@@ -22,8 +22,8 @@ def namespace(inner, prefix):
                    lambda m: f'{m.group(1)}="#{prefix}__{m.group(2)}"', inner)
     return inner
 
-# hero 不裁切：保留完整背景曲线（曲线转弯在顶部状态栏区域）。内容在 CSS 里整体下移对齐 Figma。
-STATUS_CROP = 0
+# 裁掉顶部状态栏高度(59px)：这段是纯 cyan 渐变，插画内容(地球/气泡/星星)在 y≈85 以下，裁切不影响。
+STATUS_CROP = 59
 CONT_DUR = "8s"   # 地球大陆自转周期（原 Figma 2s 太快，放慢）
 DOT_DUR = "6s"    # 小圆点绕行周期
 
