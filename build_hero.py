@@ -22,9 +22,14 @@ def namespace(inner, prefix):
                    lambda m: f'{m.group(1)}="#{prefix}__{m.group(2)}"', inner)
     return inner
 
-# 大陆自转：SMIL 注入到 continents strip 组（0 → 一个地球宽度 -134.733，2s 线性无限循环，无缝）
+# 状态栏裁切：Figma 的 hero 含顶部 59px 状态栏高度，mweb 无状态栏，裁掉让插画位置与 Figma 一致
+STATUS_CROP = 59
+CONT_DUR = "8s"   # 地球大陆自转周期（原 Figma 2s 太快，放慢）
+DOT_DUR = "6s"    # 小圆点绕行周期
+
+# 大陆自转：SMIL 注入到 continents strip 组（0 → 一个地球宽度 -134.733，线性无限循环，无缝）
 CONTINENTS_ANIM = ('<animateTransform attributeName="transform" type="translate" '
-                   'from="0 0" to="-134.733 0" dur="2s" repeatCount="indefinite" '
+                   f'from="0 0" to="-134.733 0" dur="{CONT_DUR}" repeatCount="indefinite" '
                    'additive="sum"/>')
 
 def load_earth():
@@ -83,10 +88,10 @@ def dot_layer():
     vals = ";".join(f"{DOT_X[i]:.3f} {DOT_Y[i]:.3f}" for i in range(n))
     kt = ";".join(f"{i/(n-1):.4f}" for i in range(n))
     move = (f'<animateTransform attributeName="transform" type="translate" '
-            f'values="{vals}" keyTimes="{kt}" dur="2s" repeatCount="indefinite" '
+            f'values="{vals}" keyTimes="{kt}" dur="{DOT_DUR}" repeatCount="indefinite" '
             f'calcMode="linear" additive="sum"/>')
-    fade = ('<animate attributeName="opacity" values="1;1;0;0;1" '
-            'keyTimes="0;0.4665;0.625;0.9999;1" dur="2s" repeatCount="indefinite"/>')
+    fade = (f'<animate attributeName="opacity" values="1;1;0;0;1" '
+            f'keyTimes="0;0.4665;0.625;0.9999;1" dur="{DOT_DUR}" repeatCount="indefinite"/>')
     nested = (f'<svg x="{L:.3f}" y="{T:.3f}" width="{nw:.3f}" height="{nh:.3f}" '
               f'viewBox="0 0 {nw} {nh}" overflow="visible" fill="none">{inner}</svg>')
     return f'<g id="hero-dot">{move}{fade}{nested}</g>'
@@ -111,7 +116,7 @@ defs = ('<defs>'
         '<stop offset="1" stop-color="#F1F4F8"/></linearGradient>'
         '</defs>')
 
-svg = ('<svg class="hero-svg" viewBox="0 0 375 300" width="100%" '
+svg = (f'<svg class="hero-svg" viewBox="0 {STATUS_CROP} 375 {300 - STATUS_CROP}" width="100%" '
        'preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" '
        'style="display:block" aria-hidden="true">'
        + defs + "".join(parts) + '</svg>')
