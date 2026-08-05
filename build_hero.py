@@ -94,10 +94,11 @@ def dot_layer():
     move = (f'<animateTransform attributeName="transform" type="translate" '
             f'values="{vals}" keyTimes="{kt}" dur="{DOT_DUR}" repeatCount="indefinite" '
             f'calcMode="linear" additive="sum"/>')
-    # 淡出时机：圆点整个轨道都在地球盘内，前/后侧由 y 符号决定（y<0 上弧=背面隐藏，y>0 下弧=前面显示）。
-    # 切换点在轨道左右端点：右端 t≈0.46 处淡入，左端 t≈1.0 前的 0.985 才淡出（过早会看着凭空消失）。
-    fade = (f'<animate attributeName="opacity" values="0;0;1;1;0" '
-            f'keyTimes="0;0.46;0.52;0.985;1" dur="{DOT_DUR}" repeatCount="indefinite"/>')
+    # 淡出时机按"圆点是否真被地球盘挡住"计算（球心≈(274.8,144.8) r≈37.8，轨迹点全局=(224.3+x,141+y)）：
+    # 上弧 index0~4 在球盘左外侧→可见；index5~10.9 进入球盘且在背面→隐藏；index11 从右缘钻出→可见；
+    # 下弧全程在地球前面→可见。即只在 t≈0.18~0.43 隐藏，其余时间都可见。
+    fade = (f'<animate attributeName="opacity" values="1;1;0;0;1;1" '
+            f'keyTimes="0;0.17;0.21;0.43;0.47;1" dur="{DOT_DUR}" repeatCount="indefinite"/>')
     nested = (f'<svg x="{L:.3f}" y="{T:.3f}" width="{nw:.3f}" height="{nh:.3f}" '
               f'viewBox="0 0 {nw} {nh}" overflow="visible" fill="none">{inner}</svg>')
     return f'<g id="hero-dot">{move}{fade}{nested}</g>'
