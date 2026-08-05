@@ -37,9 +37,6 @@ def png_datauri(name):
 
 subs = {
     "{{HERO_SVG}}":        (ROOT / "assets" / "hero" / "hero-scene.svg").read_text(encoding="utf-8"),
-    "{{SB_signal}}":       inline_svg_to_img(SB_SIGNAL),
-    "{{SB_wifi}}":         inline_svg_to_img(SB_WIFI),
-    "{{SB_battery}}":      inline_svg_to_img(SB_BATTERY),
     "{{IC_back}}":         svg("back"),
     "{{IC_location}}":     svg("location"),
     "{{IC_arrowRight}}":   svg("arrowRight"),

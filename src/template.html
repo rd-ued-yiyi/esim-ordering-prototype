@@ -53,6 +53,9 @@
     min-height: 100vh;
     background: var(--kk-surface-light);
     overflow-x: hidden;
+    /* 无状态栏：内容整体下移一个状态栏高度(59px，对齐 Figma)，顶部露出 hero 曲线；
+       有刘海/安全区时取更大值以避开遮挡。hero 为 absolute top:0 不受影响。 */
+    padding-top: max(59px, calc(env(safe-area-inset-top, 0px) + 12px));
   }
 
   /* ---------- 屏幕路由 ---------- */
@@ -81,24 +84,6 @@
     position: absolute; top: 0; left: 0;
     width: 100%; height: auto;
     z-index: 0; pointer-events: none;
-  }
-
-  /* ---------- 状态栏 ---------- */
-  .statusbar {
-    position: relative; z-index: 2;
-    height: 54px; width: 100%;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 14px 22px 0;
-    color: #fff;
-  }
-  .statusbar .clock {
-    font-size: 15px; font-weight: 600; letter-spacing: .2px;
-    font-variant-numeric: tabular-nums;
-  }
-  .statusbar .sys { display: flex; align-items: center; gap: 6px; }
-  .statusbar .island {
-    position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
-    width: 118px; height: 34px; background: #000; border-radius: 32px;
   }
 
   /* ---------- header ---------- */
@@ -186,12 +171,6 @@
     opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; max-width: 300px;
   }
   .toast.show { opacity: 1; transform: translate(-50%, 0); }
-
-  /* ---------- 真机（触屏）隐藏模拟状态栏，避免与系统状态栏叠层；电脑预览保留 ---------- */
-  @media (hover: none) and (pointer: coarse) {
-    .statusbar { display: none; }
-    .mheader { padding-top: calc(12px + env(safe-area-inset-top, 0px)); }
-  }
 </style>
 
 <div class="esim-root">
@@ -200,13 +179,6 @@
     <!-- ============ SCREEN: 主题落地页 ============ -->
     <section class="screen is-active" data-screen="home">
       {{HERO_SVG}}
-
-      <!-- 状态栏 -->
-      <div class="statusbar">
-        <span class="clock">9:41</span>
-        <div class="island"></div>
-        <div class="sys">{{SB_signal}}{{SB_wifi}}{{SB_battery}}</div>
-      </div>
 
       <!-- header -->
       <div class="mheader">

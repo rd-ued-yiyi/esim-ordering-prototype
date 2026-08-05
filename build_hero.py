@@ -22,8 +22,8 @@ def namespace(inner, prefix):
                    lambda m: f'{m.group(1)}="#{prefix}__{m.group(2)}"', inner)
     return inner
 
-# 状态栏裁切：Figma 的 hero 含顶部 59px 状态栏高度，mweb 无状态栏，裁掉让插画位置与 Figma 一致
-STATUS_CROP = 59
+# hero 不裁切：保留完整背景曲线（曲线转弯在顶部状态栏区域）。内容在 CSS 里整体下移对齐 Figma。
+STATUS_CROP = 0
 CONT_DUR = "8s"   # 地球大陆自转周期（原 Figma 2s 太快，放慢）
 DOT_DUR = "6s"    # 小圆点绕行周期
 
@@ -90,8 +90,10 @@ def dot_layer():
     move = (f'<animateTransform attributeName="transform" type="translate" '
             f'values="{vals}" keyTimes="{kt}" dur="{DOT_DUR}" repeatCount="indefinite" '
             f'calcMode="linear" additive="sum"/>')
-    fade = (f'<animate attributeName="opacity" values="1;1;0;0;1" '
-            f'keyTimes="0;0.4665;0.625;0.9999;1" dur="{DOT_DUR}" repeatCount="indefinite"/>')
+    # 淡出时机：小圆点在轨迹上半段(y<0，即绕到地球背面/上方，index 0~11)隐藏，
+    # 下半段(y>0，绕到地球前方/下方)显示——避免它"飘在球上面"。
+    fade = (f'<animate attributeName="opacity" values="0;0;1;1;0" '
+            f'keyTimes="0;0.44;0.48;0.96;1" dur="{DOT_DUR}" repeatCount="indefinite"/>')
     nested = (f'<svg x="{L:.3f}" y="{T:.3f}" width="{nw:.3f}" height="{nh:.3f}" '
               f'viewBox="0 0 {nw} {nh}" overflow="visible" fill="none">{inner}</svg>')
     return f'<g id="hero-dot">{move}{fade}{nested}</g>'
