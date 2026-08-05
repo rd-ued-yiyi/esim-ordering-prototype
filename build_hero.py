@@ -40,12 +40,15 @@ def load_earth():
 
 # 图层：name, 外框 L,T,W,H(取自 Figma), SVG 变换(围绕中心), 是否 earth
 LAYERS = [
-    ("blob",   -14.07,   1.14, 442.147, 171.458, "rotate(180) scale(1 -1)"),
+    # blob：导出的 SVG 已烘焙 rotate(180)，只需 scaleY(-1)（回环在左、左上向右下扫，见 blob_compare C）。
+    # 下移 15px：裁掉顶部 59px 后，曲线回环的转弯完整落在可见区内（Figma 原位回环顶恰贴 59 线）。
+    ("blob",   -14.07,  41.14, 442.147, 171.458, "scale(1 -1)"),
     ("phone1", 175.77, 107.81, 187.76,  139.245, "rotate(-158) skewX(-24) scale(1 -0.91)"),
     ("phone2", 221.95, 179.31,  30.593,  17.619, "rotate(-158) skewX(-24) scale(1 -0.91)"),
     ("phone3", 197.97, 192.59,  65.375,  36.797, "rotate(-158) skewX(-24) scale(1 -0.91)"),
-    ("line5",  308.01, 124.26,  16.546,   7.091, "scale(1 -1) rotate(-156.8)"),
-    ("line6",  208.58, 222.64,  16.546,   7.091, "scale(1 -1) rotate(-156.8)"),
+    # 注意变换顺序：CSS 是 rotate 在前 scale 在后（顺序反了线的斜向会镜像成「\」）
+    ("line5",  308.01, 124.26,  16.546,   7.091, "rotate(-156.8) scale(1 -1)"),
+    ("line6",  208.58, 222.64,  16.546,   7.091, "rotate(-156.8) scale(1 -1)"),
     ("ring",   233.73, 151.73,  81.643,  48.717, ""),
     ("earth",  218.28,  81.96, 156.244, 132.287, "rotate(15)"),
     ("subtract",222.09, 120.0, 105.263,  52.39,  ""),
@@ -90,10 +93,10 @@ def dot_layer():
     move = (f'<animateTransform attributeName="transform" type="translate" '
             f'values="{vals}" keyTimes="{kt}" dur="{DOT_DUR}" repeatCount="indefinite" '
             f'calcMode="linear" additive="sum"/>')
-    # 淡出时机：小圆点在轨迹上半段(y<0，即绕到地球背面/上方，index 0~11)隐藏，
-    # 下半段(y>0，绕到地球前方/下方)显示——避免它"飘在球上面"。
+    # 淡出时机：圆点整个轨道都在地球盘内，前/后侧由 y 符号决定（y<0 上弧=背面隐藏，y>0 下弧=前面显示）。
+    # 切换点在轨道左右端点：右端 t≈0.46 处淡入，左端 t≈1.0 前的 0.985 才淡出（过早会看着凭空消失）。
     fade = (f'<animate attributeName="opacity" values="0;0;1;1;0" '
-            f'keyTimes="0;0.44;0.48;0.96;1" dur="{DOT_DUR}" repeatCount="indefinite"/>')
+            f'keyTimes="0;0.46;0.52;0.985;1" dur="{DOT_DUR}" repeatCount="indefinite"/>')
     nested = (f'<svg x="{L:.3f}" y="{T:.3f}" width="{nw:.3f}" height="{nh:.3f}" '
               f'viewBox="0 0 {nw} {nh}" overflow="visible" fill="none">{inner}</svg>')
     return f'<g id="hero-dot">{move}{fade}{nested}</g>'
