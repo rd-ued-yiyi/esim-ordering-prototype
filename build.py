@@ -63,5 +63,22 @@ leftover = re.findall(r"\{\{[^}]+\}\}", out)
 if leftover:
     raise SystemExit(f"未替换的 token: {set(leftover)}")
 
-(ROOT / "index.html").write_text(out, encoding="utf-8")
-print(f"index.html 生成完成 ({len(out):,} 字符)")
+# 包成完整 HTML 文档：直接静态托管（GitHub Pages）时必须有 doctype + viewport meta，
+# 否则手机浏览器会按桌面宽度渲染再缩小，页面变成窄窄一条。
+DOC = (
+    "<!doctype html>\n"
+    '<html lang="zh-Hans">\n'
+    "<head>\n"
+    '<meta charset="utf-8">\n'
+    '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n'
+    '<meta name="theme-color" content="#26BEC9">\n'
+    "<title>eSIM · KKday</title>\n"
+    "</head>\n"
+    "<body>\n"
+    f"{out}\n"
+    "</body>\n"
+    "</html>\n"
+)
+
+(ROOT / "index.html").write_text(DOC, encoding="utf-8")
+print(f"index.html 生成完成 ({len(DOC):,} 字符)")

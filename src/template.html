@@ -39,10 +39,10 @@
     display: flex; justify-content: center;
   }
 
-  /* ---------- 移动端设备框 ---------- */
+  /* ---------- 移动端设备框：手机满宽自适应，桌面居中成手机框 ---------- */
   .app {
     position: relative;
-    width: 375px; max-width: 100vw;
+    width: 100%; max-width: 430px; margin: 0 auto;
     min-height: 100vh;
     background: var(--kk-surface-light);
     overflow-x: hidden;
@@ -72,9 +72,9 @@
   /* ================= HERO ================= */
   .hero-bg {
     position: absolute; top: 0; left: 0;
-    width: 375px; height: 300px;
+    width: 100%; height: 300px;
     background: var(--kk-primary-medium) url("{{HERO}}") no-repeat top center;
-    background-size: 375px 300px;
+    background-size: cover;
     z-index: 0; pointer-events: none;
   }
 
