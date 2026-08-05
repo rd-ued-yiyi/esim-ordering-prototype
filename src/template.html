@@ -77,11 +77,9 @@
   .rot90 { transform: rotate(90deg); }
 
   /* ================= HERO ================= */
-  .hero-bg {
+  .hero-svg {
     position: absolute; top: 0; left: 0;
-    width: 100%; height: 300px;
-    background: var(--kk-primary-medium) url("{{HERO}}") no-repeat top center;
-    background-size: cover;
+    width: 100%; height: auto;
     z-index: 0; pointer-events: none;
   }
 
@@ -201,7 +199,7 @@
 
     <!-- ============ SCREEN: 主题落地页 ============ -->
     <section class="screen is-active" data-screen="home">
-      <div class="hero-bg"></div>
+      {{HERO_SVG}}
 
       <!-- 状态栏 -->
       <div class="statusbar">

@@ -36,7 +36,7 @@ def png_datauri(name):
     return "data:image/png;base64," + base64.b64encode(b).decode()
 
 subs = {
-    "{{HERO}}":            png_datauri("hero-bg.png"),
+    "{{HERO_SVG}}":        (ROOT / "assets" / "hero" / "hero-scene.svg").read_text(encoding="utf-8"),
     "{{SB_signal}}":       inline_svg_to_img(SB_SIGNAL),
     "{{SB_wifi}}":         inline_svg_to_img(SB_WIFI),
     "{{SB_battery}}":      inline_svg_to_img(SB_BATTERY),
