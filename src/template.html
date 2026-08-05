@@ -1,0 +1,358 @@
+<!-- eSIM 订购流程原型 · 第 1 页：主题落地页 -->
+<!-- 基于 KKday Web Design System tokens · Figma node 648-800 高保真还原 -->
+<style>
+  /* ---------- KKday DS tokens (subset) ---------- */
+  :root {
+    --kk-primary-medium: #26BEC9;
+    --kk-primary-button: #1AB6C1;
+    --kk-primary-lighter: #F0FAFB;
+    --kk-surface-lighter: #F7FAFC;
+    --kk-surface-light: #F1F4F8;
+    --kk-white: #FFFFFF;
+    --kk-text-darker: #212121;
+    --kk-text-dark: #727272;
+    --kk-text-medium: #9C9DA0;
+    --kk-text-critical: #EF7A70;
+    --kk-border-lighter: #E6E9ED;
+    --kk-border-light: #D5D6DB;
+
+    --sp-050: 4px;  --sp-075: 6px;  --sp-100: 8px; --sp-150: 12px;
+    --sp-200: 16px; --sp-250: 20px; --sp-300: 24px; --sp-400: 32px;
+
+    --r-sm: 4px; --r-md: 8px; --r-lg: 12px; --r-xl: 16px; --r-circle: 999px;
+
+    --el-action: 0 1px 4px rgba(38,50,56,.12);
+    --el-fixed: 0 2px 24px rgba(38,50,56,.12);
+    --el-hero-card: 0 8px 24px rgba(38,190,201,.20);
+
+    --font-tc: "PingFang SC","PingFang TC",-apple-system,BlinkMacSystemFont,
+               "Noto Sans TC","Noto Sans SC","Microsoft JhengHei",sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  .esim-root {
+    font-family: var(--font-tc);
+    color: var(--kk-text-darker);
+    background: #d9dee5;                       /* 桌面预览时页外底色 */
+    min-height: 100vh;
+    display: flex; justify-content: center;
+  }
+
+  /* ---------- 移动端设备框 ---------- */
+  .app {
+    position: relative;
+    width: 375px; max-width: 100vw;
+    min-height: 100vh;
+    background: var(--kk-surface-light);
+    overflow-x: hidden;
+  }
+
+  /* ---------- 屏幕路由 ---------- */
+  .screen { display: none; }
+  .screen.is-active { display: block; }
+
+  /* ---------- 排版工具 ---------- */
+  .t-h4          { font-size: 24px; line-height: 30px; font-weight: 600; }
+  .t-h6          { font-size: 18px; line-height: 26px; font-weight: 600; }
+  .t-subtitle-lg { font-size: 16px; line-height: 24px; font-weight: 600; }
+  .t-body-lg     { font-size: 16px; line-height: 24px; font-weight: 400; }
+  .t-body-md     { font-size: 14px; line-height: 20px; font-weight: 400; }
+  .t-link-md     { font-size: 14px; line-height: 20px; font-weight: 500; text-decoration: underline; }
+
+  /* ---------- icon 盒 ---------- */
+  .ic { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; }
+  .ic-16 { width: 16px; height: 16px; }
+  .ic-20 { width: 20px; height: 20px; }
+  .ic-24 { width: 24px; height: 24px; }
+  .ic-32 { width: 32px; height: 32px; }
+  .ic svg { display: block; }
+  .rot90 { transform: rotate(90deg); }
+
+  /* ================= HERO ================= */
+  .hero-bg {
+    position: absolute; top: 0; left: 0;
+    width: 375px; height: 300px;
+    background: var(--kk-primary-medium) url("{{HERO}}") no-repeat top center;
+    background-size: 375px 300px;
+    z-index: 0; pointer-events: none;
+  }
+
+  /* ---------- 状态栏 ---------- */
+  .statusbar {
+    position: relative; z-index: 2;
+    height: 54px; width: 100%;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 22px 0;
+    color: #fff;
+  }
+  .statusbar .clock {
+    font-size: 15px; font-weight: 600; letter-spacing: .2px;
+    font-variant-numeric: tabular-nums;
+  }
+  .statusbar .sys { display: flex; align-items: center; gap: 6px; }
+  .statusbar .island {
+    position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+    width: 118px; height: 34px; background: #000; border-radius: 32px;
+  }
+
+  /* ---------- header ---------- */
+  .mheader {
+    position: relative; z-index: 2;
+    display: flex; align-items: flex-start; justify-content: space-between;
+    padding: 12px 16px;
+  }
+  .nav-circle {
+    width: 32px; height: 32px; border-radius: var(--r-circle);
+    background: #fff; box-shadow: 0 4px 12px rgba(38,50,56,.12);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; border: 0;
+  }
+
+  /* ---------- 内容区 ---------- */
+  .con { position: relative; z-index: 1; padding-bottom: 40px; }
+  .title-block { padding: 8px 24px 0; color: #fff; }
+  .title-block .sub { margin-top: 8px; }
+
+  .page { display: flex; flex-direction: column; gap: 16px; padding: 20px 16px 0; }
+
+  .card {
+    background: #fff; border-radius: var(--r-xl);
+    padding: 16px; overflow: hidden;
+  }
+  .card--pad-v { padding: 20px 16px; }
+
+  /* ---------- destination card ---------- */
+  .dest-card { box-shadow: var(--el-hero-card); display: flex; flex-direction: column; gap: 16px; }
+  .search-bar {
+    display: flex; align-items: center; gap: 8px;
+    padding: 12px; border: 1.5px solid var(--kk-primary-medium);
+    border-radius: var(--r-lg); background: #fff; cursor: pointer;
+  }
+  .search-bar .label { flex: 1 1 0; min-width: 0; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 2px;
+    background: var(--kk-surface-light); border-radius: var(--r-md);
+    padding: 8px; cursor: pointer; border: 0;
+  }
+  .chip .chip-label { padding: 0 4px; white-space: nowrap; color: var(--kk-text-darker); }
+
+  /* ---------- benefits card ---------- */
+  .stack-20 { display: flex; flex-direction: column; gap: 20px; }
+  .card-title { color: var(--kk-text-darker); }
+  .benefit-row { display: flex; align-items: center; gap: 20px; }
+  .benefit-row .txt { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+  .benefit-row .desc { color: var(--kk-text-dark); }
+
+  /* ---------- guide card ---------- */
+  .guide-tabs { display: flex; gap: 8px; }
+  .guide-tab {
+    flex: 1 1 0; min-width: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+    padding: 16px 12px 12px;
+    border: 1px solid var(--kk-border-lighter); border-radius: var(--r-lg);
+    background: #fff; cursor: pointer;
+  }
+  .guide-tab .lbl { color: var(--kk-text-darker); }
+
+  /* ---------- faq card ---------- */
+  .faq-head { display: flex; align-items: center; gap: 20px; }
+  .faq-head .ttl { flex: 1 1 0; min-width: 0; }
+  .faq-more { color: var(--kk-text-darker); cursor: pointer; white-space: nowrap; }
+  .faq-list { display: flex; flex-direction: column; }
+  .faq-item { border-bottom: 1px solid var(--kk-border-lighter); }
+  .faq-item:last-child { border-bottom: 0; }
+  .faq-q {
+    display: flex; align-items: center; gap: 16px;
+    padding: 12px 0; cursor: pointer; width: 100%; background: none; border: 0; text-align: left;
+  }
+  .faq-q .qtext { flex: 1 1 0; min-width: 0; color: var(--kk-text-darker); }
+  .faq-q .chev { transition: transform .2s ease; }
+  .faq-item.open .faq-q .chev { transform: rotate(180deg); }
+  .faq-a { display: none; padding: 0 0 16px; color: var(--kk-text-darker); }
+  .faq-item.open .faq-a { display: block; }
+
+  /* ---------- toast ---------- */
+  .toast {
+    position: fixed; left: 50%; bottom: 32px; transform: translate(-50%, 20px);
+    background: rgba(33,33,33,.92); color: #fff; font-size: 14px; line-height: 20px;
+    padding: 10px 16px; border-radius: var(--r-md); z-index: 50;
+    opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; max-width: 300px;
+  }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+  /* ---------- 真机（触屏）隐藏模拟状态栏，避免与系统状态栏叠层；电脑预览保留 ---------- */
+  @media (hover: none) and (pointer: coarse) {
+    .statusbar { display: none; }
+    .mheader { padding-top: calc(12px + env(safe-area-inset-top, 0px)); }
+  }
+</style>
+
+<div class="esim-root">
+  <div class="app">
+
+    <!-- ============ SCREEN: 主题落地页 ============ -->
+    <section class="screen is-active" data-screen="home">
+      <div class="hero-bg"></div>
+
+      <!-- 状态栏 -->
+      <div class="statusbar">
+        <span class="clock">9:41</span>
+        <div class="island"></div>
+        <div class="sys">{{SB_signal}}{{SB_wifi}}{{SB_battery}}</div>
+      </div>
+
+      <!-- header -->
+      <div class="mheader">
+        <button class="nav-circle" data-action="back" aria-label="返回">
+          <span class="ic ic-20">{{IC_back}}</span>
+        </button>
+      </div>
+
+      <!-- 内容 -->
+      <div class="con">
+        <div class="title-block">
+          <div class="t-h4">eSIM</div>
+          <div class="sub t-body-md">即买即用，轻松出发</div>
+        </div>
+
+        <div class="page">
+
+          <!-- 目的地卡 -->
+          <div class="card dest-card">
+            <button class="search-bar" data-action="pick-destination">
+              <span class="ic ic-24">{{IC_location}}</span>
+              <span class="label t-h6">请先选择目的地</span>
+              <span class="ic ic-24"><span class="rot90 ic">{{IC_arrowRight}}</span></span>
+            </button>
+            <div class="chips">
+              <button class="chip" data-dest="日本"><span class="ic ic-16">{{IC_fire}}</span><span class="chip-label t-body-md">日本</span></button>
+              <button class="chip" data-dest="韩国"><span class="ic ic-16">{{IC_fire}}</span><span class="chip-label t-body-md">韩国</span></button>
+              <button class="chip" data-dest="泰国"><span class="ic ic-16">{{IC_fire}}</span><span class="chip-label t-body-md">泰国</span></button>
+              <button class="chip" data-dest="新加坡"><span class="chip-label t-body-md">新加坡</span></button>
+              <button class="chip" data-dest="澳大利亚"><span class="chip-label t-body-md">澳大利亚</span></button>
+              <button class="chip" data-dest="迪拜"><span class="chip-label t-body-md">迪拜</span></button>
+              <button class="chip" data-dest="法国"><span class="chip-label t-body-md">法国</span></button>
+              <button class="chip" data-dest="亚洲通"><span class="chip-label t-body-md">亚洲通</span></button>
+              <button class="chip" data-dest="东南亚"><span class="chip-label t-body-md">东南亚</span></button>
+              <button class="chip" data-dest="北欧地区"><span class="chip-label t-body-md">北欧地区</span></button>
+              <button class="chip" data-action="pick-destination"><span class="chip-label t-body-md">更多</span><span class="ic ic-16"><span class="rot90 ic">{{IC_arrowRightSm}}</span></span></button>
+            </div>
+          </div>
+
+          <!-- 为什么选择 KKday -->
+          <div class="card card--pad-v">
+            <div class="stack-20">
+              <div class="t-h6 card-title">为什么选择KKday？</div>
+              <div class="stack-20">
+                <div class="benefit-row">
+                  <span class="ic ic-32">{{PICTO_tours}}</span>
+                  <div class="txt"><div class="t-subtitle-lg">简单易用</div><div class="desc t-body-md">透过 KKday APP 安装和管理 eSIM 卡，扫码即装，轻松上手。</div></div>
+                </div>
+                <div class="benefit-row">
+                  <span class="ic ic-32">{{PICTO_cruise}}</span>
+                  <div class="txt"><div class="t-subtitle-lg">灵活弹性</div><div class="desc t-body-md">透过 KKday APP 安装和管理 eSIM 卡，扫码即装，轻松上手。</div></div>
+                </div>
+                <div class="benefit-row">
+                  <span class="ic ic-32">{{PICTO_travel}}</span>
+                  <div class="txt"><div class="t-subtitle-lg">80+ 国家覆盖</div><div class="desc t-body-md">透过 KKday APP 安装和管理 eSIM 卡，扫码即装，轻松上手。</div></div>
+                </div>
+                <div class="benefit-row">
+                  <span class="ic ic-32">{{PICTO_tours}}</span>
+                  <div class="txt"><div class="t-subtitle-lg">客服支持</div><div class="desc t-body-md">透过 KKday APP 安装和管理 eSIM 卡，扫码即装，轻松上手。</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- eSIM 安装指南 -->
+          <div class="card card--pad-v">
+            <div class="stack-20">
+              <div class="t-h6 card-title">eSIM 安裝指南</div>
+              <div class="guide-tabs">
+                <button class="guide-tab" data-action="guide" data-guide="iOS"><span class="ic ic-24">{{IC_checkCircle}}</span><span class="lbl t-body-lg">iOS</span></button>
+                <button class="guide-tab" data-action="guide" data-guide="Android"><span class="ic ic-24">{{IC_star}}</span><span class="lbl t-body-lg">Android</span></button>
+                <button class="guide-tab" data-action="guide" data-guide="分享"><span class="ic ic-24">{{IC_locationArrow}}</span><span class="lbl t-body-lg">分享</span></button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 常见问题 -->
+          <div class="card card--pad-v">
+            <div class="stack-20">
+              <div class="faq-head">
+                <span class="ttl t-h6 card-title">常见问题</span>
+                <span class="faq-more t-link-md" data-action="faq-more">查看更多</span>
+              </div>
+              <div class="faq-list">
+                <div class="faq-item">
+                  <button class="faq-q"><span class="qtext t-subtitle-lg">ESIM/WIFI常见问题</span><span class="ic ic-20 chev">{{IC_arrowDown}}</span></button>
+                  <div class="faq-a t-body-md">KKday ESIM/WIFI常见问题说明 KKday ESIM/WIFI常见问题说明 KKday ESIM/WIFI常见问题说明</div>
+                </div>
+                <div class="faq-item open">
+                  <button class="faq-q"><span class="qtext t-subtitle-lg">ESIM/WIFI常见问题ESIM/WIFI常见问题ESIM/WIFI常见问题</span><span class="ic ic-20 chev">{{IC_arrowDown}}</span></button>
+                  <div class="faq-a t-body-md">KKday ESIM/WIFI常见问题说明 KKday ESIM/WIFI常见问题说明 KKday ESIM/WIFI常见问题说明 KKday ESIM/WIFI常见问题说明 KKday ESIM/WIFI常见问题说明 KKday ESIM/WIFI常见问题说明</div>
+                </div>
+                <div class="faq-item">
+                  <button class="faq-q"><span class="qtext t-subtitle-lg">ESIM/WIFI常见问题</span><span class="ic ic-20 chev">{{IC_arrowDown}}</span></button>
+                  <div class="faq-a t-body-md">KKday ESIM/WIFI常见问题说明 KKday ESIM/WIFI常见问题说明 KKday ESIM/WIFI常见问题说明</div>
+                </div>
+                <div class="faq-item">
+                  <button class="faq-q"><span class="qtext t-subtitle-lg">ESIM/WIFI常见问题</span><span class="ic ic-20 chev">{{IC_arrowDown}}</span></button>
+                  <div class="faq-a t-body-md">KKday ESIM/WIFI常见问题说明 KKday ESIM/WIFI常见问题说明 KKday ESIM/WIFI常见问题说明</div>
+                </div>
+                <div class="faq-item">
+                  <button class="faq-q"><span class="qtext t-subtitle-lg">ESIM/WIFI常见问题</span><span class="ic ic-20 chev">{{IC_arrowDown}}</span></button>
+                  <div class="faq-a t-body-md">KKday ESIM/WIFI常见问题说明 KKday ESIM/WIFI常见问题说明 KKday ESIM/WIFI常见问题说明</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /page -->
+      </div><!-- /con -->
+    </section>
+
+  </div><!-- /app -->
+  <div class="toast" id="toast"></div>
+</div>
+
+<script>
+(function () {
+  var root = document.currentScript.closest('.esim-root') || document;
+
+  // FAQ 手风琴
+  document.querySelectorAll('.faq-q').forEach(function (q) {
+    q.addEventListener('click', function () {
+      q.closest('.faq-item').classList.toggle('open');
+    });
+  });
+
+  // toast
+  var toastEl = document.getElementById('toast');
+  var toastTimer;
+  function toast(msg) {
+    toastEl.textContent = msg;
+    toastEl.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toastEl.classList.remove('show'); }, 1800);
+  }
+
+  // 交互占位（后续接入订购流程后续页面）
+  document.querySelectorAll('[data-action]').forEach(function (el) {
+    el.addEventListener('click', function () {
+      var a = el.getAttribute('data-action');
+      if (a === 'pick-destination') toast('下一步：选择目的地（开发中）');
+      else if (a === 'guide') toast('安装指南：' + el.getAttribute('data-guide') + '（开发中）');
+      else if (a === 'faq-more') toast('常见问题列表（开发中）');
+      else if (a === 'back') toast('返回上一页');
+    });
+  });
+  document.querySelectorAll('.chip[data-dest]').forEach(function (el) {
+    el.addEventListener('click', function () {
+      toast(el.getAttribute('data-dest') + ' eSIM 方案（开发中）');
+    });
+  });
+})();
+</script>
