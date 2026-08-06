@@ -1316,20 +1316,20 @@
   var state = { days: '1', daysTouched: false, tab: 'daily', plan: '1GB/天' };
 
   // 仿真价格模型（NT$）：每日固定/无限流量按天计价（长天数有折扣），总流量一口价
+  // 价格参照 2026 台湾市售亚洲 eSIM 行情（每日固定 1GB≈NT$25-30/天；总流量对齐 Airalo/Nomad 档位价；
+  // 无限流量=每日高速额度用完降速 NT$55-90/天、全程不限速 NT$130-150/天）
   var PLANS = {
     daily:     { note: '每日重置，用完降速',
-                 opts: [ { t: '1GB/天', per: 26 }, { t: '2GB/天', per: 45 }, { t: '3GB/天', per: 63 },
-                         { t: '4GB/天', per: 78 }, { t: '5GB/天', per: 92 }, { t: '6GB/天', per: 105 },
-                         { t: '7GB/天', per: 117 }, { t: '8GB/天', per: 128 }, { t: '9GB/天', per: 138 },
-                         { t: '10GB/天', per: 147 } ] },
+                 opts: [ { t: '500MB/天', per: 15 }, { t: '1GB/天', per: 26 }, { t: '2GB/天', per: 42 },
+                         { t: '3GB/天', per: 55 }, { t: '4GB/天', per: 66 }, { t: '5GB/天', per: 78 } ] },
     total:     { note: '总流量用完即停，可随时加购',
-                 opts: [ { t: '1GB', price: 99, gb: 1 }, { t: '3GB', price: 219, gb: 3 },
-                         { t: '5GB', price: 329, gb: 5 }, { t: '10GB', price: 549, gb: 10 },
-                         { t: '20GB', price: 899, gb: 20 }, { t: '30GB', price: 1190, gb: 30 },
-                         { t: '50GB', price: 1690, gb: 50 }, { t: '100GB', price: 2790, gb: 100 } ] },
+                 opts: [ { t: '1GB', price: 149, gb: 1 }, { t: '3GB', price: 289, gb: 3 },
+                         { t: '5GB', price: 399, gb: 5 }, { t: '10GB', price: 619, gb: 10 },
+                         { t: '20GB', price: 999, gb: 20 }, { t: '30GB', price: 1290, gb: 30 },
+                         { t: '50GB', price: 1790, gb: 50 }, { t: '100GB', price: 2990, gb: 100 } ] },
     unlimited: { note: '不限流量，依公平使用原则',
-                 opts: [ { t: '每日 500MB 高速', per: 88 }, { t: '每日 1GB 高速', per: 118 },
-                         { t: '全程高速', per: 168 } ] }
+                 opts: [ { t: '每日 1GB 高速', per: 58 }, { t: '每日 3GB 高速', per: 88 },
+                         { t: '全程高速', per: 138 } ] }
   };
   function daysDiscount(d) { return d >= 30 ? 0.85 : d >= 15 ? 0.9 : d >= 7 ? 0.95 : 1; }
   function priceLabelFor(o, d) {
@@ -1343,10 +1343,10 @@
   // 推荐 badge 随天数联动（仅每日固定流量）
   function badgeForTab(tab, d) {
     if (tab === 'daily') {
-      if (!d) return '4GB/天';
+      if (!d) return '3GB/天';
       if (d <= 3) return '2GB/天';
-      if (d <= 10) return '4GB/天';
-      return '3GB/天';  // 长天数省钱档
+      if (d <= 10) return '3GB/天';
+      return '2GB/天';  // 长天数省钱档
     }
     if (tab === 'total') {
       // 推荐最接近「天数×1GB」的总量档
@@ -1356,7 +1356,7 @@
       opts.forEach(function (o) { if (Math.abs(o.gb - target) < Math.abs(best.gb - target)) best = o; });
       return best.t;
     }
-    return '每日 1GB 高速';  // 无限流量推荐中间档
+    return '每日 3GB 高速';  // 无限流量推荐中间档
   }
   function badgeFor() { return badgeForTab(state.tab, state.days ? +state.days : 0); }
 
