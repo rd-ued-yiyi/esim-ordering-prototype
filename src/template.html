@@ -121,6 +121,13 @@
   }
   .search-bar .label { flex: 1 1 0; min-width: 0; }
   .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+
+  /* 主题页「最近选择」历史区 */
+  .home-hist { display: none; flex-direction: column; gap: 8px; }
+  .home-hist.show { display: flex; }
+  .home-hist-head { display: flex; align-items: center; justify-content: space-between; }
+  .home-hist-head .t { font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
+  .home-hist-head .gact { display: flex; align-items: center; padding: 2px; }
   .chip {
     display: inline-flex; align-items: center; gap: 2px;
     background: var(--kk-surface-light); border-radius: var(--r-md);
@@ -174,7 +181,8 @@
     padding: 0 12px; cursor: pointer;
     color: var(--kk-text-darker);  /* 不继承 .title-block 的白色 */
   }
-  .dest-bar .name { flex: 1 1 0; min-width: 0; text-align: left; }
+  .dest-bar .name { flex: 1 1 0; min-width: 0; text-align: left; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .dest-bar .dest-num { flex: 0 0 auto; color: var(--kk-text-darker); }
 
   .inline-note {
     display: flex; align-items: flex-start; gap: 4px;
@@ -481,6 +489,15 @@
               <button class="chip" data-dest="北欧地区"><span class="chip-label t-body-md">北欧地区</span></button>
               <button class="chip" data-action="pick-destination"><span class="chip-label t-body-md">更多</span><span class="ic ic-16"><span class="rot90 ic">{{IC_arrowRightSm}}</span></span></button>
             </div>
+
+            <!-- 最近选择（有历史时显示） -->
+            <div class="home-hist" id="homeHist">
+              <div class="home-hist-head">
+                <span class="t">最近选择</span>
+                <button class="gact" id="homeHistClear" aria-label="清除历史"><span class="ic ic-16">{{IC_trash}}</span></button>
+              </div>
+              <div class="chips-row" id="homeHistChips"></div>
+            </div>
           </div>
 
           <!-- 为什么选择 KKday -->
@@ -571,6 +588,7 @@
           <button class="dest-bar" data-action="change-destination">
             <span class="ic ic-24">{{IC_location}}</span>
             <span class="name t-h6" id="destName">新加坡</span>
+            <span class="dest-num t-body-md" id="destNum" hidden></span>
             <span class="ic ic-24">{{IC_arrowDown}}</span>
           </button>
         </div>
@@ -996,7 +1014,7 @@
   }
   function pickCountry(name) {
     histAdd(HK_C, name);
-    finishSelect(name);
+    finishSelect(name, 'country');
   }
 
   // ---------- Tab2 多国区域 ----------
@@ -1032,7 +1050,7 @@
   }
   function pickRegion(r) {
     histAdd(HK_R, r.name);
-    finishSelect(r.name);
+    finishSelect(r.name, 'region');
   }
 
   // ---------- Tab3 多国自由选择 ----------
@@ -1099,8 +1117,8 @@
   });
   dm.confirm.addEventListener('click', function () {
     if (!dm.multiSel.length) return;
-    var name = dm.multiSel.length === 1 ? dm.multiSel[0] : (dm.multiSel[0] + '等' + dm.multiSel.length + '国');
-    finishSelect(name);
+    // 多国态：bar 显示国家列表（超出省略）+ (N)，见 Figma 871-76702
+    finishSelect(dm.multiSel.join(' '), 'multi', dm.multiSel.length);
   });
 
   // ---------- 搜索 ----------
@@ -1173,11 +1191,38 @@
     dm.el.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
   }
-  function finishSelect(name) {
+  function finishSelect(name, type, count) {
     document.getElementById('destName').textContent = name;
+    var num = document.getElementById('destNum');
+    num.hidden = !(type === 'multi' && count > 1);
+    if (!num.hidden) num.textContent = '(' + count + ')';
+    try { localStorage.setItem('esim-last-type', type || 'country'); } catch (e) {}
+    renderHomeHist();
     closeModal();
     go('destination');
   }
+  function lastType() {
+    try { return localStorage.getItem('esim-last-type') || 'country'; } catch (e) { return 'country'; }
+  }
+
+  // ---------- 主题页「最近选择」 ----------
+  function renderHomeHist() {
+    var box = document.getElementById('homeHist');
+    var hist = histGet(HK_C, []);
+    box.classList.toggle('show', hist.length > 0);
+    var wrap = document.getElementById('homeHistChips');
+    wrap.innerHTML = '';
+    hist.forEach(function (n) {
+      wrap.appendChild(chipEl(n, function (label) {
+        histAdd(HK_C, label);
+        finishSelect(label, 'country');
+      }));
+    });
+  }
+  document.getElementById('homeHistClear').addEventListener('click', function () {
+    try { localStorage.setItem(HK_C, '[]'); } catch (e) {}
+    renderHomeHist();
+  });
   document.getElementById('dmClose').addEventListener('click', closeModal);
   document.querySelectorAll('.dm-cat').forEach(function (c) {
     c.addEventListener('click', function () {
@@ -1194,7 +1239,7 @@
     el.addEventListener('click', function () {
       var a = el.getAttribute('data-action');
       if (a === 'pick-destination') openModal('country');
-      else if (a === 'change-destination') openModal('country');
+      else if (a === 'change-destination') openModal(lastType()); // 再次打开默认进入上次所选类目
       else if (a === 'guide') toast('安装指南：' + el.getAttribute('data-guide') + '（开发中）');
       else if (a === 'faq-more') toast('常见问题列表（开发中）');
       else if (a === 'back') { if (current === 'destination') go('home'); else toast('返回上一页'); }
@@ -1204,13 +1249,13 @@
   // 首页目的地 chip → 进入目的地页
   document.querySelectorAll('.chip[data-dest]').forEach(function (el) {
     el.addEventListener('click', function () {
-      document.getElementById('destName').textContent = el.getAttribute('data-dest');
       histAdd(HK_C, el.getAttribute('data-dest'));
-      go('destination');
+      finishSelect(el.getAttribute('data-dest'), 'country');
     });
   });
 
   renderOpts();
   updateCta();
+  renderHomeHist();
 })();
 </script>
