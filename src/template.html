@@ -469,11 +469,14 @@
     transition: box-shadow .2s;
   }
   .pl-head.scrolled { box-shadow: var(--el-fixed); }  /* 页面滑动时固定头部投影（Figma 913-43602） */
-  .pl-bar { display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 16px; }
-  .pl-bar .pl-back { display: flex; align-items: center; padding: 4px; }
-  .pl-bar .pl-title-wrap { display: flex; align-items: center; gap: 4px; min-width: 0; }
-  .pl-bar .pl-title { font-size: 18px; line-height: 26px; font-weight: 600; color: var(--kk-text-darker);
-    max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  /* Figma 913-43623：返回键↔标题组 gap 20，标题↔数量↔箭头 gap 8，pl-20 pr-40，高 54 */
+  .pl-bar { display: flex; align-items: center; gap: 20px; height: 54px; padding: 8px 40px 8px 20px; }
+  .pl-bar .pl-back { display: flex; align-items: center; }
+  .pl-bar .pl-title-wrap { display: flex; align-items: center; gap: 8px; flex: 1 1 0; min-width: 0; }
+  .pl-bar .pl-title { flex: 0 1 auto; min-width: 0; text-align: left;  /* 短标题箭头贴排（795-35680），长标题收缩省略 */
+    font-size: 18px; line-height: 26px; font-weight: 600; color: var(--kk-text-darker);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .pl-bar .pl-num { flex: 0 0 auto; font-size: 14px; line-height: 20px; color: var(--kk-text-darker); }
 
   .pl-conds { display: flex; align-items: stretch; padding: 4px 0 0; overflow: hidden; }
   .pl-cond-fixed {
@@ -1009,6 +1012,7 @@
           <button class="pl-back" data-action="back-plans" aria-label="返回"><span class="ic ic-24">{{IC_back}}</span></button>
           <button class="pl-title-wrap" data-action="change-destination">
             <span class="pl-title" id="plTitle">日本</span>
+            <span class="pl-num" id="plTitleNum" hidden></span>
             <span class="ic ic-20">{{IC_arrowDown}}</span>
           </button>
         </div>
@@ -2086,6 +2090,10 @@
 
   function renderPlans(centerSel) {
     document.getElementById('plTitle').textContent = document.getElementById('destName').textContent;
+    // 多国自由选择：标题旁同样显示数量 (N)（Figma 970-49427），与目的地页 destNum 同步
+    var tNum = document.getElementById('plTitleNum'), dNum = document.getElementById('destNum');
+    tNum.hidden = dNum.hidden;
+    tNum.textContent = dNum.textContent;
     // 条件 chips：当前条件（点击回目的地页修改）+ 同 tab 相邻流量档快速切换
     var fixed = document.getElementById('plCondFixed');
     var conds = document.getElementById('plCondScroll');
