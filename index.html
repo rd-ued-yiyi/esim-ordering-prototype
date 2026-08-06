@@ -638,6 +638,9 @@
   }
   .det-sec { background: #fff; padding: 24px 20px 32px; }
   .det-sec + .det-sec { margin-top: 8px; }
+  /* 区块左右内距按 Figma 各不相同：服务说明 16 / 其余 20 / 图文说明 24 */
+  .det-sec[data-sec="svc"] { padding-left: 16px; padding-right: 16px; }
+  .det-sec[data-sec="imgs"] { padding: 24px; }
   .det-cond { display: flex; align-items: center; gap: 8px;
     font-size: 14px; line-height: 20px; font-weight: 600; color: #13A3B6; margin-bottom: 8px; }
   .det-title { font-size: 22px; line-height: 28px; font-weight: 600; color: var(--kk-text-darker); margin: 0 0 8px; }
@@ -655,10 +658,11 @@
   .det-more { display: inline-flex; align-items: center; gap: 4px; margin-top: 8px;
     font-size: 14px; line-height: 20px; font-weight: 600; color: var(--kk-text-darker); }
   .det-more .chev { transition: transform .2s; }
+  .det-more .chev img { width: 9.4px; height: 5.2px; }  /* arrowDown 裸矢量按 16 框占位 */
   .det-more.open .chev { transform: rotate(180deg); }
   .det-provider { margin-top: 24px; font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
-  .det-h2 { font-size: 18px; line-height: 26px; font-weight: 600; color: var(--kk-text-darker); margin: 32px 0 20px; }
-  .det-h5 { font-size: 22px; line-height: 28px; font-weight: 600; color: var(--kk-text-darker); margin: 0 0 20px; }
+  .det-h2 { font-size: 18px; line-height: 26px; font-weight: 600; color: var(--kk-text-darker); margin: 0 0 20px; }
+  .det-h5 { font-size: 22px; line-height: 28px; font-weight: 600; color: var(--kk-text-darker); margin: 0 0 24px; }
   .det-sub { font-size: 16px; line-height: 24px; font-weight: 600; color: var(--kk-text-darker); margin: 24px 0 8px; }
   /* 基本信息表（Figma 902-41074） */
   .det-table { border: 1px solid var(--kk-border-lighter); border-radius: var(--r-md); overflow: hidden; }
@@ -727,15 +731,23 @@
   /* 图文说明 */
   .det-fig { margin-top: 8px; }
   .det-fig img { display: block; width: 100%; border-radius: var(--r-md); }
-  .det-pid { padding: 8px 0 16px; text-align: left; font-size: 12px; line-height: 16px; color: var(--kk-text-medium);
-    background: #fff; margin-top: 8px; padding-left: 20px; }
+  .det-pid { padding: 8px 0 16px; text-align: center; font-size: 12px; line-height: 16px; color: var(--kk-text-medium);
+    background: #fff; margin-top: 8px; }
   /* 优惠横幅 + 底部 CTA */
   .det-coupon { flex: 0 0 auto; display: flex; align-items: center; gap: 8px;
     background: #FDEFED; padding: 8px 16px; }
   .det-coupon .tk { display: inline-flex; align-items: center; border: 1px solid #F0544C; border-radius: 6px;
-    padding: 2px 10px; font-size: 13px; line-height: 20px; font-weight: 600; color: #F0544C; background: #fff; position: relative; }
+    padding: 2px 12px; font-size: 14px; line-height: 20px; font-weight: 600; color: #F0544C; background: #fff; position: relative; }
+  /* 票券缺口：用横幅底色圆点盖在边框上，模拟两侧半圆凹口 */
+  .det-coupon .tk::before, .det-coupon .tk::after {
+    content: ''; position: absolute; top: 50%; transform: translateY(-50%);
+    width: 8px; height: 8px; border-radius: 50%; background: #FDEFED;
+  }
+  .det-coupon .tk::before { left: -4px; }
+  .det-coupon .tk::after { right: -4px; }
   .det-coupon .claim { margin-left: auto; font-size: 14px; line-height: 20px; font-weight: 600; color: #F0544C; }
-  .det-foot { flex: 0 0 auto; background: #fff; border-top: 1px solid var(--kk-border-lighter);
+  /* Figma 871-78248：底部栏用软投影分层（置底浮块，非置顶 header） */
+  .det-foot { flex: 0 0 auto; background: #fff; box-shadow: 0 -2px 8px rgba(38, 50, 56, .06);
     padding: 12px 24px calc(12px + env(safe-area-inset-bottom, 0px)); }
 
   /* ================= 滚动置顶 header ================= */
@@ -1442,7 +1454,8 @@
         <p class="det-intro" id="detIntro">依据购买天数，可额外享有 3GB~30GB 的热点分享流量。由连续两年荣获 Opensignal 网路可靠性全球大奖的电信网络提供连线，讯号覆盖率高，市区、离岛与山区都能稳定上网；搭配 KKday App 可随时查询剩余流量，客服 24 小时在线协助安装与连线问题。</p>
         <button class="det-more" id="detMore">展开更多 <span class="ic ic-16 chev"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE0LjE2NjciIGhlaWdodD0iNy45MTY2NyIgdmlld0JveD0iMCAwIDE0LjE2NjcgNy45MTY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0wLjI0NDA3OCAwLjI0NDA3OEMwLjU2OTUxNSAtMC4wODEzNTkyIDEuMDk3MTUgLTAuMDgxMzU5MiAxLjQyMjU5IDAuMjQ0MDc4TDcuMDgzMzMgNS45MDQ4MkwxMi43NDQxIDAuMjQ0MDc4QzEzLjA2OTUgLTAuMDgxMzU5MiAxMy41OTcyIC0wLjA4MTM1OTIgMTMuOTIyNiAwLjI0NDA3OEMxNC4yNDggMC41Njk1MTUgMTQuMjQ4IDEuMDk3MTUgMTMuOTIyNiAxLjQyMjU5TDcuNjcyNTkgNy42NzI1OUM3LjM0NzE1IDcuOTk4MDMgNi44MTk1MSA3Ljk5ODAzIDYuNDk0MDggNy42NzI1OUwwLjI0NDA3OCAxLjQyMjU5Qy0wLjA4MTM1OTIgMS4wOTcxNSAtMC4wODEzNTkyIDAuNTY5NTE1IDAuMjQ0MDc4IDAuMjQ0MDc4WiIgZmlsbD0iIzIxMjEyMSIvPgo8L3N2Zz4=" width="14.17" height="7.92"></span></button>
         <div class="det-provider" id="detProvider"></div>
-        <h3 class="det-h2" style="margin-bottom:20px;">基本信息</h3>
+        <hr class="pkg-hr">
+        <h3 class="det-h2">基本信息</h3>
         <div class="det-table">
           <div class="th">卡片规格</div>
           <div class="tr"><div class="td-k">SIM 卡片规格</div><div class="td-v">eSIM</div></div>
@@ -1601,6 +1614,7 @@
     </div>
 
     <div class="det-coupon">
+      <span class="ic ic-24"><img alt="" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMiIgaGVpZ2h0PSIyMCIgdmlld0JveD0iMCAwIDIyIDIwIiBmaWxsPSJub25lIj48ZyB0cmFuc2Zvcm09InJvdGF0ZSgtMTIgMTEgMTApIj48cGF0aCBkPSJNMiA1YTEuNSAxLjUgMCAwIDEgMS41LTEuNWgxNUExLjUgMS41IDAgMCAxIDIwIDV2M2EyIDIgMCAwIDAgMCA0djNhMS41IDEuNSAwIDAgMS0xLjUgMS41aC0xNUExLjUgMS41IDAgMCAxIDIgMTV2LTNhMiAyIDAgMCAwIDAtNFY1WiIgZmlsbD0iI0YwNTQ0QyIvPjxwYXRoIGQ9Ik0xMSA1djEwIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMS4yIiBzdHJva2UtZGFzaGFycmF5PSIyIDIiLz48L2c+PGNpcmNsZSBjeD0iMTkiIGN5PSIzIiByPSIxLjIiIGZpbGw9IiNGNUE2MjMiLz48Y2lyY2xlIGN4PSIzLjUiIGN5PSIxNi41IiByPSIxIiBmaWxsPSIjMjZCRUM5Ii8+PC9zdmc+" width="22" height="20"></span>
       <span class="tk">95 折</span><span class="tk">TWD 100</span>
       <button class="claim" id="detClaim">领取 ›</button>
     </div>
