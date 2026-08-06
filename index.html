@@ -477,7 +477,7 @@
     display: flex; align-items: center; flex: 0 0 auto;
     background: #fff; padding: 0 8px 0 16px;
     position: relative; z-index: 1;
-    box-shadow: var(--el-action);  /* 与滚动区的分隔用投影，非竖线（Figma 795-35687） */
+    filter: drop-shadow(0 1px 2px rgba(38, 50, 56, .12));  /* Figma 795-35939 */
   }
   .pl-cond-scroll {
     display: flex; gap: 8px; flex: 1 1 0; min-width: 0;
@@ -502,7 +502,6 @@
   .pl-filter-fixed {
     flex: 0 0 auto; background: #fff; padding: 0 4px 0 16px;
     position: relative; z-index: 1;
-    box-shadow: var(--el-action);
   }
   .pl-filter-scroll {
     display: flex; gap: 8px; flex: 1 1 0; min-width: 0;
