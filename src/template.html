@@ -288,6 +288,20 @@
   }
   .cta.enabled { background: var(--kk-primary-button); color: #fff; }
 
+  /* ---------- KKButton Loading 态（Figma 976-51590）：禁态底色 + 文字隐藏 + 白色弧线旋转 ---------- */
+  .is-loading { position: relative; pointer-events: none; color: transparent !important; }
+  .cta.is-loading, .pkg-cta.is-loading { background: rgba(26, 182, 193, .4) !important; }
+  .is-loading::after {
+    content: ''; position: absolute; left: 50%; top: 50%;
+    width: 18px; height: 18px; margin: -11px 0 0 -11px;
+    border: 2.5px solid rgba(255, 255, 255, .9); border-right-color: transparent;
+    border-radius: 50%;
+    animation: btnSpin .8s linear infinite;
+  }
+  /* 次要按钮（白底深框）：深色弧线 */
+  .det-morebtn.is-loading::after { border-color: rgba(33, 33, 33, .8); border-right-color: transparent; }
+  @keyframes btnSpin { to { transform: rotate(360deg); } }
+
   /* ================= 选择目的地 modal ================= */
   .dest-modal {
     position: fixed; inset: 0; z-index: 40;
@@ -1560,6 +1574,16 @@
     toastTimer = setTimeout(function () { toastEl.classList.remove('show'); }, 1800);
   }
 
+  // ---------- KKButton 仿真加载（Figma 976-51590）：点击 → 短暂 Loading 态 → 执行 ----------
+  function withLoading(btn, fn) {
+    if (!btn || btn.classList.contains('is-loading')) return;
+    btn.classList.add('is-loading');
+    setTimeout(function () {
+      btn.classList.remove('is-loading');
+      fn();
+    }, 600 + Math.random() * 200);
+  }
+
   // ---------- 屏幕路由 ----------
   var current = 'home';
   function go(name) {
@@ -1735,8 +1759,10 @@
 
   document.getElementById('searchCta').addEventListener('click', function () {
     if (state.days && state.plan) {
-      renderPlans('center');  // 进页：选中档位瞬时定位到可视区中央
-      go('plans');
+      withLoading(this, function () {
+        renderPlans('center');  // 进页：选中档位瞬时定位到可视区中央
+        go('plans');
+      });
     }
   });
 
@@ -2012,7 +2038,9 @@
     if (!dm.multiSel.length) return;
     if (dm.multiSel.length < 2) { toast('多国组合请至少选择 2 个目的地'); return; }
     // 多国态：bar 显示国家列表（超出省略）+ (N)，见 Figma 871-76702
-    finishSelect(dm.multiSel.join(' '), 'multi', dm.multiSel.length);
+    withLoading(this, function () {
+      finishSelect(dm.multiSel.join(' '), 'multi', dm.multiSel.length);
+    });
   });
 
   // ---------- 搜索 ----------
@@ -2299,8 +2327,10 @@
     openSheet(document.getElementById('bsRegion'));
   }
   document.getElementById('bsRegionConfirm').addEventListener('click', function () {
-    closeSheets();
-    if (regionSheetR) pickRegion(regionSheetR);
+    withLoading(this, function () {
+      closeSheets();
+      if (regionSheetR) pickRegion(regionSheetR);
+    });
   });
 
   // 用卡天数滚轮 picker：高亮条固定中间，滚动选项，中心项即选中
@@ -2333,8 +2363,10 @@
     });
   });
   document.getElementById('bsDaysConfirm').addEventListener('click', function () {
-    setDays(pickerVal, true);
-    closeSheets();
+    withLoading(this, function () {
+      setDays(pickerVal, true);
+      closeSheets();
+    });
   });
 
   // 「不知道怎么选 ?」→ 选择建议 sheet
@@ -2575,7 +2607,9 @@
         if (e.target.closest('.rcount')) { openDetail(p, 'review'); return; }
         openDetail(p);
       });
-      card.querySelector('.pkg-cta').addEventListener('click', function () { toast('订购流程（开发中）：' + p.title); });
+      card.querySelector('.pkg-cta').addEventListener('click', function () {
+        withLoading(this, function () { toast('订购流程（开发中）：' + p.title); });
+      });
       box.appendChild(card);
     });
   }
@@ -2684,7 +2718,9 @@
     price.querySelector('.num').textContent = p.now.toLocaleString();
     if (p.was) price.querySelector('.pkg-was').textContent = 'NT$ ' + p.was.toLocaleString();
     price.querySelector('.pkg-per').textContent = '≈NT$' + p.perDay + '/天';
-    document.getElementById('detCta').onclick = function () { toast('订购流程（开发中）：' + p.title); };
+    document.getElementById('detCta').onclick = function () {
+      withLoading(this, function () { toast('订购流程（开发中）：' + p.title); });
+    };
   }
   function openDetail(p, anchor) {
     fillDetail(p);
@@ -2742,7 +2778,9 @@
     this.firstChild.textContent = this.classList.contains('open') ? '收起 ' : '展开更多 ';
   });
   document.getElementById('detClaim').addEventListener('click', function () { toast('优惠券已领取（原型演示）'); });
-  document.getElementById('detMoreReviews').addEventListener('click', function () { toast('完整评论列表（开发中）'); });
+  document.getElementById('detMoreReviews').addEventListener('click', function () {
+    withLoading(this, function () { toast('完整评论列表（开发中）'); });
+  });
 
   // ---------- 修改搜寻条件 modal（Figma 871-80184） ----------
   var editState = { days: null, tab: 'daily', plan: null };
@@ -2835,15 +2873,17 @@
   }
   document.getElementById('condClose').addEventListener('click', closeCondModal);
   document.getElementById('condConfirm').addEventListener('click', function () {
-    state.tab = editState.tab;
-    state.plan = editState.plan;
-    document.querySelectorAll('#dataTabs .ftab').forEach(function (t) {
-      t.classList.toggle('sel', t.getAttribute('data-tab') === state.tab);
+    withLoading(this, function () {
+      state.tab = editState.tab;
+      state.plan = editState.plan;
+      document.querySelectorAll('#dataTabs .ftab').forEach(function (t) {
+        t.classList.toggle('sel', t.getAttribute('data-tab') === state.tab);
+      });
+      setDays(editState.days);  // 内部会 renderOpts + updateCta
+      renderPlans('smooth');
+      closeCondModal();
+      window.scrollTo(0, 0);
     });
-    setDays(editState.days);  // 内部会 renderOpts + updateCta
-    renderPlans('smooth');
-    closeCondModal();
-    window.scrollTo(0, 0);
   });
 
 
