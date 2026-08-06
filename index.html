@@ -541,15 +541,16 @@
     padding: 8px 20px; font-size: 16px; line-height: 24px; font-weight: 600; flex: 0 0 auto; }
 
   /* ================= 修改搜寻条件 modal / 排序 sheet ================= */
-  .cond-body { flex: 1 1 0; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
-  .cond-picker-wrap { }
+  .cond-body { flex: 1 1 0; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: none; display: flex; flex-direction: column; }
+  .cond-picker-wrap { flex: 0 0 auto; }
   .cond-flow {
-    position: relative; background: #fff;
+    position: relative; background: #fff; flex: 1 0 auto;
     border-radius: var(--r-xl) var(--r-xl) 0 0;
     box-shadow: 0 -4px 16px rgba(38, 50, 56, .08);
     padding: 20px 24px 8px; display: flex; flex-direction: column; gap: 8px;
+    align-content: flex-start;
   }
-  .cond-foot { padding: 12px 24px calc(16px + env(safe-area-inset-bottom, 0px)); }
+  .cond-foot { border-top: 1px solid var(--kk-border-lighter); padding: 12px 24px calc(16px + env(safe-area-inset-bottom, 0px)); }
   .cond-sum { font-size: 16px; line-height: 24px; font-weight: 600; color: var(--kk-text-darker); margin-bottom: 12px; }
   .cond-foot .cta { background: var(--kk-primary-button); color: #fff; }
 
@@ -2199,7 +2200,15 @@
       renderCondOpts(); updateCondSum();
     });
   });
+  function condTouchGuard(e) {
+    var t = e.target;
+    if (t.closest && (t.closest('.bs-wheel') || t.closest('.opts-scroll'))) return;  // 内部滚动区放行
+    var b = t.closest && t.closest('.cond-body');
+    if (b && b.scrollHeight > b.clientHeight + 1) return;  // body 真的可滚时放行
+    e.preventDefault();
+  }
   function openCondModal() {
+    document.addEventListener('touchmove', condTouchGuard, { passive: false });
     editState = { days: state.days || '4', tab: state.tab, plan: state.plan };
     renderCondOpts(); updateCondSum();
     var m = document.getElementById('condModal');
@@ -2213,6 +2222,7 @@
     });
   }
   function closeCondModal() {
+    document.removeEventListener('touchmove', condTouchGuard, { passive: false });
     var m = document.getElementById('condModal');
     if (m.classList.contains('open')) unlockBody();
     m.classList.remove('open');
