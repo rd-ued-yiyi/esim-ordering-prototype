@@ -74,6 +74,8 @@
   .ic { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; }
   /* icon 图片不得超出 .ic 盒（资产 intrinsic 尺寸可能大于盒，如 19.5px 的 checkCircle 放进 16px 盒） */
   .ic img { max-width: 100%; max-height: 100%; object-fit: contain; }
+  /* 拉伸填满盒（intrinsic 小于盒时放大，如 13px 的火苗放进 20px 盒） */
+  .ic-stretch img { width: 100%; height: 100%; }
   .ic-14 { width: 14px; height: 14px; }
   .ic-16 { width: 16px; height: 16px; }
   .ic-20 { width: 20px; height: 20px; }
@@ -246,7 +248,8 @@
 
   .opts-scroll { width: 100%; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
   .opts-scroll::-webkit-scrollbar { display: none; }
-  .opts-grid { display: grid; grid-auto-flow: column; grid-template-rows: repeat(2, auto); gap: 8px; width: max-content; padding-top: 4px; }
+  /* padding-top 8px：给第一排 opt 卡的 80%选择 badge(top:-6px) 留出空间不被裁切 */
+  .opts-grid { display: grid; grid-auto-flow: column; grid-template-rows: repeat(2, auto); gap: 8px; width: max-content; padding-top: 8px; }
   .opt {
     position: relative;
     display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
@@ -312,7 +315,7 @@
   /* 搜索态：header 区加底边框（Figma 848-41868） */
   .dm-head.searching { border-bottom: 1px solid var(--kk-border-lighter); }
 
-  .dm-cats { display: flex; gap: 10px; padding: 0 20px 12px; overflow-x: auto; scrollbar-width: none; }
+  .dm-cats { display: flex; gap: 10px; padding: 0 20px; overflow-x: auto; scrollbar-width: none; }
   .dm-cats::-webkit-scrollbar { display: none; }
   .dm-cat {
     display: inline-flex; align-items: center;
@@ -332,6 +335,8 @@
   .dm-body { flex: 1 1 0; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
   .dm-pane { display: none; padding: 12px 0 32px; }
   .dm-pane.act { display: block; }
+  /* 多国自由选择：洲际 tab 紧贴分类行（Figma 686-35070 间距为 0） */
+  #paneMulti.dm-pane { padding-top: 0; }
 
   .dm-group { padding: 0 20px; margin-bottom: 32px; }
   .dm-group-head { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; }
@@ -536,6 +541,23 @@
     scroll-snap-align: center;
   }
   .bs-day.sel { color: var(--kk-text-darker); font-weight: 600; }
+
+  /* ================= 选中目的地飞入引导 ================= */
+  .fly-chip {
+    position: fixed; z-index: 60; pointer-events: none;
+    background: var(--kk-primary-lighter);
+    box-shadow: inset 0 0 0 1px var(--kk-primary-medium), var(--el-fixed);
+    color: #13A3B6; border-radius: var(--r-md);
+    padding: 8px 12px; font-size: 14px; line-height: 20px;
+    max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    transition: transform .5s cubic-bezier(.35,.8,.3,1), opacity .5s ease;
+    will-change: transform, opacity;
+  }
+  .dest-bar.pulse { animation: barPulse .7s ease; }
+  @keyframes barPulse {
+    0%   { box-shadow: 0 0 0 0 rgba(38,190,201,.45); }
+    100% { box-shadow: 0 0 0 14px rgba(38,190,201,0); }
+  }
 
   /* ---------- toast ---------- */
   .toast {
@@ -1210,7 +1232,7 @@
     pane.innerHTML = '';
     var hist = histGet(HK_C, HIST_C_DEF);
     if (hist.length) {
-      var g = groupEl('历史选择', '<button class="gact" data-hclear="c"><span class="ic ic-20">' + ICONS.trash + '</span></button>');
+      var g = groupEl('最近选择', '<button class="gact" data-hclear="c"><span class="ic ic-20">' + ICONS.trash + '</span></button>');
       var chips = el('<div class="dm-chips"></div>');
       hist.forEach(function (n) { chips.appendChild(chipEl(n, pickCountry)); });
       g.appendChild(chips);
@@ -1220,7 +1242,7 @@
       });
       pane.appendChild(g);
     }
-    var hot = groupEl('<span class="ic ic-20">' + ICONS.fire + '</span>热门');
+    var hot = groupEl('<span class="ic ic-20 ic-stretch">' + ICONS.fire + '</span>热门');
     var hotChips = el('<div class="dm-chips"></div>');
     GEO.hot.forEach(function (n) { hotChips.appendChild(chipEl(n, pickCountry)); });
     hot.appendChild(hotChips);
@@ -1247,7 +1269,7 @@
     pane.innerHTML = '';
     var hist = histGet(HK_R, HIST_R_DEF);
     if (hist.length) {
-      var g = groupEl('历史选择', '<button class="gact" data-hclear="r"><span class="ic ic-20">' + ICONS.trash + '</span></button>');
+      var g = groupEl('最近选择', '<button class="gact" data-hclear="r"><span class="ic ic-20">' + ICONS.trash + '</span></button>');
       var rows = el('<div class="dm-rows"></div>');
       hist.forEach(function (n) {
         var r = GEO.regions.concat(GEO.hotRegions).filter(function (x) { return x.name === n; })[0];
@@ -1260,7 +1282,7 @@
       });
       pane.appendChild(g);
     }
-    var hot = groupEl('<span class="ic ic-20">' + ICONS.fire + '</span>热门');
+    var hot = groupEl('<span class="ic ic-20 ic-stretch">' + ICONS.fire + '</span>热门');
     var hotRows = el('<div class="dm-rows"></div>');
     GEO.hotRegions.forEach(function (r) { hotRows.appendChild(regionRowEl(r, pickRegion)); });
     hot.appendChild(hotRows);
@@ -1440,6 +1462,40 @@
     dm.el.classList.remove('open');
     dm.el.setAttribute('aria-hidden', 'true');
   }
+  // 记录最近一次点击的按钮位置，作为飞入动画起点
+  var lastTapRect = null;
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('button');
+    if (b) lastTapRect = b.getBoundingClientRect();
+  }, true);
+
+  // 选中内容飞向目的地 bar 的视觉引导
+  function flyToBar(name) {
+    var bar = document.querySelector('[data-screen="destination"] .dest-bar');
+    if (!bar || !lastTapRect) return;
+    var src = lastTapRect;
+    var f = document.createElement('div');
+    f.className = 'fly-chip';
+    f.textContent = name;
+    f.style.left = src.left + 'px';
+    f.style.top = src.top + 'px';
+    document.body.appendChild(f);
+    var dst = bar.getBoundingClientRect();
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        var dx = dst.left + 44 - src.left;                       // 落点：bar 内文字起始处
+        var dy = dst.top + (dst.height - f.offsetHeight) / 2 - src.top;
+        f.style.transform = 'translate(' + dx + 'px,' + dy + 'px) scale(.55)';
+        f.style.opacity = '0';
+      });
+    });
+    setTimeout(function () {
+      f.remove();
+      bar.classList.add('pulse');
+      setTimeout(function () { bar.classList.remove('pulse'); }, 700);
+    }, 520);
+  }
+
   function finishSelect(name, type, count) {
     document.getElementById('destName').textContent = name;
     var num = document.getElementById('destNum');
@@ -1449,6 +1505,7 @@
     renderHomeHist();
     closeModal();
     go('destination');
+    flyToBar(name);
   }
   function lastType() {
     try { return localStorage.getItem('esim-last-type') || 'country'; } catch (e) { return 'country'; }
