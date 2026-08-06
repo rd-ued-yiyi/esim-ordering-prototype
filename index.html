@@ -526,9 +526,16 @@
     padding: 0 8px 0 12px; font-size: 14px; line-height: 20px; color: var(--kk-text-darker);
     white-space: nowrap;
   }
+  .fpill.fquick { padding: 0 12px; }        /* 无箭头快速筛选：左右等距（Figma px-12） */
+  .fpill.ficon { padding: 0 12px 0 8px; }   /* 筛选（icon 在左）：pl-8 pr-12（Figma 795-35699） */
+  /* 下拉箭头按 Figma ic_arrowDown_line 16 框内矢量实际占位（≈9.4×5.2），
+     资产是裸矢量（14.2×7.9），原尺寸渲染会显得过大过粗 */
+  .fpill .chev-sm img { width: 9.4px; height: 5.2px; }
 
   .pl-body { padding: 12px 16px 24px; }
   .pl-note { display: flex; align-items: center; gap: 4px; font-size: 12px; line-height: 16px; color: var(--kk-primary-medium); }
+  /* checkCircle 资产是 24 框裸矢量（19.5px），16 框内实际占位 13×13（inset 9.38%，Figma 821-38628） */
+  .pl-note .ic img, .inline-note .ic img { width: 13px; height: 13px; }
   .pl-meta { display: flex; align-items: center; margin: 12px 0; }
   .pl-meta .cnt { flex: 1 1 0; font-size: 14px; line-height: 20px; color: var(--kk-text-dark); }
   .pl-meta .sort { display: inline-flex; align-items: center; gap: 2px; font-size: 14px; line-height: 20px; color: var(--kk-text-dark); }
@@ -550,7 +557,10 @@
   .pkg-rating { display: flex; align-items: center; gap: 4px; margin-top: 2px; }
   .pkg-rating .score { font-size: 14px; line-height: 20px; font-weight: 600; color: #13A3B6; }
   .pkg-rating .grade { font-size: 12px; line-height: 16px; font-weight: 500; color: #13A3B6; }
-  .pkg-rating .rcount { font-size: 12px; line-height: 16px; color: var(--kk-text-darker); }
+  .pkg-rating .rcount { font-size: 12px; line-height: 16px; color: var(--kk-text-darker); text-decoration: underline; }  /* Figma 863-73998：评论数带下划线 */
+  .ic-14 { width: 14px; height: 14px; }
+  /* 火苗 ic_fire_fill 为 14 框（Figma 863-73870），裸矢量按框内占位渲染（≈10.1×11.5），不拉伸变形 */
+  .pkg-rating .bought .ic img { width: 10.1px; height: 11.5px; }
   .pkg-rating .bought { margin-left: auto; display: inline-flex; align-items: center; gap: 4px;
     font-size: 12px; line-height: 16px; color: var(--kk-text-dark); }
   .pkg-rating .bought.hot { color: var(--kk-text-critical); }
@@ -1102,14 +1112,14 @@
         <div class="pl-conds"><div class="pl-cond-fixed" id="plCondFixed"></div><div class="pl-cond-scroll" id="plCondScroll"></div></div>
         <div class="pl-filters">
           <div class="pl-filter-fixed">
-            <button class="fpill" data-action="filter"><span class="ic ic-16"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjEyIiBoZWlnaHQ9IjkiIHZpZXdCb3g9IjAgMCAxMiA5IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8ZyBpZD0iVmVjdG9yIj4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0yLjgyMjQ2IDEuMjUwMDNMMC41MDAwMDkgMS4yNDk5OUMwLjIyMzg2NyAxLjI0OTk4IDQuOTI3NTZlLTA2IDEuNDczODQgMCAxLjc0OTk4Qy00LjkyNzA3ZS0wNiAyLjAyNjEyIDAuMjIzODQ5IDIuMjQ5OTggMC40OTk5OTEgMi4yNDk5OUwyLjgyMjQ4IDIuMjUwMDNDMy4wMzc2MyAyLjk3Mjg5IDMuNzA3MjYgMy41IDQuNSAzLjVDNS4yOTI3NCAzLjUgNS45NjIzNyAyLjk3Mjg5IDYuMTc3NTIgMi4yNTAwNEwxMS41IDIuMjQ5OTlDMTEuNzc2MSAyLjI0OTk5IDEyIDIuMDI2MTMgMTIgMS43NDk5OUMxMiAxLjQ3Mzg0IDExLjc3NjEgMS4yNDk5OSAxMS41IDEuMjQ5OTlMNi4xNzc1NCAxLjI1MDA0QzUuOTYyNDEgMC41MjcxNDUgNS4yOTI3NyAwIDQuNSAwQzMuNzA3MjMgMCAzLjAzNzU5IDAuNTI3MTQzIDIuODIyNDYgMS4yNTAwM1pNMy43NSAxLjc1QzMuNzUgMS4zMzU3OSA0LjA4NTc5IDEgNC41IDFDNC45MTQyMSAxIDUuMjUgMS4zMzU3OSA1LjI1IDEuNzVDNS4yNSAyLjE2NDIxIDQuOTE0MjEgMi41IDQuNSAyLjVDNC4wODU3OSAyLjUgMy43NTAwMSAyLjE2NDIxIDMuNzUgMS43NUMzLjc1IDEuNzUgMy43NSAxLjc1IDMuNzUgMS43NVoiIGZpbGw9ImJsYWNrIi8+CjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNMC41IDYuNzUwMDFMNi44MjI0NyA2Ljc1QzcuMDM3NjEgNi4wMjcxMyA3LjcwNzI1IDUuNSA4LjUgNS41QzkuMjkyNzYgNS41IDkuOTYyMzkgNi4wMjcxMyAxMC4xNzc1IDYuNzVMMTEuNSA2Ljc1MDAxQzExLjc3NjEgNi43NTAwMSAxMiA2Ljk3Mzg3IDEyIDcuMjUwMDFDMTIgNy41MjYxNiAxMS43NzYxIDcuNzUwMDEgMTEuNSA3Ljc1MDAxTDEwLjE3NzUgNy43NUM5Ljk2MjM5IDguNDcyODcgOS4yOTI3NSA5IDguNSA5QzcuNzA3MjUgOSA3LjAzNzYxIDguNDcyODcgNi44MjI0NyA3Ljc1TDAuNSA3Ljc1MDAxQzAuMjIzODU4IDcuNzUwMDEgMCA3LjUyNjE1IDAgNy4yNTAwMUMwIDYuOTczODcgMC4yMjM4NTcgNi43NTAwMSAwLjUgNi43NTAwMVpNOC41IDYuNUM4LjA4NTc5IDYuNSA3Ljc1IDYuODM1NzkgNy43NSA3LjI1QzcuNzUgNy42NjQyMSA4LjA4NTc5IDggOC41IDhDOC45MTQyMSA4IDkuMjUgNy42NjQyMSA5LjI1IDcuMjVDOS4yNSA2LjgzNTc5IDguOTE0MjEgNi41IDguNSA2LjVaIiBmaWxsPSJibGFjayIvPgo8L2c+Cjwvc3ZnPg==" width="12.00" height="9.00"></span>筛选</button>
+            <button class="fpill ficon" data-action="filter"><span class="ic ic-16"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjEyIiBoZWlnaHQ9IjkiIHZpZXdCb3g9IjAgMCAxMiA5IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8ZyBpZD0iVmVjdG9yIj4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0yLjgyMjQ2IDEuMjUwMDNMMC41MDAwMDkgMS4yNDk5OUMwLjIyMzg2NyAxLjI0OTk4IDQuOTI3NTZlLTA2IDEuNDczODQgMCAxLjc0OTk4Qy00LjkyNzA3ZS0wNiAyLjAyNjEyIDAuMjIzODQ5IDIuMjQ5OTggMC40OTk5OTEgMi4yNDk5OUwyLjgyMjQ4IDIuMjUwMDNDMy4wMzc2MyAyLjk3Mjg5IDMuNzA3MjYgMy41IDQuNSAzLjVDNS4yOTI3NCAzLjUgNS45NjIzNyAyLjk3Mjg5IDYuMTc3NTIgMi4yNTAwNEwxMS41IDIuMjQ5OTlDMTEuNzc2MSAyLjI0OTk5IDEyIDIuMDI2MTMgMTIgMS43NDk5OUMxMiAxLjQ3Mzg0IDExLjc3NjEgMS4yNDk5OSAxMS41IDEuMjQ5OTlMNi4xNzc1NCAxLjI1MDA0QzUuOTYyNDEgMC41MjcxNDUgNS4yOTI3NyAwIDQuNSAwQzMuNzA3MjMgMCAzLjAzNzU5IDAuNTI3MTQzIDIuODIyNDYgMS4yNTAwM1pNMy43NSAxLjc1QzMuNzUgMS4zMzU3OSA0LjA4NTc5IDEgNC41IDFDNC45MTQyMSAxIDUuMjUgMS4zMzU3OSA1LjI1IDEuNzVDNS4yNSAyLjE2NDIxIDQuOTE0MjEgMi41IDQuNSAyLjVDNC4wODU3OSAyLjUgMy43NTAwMSAyLjE2NDIxIDMuNzUgMS43NUMzLjc1IDEuNzUgMy43NSAxLjc1IDMuNzUgMS43NVoiIGZpbGw9ImJsYWNrIi8+CjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNMC41IDYuNzUwMDFMNi44MjI0NyA2Ljc1QzcuMDM3NjEgNi4wMjcxMyA3LjcwNzI1IDUuNSA4LjUgNS41QzkuMjkyNzYgNS41IDkuOTYyMzkgNi4wMjcxMyAxMC4xNzc1IDYuNzVMMTEuNSA2Ljc1MDAxQzExLjc3NjEgNi43NTAwMSAxMiA2Ljk3Mzg3IDEyIDcuMjUwMDFDMTIgNy41MjYxNiAxMS43NzYxIDcuNzUwMDEgMTEuNSA3Ljc1MDAxTDEwLjE3NzUgNy43NUM5Ljk2MjM5IDguNDcyODcgOS4yOTI3NSA5IDguNSA5QzcuNzA3MjUgOSA3LjAzNzYxIDguNDcyODcgNi44MjI0NyA3Ljc1TDAuNSA3Ljc1MDAxQzAuMjIzODU4IDcuNzUwMDEgMCA3LjUyNjE1IDAgNy4yNTAwMUMwIDYuOTczODcgMC4yMjM4NTcgNi43NTAwMSAwLjUgNi43NTAwMVpNOC41IDYuNUM4LjA4NTc5IDYuNSA3Ljc1IDYuODM1NzkgNy43NSA3LjI1QzcuNzUgNy42NjQyMSA4LjA4NTc5IDggOC41IDhDOC45MTQyMSA4IDkuMjUgNy42NjQyMSA5LjI1IDcuMjVDOS4yNSA2LjgzNTc5IDguOTE0MjEgNi41IDguNSA2LjVaIiBmaWxsPSJibGFjayIvPgo8L2c+Cjwvc3ZnPg==" width="12.00" height="9.00"></span>筛选</button>
           </div>
           <div class="pl-filter-scroll">
-            <button class="fpill" data-action="filter">本地/漫游<span class="ic ic-16"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE0LjE2NjciIGhlaWdodD0iNy45MTY2NyIgdmlld0JveD0iMCAwIDE0LjE2NjcgNy45MTY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0wLjI0NDA3OCAwLjI0NDA3OEMwLjU2OTUxNSAtMC4wODEzNTkyIDEuMDk3MTUgLTAuMDgxMzU5MiAxLjQyMjU5IDAuMjQ0MDc4TDcuMDgzMzMgNS45MDQ4MkwxMi43NDQxIDAuMjQ0MDc4QzEzLjA2OTUgLTAuMDgxMzU5MiAxMy41OTcyIC0wLjA4MTM1OTIgMTMuOTIyNiAwLjI0NDA3OEMxNC4yNDggMC41Njk1MTUgMTQuMjQ4IDEuMDk3MTUgMTMuOTIyNiAxLjQyMjU5TDcuNjcyNTkgNy42NzI1OUM3LjM0NzE1IDcuOTk4MDMgNi44MTk1MSA3Ljk5ODAzIDYuNDk0MDggNy42NzI1OUwwLjI0NDA3OCAxLjQyMjU5Qy0wLjA4MTM1OTIgMS4wOTcxNSAtMC4wODEzNTkyIDAuNTY5NTE1IDAuMjQ0MDc4IDAuMjQ0MDc4WiIgZmlsbD0iIzIxMjEyMSIvPgo8L3N2Zz4=" width="14.17" height="7.92"></span></button>
-            <button class="fpill" data-action="filter">eSIM类型<span class="ic ic-16"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE0LjE2NjciIGhlaWdodD0iNy45MTY2NyIgdmlld0JveD0iMCAwIDE0LjE2NjcgNy45MTY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0wLjI0NDA3OCAwLjI0NDA3OEMwLjU2OTUxNSAtMC4wODEzNTkyIDEuMDk3MTUgLTAuMDgxMzU5MiAxLjQyMjU5IDAuMjQ0MDc4TDcuMDgzMzMgNS45MDQ4MkwxMi43NDQxIDAuMjQ0MDc4QzEzLjA2OTUgLTAuMDgxMzU5MiAxMy41OTcyIC0wLjA4MTM1OTIgMTMuOTIyNiAwLjI0NDA3OEMxNC4yNDggMC41Njk1MTUgMTQuMjQ4IDEuMDk3MTUgMTMuOTIyNiAxLjQyMjU5TDcuNjcyNTkgNy42NzI1OUM3LjM0NzE1IDcuOTk4MDMgNi44MTk1MSA3Ljk5ODAzIDYuNDk0MDggNy42NzI1OUwwLjI0NDA3OCAxLjQyMjU5Qy0wLjA4MTM1OTIgMS4wOTcxNSAtMC4wODEzNTkyIDAuNTY5NTE1IDAuMjQ0MDc4IDAuMjQ0MDc4WiIgZmlsbD0iIzIxMjEyMSIvPgo8L3N2Zz4=" width="14.17" height="7.92"></span></button>
+            <button class="fpill" data-action="filter">可用日期<span class="ic ic-16 chev-sm"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE0LjE2NjciIGhlaWdodD0iNy45MTY2NyIgdmlld0JveD0iMCAwIDE0LjE2NjcgNy45MTY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0wLjI0NDA3OCAwLjI0NDA3OEMwLjU2OTUxNSAtMC4wODEzNTkyIDEuMDk3MTUgLTAuMDgxMzU5MiAxLjQyMjU5IDAuMjQ0MDc4TDcuMDgzMzMgNS45MDQ4MkwxMi43NDQxIDAuMjQ0MDc4QzEzLjA2OTUgLTAuMDgxMzU5MiAxMy41OTcyIC0wLjA4MTM1OTIgMTMuOTIyNiAwLjI0NDA3OEMxNC4yNDggMC41Njk1MTUgMTQuMjQ4IDEuMDk3MTUgMTMuOTIyNiAxLjQyMjU5TDcuNjcyNTkgNy42NzI1OUM3LjM0NzE1IDcuOTk4MDMgNi44MTk1MSA3Ljk5ODAzIDYuNDk0MDggNy42NzI1OUwwLjI0NDA3OCAxLjQyMjU5Qy0wLjA4MTM1OTIgMS4wOTcxNSAtMC4wODEzNTkyIDAuNTY5NTE1IDAuMjQ0MDc4IDAuMjQ0MDc4WiIgZmlsbD0iIzIxMjEyMSIvPgo8L3N2Zz4=" width="14.17" height="7.92"></span></button>
+            <button class="fpill" data-action="filter">本地/漫游<span class="ic ic-16 chev-sm"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE0LjE2NjciIGhlaWdodD0iNy45MTY2NyIgdmlld0JveD0iMCAwIDE0LjE2NjcgNy45MTY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0wLjI0NDA3OCAwLjI0NDA3OEMwLjU2OTUxNSAtMC4wODEzNTkyIDEuMDk3MTUgLTAuMDgxMzU5MiAxLjQyMjU5IDAuMjQ0MDc4TDcuMDgzMzMgNS45MDQ4MkwxMi43NDQxIDAuMjQ0MDc4QzEzLjA2OTUgLTAuMDgxMzU5MiAxMy41OTcyIC0wLjA4MTM1OTIgMTMuOTIyNiAwLjI0NDA3OEMxNC4yNDggMC41Njk1MTUgMTQuMjQ4IDEuMDk3MTUgMTMuOTIyNiAxLjQyMjU5TDcuNjcyNTkgNy42NzI1OUM3LjM0NzE1IDcuOTk4MDMgNi44MTk1MSA3Ljk5ODAzIDYuNDk0MDggNy42NzI1OUwwLjI0NDA3OCAxLjQyMjU5Qy0wLjA4MTM1OTIgMS4wOTcxNSAtMC4wODEzNTkyIDAuNTY5NTE1IDAuMjQ0MDc4IDAuMjQ0MDc4WiIgZmlsbD0iIzIxMjEyMSIvPgo8L3N2Zz4=" width="14.17" height="7.92"></span></button>
             <button class="fpill fquick" data-action="fquick">支持热点</button>
-            <button class="fpill fquick" data-action="fquick">中文</button>
-            <button class="fpill" data-action="filter">行程时长<span class="ic ic-16"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE0LjE2NjciIGhlaWdodD0iNy45MTY2NyIgdmlld0JveD0iMCAwIDE0LjE2NjcgNy45MTY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0wLjI0NDA3OCAwLjI0NDA3OEMwLjU2OTUxNSAtMC4wODEzNTkyIDEuMDk3MTUgLTAuMDgxMzU5MiAxLjQyMjU5IDAuMjQ0MDc4TDcuMDgzMzMgNS45MDQ4MkwxMi43NDQxIDAuMjQ0MDc4QzEzLjA2OTUgLTAuMDgxMzU5MiAxMy41OTcyIC0wLjA4MTM1OTIgMTMuOTIyNiAwLjI0NDA3OEMxNC4yNDggMC41Njk1MTUgMTQuMjQ4IDEuMDk3MTUgMTMuOTIyNiAxLjQyMjU5TDcuNjcyNTkgNy42NzI1OUM3LjM0NzE1IDcuOTk4MDMgNi44MTk1MSA3Ljk5ODAzIDYuNDk0MDggNy42NzI1OUwwLjI0NDA3OCAxLjQyMjU5Qy0wLjA4MTM1OTIgMS4wOTcxNSAtMC4wODEzNTkyIDAuNTY5NTE1IDAuMjQ0MDc4IDAuMjQ0MDc4WiIgZmlsbD0iIzIxMjEyMSIvPgo8L3N2Zz4=" width="14.17" height="7.92"></span></button>
+            <button class="fpill fquick" data-action="fquick">免费取消</button>
+            <button class="fpill fquick" data-action="fquick">立即确认</button>
           </div>
         </div>
       </div>
@@ -1918,6 +1928,14 @@
       renderPlans();          // 留在列表页，按新目的地刷新
       go('plans');
     } else {
+      // 目的地页切换目的地：搜索条件回到默认状态（1 天浅灰 + 每日流量第一档）
+      state.tab = 'daily';
+      state.plan = null;
+      state.daysTouched = false;
+      setDays('1', false);    // 内部 renderOpts 会把 plan 落回第一档
+      var os = document.getElementById('dataOptsScroll');
+      os.scrollLeft = 0;      // 滚动带回到每日流量组起点
+      setTabsActive(document.getElementById('dataTabs'), document.getElementById('dataNote'), 'daily');
       go('destination');
     }
     flyToBar(name);
@@ -2238,7 +2256,7 @@
       rating.innerHTML = '<span class="ic ic-16">' + ICONS.star + '</span>' +
         '<span class="score"></span>' + (p.rating >= 4.5 ? '<span class="grade">非常好</span>' : '') +
         '<span class="rcount"></span>' +
-        '<span class="bought' + (p.hot ? ' hot' : '') + '">' + (p.hot ? '<span class="ic ic-16 ic-stretch">' + ICONS.fire2 + '</span>' : '') + '<span class="bt"></span></span>';
+        '<span class="bought' + (p.hot ? ' hot' : '') + '">' + (p.hot ? '<span class="ic ic-14">' + ICONS.fire2 + '</span>' : '') + '<span class="bt"></span></span>';
       rating.querySelector('.score').textContent = p.rating.toFixed(1);
       rating.querySelector('.rcount').textContent = '(' + p.reviews + ')';
       rating.querySelector('.bt').textContent = p.bought;
