@@ -495,8 +495,9 @@
   .pl-filters::-webkit-scrollbar { display: none; }
   .fpill {
     display: inline-flex; align-items: center; gap: 4px; flex: 0 0 auto;
+    height: 32px; box-sizing: border-box;
     background: #fff; border: 1px solid var(--kk-border-light); border-radius: 999px;
-    padding: 8px 12px; font-size: 14px; line-height: 20px; color: var(--kk-text-darker);
+    padding: 0 8px 0 12px; font-size: 14px; line-height: 20px; color: var(--kk-text-darker);
     white-space: nowrap;
   }
 
@@ -674,7 +675,7 @@
     transition: transform .5s cubic-bezier(.35,.8,.3,1), opacity .5s ease;
     will-change: transform, opacity;
   }
-  .dest-bar.pulse { animation: barPulse .7s ease; }
+  .dest-bar.pulse, .pl-title-wrap.pulse { animation: barPulse .7s ease; border-radius: var(--r-md); }
   @keyframes barPulse {
     0%   { box-shadow: 0 0 0 0 rgba(38,190,201,.45); }
     100% { box-shadow: 0 0 0 14px rgba(38,190,201,0); }
@@ -1765,7 +1766,9 @@
 
   // 选中内容飞向目的地 bar 的视觉引导
   function flyToBar(name) {
-    var bar = document.querySelector('[data-screen="destination"] .dest-bar');
+    var bar = current === 'plans'
+      ? document.querySelector('[data-screen="plans"] .pl-title-wrap')
+      : document.querySelector('[data-screen="destination"] .dest-bar');
     if (!bar || !lastTapRect) return;
     var src = lastTapRect;
     var f = document.createElement('div');
@@ -1801,7 +1804,12 @@
     } catch (e) {}
     renderHomeHist();
     closeModal();
-    go('destination');
+    if (current === 'plans') {
+      renderPlans();          // 留在列表页，按新目的地刷新
+      go('plans');
+    } else {
+      go('destination');
+    }
     flyToBar(name);
   }
   function lastType() {
