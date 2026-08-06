@@ -248,8 +248,9 @@
 
   .opts-scroll { width: 100%; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
   .opts-scroll::-webkit-scrollbar { display: none; }
-  /* padding-top 8px：给第一排 opt 卡的 80%选择 badge(top:-6px) 留出空间不被裁切 */
-  .opts-grid { display: grid; grid-auto-flow: column; grid-template-rows: repeat(2, auto); gap: 8px; width: max-content; padding-top: 8px; }
+  /* 顶部留白 4px 给第一排 badge(top:-4px)，再用负 margin 抵消——note→卡顶净间距保持 8px（Figma） */
+  .opts-scroll { margin-top: -4px; }
+  .opts-grid { display: grid; grid-auto-flow: column; grid-template-rows: repeat(2, auto); gap: 8px; width: max-content; padding-top: 4px; }
   .opt {
     position: relative;
     display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
@@ -260,7 +261,7 @@
   .opt.sel .t { color: #13A3B6; }
   .opt .p { font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
   .opt .badge {
-    position: absolute; top: -6px; left: 0;
+    position: absolute; top: -4px; left: 0;
     background: var(--kk-text-critical); color: #fff;
     font-size: 12px; line-height: 16px; padding: 2px 6px;
     border-radius: var(--r-md) var(--r-lg) var(--r-lg) 0;
@@ -1239,7 +1240,7 @@
     pane.innerHTML = '';
     var cur = currentSel();
     var curC = cur.type === 'country' ? cur.name : null;
-    var hist = histGet(HK_C, HIST_C_DEF);
+    var hist = histGet(HK_C, HIST_C_DEF).slice(0, 5);  // modal 最多显示 5 个
     if (hist.length) {
       var g = groupEl('最近选择', '<button class="gact" data-hclear="c"><span class="ic ic-20">' + ICONS.trash + '</span></button>');
       var chips = el('<div class="dm-chips"></div>');
@@ -1278,7 +1279,7 @@
     pane.innerHTML = '';
     var cur = currentSel();
     var curR = cur.type === 'region' ? cur.name : null;
-    var hist = histGet(HK_R, HIST_R_DEF);
+    var hist = histGet(HK_R, HIST_R_DEF).slice(0, 5);  // modal 最多显示 5 个
     if (hist.length) {
       var g = groupEl('最近选择', '<button class="gact" data-hclear="r"><span class="ic ic-20">' + ICONS.trash + '</span></button>');
       var rows = el('<div class="dm-rows"></div>');
@@ -1528,7 +1529,7 @@
   // ---------- 主题页「最近选择」 ----------
   function renderHomeHist() {
     var box = document.getElementById('homeHist');
-    var hist = histGet(HK_C, []);
+    var hist = histGet(HK_C, []).slice(0, 3);  // 主题页最多显示 3 个
     box.classList.toggle('show', hist.length > 0);
     var wrap = document.getElementById('homeHistChips');
     wrap.innerHTML = '';
