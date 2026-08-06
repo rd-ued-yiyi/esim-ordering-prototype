@@ -21,6 +21,7 @@
     --kk-text-darker: #212121;
     --kk-text-dark: #727272;
     --kk-text-medium: #9C9DA0;
+    --kk-text-light: #BABBBE;
     --kk-text-critical: #EF7A70;
     --kk-border-lighter: #E6E9ED;
     --kk-border-light: #D5D6DB;
@@ -178,6 +179,7 @@
     background: rgba(255,255,255,.88);
     border: 1.5px solid #fff; border-radius: var(--r-lg);
     padding: 0 12px; cursor: pointer;
+    color: var(--kk-text-darker);  /* 不继承 .title-block 的白色 */
   }
   .dest-bar .name { flex: 1 1 0; min-width: 0; text-align: left; }
 
