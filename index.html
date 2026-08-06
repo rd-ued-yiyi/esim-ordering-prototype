@@ -535,6 +535,24 @@
   .pkg-cta { background: var(--kk-primary-button); color: #fff; border-radius: var(--r-md);
     padding: 8px 20px; font-size: 16px; line-height: 24px; font-weight: 600; flex: 0 0 auto; }
 
+  /* ================= 修改搜寻条件 modal / 排序 sheet ================= */
+  .cond-body { flex: 1 1 0; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
+  .cond-picker-wrap { border-bottom: 1px solid var(--kk-border-lighter); }
+  .cond-flow { padding: 16px 24px 8px; display: flex; flex-direction: column; gap: 8px; }
+  .cond-foot { padding: 12px 24px calc(16px + env(safe-area-inset-bottom, 0px)); }
+  .cond-sum { font-size: 16px; line-height: 24px; font-weight: 600; color: var(--kk-text-darker); margin-bottom: 12px; }
+  .cond-foot .cta { background: var(--kk-primary-button); color: #fff; }
+
+  .sort-list { padding: 4px 0 16px; }
+  .sort-item { display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px 24px; text-align: left; }
+  .sort-item .sname { flex: 1 1 0; font-size: 14px; line-height: 20px; color: var(--kk-text-darker); }
+  .sradio { width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid var(--kk-border-light); position: relative; flex: 0 0 auto; }
+  .sradio.on { background: var(--kk-primary-medium); border-color: var(--kk-primary-medium); }
+  .sradio.on::after {
+    content: ''; position: absolute; left: 5.5px; top: 2.5px;
+    width: 5px; height: 9px; border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(45deg);
+  }
+
   /* ================= 滚动置顶 header ================= */
   .page-header {
     position: fixed; top: 0; left: 0; right: 0; z-index: 30;
@@ -1171,6 +1189,48 @@
     <div class="bs-foot"><button class="cta" id="bsDaysConfirm">确定</button></div>
   </div>
 
+  <!-- 修改搜寻条件 modal（列表页「N天·类型 ✏」） -->
+  <div class="dest-modal" id="condModal" aria-hidden="true">
+    <div class="dm-bar" style="margin-top: env(safe-area-inset-top, 0px);">
+      <button class="dm-close" id="condClose" aria-label="关闭"><span class="ic ic-24"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjEzLjA2NzciIGhlaWdodD0iMTMuMDY3NyIgdmlld0JveD0iMCAwIDEzLjA2NzcgMTMuMDY3NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgaWQ9IlZlY3RvciI+CjxwYXRoIGQ9Ik0xMi44NDgxIDEuMjgwMzNDMTMuMTQxIDAuOTg3NDM3IDEzLjE0MSAwLjUxMjU2MyAxMi44NDgxIDAuMjE5NjdDMTIuNTU1MiAtMC4wNzMyMjMzIDEyLjA4MDMgLTAuMDczMjIzMyAxMS43ODc0IDAuMjE5NjdMNi41MzM4NyA1LjQ3MzIxTDEuMjgwMzMgMC4yMTk2N0MwLjk4NzQzNyAtMC4wNzMyMjMzIDAuNTEyNTYzIC0wLjA3MzIyMzMgMC4yMTk2NyAwLjIxOTY3Qy0wLjA3MzIyMzMgMC41MTI1NjMgLTAuMDczMjIzMyAwLjk4NzQzNyAwLjIxOTY3IDEuMjgwMzNMNS40NzMyMSA2LjUzMzg3TDAuMjE5NjcgMTEuNzg3NEMtMC4wNzMyMjMzIDEyLjA4MDMgLTAuMDczMjIzMyAxMi41NTUyIDAuMjE5NjcgMTIuODQ4MUMwLjUxMjU2MyAxMy4xNDEgMC45ODc0MzcgMTMuMTQxIDEuMjgwMzMgMTIuODQ4MUw2LjUzMzg3IDcuNTk0NTNMMTEuNzg3NCAxMi44NDgxQzEyLjA4MDMgMTMuMTQxIDEyLjU1NTIgMTMuMTQxIDEyLjg0ODEgMTIuODQ4MUMxMy4xNDEgMTIuNTU1MiAxMy4xNDEgMTIuMDgwMyAxMi44NDgxIDExLjc4NzRMNy41OTQ1MyA2LjUzMzg3TDEyLjg0ODEgMS4yODAzM1oiIGZpbGw9ImJsYWNrIi8+CjwvZz4KPC9zdmc+" width="13.07" height="13.07"></span></button>
+      <span class="dm-title">选择天数</span>
+      <span class="dm-spacer"></span>
+    </div>
+    <div class="cond-body">
+      <div class="cond-picker-wrap">
+        <div class="bs-picker">
+          <div class="bs-highlight"></div>
+          <div class="bs-wheel" id="condDaysList"></div>
+        </div>
+      </div>
+      <div class="cond-flow">
+        <div class="field-head"><span class="label-sm">流量</span></div>
+        <div class="ftabs" id="condTabs">
+          <button class="ftab" data-tab="daily">每日固定流量</button>
+          <button class="ftab" data-tab="total">总流量</button>
+          <button class="ftab" data-tab="unlimited">无限流量</button>
+        </div>
+        <div class="field-note" id="condNote"></div>
+        <div class="opts-scroll"><div class="opts-grid" id="condOpts"></div></div>
+      </div>
+    </div>
+    <div class="cond-foot">
+      <div class="cond-sum" id="condSum"></div>
+      <button class="cta" id="condConfirm">确定</button>
+    </div>
+  </div>
+
+  <!-- 排序 sheet -->
+  <div class="bsheet" id="bsSort">
+    <div class="bs-handle"></div>
+    <div class="bs-bar">
+      <button class="bs-close" data-bs-close aria-label="关闭"><span class="ic ic-24"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjEzLjA2NzciIGhlaWdodD0iMTMuMDY3NyIgdmlld0JveD0iMCAwIDEzLjA2NzcgMTMuMDY3NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgaWQ9IlZlY3RvciI+CjxwYXRoIGQ9Ik0xMi44NDgxIDEuMjgwMzNDMTMuMTQxIDAuOTg3NDM3IDEzLjE0MSAwLjUxMjU2MyAxMi44NDgxIDAuMjE5NjdDMTIuNTU1MiAtMC4wNzMyMjMzIDEyLjA4MDMgLTAuMDczMjIzMyAxMS43ODc0IDAuMjE5NjdMNi41MzM4NyA1LjQ3MzIxTDEuMjgwMzMgMC4yMTk2N0MwLjk4NzQzNyAtMC4wNzMyMjMzIDAuNTEyNTYzIC0wLjA3MzIyMzMgMC4yMTk2NyAwLjIxOTY3Qy0wLjA3MzIyMzMgMC41MTI1NjMgLTAuMDczMjIzMyAwLjk4NzQzNyAwLjIxOTY3IDEuMjgwMzNMNS40NzMyMSA2LjUzMzg3TDAuMjE5NjcgMTEuNzg3NEMtMC4wNzMyMjMzIDEyLjA4MDMgLTAuMDczMjIzMyAxMi41NTUyIDAuMjE5NjcgMTIuODQ4MUMwLjUxMjU2MyAxMy4xNDEgMC45ODc0MzcgMTMuMTQxIDEuMjgwMzMgMTIuODQ4MUw2LjUzMzg3IDcuNTk0NTNMMTEuNzg3NCAxMi44NDgxQzEyLjA4MDMgMTMuMTQxIDEyLjU1NTIgMTMuMTQxIDEyLjg0ODEgMTIuODQ4MUMxMy4xNDEgMTIuNTU1MiAxMy4xNDEgMTIuMDgwMyAxMi44NDgxIDExLjc4NzRMNy41OTQ1MyA2LjUzMzg3TDEyLjg0ODEgMS4yODAzM1oiIGZpbGw9ImJsYWNrIi8+CjwvZz4KPC9zdmc+" width="13.07" height="13.07"></span></button>
+      <span class="bs-title">排序</span>
+      <span class="bs-spacer"></span>
+    </div>
+    <div class="sort-list" id="sortList"></div>
+  </div>
+
   <div class="toast" id="toast"></div>
 </div>
 
@@ -1226,23 +1286,23 @@
                          { t: '全程高速', per: 168 } ] }
   };
   function daysDiscount(d) { return d >= 30 ? 0.85 : d >= 15 ? 0.9 : d >= 7 ? 0.95 : 1; }
-  function optPriceLabel(o) {
-    var d = state.days ? +state.days : 0;
+  function priceLabelFor(o, d) {
     if (o.per) {
       return d ? 'NT$ ' + Math.round(o.per * d * daysDiscount(d)) + '起'
                : 'NT$ ' + o.per + '/天起';
     }
     return 'NT$ ' + o.price + '起';
   }
+  function optPriceLabel(o) { return priceLabelFor(o, state.days ? +state.days : 0); }
   // 推荐 badge 随天数联动（仅每日固定流量）
-  function badgeFor() {
-    if (state.tab !== 'daily') return null;
-    var d = state.days ? +state.days : 0;
+  function badgeForTab(tab, d) {
+    if (tab !== 'daily') return null;
     if (!d) return '4GB/天';
     if (d <= 3) return '2GB/天';
     if (d <= 10) return '4GB/天';
     return '3GB/天';  // 长天数省钱档
   }
+  function badgeFor() { return badgeForTab(state.tab, state.days ? +state.days : 0); }
 
   function renderOpts() {
     var cfg = PLANS[state.tab];
@@ -1899,7 +1959,9 @@
     '4G/5G·本地网络·即插即用',
     '5G·漫游·双网切换·{v}'
   ];
-  var sortMode = 0;  // 0 推荐 1 价格低→高 2 价格高→低
+  var sortMode = 0;  // 0 价格低到高 1 高评分优先 2 高销量优先（Figma 902-41325）
+  var SORT_NAMES = ['价格低到高', '高评分优先', '高销量优先'];
+  function boughtNum(p) { return p.bought.indexOf('10k') >= 0 ? 10000 : parseInt(p.bought, 10) || 0; }
 
   function fmtDate(offsetDays) {
     var d = new Date(Date.now() + offsetDays * 864e5);
@@ -1961,7 +2023,7 @@
     conds.innerHTML = '';
     var edit = el('<button class="cond-chip sel"><span class="lb"></span><span class="ic ic-16">' + ICONS.pencil + '</span></button>');
     edit.querySelector('.lb').textContent = state.days + '天·' + tabShort();
-    edit.addEventListener('click', function () { go('destination'); });
+    edit.addEventListener('click', function () { openCondModal(); });
     conds.appendChild(edit);
     conds.appendChild(el('<div class="cond-div"></div>'));
     var opts = PLANS[state.tab].opts;
@@ -1978,11 +2040,11 @@
     });
 
     var list = buildPlans();
-    if (sortMode === 1) list.sort(function (a, b) { return a.now - b.now; });
-    if (sortMode === 2) list.sort(function (a, b) { return b.now - a.now; });
+    if (sortMode === 0) list.sort(function (a, b) { return a.now - b.now; });
+    if (sortMode === 1) list.sort(function (a, b) { return b.rating - a.rating; });
+    if (sortMode === 2) list.sort(function (a, b) { return boughtNum(b) - boughtNum(a); });
     document.getElementById('plCount').textContent = (26 + list.length) + ' 项结果';
-    document.getElementById('plSort').childNodes[0].textContent =
-      sortMode === 0 ? '排序' : sortMode === 1 ? '价格低→高' : '价格高→低';
+    document.getElementById('plSort').childNodes[0].textContent = SORT_NAMES[sortMode];
 
     var box = document.getElementById('plList');
     box.innerHTML = '';
@@ -2030,9 +2092,115 @@
       box.appendChild(card);
     });
   }
+  // 排序 bottom sheet（Figma 902-41325）：点选即应用
+  function renderSortList() {
+    var box = document.getElementById('sortList');
+    box.innerHTML = '';
+    SORT_NAMES.forEach(function (n, i) {
+      var it = el('<button class="sort-item"><span class="sname"></span><span class="sradio' + (i === sortMode ? ' on' : '') + '"></span></button>');
+      it.querySelector('.sname').textContent = n;
+      it.addEventListener('click', function () {
+        sortMode = i;
+        renderPlans();
+        closeSheets();
+        window.scrollTo(0, 0);
+      });
+      box.appendChild(it);
+    });
+  }
   document.getElementById('plSort').addEventListener('click', function () {
-    sortMode = (sortMode + 1) % 3;
+    renderSortList();
+    openSheet(document.getElementById('bsSort'));
+  });
+
+  // ---------- 修改搜寻条件 modal（Figma 871-80184） ----------
+  var editState = { days: null, tab: 'daily', plan: null };
+  var condWheel = document.getElementById('condDaysList');
+  DAYS_ALL.forEach(function (d) {
+    var b = document.createElement('div');
+    b.className = 'bs-day';
+    b.textContent = d + ' 天';
+    condWheel.appendChild(b);
+  });
+  function updateCondWheel() {
+    var idx = Math.round(condWheel.scrollTop / DAY_H);
+    idx = Math.max(0, Math.min(DAYS_ALL.length - 1, idx));
+    editState.days = DAYS_ALL[idx];
+    condWheel.querySelectorAll('.bs-day').forEach(function (el2, i) {
+      el2.classList.toggle('sel', i === idx);
+    });
+    updateCondSum();
+  }
+  condWheel.addEventListener('scroll', updateCondWheel, { passive: true });
+
+  function tabFull(tab) { return tab === 'daily' ? '每日固定流量' : tab === 'total' ? '总流量' : '无限流量'; }
+  function updateCondSum() {
+    document.getElementById('condSum').textContent =
+      editState.days + '天·' + tabFull(editState.tab) + (editState.plan ? '·' + editState.plan : '');
+  }
+  function renderCondOpts() {
+    document.getElementById('condNote').textContent = PLANS[editState.tab].note;
+    document.querySelectorAll('#condTabs .ftab').forEach(function (t) {
+      t.classList.toggle('sel', t.getAttribute('data-tab') === editState.tab);
+    });
+    var d = editState.days ? +editState.days : 0;
+    var opts = PLANS[editState.tab].opts;
+    if (editState.tab === 'total' && d) {
+      var fit = opts.filter(function (o) { return o.gb >= d * 0.2; });
+      opts = fit.length >= 2 ? fit : PLANS.total.opts.slice(-2);
+    }
+    if (editState.plan && !opts.some(function (o) { return o.t === editState.plan; })) editState.plan = opts[0].t;
+    var badge = badgeForTab(editState.tab, d);
+    var grid = document.getElementById('condOpts');
+    grid.innerHTML = '';
+    opts.forEach(function (o) {
+      var b = el('<button class="opt' + (editState.plan === o.t ? ' sel' : '') + '"><span class="t"></span><span class="p"></span>' +
+        (badge === o.t ? '<span class="badge">80%选择</span>' : '') + '</button>');
+      b.querySelector('.t').textContent = o.t;
+      b.querySelector('.p').textContent = priceLabelFor(o, d);
+      b.addEventListener('click', function () {
+        editState.plan = o.t;
+        renderCondOpts(); updateCondSum();
+      });
+      grid.appendChild(b);
+    });
+  }
+  document.querySelectorAll('#condTabs .ftab').forEach(function (t) {
+    t.addEventListener('click', function () {
+      editState.tab = t.getAttribute('data-tab');
+      editState.plan = null;
+      renderCondOpts(); updateCondSum();
+    });
+  });
+  function openCondModal() {
+    editState = { days: state.days || '4', tab: state.tab, plan: state.plan };
+    renderCondOpts(); updateCondSum();
+    var m = document.getElementById('condModal');
+    m.classList.add('open');
+    m.setAttribute('aria-hidden', 'false');
+    lockBody();
+    requestAnimationFrame(function () {
+      var idx = Math.max(0, DAYS_ALL.indexOf(editState.days));
+      condWheel.scrollTop = idx * DAY_H;
+      updateCondWheel();
+    });
+  }
+  function closeCondModal() {
+    var m = document.getElementById('condModal');
+    if (m.classList.contains('open')) unlockBody();
+    m.classList.remove('open');
+    m.setAttribute('aria-hidden', 'true');
+  }
+  document.getElementById('condClose').addEventListener('click', closeCondModal);
+  document.getElementById('condConfirm').addEventListener('click', function () {
+    state.tab = editState.tab;
+    state.plan = editState.plan;
+    document.querySelectorAll('#dataTabs .ftab').forEach(function (t) {
+      t.classList.toggle('sel', t.getAttribute('data-tab') === state.tab);
+    });
+    setDays(editState.days);  // 内部会 renderOpts + updateCta
     renderPlans();
+    closeCondModal();
     window.scrollTo(0, 0);
   });
 
