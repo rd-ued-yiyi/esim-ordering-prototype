@@ -2091,6 +2091,17 @@
     '轻量出行首选·高CP值',
     '5G 高速上网·涵盖离岛地区'
   ];
+  // 每张卡的功能标签组合各不相同（大多数满 4 个，少数 2 个做差异）；池：含通话/含简讯/可以加值/支持热点/可延长天数/支持AI
+  var PKG_TAGS = [
+    ['含通话', '含简讯', '可以加值', '支持热点'],
+    ['支持热点', '可以加值', '可延长天数', '支持AI'],
+    ['含通话', '支持热点', '可延长天数', '含简讯'],
+    ['可以加值', '可延长天数'],
+    ['含通话', '含简讯', '支持热点', '支持AI'],
+    ['可以加值', '含通话', '可延长天数', '支持AI'],
+    ['支持热点', '可以加值'],
+    ['含简讯', '支持热点', '可以加值', '可延长天数']
+  ];
   var sortMode = 0;  // 0 价格低到高 1 高评分优先 2 高销量优先（Figma 902-41325）
   var SORT_NAMES = ['价格低到高', '高评分优先', '高销量优先'];
   function boughtNum(p) { return p.bought.indexOf('10k') >= 0 ? 10000 : parseInt(p.bought, 10) || 0; }
@@ -2126,7 +2137,7 @@
       var perkSet = i % 4;
       out.push({
         title: PKG_TITLES[i % PKG_TITLES.length],
-        tags: ['含通话', '可以加值', '支持AI', '支持热点'].slice(0, 2 + (i % 3)),
+        tags: PKG_TAGS[i % PKG_TAGS.length],
         perks: perkSet === 0 ? [['flash', '立即确认'], ['reload', '免费取消'], ['checkLine', '即日可用']]
              : perkSet === 1 ? [['reload', '免费取消'], ['calendarD', '最早可使用日: ' + fmtDate(2)]]
              : perkSet === 2 ? [['reloadD', '2天前可免费取消'], ['calendarD', '最早可使用日: ' + fmtDate(2)]]
