@@ -1599,7 +1599,8 @@
       '<span class="rd"><span class="desc"></span><span class="cnt"><span></span>' +
       '<span class="ic ic-16">' + ICONS.info + '</span></span></span></span></button>');
     row.querySelector('.rn').textContent = r.name;
-    row.querySelector('.desc').textContent = r.desc;
+    // 国家串用完整 list 拼出，统一交给 CSS 尾部省略（手写 desc 有的只列了部分，短了不触发省略号会像“显示完了”）
+    row.querySelector('.desc').textContent = (r.list && r.list.length) ? r.list.join('、') : r.desc;
     row.querySelector('.cnt span').textContent = r.count + '个国家';
     row.addEventListener('click', function () { onTap(r); });
     // 点「N个国家 ⓘ」→ 展开包含地区 bottom sheet（不触发行选择）
