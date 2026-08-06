@@ -496,13 +496,25 @@
     width: 5px; height: 5px; border-radius: 50%; background: var(--kk-text-darker);
   }
 
-  /* 天数 picker sheet */
-  .bs-days { padding: 8px 0; }
-  .bs-day {
-    width: 100%; padding: 8px 0; text-align: center;
-    font-size: 16px; line-height: 24px; color: var(--kk-text-light);
+  /* 天数滚轮 picker：高亮条固定在中间，选项滚动吸附（iOS wheel 风格） */
+  .bs-picker { position: relative; height: 252px; overflow: hidden; }  /* 7 行 × 36px */
+  .bs-highlight {
+    position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%);
+    height: 36px; background: var(--kk-surface-light); pointer-events: none;
   }
-  .bs-day.sel { color: var(--kk-text-darker); background: var(--kk-surface-light); font-weight: 600; }
+  .bs-wheel {
+    position: relative; height: 100%; overflow-y: auto;
+    scrollbar-width: none; -webkit-overflow-scrolling: touch;
+    scroll-snap-type: y mandatory;
+    padding: 108px 0;  /* (252-36)/2：首尾项也能滚到中间 */
+  }
+  .bs-wheel::-webkit-scrollbar { display: none; }
+  .bs-day {
+    height: 36px; line-height: 36px; text-align: center;
+    font-size: 16px; color: var(--kk-text-light);
+    scroll-snap-align: center;
+  }
+  .bs-day.sel { color: var(--kk-text-darker); font-weight: 600; }
 
   /* ---------- toast ---------- */
   .toast {
@@ -872,7 +884,10 @@
       <span class="bs-title">选择用卡天数</span>
       <span class="bs-spacer"></span>
     </div>
-    <div class="bs-body"><div class="bs-days" id="bsDaysList"></div></div>
+    <div class="bs-picker">
+      <div class="bs-highlight"></div>
+      <div class="bs-wheel" id="bsDaysList"></div>
+    </div>
     <div class="bs-foot"><button class="cta" id="bsDaysConfirm">确定</button></div>
   </div>
 
@@ -1418,26 +1433,34 @@
     openSheet(document.getElementById('bsRegion'));
   }
 
-  // 用卡天数 picker sheet
+  // 用卡天数滚轮 picker：高亮条固定中间，滚动选项，中心项即选中
   var DAYS_ALL = ['1','2','3','4','5','6','7','8','9','10','15','20','30'];
+  var DAY_H = 36;
   var pickerVal = null;
-  function renderDaysPicker() {
-    var box = document.getElementById('bsDaysList');
-    box.innerHTML = '';
-    DAYS_ALL.forEach(function (d) {
-      var b = document.createElement('button');
-      b.className = 'bs-day' + (pickerVal === d ? ' sel' : '');
-      b.textContent = d + ' 天';
-      b.addEventListener('click', function () { pickerVal = d; renderDaysPicker(); });
-      box.appendChild(b);
+  var wheel = document.getElementById('bsDaysList');
+  DAYS_ALL.forEach(function (d) {
+    var b = document.createElement('div');
+    b.className = 'bs-day';
+    b.textContent = d + ' 天';
+    wheel.appendChild(b);
+  });
+  function updateWheel() {
+    var idx = Math.round(wheel.scrollTop / DAY_H);
+    idx = Math.max(0, Math.min(DAYS_ALL.length - 1, idx));
+    pickerVal = DAYS_ALL[idx];
+    wheel.querySelectorAll('.bs-day').forEach(function (el, i) {
+      el.classList.toggle('sel', i === idx);
     });
   }
+  wheel.addEventListener('scroll', updateWheel, { passive: true });
   document.getElementById('daysRow').addEventListener('click', function () {
-    pickerVal = state.days || '4';
-    renderDaysPicker();
+    var v = state.days || '4';
+    var idx = Math.max(0, DAYS_ALL.indexOf(v));
     openSheet(document.getElementById('bsDays'));
-    var sel = document.querySelector('#bsDaysList .bs-day.sel');
-    if (sel) sel.scrollIntoView({ block: 'center' });
+    requestAnimationFrame(function () {
+      wheel.scrollTop = idx * DAY_H;
+      updateWheel();
+    });
   });
   document.getElementById('bsDaysConfirm').addEventListener('click', function () {
     setDays(pickerVal);
