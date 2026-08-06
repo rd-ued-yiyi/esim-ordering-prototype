@@ -162,6 +162,86 @@
   .faq-a { display: none; padding: 0 0 16px; color: var(--kk-text-darker); }
   .faq-item.open .faq-a { display: block; }
 
+  /* ================= 目的地页 ================= */
+  .dest-bar {
+    display: flex; align-items: center; gap: 8px;
+    height: 48px; max-width: 240px;
+    background: rgba(255,255,255,.88);
+    border: 1.5px solid #fff; border-radius: var(--r-lg);
+    padding: 0 12px; cursor: pointer;
+  }
+  .dest-bar .name { flex: 1 1 0; min-width: 0; text-align: left; }
+
+  .inline-note {
+    display: flex; align-items: flex-start; gap: 4px;
+    background: var(--kk-primary-lighter); border-radius: var(--r-md);
+    padding: 12px; width: 100%;
+    font-size: 12px; line-height: 16px; color: var(--kk-text-darker);
+  }
+  .inline-note .ic { margin-top: 0; }
+
+  .field-head { display: flex; align-items: center; gap: 8px; width: 100%; }
+  .field-head .label-lg { font-size: 18px; line-height: 26px; font-weight: 600; color: var(--kk-text-darker); white-space: nowrap; }
+  .field-head .placeholder { flex: 1 1 0; min-width: 0; font-size: 18px; line-height: 26px; font-weight: 600; color: var(--kk-text-light); }
+  .field-head .placeholder.has-value { color: var(--kk-text-darker); }
+  .field-head .label-sm { font-size: 14px; line-height: 20px; font-weight: 600; color: var(--kk-text-darker); white-space: nowrap; }
+  .field-head .hint { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
+
+  /* chip / tab / option 选中态（inset 阴影模拟边框，避免尺寸跳动） */
+  .chip.sel, .opt.sel {
+    background: var(--kk-primary-lighter);
+    box-shadow: inset 0 0 0 1.5px var(--kk-primary-medium);
+  }
+  .chip.sel .chip-label { color: #13A3B6; }
+
+  .ftabs { display: flex; gap: 8px; width: 100%; }
+  .ftab {
+    position: relative;
+    background: var(--kk-surface-light); border-radius: var(--r-md);
+    padding: 6px 12px; font-size: 14px; line-height: 20px; color: var(--kk-text-darker);
+    white-space: nowrap;
+  }
+  .ftab.sel {
+    background: var(--kk-primary-lighter);
+    box-shadow: inset 0 0 0 1px var(--kk-primary-medium);
+    color: #13A3B6;
+  }
+  .ftab.sel::after {
+    content: ''; position: absolute; left: 50%; bottom: -4.5px;
+    width: 9px; height: 9px; background: var(--kk-primary-lighter);
+    border-right: 1px solid var(--kk-primary-medium);
+    border-bottom: 1px solid var(--kk-primary-medium);
+    transform: translateX(-50%) rotate(45deg);
+  }
+  .field-note { font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
+
+  .opts-scroll { width: 100%; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .opts-scroll::-webkit-scrollbar { display: none; }
+  .opts-grid { display: grid; grid-auto-flow: column; grid-template-rows: repeat(2, auto); gap: 8px; width: max-content; padding-top: 4px; }
+  .opt {
+    position: relative;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+    background: var(--kk-surface-light); border-radius: var(--r-md);
+    padding: 16px; white-space: nowrap;
+  }
+  .opt .t { font-size: 16px; line-height: 24px; font-weight: 600; color: var(--kk-text-darker); }
+  .opt.sel .t { color: #13A3B6; }
+  .opt .p { font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
+  .opt .badge {
+    position: absolute; top: -6px; left: 0;
+    background: var(--kk-text-critical); color: #fff;
+    font-size: 12px; line-height: 16px; padding: 2px 6px;
+    border-radius: var(--r-md) var(--r-lg) var(--r-lg) 0;
+  }
+
+  .cta {
+    width: 100%; padding: 12px 24px; border-radius: var(--r-md);
+    background: rgba(26,182,193,.4); color: rgba(255,255,255,.6);
+    font-size: 16px; line-height: 24px; font-weight: 600; text-align: center;
+    transition: background .15s, color .15s;
+  }
+  .cta.enabled { background: var(--kk-primary-button); color: #fff; }
+
   /* ---------- toast ---------- */
   .toast {
     position: fixed; left: 50%; bottom: 32px; transform: translate(-50%, 20px);
@@ -175,9 +255,11 @@
 <div class="esim-root">
   <div class="app">
 
+    <!-- hero 背景：home / destination 两屏共享（同一份，避免 SVG id 冲突） -->
+    {{HERO_SVG}}
+
     <!-- ============ SCREEN: 主题落地页 ============ -->
     <section class="screen is-active" data-screen="home">
-      {{HERO_SVG}}
 
       <!-- header -->
       <div class="mheader">
@@ -290,6 +372,144 @@
       </div><!-- /con -->
     </section>
 
+    <!-- ============ SCREEN: 目的地页 ============ -->
+    <section class="screen" data-screen="destination">
+
+      <!-- header -->
+      <div class="mheader">
+        <button class="nav-circle" data-action="back" aria-label="返回">
+          <span class="ic ic-20">{{IC_back}}</span>
+        </button>
+      </div>
+
+      <div class="con">
+        <div class="title-block">
+          <button class="dest-bar" data-action="change-destination">
+            <span class="ic ic-24">{{IC_location}}</span>
+            <span class="name t-h6" id="destName">新加坡</span>
+            <span class="ic ic-24">{{IC_arrowDown}}</span>
+          </button>
+        </div>
+
+        <div class="page">
+
+          <!-- 搜索卡 2 -->
+          <div class="card dest-card">
+            <div class="inline-note">
+              <span class="ic ic-16">{{IC_checkCircle}}</span>
+              <span>此设备支援使用 eSIM</span>
+            </div>
+
+            <!-- 用卡天数 -->
+            <div class="field-head">
+              <span class="label-lg">用卡天数</span>
+              <span class="placeholder" id="daysValue">请选择</span>
+              <span class="ic ic-24"><span class="rot90 ic">{{IC_arrowRight}}</span></span>
+            </div>
+            <div class="chips" id="dayChips">
+              <button class="chip" data-days="1"><span class="chip-label t-body-md">1 天</span></button>
+              <button class="chip" data-days="2"><span class="chip-label t-body-md">2 天</span></button>
+              <button class="chip" data-days="4"><span class="chip-label t-body-md">4 天</span></button>
+              <button class="chip" data-days="5"><span class="chip-label t-body-md">5 天</span></button>
+              <button class="chip" data-days="6"><span class="chip-label t-body-md">6 天</span></button>
+              <button class="chip" data-days="7"><span class="chip-label t-body-md">7 天</span></button>
+              <button class="chip" data-days="8"><span class="chip-label t-body-md">8 天</span></button>
+              <button class="chip" data-days="9"><span class="chip-label t-body-md">9 天</span></button>
+              <button class="chip" data-days="10"><span class="chip-label t-body-md">10 天</span></button>
+              <button class="chip" data-days="15"><span class="chip-label t-body-md">15 天</span></button>
+              <button class="chip" data-days="20"><span class="chip-label t-body-md">20 天</span></button>
+              <button class="chip" data-days="30"><span class="chip-label t-body-md">30 天</span></button>
+            </div>
+
+            <!-- 流量 -->
+            <div class="field-head">
+              <span class="label-sm">流量</span>
+              <span class="hint">不知道怎么选<span class="ic ic-16">{{IC_question}}</span></span>
+            </div>
+            <div class="ftabs" id="dataTabs">
+              <button class="ftab sel" data-tab="daily">每日固定流量</button>
+              <button class="ftab" data-tab="total">总流量</button>
+              <button class="ftab" data-tab="unlimited">无限流量</button>
+            </div>
+            <div class="field-note" id="dataNote">每日重置，用完降速</div>
+            <div class="opts-scroll"><div class="opts-grid" id="dataOpts"></div></div>
+
+            <button class="cta" id="searchCta" disabled>搜寻套餐</button>
+          </div>
+
+          <!-- 为什么选择 KKday -->
+          <div class="card card--pad-v">
+            <div class="stack-20">
+              <div class="t-h6 card-title">为什么选择KKday？</div>
+              <div class="stack-20">
+                <div class="benefit-row">
+                  <span class="ic ic-32">{{PICTO_tours}}</span>
+                  <div class="txt"><div class="t-subtitle-lg">简单易用</div><div class="desc t-body-md">透过 KKday APP 安装和管理 eSIM 卡，扫码即装，轻松上手。</div></div>
+                </div>
+                <div class="benefit-row">
+                  <span class="ic ic-32">{{PICTO_cruise}}</span>
+                  <div class="txt"><div class="t-subtitle-lg">灵活弹性</div><div class="desc t-body-md">透过 KKday APP 安装和管理 eSIM 卡，扫码即装，轻松上手。</div></div>
+                </div>
+                <div class="benefit-row">
+                  <span class="ic ic-32">{{PICTO_travel}}</span>
+                  <div class="txt"><div class="t-subtitle-lg">80+ 国家覆盖</div><div class="desc t-body-md">透过 KKday APP 安装和管理 eSIM 卡，扫码即装，轻松上手。</div></div>
+                </div>
+                <div class="benefit-row">
+                  <span class="ic ic-32">{{PICTO_tours}}</span>
+                  <div class="txt"><div class="t-subtitle-lg">客服支持</div><div class="desc t-body-md">透过 KKday APP 安装和管理 eSIM 卡，扫码即装，轻松上手。</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- eSIM 安装指南 -->
+          <div class="card card--pad-v">
+            <div class="stack-20">
+              <div class="t-h6 card-title">eSIM 安裝指南</div>
+              <div class="guide-tabs">
+                <button class="guide-tab" data-action="guide" data-guide="iOS"><span class="ic ic-24">{{IC_checkCircle}}</span><span class="lbl t-body-lg">iOS</span></button>
+                <button class="guide-tab" data-action="guide" data-guide="Android"><span class="ic ic-24">{{IC_star}}</span><span class="lbl t-body-lg">Android</span></button>
+                <button class="guide-tab" data-action="guide" data-guide="分享"><span class="ic ic-24">{{IC_locationArrow}}</span><span class="lbl t-body-lg">分享</span></button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 常见问题 -->
+          <div class="card card--pad-v">
+            <div class="stack-20">
+              <div class="faq-head">
+                <span class="ttl t-h6 card-title">常见问题</span>
+                <span class="faq-more t-link-md" data-action="faq-more">查看更多</span>
+              </div>
+              <div class="faq-list">
+                <div class="faq-item">
+                  <button class="faq-q"><span class="qtext t-subtitle-lg">ESIM/WIFI常见问题</span><span class="ic ic-20 chev">{{IC_arrowDown}}</span></button>
+                  <div class="faq-a t-body-md">KKday ESIM/WIFI常见问题说明 KKday ESIM/WIFI常见问题说明 KKday ESIM/WIFI常见问题说明</div>
+                </div>
+                <div class="faq-item">
+                  <button class="faq-q"><span class="qtext t-subtitle-lg">ESIM/WIFI常见问题ESIM/WIFI常见问题ESIM/WIFI常见问题</span><span class="ic ic-20 chev">{{IC_arrowDown}}</span></button>
+                  <div class="faq-a t-body-md">KKday ESIM/WIFI常见问题说明 KKday ESIM/WIFI常见问题说明 KKday ESIM/WIFI常见问题说明 KKday ESIM/WIFI常见问题说明 KKday ESIM/WIFI常见问题说明 KKday ESIM/WIFI常见问题说明</div>
+                </div>
+                <div class="faq-item">
+                  <button class="faq-q"><span class="qtext t-subtitle-lg">ESIM/WIFI常见问题</span><span class="ic ic-20 chev">{{IC_arrowDown}}</span></button>
+                  <div class="faq-a t-body-md">KKday ESIM/WIFI常见问题说明 KKday ESIM/WIFI常见问题说明 KKday ESIM/WIFI常见问题说明</div>
+                </div>
+                <div class="faq-item">
+                  <button class="faq-q"><span class="qtext t-subtitle-lg">ESIM/WIFI常见问题</span><span class="ic ic-20 chev">{{IC_arrowDown}}</span></button>
+                  <div class="faq-a t-body-md">KKday ESIM/WIFI常见问题说明 KKday ESIM/WIFI常见问题说明 KKday ESIM/WIFI常见问题说明</div>
+                </div>
+                <div class="faq-item">
+                  <button class="faq-q"><span class="qtext t-subtitle-lg">ESIM/WIFI常见问题</span><span class="ic ic-20 chev">{{IC_arrowDown}}</span></button>
+                  <div class="faq-a t-body-md">KKday ESIM/WIFI常见问题说明 KKday ESIM/WIFI常见问题说明 KKday ESIM/WIFI常见问题说明</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /page -->
+      </div><!-- /con -->
+    </section>
+
   </div><!-- /app -->
   <div class="toast" id="toast"></div>
 </div>
@@ -315,20 +535,109 @@
     toastTimer = setTimeout(function () { toastEl.classList.remove('show'); }, 1800);
   }
 
-  // 交互占位（后续接入订购流程后续页面）
+  // ---------- 屏幕路由 ----------
+  var current = 'home';
+  function go(name) {
+    current = name;
+    document.querySelectorAll('.screen').forEach(function (s) {
+      s.classList.toggle('is-active', s.getAttribute('data-screen') === name);
+    });
+    window.scrollTo(0, 0);
+  }
+
+  // ---------- 目的地页状态 ----------
+  var state = { days: null, tab: 'daily', plan: null };
+
+  var PLANS = {
+    daily:     { note: '每日重置，用完降速', badgeOn: '4GB/天',
+                 opts: ['1GB/天','2GB/天','3GB/天','4GB/天','5GB/天','6GB/天','7GB/天','8GB/天','9GB/天','10GB/天'] },
+    total:     { note: '总流量用完即停，可随时加购', badgeOn: null,
+                 opts: ['1GB','3GB','5GB','10GB','20GB','30GB','50GB','100GB'] },
+    unlimited: { note: '不限流量，依公平使用原则', badgeOn: null,
+                 opts: ['每日 500MB 后降速','每日 1GB 后降速','全程高速'] }
+  };
+
+  function renderOpts() {
+    var cfg = PLANS[state.tab];
+    document.getElementById('dataNote').textContent = cfg.note;
+    var grid = document.getElementById('dataOpts');
+    grid.innerHTML = '';
+    cfg.opts.forEach(function (t) {
+      var b = document.createElement('button');
+      b.className = 'opt' + (state.plan === t ? ' sel' : '');
+      b.innerHTML = '<span class="t"></span><span class="p">NT$ 12起</span>' +
+        (cfg.badgeOn === t ? '<span class="badge">80%选择</span>' : '');
+      b.querySelector('.t').textContent = t;
+      b.addEventListener('click', function () {
+        state.plan = (state.plan === t) ? null : t;
+        renderOpts(); updateCta();
+      });
+      grid.appendChild(b);
+    });
+  }
+
+  function updateCta() {
+    var ok = state.days && state.plan;
+    var cta = document.getElementById('searchCta');
+    cta.classList.toggle('enabled', !!ok);
+    cta.disabled = !ok;
+  }
+
+  // 天数 chips 单选
+  document.querySelectorAll('#dayChips .chip').forEach(function (el) {
+    el.addEventListener('click', function () {
+      var v = el.getAttribute('data-days');
+      state.days = (state.days === v) ? null : v;
+      document.querySelectorAll('#dayChips .chip').forEach(function (c) {
+        c.classList.toggle('sel', c.getAttribute('data-days') === state.days);
+      });
+      var dv = document.getElementById('daysValue');
+      dv.textContent = state.days ? (state.days + ' 天') : '请选择';
+      dv.classList.toggle('has-value', !!state.days);
+      updateCta();
+    });
+  });
+
+  // 流量 tab 切换
+  document.querySelectorAll('#dataTabs .ftab').forEach(function (el) {
+    el.addEventListener('click', function () {
+      state.tab = el.getAttribute('data-tab');
+      state.plan = null;
+      document.querySelectorAll('#dataTabs .ftab').forEach(function (t) {
+        t.classList.toggle('sel', t === el);
+      });
+      renderOpts(); updateCta();
+    });
+  });
+
+  document.getElementById('searchCta').addEventListener('click', function () {
+    if (state.days && state.plan) {
+      toast('搜寻：' + document.getElementById('destName').textContent +
+            ' · ' + state.days + ' 天 · ' + state.plan + '（套餐列表开发中）');
+    }
+  });
+
+  // ---------- 通用动作 ----------
   document.querySelectorAll('[data-action]').forEach(function (el) {
     el.addEventListener('click', function () {
       var a = el.getAttribute('data-action');
-      if (a === 'pick-destination') toast('下一步：选择目的地（开发中）');
+      if (a === 'pick-destination') toast('目的地选择面板（开发中）');
+      else if (a === 'change-destination') go('home');
       else if (a === 'guide') toast('安装指南：' + el.getAttribute('data-guide') + '（开发中）');
       else if (a === 'faq-more') toast('常见问题列表（开发中）');
-      else if (a === 'back') toast('返回上一页');
+      else if (a === 'back') { if (current === 'destination') go('home'); else toast('返回上一页'); }
     });
   });
+
+  // 首页目的地 chip → 进入目的地页
   document.querySelectorAll('.chip[data-dest]').forEach(function (el) {
     el.addEventListener('click', function () {
-      toast(el.getAttribute('data-dest') + ' eSIM 方案（开发中）');
+      document.getElementById('destName').textContent = el.getAttribute('data-dest');
+      go('destination');
     });
   });
+
+  renderOpts();
+  updateCta();
 })();
 </script>

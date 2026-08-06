@@ -171,6 +171,86 @@
   .faq-a { display: none; padding: 0 0 16px; color: var(--kk-text-darker); }
   .faq-item.open .faq-a { display: block; }
 
+  /* ================= 目的地页 ================= */
+  .dest-bar {
+    display: flex; align-items: center; gap: 8px;
+    height: 48px; max-width: 240px;
+    background: rgba(255,255,255,.88);
+    border: 1.5px solid #fff; border-radius: var(--r-lg);
+    padding: 0 12px; cursor: pointer;
+  }
+  .dest-bar .name { flex: 1 1 0; min-width: 0; text-align: left; }
+
+  .inline-note {
+    display: flex; align-items: flex-start; gap: 4px;
+    background: var(--kk-primary-lighter); border-radius: var(--r-md);
+    padding: 12px; width: 100%;
+    font-size: 12px; line-height: 16px; color: var(--kk-text-darker);
+  }
+  .inline-note .ic { margin-top: 0; }
+
+  .field-head { display: flex; align-items: center; gap: 8px; width: 100%; }
+  .field-head .label-lg { font-size: 18px; line-height: 26px; font-weight: 600; color: var(--kk-text-darker); white-space: nowrap; }
+  .field-head .placeholder { flex: 1 1 0; min-width: 0; font-size: 18px; line-height: 26px; font-weight: 600; color: var(--kk-text-light); }
+  .field-head .placeholder.has-value { color: var(--kk-text-darker); }
+  .field-head .label-sm { font-size: 14px; line-height: 20px; font-weight: 600; color: var(--kk-text-darker); white-space: nowrap; }
+  .field-head .hint { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
+
+  /* chip / tab / option 选中态（inset 阴影模拟边框，避免尺寸跳动） */
+  .chip.sel, .opt.sel {
+    background: var(--kk-primary-lighter);
+    box-shadow: inset 0 0 0 1.5px var(--kk-primary-medium);
+  }
+  .chip.sel .chip-label { color: #13A3B6; }
+
+  .ftabs { display: flex; gap: 8px; width: 100%; }
+  .ftab {
+    position: relative;
+    background: var(--kk-surface-light); border-radius: var(--r-md);
+    padding: 6px 12px; font-size: 14px; line-height: 20px; color: var(--kk-text-darker);
+    white-space: nowrap;
+  }
+  .ftab.sel {
+    background: var(--kk-primary-lighter);
+    box-shadow: inset 0 0 0 1px var(--kk-primary-medium);
+    color: #13A3B6;
+  }
+  .ftab.sel::after {
+    content: ''; position: absolute; left: 50%; bottom: -4.5px;
+    width: 9px; height: 9px; background: var(--kk-primary-lighter);
+    border-right: 1px solid var(--kk-primary-medium);
+    border-bottom: 1px solid var(--kk-primary-medium);
+    transform: translateX(-50%) rotate(45deg);
+  }
+  .field-note { font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
+
+  .opts-scroll { width: 100%; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .opts-scroll::-webkit-scrollbar { display: none; }
+  .opts-grid { display: grid; grid-auto-flow: column; grid-template-rows: repeat(2, auto); gap: 8px; width: max-content; padding-top: 4px; }
+  .opt {
+    position: relative;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+    background: var(--kk-surface-light); border-radius: var(--r-md);
+    padding: 16px; white-space: nowrap;
+  }
+  .opt .t { font-size: 16px; line-height: 24px; font-weight: 600; color: var(--kk-text-darker); }
+  .opt.sel .t { color: #13A3B6; }
+  .opt .p { font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
+  .opt .badge {
+    position: absolute; top: -6px; left: 0;
+    background: var(--kk-text-critical); color: #fff;
+    font-size: 12px; line-height: 16px; padding: 2px 6px;
+    border-radius: var(--r-md) var(--r-lg) var(--r-lg) 0;
+  }
+
+  .cta {
+    width: 100%; padding: 12px 24px; border-radius: var(--r-md);
+    background: rgba(26,182,193,.4); color: rgba(255,255,255,.6);
+    font-size: 16px; line-height: 24px; font-weight: 600; text-align: center;
+    transition: background .15s, color .15s;
+  }
+  .cta.enabled { background: var(--kk-primary-button); color: #fff; }
+
   /* ---------- toast ---------- */
   .toast {
     position: fixed; left: 50%; bottom: 32px; transform: translate(-50%, 20px);
@@ -184,9 +264,8 @@
 <div class="esim-root">
   <div class="app">
 
-    <!-- ============ SCREEN: 主题落地页 ============ -->
-    <section class="screen is-active" data-screen="home">
-      <svg class="hero-svg" viewBox="0 59 375 241" width="100%" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" style="display:block" aria-hidden="true"><defs><linearGradient id="heroCyanFade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#26BEC9" stop-opacity="0"/><stop offset="1" stop-color="#26BEC9"/></linearGradient><linearGradient id="heroPageFade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F1F4F8" stop-opacity="0"/><stop offset="1" stop-color="#F1F4F8"/></linearGradient></defs><rect width="375" height="300" fill="#26BEC9"/><g transform="translate(207.004 111.869) scale(-1 1) translate(-207.004 -111.869)"><svg x="-26.571" y="13.641" width="467.149" height="196.457" viewBox="0 0 467.149 196.457" overflow="visible" fill="none"><path id="blob__Vector 202" d="M12.5023 128.966C66.2633 139.139 160.031 175.395 162.839 106.054C165.647 36.7119 51.8818 91.7252 141.971 157.529C278.59 257.32 423.518 44.6666 454.649 12.5" stroke="#1AB6C1" stroke-width="25" stroke-linecap="round" stroke-linejoin="round"/></svg></g><g transform="translate(269.650 177.433) rotate(-158) skewX(-24) scale(1 -0.91) translate(-269.650 -177.433)"><svg x="226.254" y="95.991" width="86.791" height="162.883" viewBox="0 0 86.791 162.883" overflow="visible" fill="none"><path id="phone1__Rectangle 4" d="M3 18.7582C3 10.0552 10.0552 3 18.7582 3H71.1845C78.1469 3 83.791 8.64415 83.791 15.6066V144.124C83.791 152.827 76.7359 159.883 68.0328 159.883H15.6066C8.64415 159.883 3 154.238 3 147.276V18.7582Z" fill="#CEF0F3" stroke="white" stroke-width="6"/></svg></g><g transform="translate(237.246 188.120) rotate(-158) skewX(-24) scale(1 -0.91) translate(-237.246 -188.120)"><svg x="225.798" y="181.612" width="22.898" height="13.015" viewBox="0 0 22.8975 13.0155" overflow="visible" fill="none"><path id="phone2__Rectangle 7" opacity="0.5" d="M0 4C0 1.79086 1.79086 0 4 0H18.8975C21.1066 0 22.8975 1.79086 22.8975 4V9.01551C22.8975 11.2246 21.1066 13.0155 18.8975 13.0155H4C1.79086 13.0155 0 11.2247 0 9.01551V4Z" fill="#26BEC9"/></svg></g><g transform="translate(230.657 210.988) rotate(-158) skewX(-24) scale(1 -0.91) translate(-230.657 -210.988)"><svg x="205.372" y="198.139" width="50.570" height="25.700" viewBox="0 0 50.5703 25.6999" overflow="visible" fill="none"><path id="phone3__Rectangle 8" opacity="0.5" d="M0 8C0 3.58172 3.58172 0 8 0H46.5703C48.7795 0 50.5703 1.79086 50.5703 4V17.6999C50.5703 22.1182 46.9886 25.6999 42.5703 25.6999H4C1.79086 25.6999 0 23.909 0 21.6999V8Z" fill="#26BEC9"/></svg></g><g transform="translate(316.283 127.806) rotate(-156.8) scale(1 -1) translate(-316.283 -127.806)"><svg x="304.785" y="125.309" width="22.995" height="4.994" viewBox="0 0 22.9953 4.99362" overflow="visible" fill="none"><path id="line5__Line 5" d="M2.49681 2.49681H20.4984" stroke="white" stroke-width="4.99362" stroke-linecap="round"/></svg></g><g transform="translate(216.853 226.185) rotate(-156.8) scale(1 -1) translate(-216.853 -226.185)"><svg x="206.354" y="224.687" width="20.998" height="2.996" viewBox="0 0 20.9978 2.99617" overflow="visible" fill="none"><path id="line6__Line 6" d="M1.49809 1.49809H19.4997" stroke="#26BEC9" stroke-width="2.99617" stroke-linecap="round"/></svg></g><svg x="213.730" y="131.730" width="121.643" height="88.717" viewBox="0 0 121.643 88.7168" overflow="visible" fill="none"><g id="ring__Ellipse 3" filter="url(#ring__filter0_f_0_540)">
+    <!-- hero 背景：home / destination 两屏共享（同一份，避免 SVG id 冲突） -->
+    <svg class="hero-svg" viewBox="0 59 375 241" width="100%" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" style="display:block" aria-hidden="true"><defs><linearGradient id="heroCyanFade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#26BEC9" stop-opacity="0"/><stop offset="1" stop-color="#26BEC9"/></linearGradient><linearGradient id="heroPageFade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F1F4F8" stop-opacity="0"/><stop offset="1" stop-color="#F1F4F8"/></linearGradient></defs><rect width="375" height="300" fill="#26BEC9"/><g transform="translate(207.004 111.869) scale(-1 1) translate(-207.004 -111.869)"><svg x="-26.571" y="13.641" width="467.149" height="196.457" viewBox="0 0 467.149 196.457" overflow="visible" fill="none"><path id="blob__Vector 202" d="M12.5023 128.966C66.2633 139.139 160.031 175.395 162.839 106.054C165.647 36.7119 51.8818 91.7252 141.971 157.529C278.59 257.32 423.518 44.6666 454.649 12.5" stroke="#1AB6C1" stroke-width="25" stroke-linecap="round" stroke-linejoin="round"/></svg></g><g transform="translate(269.650 177.433) rotate(-158) skewX(-24) scale(1 -0.91) translate(-269.650 -177.433)"><svg x="226.254" y="95.991" width="86.791" height="162.883" viewBox="0 0 86.791 162.883" overflow="visible" fill="none"><path id="phone1__Rectangle 4" d="M3 18.7582C3 10.0552 10.0552 3 18.7582 3H71.1845C78.1469 3 83.791 8.64415 83.791 15.6066V144.124C83.791 152.827 76.7359 159.883 68.0328 159.883H15.6066C8.64415 159.883 3 154.238 3 147.276V18.7582Z" fill="#CEF0F3" stroke="white" stroke-width="6"/></svg></g><g transform="translate(237.246 188.120) rotate(-158) skewX(-24) scale(1 -0.91) translate(-237.246 -188.120)"><svg x="225.798" y="181.612" width="22.898" height="13.015" viewBox="0 0 22.8975 13.0155" overflow="visible" fill="none"><path id="phone2__Rectangle 7" opacity="0.5" d="M0 4C0 1.79086 1.79086 0 4 0H18.8975C21.1066 0 22.8975 1.79086 22.8975 4V9.01551C22.8975 11.2246 21.1066 13.0155 18.8975 13.0155H4C1.79086 13.0155 0 11.2247 0 9.01551V4Z" fill="#26BEC9"/></svg></g><g transform="translate(230.657 210.988) rotate(-158) skewX(-24) scale(1 -0.91) translate(-230.657 -210.988)"><svg x="205.372" y="198.139" width="50.570" height="25.700" viewBox="0 0 50.5703 25.6999" overflow="visible" fill="none"><path id="phone3__Rectangle 8" opacity="0.5" d="M0 8C0 3.58172 3.58172 0 8 0H46.5703C48.7795 0 50.5703 1.79086 50.5703 4V17.6999C50.5703 22.1182 46.9886 25.6999 42.5703 25.6999H4C1.79086 25.6999 0 23.909 0 21.6999V8Z" fill="#26BEC9"/></svg></g><g transform="translate(316.283 127.806) rotate(-156.8) scale(1 -1) translate(-316.283 -127.806)"><svg x="304.785" y="125.309" width="22.995" height="4.994" viewBox="0 0 22.9953 4.99362" overflow="visible" fill="none"><path id="line5__Line 5" d="M2.49681 2.49681H20.4984" stroke="white" stroke-width="4.99362" stroke-linecap="round"/></svg></g><g transform="translate(216.853 226.185) rotate(-156.8) scale(1 -1) translate(-216.853 -226.185)"><svg x="206.354" y="224.687" width="20.998" height="2.996" viewBox="0 0 20.9978 2.99617" overflow="visible" fill="none"><path id="line6__Line 6" d="M1.49809 1.49809H19.4997" stroke="#26BEC9" stroke-width="2.99617" stroke-linecap="round"/></svg></g><svg x="213.730" y="131.730" width="121.643" height="88.717" viewBox="0 0 121.643 88.7168" overflow="visible" fill="none"><g id="ring__Ellipse 3" filter="url(#ring__filter0_f_0_540)">
 <ellipse cx="60.8214" cy="44.3584" rx="40.8214" ry="24.3584" fill="white"/>
 </g>
 <defs>
@@ -279,6 +358,9 @@
 <path id="wifi__Ellipse 8" d="M15.951 5.43864C13.1664 2.65409 8.65178 2.65409 5.86723 5.43864" stroke="#26BEC9" stroke-width="1.22066" stroke-linecap="round"/>
 <path id="wifi__Ellipse 7" d="M13.8504 7.53933C12.2261 5.91501 9.59256 5.91501 7.96824 7.53933" stroke="#26BEC9" stroke-width="1.22066" stroke-linecap="round"/>
 </g></svg></g><g transform="translate(310.650 103.590) rotate(68.05) translate(-310.650 -103.590)"><svg x="306.150" y="99.090" width="9.000" height="9.000" viewBox="0 0 9.0 9.0" overflow="visible" fill="none"><path id="star1__Vector" d="M3.94211 0.369952C4.15049 -0.123318 4.84951 -0.123317 5.05789 0.369953L6.02308 2.65471C6.08444 2.79997 6.20003 2.91556 6.34529 2.97692L8.63005 3.94211C9.12332 4.15049 9.12332 4.84952 8.63005 5.05789L6.34529 6.02308C6.20003 6.08444 6.08444 6.20004 6.02308 6.34529L5.05789 8.63005C4.84951 9.12332 4.15049 9.12332 3.94211 8.63005L2.97692 6.34529C2.91556 6.20003 2.79997 6.08444 2.65471 6.02308L0.369952 5.05789C-0.123318 4.84952 -0.123317 4.15049 0.369953 3.94211L2.65471 2.97692C2.79997 2.91556 2.91556 2.79997 2.97692 2.65471L3.94211 0.369952Z" fill="#FFDD4A"/></svg></g><g transform="translate(352.080 175.690) rotate(68.05) translate(-352.080 -175.690)"><svg x="347.588" y="171.198" width="8.983" height="8.983" viewBox="0 0 8.98337 8.98337" overflow="visible" fill="none"><path id="star2__Vector" d="M3.93482 0.369268C4.14282 -0.12309 4.84055 -0.123089 5.04854 0.369269L6.01194 2.6498C6.07319 2.79479 6.18857 2.91017 6.33356 2.97142L8.6141 3.93482C9.10646 4.14282 9.10645 4.84055 8.6141 5.04855L6.33356 6.01195C6.18857 6.07319 6.07319 6.18858 6.01194 6.33356L5.04854 8.6141C4.84055 9.10646 4.14281 9.10646 3.93482 8.6141L2.97142 6.33356C2.91017 6.18858 2.79479 6.07319 2.6498 6.01195L0.369268 5.04855C-0.12309 4.84055 -0.123089 4.14282 0.369269 3.93482L2.6498 2.97142C2.79479 2.91017 2.91017 2.79479 2.97142 2.6498L3.93482 0.369268Z" fill="#FFDD4A"/></svg></g><g transform="translate(293.375 93.895) rotate(11.11) translate(-293.375 -93.895)"><svg x="285.337" y="85.857" width="16.077" height="16.077" viewBox="0 0 16.0767 16.0767" overflow="visible" fill="none"><path id="star3__Vector" d="M7.0418 0.660847C7.41403 -0.220283 8.66271 -0.220282 9.03494 0.660848L10.759 4.74212C10.8687 5.00159 11.0751 5.20808 11.3346 5.31769L15.4159 7.04181C16.297 7.41403 16.297 8.66271 15.4159 9.03494L11.3346 10.759C11.0751 10.8687 10.8687 11.0752 10.759 11.3346L9.03493 15.4159C8.66271 16.297 7.41403 16.297 7.0418 15.4159L5.31769 11.3346C5.20808 11.0751 5.00159 10.8687 4.74212 10.759L0.660846 9.03494C-0.220283 8.66271 -0.220282 7.41403 0.660848 7.04181L4.74212 5.31769C5.00159 5.20808 5.20808 5.00159 5.31769 4.74212L7.0418 0.660847Z" fill="#FFDD4A"/></svg></g><rect x="0" y="72.309" width="375" height="227.691" fill="url(#heroCyanFade)"/><rect x="0" y="140" width="375" height="160" fill="url(#heroPageFade)"/></svg>
+
+    <!-- ============ SCREEN: 主题落地页 ============ -->
+    <section class="screen is-active" data-screen="home">
 
       <!-- header -->
       <div class="mheader">
@@ -391,6 +473,144 @@
       </div><!-- /con -->
     </section>
 
+    <!-- ============ SCREEN: 目的地页 ============ -->
+    <section class="screen" data-screen="destination">
+
+      <!-- header -->
+      <div class="mheader">
+        <button class="nav-circle" data-action="back" aria-label="返回">
+          <span class="ic ic-20"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjcuOTE2NjciIGhlaWdodD0iMTQuMTY2NyIgdmlld0JveD0iMCAwIDcuOTE2NjcgMTQuMTY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciAoU3Ryb2tlKSIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik03LjY3MjU5IDAuMjQ0MDc4QzcuOTk4MDMgMC41Njk1MTUgNy45OTgwMyAxLjA5NzE1IDcuNjcyNTkgMS40MjI1OUwyLjAxMTg0IDcuMDgzMzNMNy42NzI1OSAxMi43NDQxQzcuOTk4MDMgMTMuMDY5NSA3Ljk5ODAzIDEzLjU5NzIgNy42NzI1OSAxMy45MjI2QzcuMzQ3MTUgMTQuMjQ4IDYuODE5NTEgMTQuMjQ4IDYuNDk0MDggMTMuOTIyNkwwLjI0NDA3OCA3LjY3MjU5Qy0wLjA4MTM1OTIgNy4zNDcxNSAtMC4wODEzNTkyIDYuODE5NTEgMC4yNDQwNzggNi40OTQwOEw2LjQ5NDA4IDAuMjQ0MDc4QzYuODE5NTEgLTAuMDgxMzU5MiA3LjM0NzE1IC0wLjA4MTM1OTIgNy42NzI1OSAwLjI0NDA3OFoiIGZpbGw9IiMyMTIxMjEiLz4KPC9zdmc+" width="7.92" height="14.17"></span>
+        </button>
+      </div>
+
+      <div class="con">
+        <div class="title-block">
+          <button class="dest-bar" data-action="change-destination">
+            <span class="ic ic-24"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE2LjUiIGhlaWdodD0iMjEiIHZpZXdCb3g9IjAgMCAxNi41IDIxIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cGF0aCBpZD0iVmVjdG9yIiBkPSJNOC4yNSAwQzYuMDYyNzYgMC4wMDI1OTUyMSAzLjk2NTg1IDAuODcyNjIyIDIuNDE5MjQgMi40MTkyNEMwLjg3MjYyMiAzLjk2NTg1IDAuMDAyNTk1MjEgNi4wNjI3NiAwIDguMjVDMCAxNS4zMDkxIDcuNSAyMC42NDExIDcuODE5MzQgMjAuODY0NUM3Ljk0NTYzIDIwLjk1MjcgOC4wOTU5NiAyMSA4LjI1IDIxQzguNDA0MDQgMjEgOC41NTQzNyAyMC45NTI3IDguNjgwNjYgMjAuODY0NUM5IDIwLjY0MTEgMTYuNSAxNS4zMDkxIDE2LjUgOC4yNUMxNi40OTc0IDYuMDYyNzYgMTUuNjI3NCAzLjk2NTg1IDE0LjA4MDggMi40MTkyNEMxMi41MzQyIDAuODcyNjIyIDEwLjQzNzIgMC4wMDI1OTQ5NiA4LjI1IDBWMFpNOC4yNTA1NSA1LjI1MDI3QzguODQzODkgNS4yNTAyNyA5LjQyMzkxIDUuNDI2MjIgOS45MTcyNiA1Ljc1NTg2QzEwLjQxMDYgNi4wODU1MSAxMC43OTUxIDYuNTU0MDQgMTEuMDIyMiA3LjEwMjIyQzExLjI0OTMgNy42NTA0IDExLjMwODcgOC4yNTM2IDExLjE5MjkgOC44MzU1NEMxMS4wNzcxIDkuNDE3NDkgMTAuNzkxNCA5Ljk1MjA0IDEwLjM3MTkgMTAuMzcxNkM5Ljk1MjMxIDEwLjc5MTIgOS40MTc3NiAxMS4wNzY5IDguODM1ODIgMTEuMTkyNkM4LjI1Mzg4IDExLjMwODQgNy42NTA2OCAxMS4yNDkgNy4xMDI1IDExLjAyMTlDNi41NTQzMiAxMC43OTQ4IDYuMDg1NzggMTAuNDEwMyA1Ljc1NjE0IDkuOTE2OThDNS40MjY1IDkuNDIzNjQgNS4yNTA1NSA4Ljg0MzYyIDUuMjUwNTUgOC4yNTAyN0M1LjI1MDU0IDcuODU2MyA1LjMyODEzIDcuNDY2MTkgNS40Nzg4OSA3LjEwMjIxQzUuNjI5NjUgNi43MzgyMyA1Ljg1MDYzIDYuNDA3NSA2LjEyOTIgNi4xMjg5M0M2LjQwNzc4IDUuODUwMzUgNi43Mzg1IDUuNjI5MzcgNy4xMDI0OSA1LjQ3ODYxQzcuNDY2NDcgNS4zMjc4NSA3Ljg1NjU4IDUuMjUwMjYgOC4yNTA1NSA1LjI1MDI3VjUuMjUwMjdaIiBmaWxsPSIjMjZCRUM5Ii8+Cjwvc3ZnPg==" width="16.50" height="21.00"></span>
+            <span class="name t-h6" id="destName">新加坡</span>
+            <span class="ic ic-24"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE0LjE2NjciIGhlaWdodD0iNy45MTY2NyIgdmlld0JveD0iMCAwIDE0LjE2NjcgNy45MTY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0wLjI0NDA3OCAwLjI0NDA3OEMwLjU2OTUxNSAtMC4wODEzNTkyIDEuMDk3MTUgLTAuMDgxMzU5MiAxLjQyMjU5IDAuMjQ0MDc4TDcuMDgzMzMgNS45MDQ4MkwxMi43NDQxIDAuMjQ0MDc4QzEzLjA2OTUgLTAuMDgxMzU5MiAxMy41OTcyIC0wLjA4MTM1OTIgMTMuOTIyNiAwLjI0NDA3OEMxNC4yNDggMC41Njk1MTUgMTQuMjQ4IDEuMDk3MTUgMTMuOTIyNiAxLjQyMjU5TDcuNjcyNTkgNy42NzI1OUM3LjM0NzE1IDcuOTk4MDMgNi44MTk1MSA3Ljk5ODAzIDYuNDk0MDggNy42NzI1OUwwLjI0NDA3OCAxLjQyMjU5Qy0wLjA4MTM1OTIgMS4wOTcxNSAtMC4wODEzNTkyIDAuNTY5NTE1IDAuMjQ0MDc4IDAuMjQ0MDc4WiIgZmlsbD0iIzIxMjEyMSIvPgo8L3N2Zz4=" width="14.17" height="7.92"></span>
+          </button>
+        </div>
+
+        <div class="page">
+
+          <!-- 搜索卡 2 -->
+          <div class="card dest-card">
+            <div class="inline-note">
+              <span class="ic ic-16"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE5LjUiIGhlaWdodD0iMTkuNSIgdmlld0JveD0iMCAwIDE5LjUgMTkuNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZD0iTTkuNzUgMEM3LjgyMTY0IDAgNS45MzY1NyAwLjU3MTgyOCA0LjMzMzE5IDEuNjQzMTdDMi43Mjk4MiAyLjcxNDUyIDEuNDgwMTMgNC4yMzcyNiAwLjc0MjE3OSA2LjAxODg0QzAuMDA0MjI0NDkgNy44MDA0MiAtMC4xODg4NTggOS43NjA4MiAwLjE4NzM0OCAxMS42NTIxQzAuNTYzNTU0IDEzLjU0MzQgMS40OTIxNSAxNS4yODA3IDIuODU1NzEgMTYuNjQ0M0M0LjIxOTI4IDE4LjAwNzkgNS45NTY1NiAxOC45MzY1IDcuODQ3ODcgMTkuMzEyN0M5LjczOTE5IDE5LjY4ODkgMTEuNjk5NiAxOS40OTU4IDEzLjQ4MTIgMTguNzU3OEMxNS4yNjI3IDE4LjAxOTkgMTYuNzg1NSAxNi43NzAyIDE3Ljg1NjggMTUuMTY2OEMxOC45MjgyIDEzLjU2MzQgMTkuNSAxMS42Nzg0IDE5LjUgOS43NUMxOS40OTcgNy4xNjUwNiAxOC40Njg4IDQuNjg2ODQgMTYuNjQxIDIuODU5MDFDMTQuODEzMiAxLjAzMTE4IDEyLjMzNDkgMC4wMDI5ODc2MyA5Ljc1IDBWMFpNMTQuMzkzNiA4LjA0MjcyTDguODkzMDcgMTMuMjkyN0M4Ljc1MzIyIDEzLjQyNTggOC41Njc1NiAxMy41IDguMzc0NTIgMTMuNUM4LjE4MTQ3IDEzLjUgNy45OTU4MiAxMy40MjU4IDcuODU1OTYgMTMuMjkyN0w1LjEwNjQ1IDEwLjY2NzdDNC45NjI4IDEwLjUzMDEgNC44Nzk2NSAxMC4zNDExIDQuODc1MjQgMTAuMTQyM0M0Ljg3MDg0IDkuOTQzNDEgNC45NDU1NSA5Ljc1MDkyIDUuMDgyOTcgOS42MDcxQzUuMjIwMzggOS40NjMyOCA1LjQwOTI3IDkuMzc5ODkgNS42MDgxMyA5LjM3NTIzQzUuODA2OTkgOS4zNzA1OCA1Ljk5OTU2IDkuNDQ1MDQgNi4xNDM1NiA5LjU4MjI4TDguMzc0NTIgMTEuNzEyOUwxMy4zNTY0IDYuOTU3MjhDMTMuNTAwNCA2LjgyMDA0IDEzLjY5MyA2Ljc0NTU4IDEzLjg5MTkgNi43NTAyM0MxNC4wOTA3IDYuNzU0ODkgMTQuMjc5NiA2LjgzODI4IDE0LjQxNyA2Ljk4MjFDMTQuNTU0NSA3LjEyNTkyIDE0LjYyOTIgNy4zMTg0MSAxNC42MjQ4IDcuNTE3MjdDMTQuNjIwNCA3LjcxNjE0IDE0LjUzNzIgNy45MDUxMyAxNC4zOTM2IDguMDQyNzJWOC4wNDI3MloiIGZpbGw9IiMyNkJFQzkiLz4KPC9zdmc+" width="19.50" height="19.50"></span>
+              <span>此设备支援使用 eSIM</span>
+            </div>
+
+            <!-- 用卡天数 -->
+            <div class="field-head">
+              <span class="label-lg">用卡天数</span>
+              <span class="placeholder" id="daysValue">请选择</span>
+              <span class="ic ic-24"><span class="rot90 ic"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE0IiBoZWlnaHQ9IjgiIHZpZXdCb3g9IjAgMCAxNCA4IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cGF0aCBpZD0iVmVjdG9yIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTYuMjkyODkgMC4yOTI4OTNDNi42ODM0MiAtMC4wOTc2MzExIDcuMzE2NTggLTAuMDk3NjMxMSA3LjcwNzExIDAuMjkyODkzTDEzLjcwNzEgNi4yOTI4OUMxNC4wOTc2IDYuNjgzNDIgMTQuMDk3NiA3LjMxNjU4IDEzLjcwNzEgNy43MDcxMUMxMy4zMTY2IDguMDk3NjMgMTIuNjgzNCA4LjA5NzYzIDEyLjI5MjkgNy43MDcxMUw3IDIuNDE0MjFMMS43MDcxMSA3LjcwNzExQzEuMzE2NTggOC4wOTc2MyAwLjY4MzQxOCA4LjA5NzYzIDAuMjkyODkzIDcuNzA3MTFDLTAuMDk3NjMxMSA3LjMxNjU4IC0wLjA5NzYzMTEgNi42ODM0MiAwLjI5Mjg5MyA2LjI5Mjg5TDYuMjkyODkgMC4yOTI4OTNaIiBmaWxsPSIjMjZCRUM5Ii8+Cjwvc3ZnPg==" width="14.00" height="8.00"></span></span>
+            </div>
+            <div class="chips" id="dayChips">
+              <button class="chip" data-days="1"><span class="chip-label t-body-md">1 天</span></button>
+              <button class="chip" data-days="2"><span class="chip-label t-body-md">2 天</span></button>
+              <button class="chip" data-days="4"><span class="chip-label t-body-md">4 天</span></button>
+              <button class="chip" data-days="5"><span class="chip-label t-body-md">5 天</span></button>
+              <button class="chip" data-days="6"><span class="chip-label t-body-md">6 天</span></button>
+              <button class="chip" data-days="7"><span class="chip-label t-body-md">7 天</span></button>
+              <button class="chip" data-days="8"><span class="chip-label t-body-md">8 天</span></button>
+              <button class="chip" data-days="9"><span class="chip-label t-body-md">9 天</span></button>
+              <button class="chip" data-days="10"><span class="chip-label t-body-md">10 天</span></button>
+              <button class="chip" data-days="15"><span class="chip-label t-body-md">15 天</span></button>
+              <button class="chip" data-days="20"><span class="chip-label t-body-md">20 天</span></button>
+              <button class="chip" data-days="30"><span class="chip-label t-body-md">30 天</span></button>
+            </div>
+
+            <!-- 流量 -->
+            <div class="field-head">
+              <span class="label-sm">流量</span>
+              <span class="hint">不知道怎么选<span class="ic ic-16"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjEzIiBoZWlnaHQ9IjEzIiB2aWV3Qm94PSIwIDAgMTMgMTMiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJWZWN0b3IiPgo8cGF0aCBkPSJNNi41IDEwLjE2NjdDNi44NjgxOSAxMC4xNjY3IDcuMTY2NjcgOS44NjgxOSA3LjE2NjY3IDkuNUM3LjE2NjY3IDkuMTMxODEgNi44NjgxOSA4LjgzMzMzIDYuNSA4LjgzMzMzQzYuMTMxODEgOC44MzMzMyA1LjgzMzMzIDkuMTMxODEgNS44MzMzMyA5LjVDNS44MzMzMyA5Ljg2ODE5IDYuMTMxODEgMTAuMTY2NyA2LjUgMTAuMTY2N1oiIGZpbGw9IiM5QzlEQTAiLz4KPHBhdGggZD0iTTYuOTM4OTUgMy4wNDM1NkM2LjUwMjUgMi45NTY3NCA2LjA1MDEgMy4wMDEzIDUuNjM4OTYgMy4xNzE2QzUuMjI3ODMgMy4zNDE4OSA0Ljg3NjQzIDMuNjMwMjggNC42MjkxOSA0LjAwMDI5QzQuMzgxOTYgNC4zNzAzIDQuMjUgNC44MDUzMiA0LjI1IDUuMjUwMzNDNC4yNSA1LjUyNjQ3IDQuNDczODYgNS43NTAzMyA0Ljc1IDUuNzUwMzNDNS4wMjYxNCA1Ljc1MDMzIDUuMjUgNS41MjY0NyA1LjI1IDUuMjUwMzNDNS4yNSA1LjAwMzEgNS4zMjMzMSA0Ljc2MTQzIDUuNDYwNjYgNC41NTU4NkM1LjU5ODAyIDQuMzUwMyA1Ljc5MzI0IDQuMTkwMDkgNi4wMjE2NSA0LjA5NTQ4QzYuMjUwMDUgNC4wMDA4NyA2LjUwMTM5IDMuOTc2MTEgNi43NDM4NiA0LjAyNDM0QzYuOTg2MzQgNC4wNzI1OCA3LjIwOTA3IDQuMTkxNjMgNy4zODM4OCA0LjM2NjQ0QzcuNTU4NyA0LjU0MTI2IDcuNjc3NzUgNC43NjM5OSA3LjcyNTk4IDUuMDA2NDZDNy43NzQyMSA1LjI0ODk0IDcuNzQ5NDYgNS41MDAyNyA3LjY1NDg1IDUuNzI4NjhDNy41NjAyNCA1Ljk1NzA5IDcuNDAwMDMgNi4xNTIzMSA3LjE5NDQ2IDYuMjg5NjZDNi45ODg5IDYuNDI3MDIgNi43NDcyMyA2LjUwMDMzIDYuNSA2LjUwMDMzQzYuMzY3MzkgNi41MDAzMyA2LjI0MDIyIDYuNTUzMDEgNi4xNDY0NSA2LjY0Njc3QzYuMDUyNjggNi43NDA1NCA2IDYuODY3NzIgNiA3LjAwMDMzVjcuNTAwMzNDNiA3Ljc3NjQ3IDYuMjIzODYgOC4wMDAzMyA2LjUgOC4wMDAzM0M2Ljc3NjE0IDguMDAwMzMgNyA3Ljc3NjQ3IDcgNy41MDAzM1Y3LjQ0NDA3QzcuMjY2MjYgNy4zODMzOCA3LjUyMDY0IDcuMjc0NDEgNy43NTAwMyA3LjEyMTEzQzguMTIwMDQgNi44NzM5IDguNDA4NDMgNi41MjI1IDguNTc4NzMgNi4xMTEzNkM4Ljc0OTAzIDUuNzAwMjMgOC43OTM1OCA1LjI0NzgzIDguNzA2NzcgNC44MTEzN0M4LjYxOTk1IDQuMzc0OTIgOC40MDU2NiAzLjk3NCA4LjA5MDk5IDMuNjU5MzRDNy43NzYzMiAzLjM0NDY3IDcuMzc1NDEgMy4xMzAzOCA2LjkzODk1IDMuMDQzNTZaIiBmaWxsPSIjOUM5REEwIi8+CjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNMCA2LjVDMCAyLjkxMDE1IDIuOTEwMTUgMCA2LjUgMEMxMC4wODk5IDAgMTMgMi45MTAxNSAxMyA2LjVDMTMgMTAuMDg5OSAxMC4wODk5IDEzIDYuNSAxM0MyLjkxMDE1IDEzIDAgMTAuMDg5OSAwIDYuNVpNNi41IDFDMy40NjI0MyAxIDEgMy40NjI0MyAxIDYuNUMxIDkuNTM3NTcgMy40NjI0MyAxMiA2LjUgMTJDOS41Mzc1NyAxMiAxMiA5LjUzNzU3IDEyIDYuNUMxMiAzLjQ2MjQzIDkuNTM3NTcgMSA2LjUgMVoiIGZpbGw9IiM5QzlEQTAiLz4KPC9nPgo8L3N2Zz4=" width="13.00" height="13.00"></span></span>
+            </div>
+            <div class="ftabs" id="dataTabs">
+              <button class="ftab sel" data-tab="daily">每日固定流量</button>
+              <button class="ftab" data-tab="total">总流量</button>
+              <button class="ftab" data-tab="unlimited">无限流量</button>
+            </div>
+            <div class="field-note" id="dataNote">每日重置，用完降速</div>
+            <div class="opts-scroll"><div class="opts-grid" id="dataOpts"></div></div>
+
+            <button class="cta" id="searchCta" disabled>搜寻套餐</button>
+          </div>
+
+          <!-- 为什么选择 KKday -->
+          <div class="card card--pad-v">
+            <div class="stack-20">
+              <div class="t-h6 card-title">为什么选择KKday？</div>
+              <div class="stack-20">
+                <div class="benefit-row">
+                  <span class="ic ic-32"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjI4LjQ3NzUiIGhlaWdodD0iMjcuOTg0MiIgdmlld0JveD0iMCAwIDI4LjQ3NzUgMjcuOTg0MiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgaWQ9IlZlY3RvciI+CjxwYXRoIGQ9Ik0xMy41NjQgMjUuMDUyNEMxNC4xNjk1IDI0LjI3NDUgMTUuNzQ4MSAxMy43NjYzIDEyLjM5MTkgMTAuMTgyMUMxMi4yNzI0IDkuOTUzNDggMTIuNDExMSA5LjY3MDQ3IDEyLjYzOTcgOS41NTA5NUMxMi44NjgzIDkuNDMxNDIgMTMuMTUyNSA5LjUzODE0IDEzLjI3MDkgOS43OTg3NUMxNi40Njc1IDEyLjUxMjMgMTcuMzU3MSAyMC4zOTEyIDE2LjYwMTggMjUuMTY2MkwxMy41NjQgMjUuMDUyNFoiIGZpbGw9IiMwMDk5QUQiLz4KPHBhdGggZD0iTTcuODk1NzkgOS4wNzI2M0M4LjI3OTAzIDExLjY0OTggMTAuNjUzMiAxMy4zNDU1IDEzLjE1ODggMTIuOTczQzE1LjczNTkgMTIuNTg5NyAxNy40MzE3IDEwLjIxNTYgMTcuMDU5MSA3LjcwOTk5QzE2LjY3NTggNS4xMzI4MSAxNC4zMDE3IDMuNDM3MDcgMTEuNzk2MSAzLjgwOTY3QzkuMjE4OTMgNC4xOTI5MSA3LjUyMzE5IDYuNTY3MDUgNy44OTU3OSA5LjA3MjYzWiIgZmlsbD0iI0ZEREUwOSIvPgo8cGF0aCBkPSJNMjIuMzcxMiAyNC4xMzM1QzIyLjU2NDQgMjUuNDMzIDIzLjc2MTUgMjYuMjg4IDI1LjAyNDkgMjYuMTAwMUMyNi4zMjQzIDI1LjkwNjkgMjcuMTc5MyAyNC43MDk4IDI2Ljk5MTUgMjMuNDQ2NEMyNi43OTgyIDIyLjE0NyAyNS42MDEyIDIxLjI5MiAyNC4zMzc4IDIxLjQ3OThDMjMuMDM4NCAyMS42NzMxIDIyLjE4MzMgMjIuODcwMiAyMi4zNzEyIDI0LjEzMzVaIiBmaWxsPSIjRkRERTA5Ii8+CjxwYXRoIGQ9Ik0xNy40OTUzIDAuMDQzMTU1QzE4LjAwNzcgMC4xMDA3MTggMTguMjExIDAuNjkzOTIyIDE3Ljg5NzUgMS4xMDMzMUwxMC42Njk3IDEwLjU0MjdDOS4yODAzMiA4LjE2MTE3IDkuMzcxMjUgNS4wNzQyMiAxMS4xMzIxIDIuNzc0MkMxMi42ODYxIDAuNzQzMzQ1IDE1LjEzMTggLTAuMjIyMzYyIDE3LjQ5NTMgMC4wNDMxNTVaIiBmaWxsPSIjMDBENUYyIi8+CjxwYXRoIGQ9Ik0yNC44NzMyIDcuNDAxODZDMjUuMTQ1MSA3Ljg0MDUyIDI0LjgxMzkgOC4zNzQwNyAyNC4yOTgxIDguMzkwNTRMMTAuNjk0OCA4LjgyNDg2QzExLjc3NzcgNS44ODE1NyAxNC41NjY4IDMuNzUyMTUgMTcuODgzNCAzLjY0NzE3QzIwLjgxNTcgMy41NTQzNSAyMy40MzE3IDUuMDc2MzUgMjQuODczMiA3LjQwMTg2WiIgZmlsbD0iIzAwRDVGMiIvPgo8cGF0aCBkPSJNMTIuMzQwNCA4LjA4ODQ0QzEyLjM0MDQgOC4wODg0NCAxMi42MTMxIDEwLjA4NjYgMTEuMjY1OSAxMy4xNDU0QzEwLjMwOCAxNS4zMjA1IDguODQ0NSAxNy4yMzgzIDguMDc4NzYgMTguMTY0OUM3LjgxMDQyIDE4LjQ4OTYgNy4zMjIxNSAxOC40OTY0IDcuMDcxNTcgMTguMTU3OEM1Ljc1ODM4IDE2LjM4MzMgNS4zOTE3NiAxMy45Nzg0IDYuMzU4NjMgMTEuODA4QzcuNDY3NzQgOS40MDQ3OCA5Ljg1NjU4IDcuOTk0NyAxMi4zNDA0IDguMDg4NDRaIiBmaWxsPSIjMDBCQ0Q1Ii8+CjxwYXRoIGQ9Ik0yOC4yODI3IDE3LjQ3NzlDMjguNjk4NCAxNy45MjY2IDI4LjQwODEgMTguNjU2OSAyNy43OTc4IDE4LjY5NzhMMjEuNzI5OCAxOS4xMDQ4TDI0LjE0OTcgMTMuMDE2NUwyOC4yODI3IDE3LjQ3NzlaIiBmaWxsPSIjMDBCQ0Q1Ii8+CjxwYXRoIGQ9Ik0yMC40MjkyIDIzLjEzMTNDMjAuMzE2IDIzLjQxMDQgMTkuOTk3OSAyMy41NDUgMTkuNzE4OCAyMy40MzE4QzE5LjQzOTYgMjMuMzE4NiAxOS4zMDUgMjMuMDAwNSAxOS40MTgyIDIyLjcyMTNMMjMuMjcxNiAxMy4yMTg2QzIzLjM4NDggMTIuOTM5NSAyMy43MDI5IDEyLjgwNDkgMjMuOTgyMSAxMi45MTgxQzI0LjI2MTIgMTMuMDMxMyAyNC4zOTU4IDEzLjM0OTQgMjQuMjgyNiAxMy42Mjg2TDIwLjQyOTIgMjMuMTMxM1oiIGZpbGw9IiMwMEJDRDUiLz4KPHBhdGggZD0iTTEyLjM3OTggOC44NTA2N0wwLjgzNTk4NiAxMS42MDU1QzAuMzM0ODk5IDExLjcyNSAtMC4xMjQwNjggMTEuMjk4NyAwLjAzMDQ0MDggMTAuODA3M0MwLjczODI0OSA4LjU1NTk4IDIuNTgyMDcgNi43MTQ5MiA1LjA1MDg3IDYuMTIzMDFDNy44OTM1NCA1LjQ0MTQ3IDEwLjc1MTMgNi42MDE3NCAxMi4zNzk4IDguODUwNjdaIiBmaWxsPSIjMDBCQ0Q1Ii8+CjxwYXRoIGQ9Ik0xMi4zNzMxIDguODg2MTNMMi45NzQwNyA0LjY0MzE5QzIuNTAyMzQgNC40MzAyNCAyLjQwMjY2IDMuODA4MzMgMi44MzQ4NCAzLjUyMzU3QzQuNTQyNyAyLjM5ODI1IDYuNzYyNCAyLjEzODggOC43NjcxIDMuMDU1MjVDMTEuMTIyMyA0LjEwMTA4IDEyLjQ4NDEgNi40NzE0NiAxMi4zNzMxIDguODg2MTNaIiBmaWxsPSIjMDBCQ0Q1Ii8+CjxwYXRoIGQ9Ik0xNS4wNDcgMjcuOTgzNEMxNC4yNDM3IDI3Ljk4MzQgMTMuNTc4OSAyNy4zMTA1IDEzLjg4NzQgMjYuNTY4OEMxNC43NjQ3IDI0LjQ1OTYgMTcuNDk4OCAyMi42NzE0IDIwLjcyODUgMjIuNjcxNEMyNC4zMDY5IDIyLjY3MTQgMjcuMjc3IDI0Ljg2NjcgMjcuNzg3MSAyNy4yNjE1QzI3Ljg3MDggMjcuNjU0NCAyNy41Mzg4IDI3Ljk4MzQgMjcuMTM3MiAyNy45ODM0SDE1LjA0N1oiIGZpbGw9IiMwMEQ1RjIiLz4KPHBhdGggZD0iTTIyLjEzNjggMjcuOTg0MkMyMi45NDAxIDI3Ljk4NDIgMjMuNjA0NSAyNy4zMjUzIDIzLjQyMjEgMjYuNTQzQzIyLjQ5MjIgMjIuNTU0NSAxNy44NDA0IDE4LjkyNDkgMTIuMjE2NCAxOC45MjQ5QzYuNTg3NzYgMTguOTI0OSAxLjkzMjkyIDIyLjUyODEgMS4wMDg0NCAyNi41NDI2QzAuODI4MTY0IDI3LjMyNTQgMS40OTI3NCAyNy45ODQyIDIuMjk2MDcgMjcuOTg0MkgyMi4xMzY4WiIgZmlsbD0iIzAwQkNENSIvPgo8L2c+Cjwvc3ZnPg==" width="28.48" height="27.98"></span>
+                  <div class="txt"><div class="t-subtitle-lg">简单易用</div><div class="desc t-body-md">透过 KKday APP 安装和管理 eSIM 卡，扫码即装，轻松上手。</div></div>
+                </div>
+                <div class="benefit-row">
+                  <span class="ic ic-32"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjI5LjE5MiIgaGVpZ2h0PSIyOC4wNjczIiB2aWV3Qm94PSIwIDAgMjkuMTkyIDI4LjA2NzMiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJWZWN0b3IiPgo8cGF0aCBkPSJNMTYuODY3IDYuMzA2OTdDMTYuODY3MSA1LjE3MzQyIDE4LjEwNjMgNC40NzU1OSAxOS4wNzU2IDUuMDYzMjZMMjEuODQyMiA2Ljc0MDUzQzIyLjQ5NDUgNy4xMzYwMiAyMi44OTI5IDcuODQzNDggMjIuODkyOSA4LjYwNjMzTDIyLjg5MjcgMTIuMjg4NEMyMi44OTI3IDEzLjQyNzcgMjEuNjQyMiAxNC4xMjQ3IDIwLjY3MzIgMTMuNTI1NUwxNy41NTYzIDExLjU5ODFDMTcuMTI3NiAxMS4zMzMxIDE2Ljg2NjcgMTAuODY0OSAxNi44NjY3IDEwLjM2MDlMMTYuODY3IDYuMzA2OTdaIiBmaWxsPSIjMDBCQ0Q1Ii8+CjxwYXRoIGQ9Ik02LjU2ODg5IDQuMDEzMjdDNi43MTI3MiAzLjQ2MDIxIDcuMTY3MDcgMy4wNDI2IDcuNzMwMjggMi45NDU4Mkw4LjQ1NzIxIDIuODIwOTFDMTAuMTI1IDIuNTM0MzIgMTEuODQwNSAyLjgzODMgMTMuMzA4MyAzLjY4MDQ4TDIyLjUzOTEgOC45NzY5QzIzLjU4OTIgOS41Nzk0NCAyNC4yNzA2IDEwLjY2NTEgMjQuMzU2NSAxMS44NzI4TDI0Ljc3NyAxNy43ODA1QzI0Ljg1NDIgMTguODY1NSAyMy43NTY3IDE5LjY0ODMgMjIuNzU2IDE5LjIyMTlMNS43NzYwNyAxMS45ODY4QzUuMTEzNDMgMTEuNzA0NSA0Ljc1NzIzIDEwLjk3OTcgNC45Mzg1MiAxMC4yODI2TDYuNTY4ODkgNC4wMTMyN1oiIGZpbGw9IiMwMEQ1RjIiLz4KPHBhdGggZD0iTTEyLjU1NTEgNi42MzY1MkMxMi42MDQgNi4yODM0NSAxMi45OTEzIDYuMDg4NjcgMTMuMzAzOSA2LjI1OTlMMjIuNjU1OCAxMS4zODIyQzIyLjgwNCAxMS40NjM0IDIyLjkwMjMgMTEuNjEyNyAyMi45MTgxIDExLjc4MDlMMjMuMDI3MyAxMi45Mzk3QzIzLjA2NTMgMTMuMzQzMiAyMi42Mzk1IDEzLjYyNzIgMjIuMjgxNiAxMy40MzdMMTIuNjU4NiA4LjMyNDc1QzEyLjQ2OTggOC4yMjQ0OCAxMi4zNjM4IDguMDE2OTkgMTIuMzkzMSA3LjgwNTI4TDEyLjU1NTEgNi42MzY1MloiIGZpbGw9IiNBQ0Y1RkYiLz4KPHBhdGggZD0iTTcuMTc3ODQgNS42NTcyOEM3LjIzMDQ3IDUuNDE5OSA3LjQ0MzYxIDUuMjUyODcgNy42ODY2OSA1LjI1ODUyTDkuNjM0NiA1LjMwMzc5QzkuOTUzNzMgNS4zMTEyMSAxMC4xODc0IDUuNjA3MTEgMTAuMTIwNiA1LjkxOTI3TDkuODU1NjggNy4xNTczQzkuODAyOTIgNy40MDM4MyA5LjU3NzY4IDcuNTc0NjIgOS4zMjYwNyA3LjU1ODg3TDcuMzg1NDggNy40Mzc0N0M3LjA3MzQ0IDcuNDE3OTUgNi44NTI1NyA3LjEyNDQxIDYuOTIwMjQgNi44MTkxOEw3LjE3Nzg0IDUuNjU3MjhaIiBmaWxsPSIjQUNGNUZGIi8+CjxwYXRoIGQ9Ik05LjQwNjMzIDI1LjA1MTRDOS43OTE5IDI0Ljk2NjcgMTAuMTkxMiAyNC45NjY3IDEwLjU3NjggMjUuMDUxNEg5LjQwNjMzWiIgZmlsbD0iIzAwQkNENSIvPgo8cGF0aCBkPSJNMTguNDg4NyAyNS4wNTE0QzE4Ljg3NDMgMjQuOTY2NyAxOS4yNzM2IDI0Ljk2NjcgMTkuNjU5MiAyNS4wNTE0SDE4LjQ4ODdaIiBmaWxsPSIjMDBCQ0Q1Ii8+CjxwYXRoIGQ9Ik0xLjE4MDQ4IDEzLjA1MjhDMC41OTMzNTEgMTAuMzk3NSAzLjAyMjEzIDguMDYxMDcgNS42NTI3OCA4Ljc1MDIyTDcuNTU5NzQgOS4yNDk1MUM3Ljk3NjcgOS4zNTg3NCA4LjM4MzE0IDkuNTA1MDkgOC43NzQyMyA5LjY4NjNMMjYuNjM1NyAxNy45NjE5QzI3LjMxMjYgMTguMjc1NiAyNy42NDI2IDE5LjA1MTMgMjcuMzk5MiAxOS43NTY2TDI2LjA0NDEgMjMuNjgwNkwyNS4wMSAyNC4yOTcxQzI0LjE1MDYgMjQuODA4NCAyMy4wNzk2IDI0LjgwODUgMjIuMjIwMyAyNC4yOTcxTDIxLjM5ODUgMjMuODA3N0MxOS45NjYxIDIyLjk1NTUgMTguMTgxNyAyMi45NTU0IDE2Ljc0OTQgMjMuODA3N0wxNS45Mjc2IDI0LjI5NzFDMTUuMDY4MiAyNC44MDg0IDEzLjk5NzIgMjQuODA4NSAxMy4xMzc5IDI0LjI5NzFMMTIuMzE2MSAyMy44MDc3QzEwLjg4MzggMjIuOTU1NSA5LjA5OTMyIDIyLjk1NTQgNy42NjY5OCAyMy44MDc3TDYuODQ1MjUgMjQuMjk3MUM1Ljk4NTg0IDI0LjgwODQgNC45MTQ4NiAyNC44MDg1IDQuMDU1NDggMjQuMjk3MUwzLjYwODA0IDI0LjAzMDhMMS4xODA0OCAxMy4wNTI4WiIgZmlsbD0iIzAwQkNENSIvPgo8cGF0aCBkPSJNMi45MDA5MiAxMy4xNzlDMi41ODYxNSAxMS41Nzg3IDQuMDc0NTEgMTAuMjExNCA1LjY0MjQ3IDEwLjY2MDVMNy44MDYyMyAxMS4yODAyQzguMDYyMDMgMTEuMzUzNSA4LjIxODI2IDExLjYxMTMgOC4xNjQ3NSAxMS44NzJMNy43NTEwOCAxMy44ODdDNy43MDI0OCAxNC4xMjM4IDcuNDk0MSAxNC4yOTM4IDcuMjUyMzkgMTQuMjkzOEgzLjUzODg5QzMuMjk1NjEgMTQuMjkzOCAzLjA4NjMyIDE0LjEyMTYgMy4wMzkzNyAxMy44ODI5TDIuOTAwOTIgMTMuMTc5WiIgZmlsbD0iI0ZEREUwOSIvPgo8cGF0aCBkPSJNMjcuNjkxMiAyNC4yNjk2QzI4LjEyMjYgMjQuMDEyOSAyOC42ODA5IDI0LjE1NDQgMjguOTM3NyAyNC41ODU3QzI5LjE5NDQgMjUuMDE3IDI5LjA1MjkgMjUuNTc1MyAyOC42MjE2IDI1LjgzMjFMMjUuOTM5OCAyNy40MjhDMjQuNTA3NCAyOC4yODA0IDIyLjcyMzEgMjguMjgwNCAyMS4yOTA3IDI3LjQyOEwyMC40Njg5IDI2LjkzODZDMTkuNjA5NSAyNi40MjcyIDE4LjUzODYgMjYuNDI3MiAxNy42NzkyIDI2LjkzODZMMTYuODU3NCAyNy40MjhDMTUuNDI1IDI4LjI4MDQgMTMuNjQwNyAyOC4yODA0IDEyLjIwODMgMjcuNDI4TDExLjM4NjUgMjYuOTM4NkMxMC41MjcxIDI2LjQyNzIgOS40NTYyMSAyNi40MjcyIDguNTk2NzcgMjYuOTM4Nkw3Ljc3NTAzIDI3LjQyOEM2LjM0MjYzIDI4LjI4MDQgNC41NTgzIDI4LjI4MDQgMy4xMjU4OSAyNy40MjhMMC40NDQwNjggMjUuODMyMUMwLjAxMjc3ODcgMjUuNTc1MyAtMC4xMjg2ODkgMjUuMDE3IDAuMTI4MDE3IDI0LjU4NTdDMC4zODQ4MjYgMjQuMTU0NCAwLjk0MzA3NyAyNC4wMTI5IDEuMzc0NDcgMjQuMjY5Nkw0LjA1NTU3IDI1Ljg2NTVDNC45MTUwMiAyNi4zNzY5IDUuOTg1OSAyNi4zNzY5IDYuODQ1MzUgMjUuODY1NUw3LjY2NzA4IDI1LjM3NjFDOS4wOTk0OSAyNC41MjM4IDEwLjg4MzggMjQuNTIzOCAxMi4zMTYyIDI1LjM3NjFMMTMuMTM4IDI1Ljg2NTVDMTMuOTk3NCAyNi4zNzY5IDE1LjA2ODMgMjYuMzc2OSAxNS45Mjc3IDI1Ljg2NTVMMTYuNzQ5NSAyNS4zNzYxQzE4LjE4MTkgMjQuNTIzOCAxOS45NjYyIDI0LjUyMzggMjEuMzk4NiAyNS4zNzYxTDIyLjIyMDMgMjUuODY1NUMyMy4wNzk4IDI2LjM3NjkgMjQuMTUwNyAyNi4zNzY5IDI1LjAxMDEgMjUuODY1NUwyNy42OTEyIDI0LjI2OTZaIiBmaWxsPSIjMDBCQ0Q1Ii8+CjxwYXRoIGQ9Ik0xNi41MzQ1IDAuMTYwNzUzQzE3LjM3MSAtMC4xMzk1OTggMTguMzMyNyAtMC4wMjQxNTAyIDE5LjA4NzggMC41NDk5NThDMTkuMTUxNiAwLjU5ODQ0MyAxOS4yMTIyIDAuNjQ5NzcyIDE5LjI3MDMgMC43MDI2NTdDMTkuMzM4OCAwLjY2NTU0MyAxOS40MDkzIDAuNjMwNTkyIDE5LjQ4MiAwLjU5ODk2NEMyMC4zNTE5IDAuMjIwNTQ4IDIxLjMxMzkgMC4zMzcxNDggMjIuMDU1MSAwLjgyNzY1N0MyMi4yMTM3IDAuOTMzMDAzIDIyLjEzNDggMS4xNjI0OSAyMS45NDUxIDEuMTgwNjRDMjEuMzgyNiAxLjIzNDQ2IDIwLjQ3MzEgMS4zNTU0MiAxOS44OTA0IDEuNjA4MkMxOS43MjQgMS42ODAzNSAxOS41NTg4IDEuNzIwOTIgMTkuNDA1MyAxLjczNjA0QzE5LjM2MTMgMS43NDI3MiAxOS4zMTQzIDEuNzQ0MjEgMTkuMjY0NyAxLjc0MzE0QzE5LjI1IDEuNzQzMDggMTkuMjM1NiAxLjc0MTU2IDE5LjIyMTMgMS43NDEwMUMxOS4yMDE4IDEuNzM5NzIgMTkuMTgxOCAxLjczOTkzIDE5LjE2MTcgMS43Mzc0NkMxOS4wNDU1IDEuNzI3MTkgMTguOTQzMSAxLjY5OTQyIDE4Ljg1OTEgMS42NTkzM0MxOC43MjQgMS42MDgxNCAxOC41ODQyIDEuNTM0NzEgMTguNDUwNyAxLjQzMzQ4QzE3Ljk0NDggMS4wNDk3MiAxNy4wOTA4IDAuNzE1ODY0IDE2LjU1NzMgMC41MzAwNzJDMTYuMzc3MiAwLjQ2NzM1OCAxNi4zNTUxIDAuMjI1MjI5IDE2LjUzNDUgMC4xNjA3NTNaIiBmaWxsPSIjMDA4MEZGIi8+CjxwYXRoIGQ9Ik0yMS41ODM2IDIuOTcwOTlDMjIuOTA3NiAyLjkxMDcyIDI0LjIyNzQgMy40OTc2MSAyNS4wNTA5IDQuNjQ3ODRDMjUuMTE0MSA0LjczNjA2IDI1LjE3MTQgNC44MjcwNSAyNS4yMjY0IDQuOTE4NDRDMjUuMzM1OSA0Ljg5Njg2IDI1LjQ0NzIgNC44Nzg0NyAyNS41NjAyIDQuODY1ODhDMjYuOTY2MSA0LjcwOTI1IDI4LjI4NTEgNS4yOTc3IDI5LjEyNTUgNi4zMjI1NkMyOS4zMDU3IDYuNTQyNDIgMjkuMDkyMSA2LjgzNDcgMjguODEzNyA2Ljc3NzFDMjcuOTg4OCA2LjYwNjQ1IDI2LjY0IDYuMzc5ODkgMjUuNjk4NyA2LjQ4Mzc4QzI1LjUxNDIgNi41MDQxNCAyNS4zMzY5IDYuNTAyOTcgMjUuMTcxIDYuNDg1OTFDMjQuOTYzNiA2LjUwMDM2IDI0LjcwNzQgNi40Mjk5NyAyNC40NDk0IDYuMjc2MzlDMjQuMzU0MSA2LjIyNTE3IDI0LjI3MTUgNi4xNjcxNyAyNC4yMDM2IDYuMTA0NTJDMjQuMDQ1IDUuOTc2MjUgMjMuODkxMyA1LjgxNjc2IDIzLjc1NDggNS42MjY1M0MyMy4yMDI2IDQuODU3MDkgMjIuMTMyMSA0LjAwNTg0IDIxLjQ1MzYgMy41MDY1MUMyMS4yMjQ3IDMuMzM3OTUgMjEuMjk5NiAyLjk4MzkzIDIxLjU4MzYgMi45NzA5OVoiIGZpbGw9IiMwMDgwRkYiLz4KPC9nPgo8L3N2Zz4=" width="29.19" height="28.07"></span>
+                  <div class="txt"><div class="t-subtitle-lg">灵活弹性</div><div class="desc t-body-md">透过 KKday APP 安装和管理 eSIM 卡，扫码即装，轻松上手。</div></div>
+                </div>
+                <div class="benefit-row">
+                  <span class="ic ic-32"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjI3LjEwMDgiIGhlaWdodD0iMjcuNjkxMSIgdmlld0JveD0iMCAwIDI3LjEwMDggMjcuNjkxMSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgaWQ9IlZlY3RvciI+CjxwYXRoIGQ9Ik0wIDEwLjIzMDhDMCA4Ljk3NjUzIDAuODAzODcxIDcuODYzNDkgMS45OTQ1MiA3LjQ2OTE4TDMuNjI2MTMgNi45Mjg4MkM0LjI3MjAyIDYuNzE0OTIgNC45Nzk5IDYuOTc3MzUgNS4zMzAyNyA3LjU2MDU5TDEyLjE3MDkgMTguOTQ3N0MxMi40NTM0IDE5LjQxODEgMTMuMTM1MiAxOS40MTgxIDEzLjQxNzcgMTguOTQ3N0wyMC4yNTI5IDcuNTY5NTVDMjAuNjA1OCA2Ljk4MjIzIDIxLjMyMDYgNi43MjA3NiAyMS45NjkxIDYuOTQxODRMMjMuNDgzMiA3LjQ1OEMyNC42NjE1IDcuODU5NjggMjUuNDUzNyA4Ljk2NjYgMjUuNDUzNyAxMC4yMTE1VjE5Ljg3MjJDMjUuNDUzNyAyMS44ODA1IDIzLjgyNTYgMjMuNTA4NiAyMS44MTczIDIzLjUwODZIMy42MzYzN0MxLjYyODA2IDIzLjUwODYgMCAyMS44ODA1IDAgMTkuODcyMlYxMC4yMzA4WiIgZmlsbD0iIzAwQkNENSIvPgo8cGF0aCBkPSJNNi43NTk5NCAxLjQ1NTgxQzYuNzYwMSAwLjM5MTY0MiA3Ljg2NTI3IC0wLjMxMTg2MyA4LjgyOTU0IDAuMTM4MzM0TDEyLjcyNjYgMS45NTcyM1Y0LjMxMzA1TDguODI5NTQgNi4xMzI2NUM3Ljg2NTMxIDYuNTgyOCA2Ljc2MDE3IDUuODc5MjcgNi43NTk5NCA0LjgxNTE4VjEuNDU1ODFaIiBmaWxsPSIjMDBCQ0Q1Ii8+CjxwYXRoIGQ9Ik0xOC42OTM1IDEuNDU1ODFDMTguNjkzNCAwLjM5MTY0MiAxNy41ODgyIC0wLjMxMTg2MyAxNi42MjM5IDAuMTM4MzM0TDEyLjcyNjYgMS45NTcyM1Y0LjMxMzA1TDE2LjYyMzkgNi4xMzI2NUMxNy41ODgyIDYuNTgyOCAxOC42OTMzIDUuODc5MjcgMTguNjkzNSA0LjgxNTE4VjEuNDU1ODFaIiBmaWxsPSIjMDBENUYyIi8+CjxwYXRoIGQ9Ik0xMS4yNzE4IDguNzA5MTRDMTEuMjcxOCA3LjkwNTgyIDExLjkyMyA3LjI1NDYgMTIuNzI2MyA3LjI1NDZDMTMuNTI5NiA3LjI1NDYgMTQuMTgwOSA3LjkwNTgyIDE0LjE4MDkgOC43MDkxNEMxNC4xODA5IDkuNTEyNDcgMTMuNTI5NiAxMC4xNjM3IDEyLjcyNjMgMTAuMTYzN0MxMS45MjMgMTAuMTYzNyAxMS4yNzE4IDkuNTEyNDcgMTEuMjcxOCA4LjcwOTE0WiIgZmlsbD0iIzAwQkNENSIvPgo8cGF0aCBkPSJNMTEuMjcxOCAxMy41MTIxQzExLjI3MTggMTIuNzA4NyAxMS45MjMgMTIuMDU3NSAxMi43MjYzIDEyLjA1NzVDMTMuNTI5NiAxMi4wNTc1IDE0LjE4MDkgMTIuNzA4NyAxNC4xODA5IDEzLjUxMjFDMTQuMTgwOSAxNC4zMTU0IDEzLjUyOTYgMTQuOTY2NiAxMi43MjYzIDE0Ljk2NjZDMTEuOTIzIDE0Ljk2NjYgMTEuMjcxOCAxNC4zMTU0IDExLjI3MTggMTMuNTEyMVoiIGZpbGw9IiMwMEJDRDUiLz4KPHBhdGggZD0iTTIyLjg2MiAxMi4wNTc1QzIzLjQ2NDQgMTIuMDU3NyAyMy45NTI5IDEyLjU0NjEgMjMuOTUyOSAxMy4xNDg0QzIzLjk1MjkgMTMuNzUwOCAyMy40NjQ0IDE0LjIzOTIgMjIuODYyIDE0LjIzOTNIMjAuNDMwOUMxOS44Mjg0IDE0LjIzOTMgMTkuMzQgMTMuNzUwOSAxOS4zNCAxMy4xNDg0QzE5LjM0IDEyLjU0NTkgMTkuODI4NCAxMi4wNTc1IDIwLjQzMDkgMTIuMDU3NUgyMi44NjJaIiBmaWxsPSIjRkRERTA5Ii8+CjxwYXRoIGQ9Ik0xNi4xOTE4IDIyLjIzNjZDMTYuMTkxOCAxOS4yMjQxIDE4LjYzMzggMTYuNzgyIDIxLjY0NjMgMTYuNzgyQzI0LjY1ODggMTYuNzgyIDI3LjEwMDggMTkuMjI0MSAyNy4xMDA4IDIyLjIzNjZDMjcuMTAwOCAyNS4yNDkgMjQuNjU4OCAyNy42OTExIDIxLjY0NjMgMjcuNjkxMUMxOC42MzM4IDI3LjY5MTEgMTYuMTkxOCAyNS4yNDkgMTYuMTkxOCAyMi4yMzY2WiIgZmlsbD0iI0FDRjVGRiIvPgo8cGF0aCBkPSJNMjMuNzAzMiAyMC4zODc0QzIzLjk4NzIgMjAuMTAzNCAyNC40NDc3IDIwLjEwMzQgMjQuNzMxNyAyMC4zODc0QzI1LjAxNTcgMjAuNjcxNCAyNS4wMTU3IDIxLjEzMTkgMjQuNzMxNyAyMS40MTU5TDIxLjg4NTIgMjQuMjYyNEMyMS42MDEyIDI0LjU0NjQgMjEuMTQwNyAyNC41NDY0IDIwLjg1NjcgMjQuMjYyNEwxOS4wNTU4IDIyLjQ2MTVDMTguNzcxOCAyMi4xNzc1IDE4Ljc3MTggMjEuNzE3IDE5LjA1NTggMjEuNDMzQzE5LjMzOTggMjEuMTQ5IDE5LjgwMDMgMjEuMTQ5IDIwLjA4NDMgMjEuNDMzTDIxLjM3MDkgMjIuNzE5NkwyMy43MDMyIDIwLjM4NzRaIiBmaWxsPSIjMDBCQ0Q1Ii8+CjwvZz4KPC9zdmc+" width="27.10" height="27.69"></span>
+                  <div class="txt"><div class="t-subtitle-lg">80+ 国家覆盖</div><div class="desc t-body-md">透过 KKday APP 安装和管理 eSIM 卡，扫码即装，轻松上手。</div></div>
+                </div>
+                <div class="benefit-row">
+                  <span class="ic ic-32"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjI4LjQ3NzUiIGhlaWdodD0iMjcuOTg0MiIgdmlld0JveD0iMCAwIDI4LjQ3NzUgMjcuOTg0MiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgaWQ9IlZlY3RvciI+CjxwYXRoIGQ9Ik0xMy41NjQgMjUuMDUyNEMxNC4xNjk1IDI0LjI3NDUgMTUuNzQ4MSAxMy43NjYzIDEyLjM5MTkgMTAuMTgyMUMxMi4yNzI0IDkuOTUzNDggMTIuNDExMSA5LjY3MDQ3IDEyLjYzOTcgOS41NTA5NUMxMi44NjgzIDkuNDMxNDIgMTMuMTUyNSA5LjUzODE0IDEzLjI3MDkgOS43OTg3NUMxNi40Njc1IDEyLjUxMjMgMTcuMzU3MSAyMC4zOTEyIDE2LjYwMTggMjUuMTY2MkwxMy41NjQgMjUuMDUyNFoiIGZpbGw9IiMwMDk5QUQiLz4KPHBhdGggZD0iTTcuODk1NzkgOS4wNzI2M0M4LjI3OTAzIDExLjY0OTggMTAuNjUzMiAxMy4zNDU1IDEzLjE1ODggMTIuOTczQzE1LjczNTkgMTIuNTg5NyAxNy40MzE3IDEwLjIxNTYgMTcuMDU5MSA3LjcwOTk5QzE2LjY3NTggNS4xMzI4MSAxNC4zMDE3IDMuNDM3MDcgMTEuNzk2MSAzLjgwOTY3QzkuMjE4OTMgNC4xOTI5MSA3LjUyMzE5IDYuNTY3MDUgNy44OTU3OSA5LjA3MjYzWiIgZmlsbD0iI0ZEREUwOSIvPgo8cGF0aCBkPSJNMjIuMzcxMiAyNC4xMzM1QzIyLjU2NDQgMjUuNDMzIDIzLjc2MTUgMjYuMjg4IDI1LjAyNDkgMjYuMTAwMUMyNi4zMjQzIDI1LjkwNjkgMjcuMTc5MyAyNC43MDk4IDI2Ljk5MTUgMjMuNDQ2NEMyNi43OTgyIDIyLjE0NyAyNS42MDEyIDIxLjI5MiAyNC4zMzc4IDIxLjQ3OThDMjMuMDM4NCAyMS42NzMxIDIyLjE4MzMgMjIuODcwMiAyMi4zNzEyIDI0LjEzMzVaIiBmaWxsPSIjRkRERTA5Ii8+CjxwYXRoIGQ9Ik0xNy40OTUzIDAuMDQzMTU1QzE4LjAwNzcgMC4xMDA3MTggMTguMjExIDAuNjkzOTIyIDE3Ljg5NzUgMS4xMDMzMUwxMC42Njk3IDEwLjU0MjdDOS4yODAzMiA4LjE2MTE3IDkuMzcxMjUgNS4wNzQyMiAxMS4xMzIxIDIuNzc0MkMxMi42ODYxIDAuNzQzMzQ1IDE1LjEzMTggLTAuMjIyMzYyIDE3LjQ5NTMgMC4wNDMxNTVaIiBmaWxsPSIjMDBENUYyIi8+CjxwYXRoIGQ9Ik0yNC44NzMyIDcuNDAxODZDMjUuMTQ1MSA3Ljg0MDUyIDI0LjgxMzkgOC4zNzQwNyAyNC4yOTgxIDguMzkwNTRMMTAuNjk0OCA4LjgyNDg2QzExLjc3NzcgNS44ODE1NyAxNC41NjY4IDMuNzUyMTUgMTcuODgzNCAzLjY0NzE3QzIwLjgxNTcgMy41NTQzNSAyMy40MzE3IDUuMDc2MzUgMjQuODczMiA3LjQwMTg2WiIgZmlsbD0iIzAwRDVGMiIvPgo8cGF0aCBkPSJNMTIuMzQwNCA4LjA4ODQ0QzEyLjM0MDQgOC4wODg0NCAxMi42MTMxIDEwLjA4NjYgMTEuMjY1OSAxMy4xNDU0QzEwLjMwOCAxNS4zMjA1IDguODQ0NSAxNy4yMzgzIDguMDc4NzYgMTguMTY0OUM3LjgxMDQyIDE4LjQ4OTYgNy4zMjIxNSAxOC40OTY0IDcuMDcxNTcgMTguMTU3OEM1Ljc1ODM4IDE2LjM4MzMgNS4zOTE3NiAxMy45Nzg0IDYuMzU4NjMgMTEuODA4QzcuNDY3NzQgOS40MDQ3OCA5Ljg1NjU4IDcuOTk0NyAxMi4zNDA0IDguMDg4NDRaIiBmaWxsPSIjMDBCQ0Q1Ii8+CjxwYXRoIGQ9Ik0yOC4yODI3IDE3LjQ3NzlDMjguNjk4NCAxNy45MjY2IDI4LjQwODEgMTguNjU2OSAyNy43OTc4IDE4LjY5NzhMMjEuNzI5OCAxOS4xMDQ4TDI0LjE0OTcgMTMuMDE2NUwyOC4yODI3IDE3LjQ3NzlaIiBmaWxsPSIjMDBCQ0Q1Ii8+CjxwYXRoIGQ9Ik0yMC40MjkyIDIzLjEzMTNDMjAuMzE2IDIzLjQxMDQgMTkuOTk3OSAyMy41NDUgMTkuNzE4OCAyMy40MzE4QzE5LjQzOTYgMjMuMzE4NiAxOS4zMDUgMjMuMDAwNSAxOS40MTgyIDIyLjcyMTNMMjMuMjcxNiAxMy4yMTg2QzIzLjM4NDggMTIuOTM5NSAyMy43MDI5IDEyLjgwNDkgMjMuOTgyMSAxMi45MTgxQzI0LjI2MTIgMTMuMDMxMyAyNC4zOTU4IDEzLjM0OTQgMjQuMjgyNiAxMy42Mjg2TDIwLjQyOTIgMjMuMTMxM1oiIGZpbGw9IiMwMEJDRDUiLz4KPHBhdGggZD0iTTEyLjM3OTggOC44NTA2N0wwLjgzNTk4NiAxMS42MDU1QzAuMzM0ODk5IDExLjcyNSAtMC4xMjQwNjggMTEuMjk4NyAwLjAzMDQ0MDggMTAuODA3M0MwLjczODI0OSA4LjU1NTk4IDIuNTgyMDcgNi43MTQ5MiA1LjA1MDg3IDYuMTIzMDFDNy44OTM1NCA1LjQ0MTQ3IDEwLjc1MTMgNi42MDE3NCAxMi4zNzk4IDguODUwNjdaIiBmaWxsPSIjMDBCQ0Q1Ii8+CjxwYXRoIGQ9Ik0xMi4zNzMxIDguODg2MTNMMi45NzQwNyA0LjY0MzE5QzIuNTAyMzQgNC40MzAyNCAyLjQwMjY2IDMuODA4MzMgMi44MzQ4NCAzLjUyMzU3QzQuNTQyNyAyLjM5ODI1IDYuNzYyNCAyLjEzODggOC43NjcxIDMuMDU1MjVDMTEuMTIyMyA0LjEwMTA4IDEyLjQ4NDEgNi40NzE0NiAxMi4zNzMxIDguODg2MTNaIiBmaWxsPSIjMDBCQ0Q1Ii8+CjxwYXRoIGQ9Ik0xNS4wNDcgMjcuOTgzNEMxNC4yNDM3IDI3Ljk4MzQgMTMuNTc4OSAyNy4zMTA1IDEzLjg4NzQgMjYuNTY4OEMxNC43NjQ3IDI0LjQ1OTYgMTcuNDk4OCAyMi42NzE0IDIwLjcyODUgMjIuNjcxNEMyNC4zMDY5IDIyLjY3MTQgMjcuMjc3IDI0Ljg2NjcgMjcuNzg3MSAyNy4yNjE1QzI3Ljg3MDggMjcuNjU0NCAyNy41Mzg4IDI3Ljk4MzQgMjcuMTM3MiAyNy45ODM0SDE1LjA0N1oiIGZpbGw9IiMwMEQ1RjIiLz4KPHBhdGggZD0iTTIyLjEzNjggMjcuOTg0MkMyMi45NDAxIDI3Ljk4NDIgMjMuNjA0NSAyNy4zMjUzIDIzLjQyMjEgMjYuNTQzQzIyLjQ5MjIgMjIuNTU0NSAxNy44NDA0IDE4LjkyNDkgMTIuMjE2NCAxOC45MjQ5QzYuNTg3NzYgMTguOTI0OSAxLjkzMjkyIDIyLjUyODEgMS4wMDg0NCAyNi41NDI2QzAuODI4MTY0IDI3LjMyNTQgMS40OTI3NCAyNy45ODQyIDIuMjk2MDcgMjcuOTg0MkgyMi4xMzY4WiIgZmlsbD0iIzAwQkNENSIvPgo8L2c+Cjwvc3ZnPg==" width="28.48" height="27.98"></span>
+                  <div class="txt"><div class="t-subtitle-lg">客服支持</div><div class="desc t-body-md">透过 KKday APP 安装和管理 eSIM 卡，扫码即装，轻松上手。</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- eSIM 安装指南 -->
+          <div class="card card--pad-v">
+            <div class="stack-20">
+              <div class="t-h6 card-title">eSIM 安裝指南</div>
+              <div class="guide-tabs">
+                <button class="guide-tab" data-action="guide" data-guide="iOS"><span class="ic ic-24"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE5LjUiIGhlaWdodD0iMTkuNSIgdmlld0JveD0iMCAwIDE5LjUgMTkuNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZD0iTTkuNzUgMEM3LjgyMTY0IDAgNS45MzY1NyAwLjU3MTgyOCA0LjMzMzE5IDEuNjQzMTdDMi43Mjk4MiAyLjcxNDUyIDEuNDgwMTMgNC4yMzcyNiAwLjc0MjE3OSA2LjAxODg0QzAuMDA0MjI0NDkgNy44MDA0MiAtMC4xODg4NTggOS43NjA4MiAwLjE4NzM0OCAxMS42NTIxQzAuNTYzNTU0IDEzLjU0MzQgMS40OTIxNSAxNS4yODA3IDIuODU1NzEgMTYuNjQ0M0M0LjIxOTI4IDE4LjAwNzkgNS45NTY1NiAxOC45MzY1IDcuODQ3ODcgMTkuMzEyN0M5LjczOTE5IDE5LjY4ODkgMTEuNjk5NiAxOS40OTU4IDEzLjQ4MTIgMTguNzU3OEMxNS4yNjI3IDE4LjAxOTkgMTYuNzg1NSAxNi43NzAyIDE3Ljg1NjggMTUuMTY2OEMxOC45MjgyIDEzLjU2MzQgMTkuNSAxMS42Nzg0IDE5LjUgOS43NUMxOS40OTcgNy4xNjUwNiAxOC40Njg4IDQuNjg2ODQgMTYuNjQxIDIuODU5MDFDMTQuODEzMiAxLjAzMTE4IDEyLjMzNDkgMC4wMDI5ODc2MyA5Ljc1IDBWMFpNMTQuMzkzNiA4LjA0MjcyTDguODkzMDcgMTMuMjkyN0M4Ljc1MzIyIDEzLjQyNTggOC41Njc1NiAxMy41IDguMzc0NTIgMTMuNUM4LjE4MTQ3IDEzLjUgNy45OTU4MiAxMy40MjU4IDcuODU1OTYgMTMuMjkyN0w1LjEwNjQ1IDEwLjY2NzdDNC45NjI4IDEwLjUzMDEgNC44Nzk2NSAxMC4zNDExIDQuODc1MjQgMTAuMTQyM0M0Ljg3MDg0IDkuOTQzNDEgNC45NDU1NSA5Ljc1MDkyIDUuMDgyOTcgOS42MDcxQzUuMjIwMzggOS40NjMyOCA1LjQwOTI3IDkuMzc5ODkgNS42MDgxMyA5LjM3NTIzQzUuODA2OTkgOS4zNzA1OCA1Ljk5OTU2IDkuNDQ1MDQgNi4xNDM1NiA5LjU4MjI4TDguMzc0NTIgMTEuNzEyOUwxMy4zNTY0IDYuOTU3MjhDMTMuNTAwNCA2LjgyMDA0IDEzLjY5MyA2Ljc0NTU4IDEzLjg5MTkgNi43NTAyM0MxNC4wOTA3IDYuNzU0ODkgMTQuMjc5NiA2LjgzODI4IDE0LjQxNyA2Ljk4MjFDMTQuNTU0NSA3LjEyNTkyIDE0LjYyOTIgNy4zMTg0MSAxNC42MjQ4IDcuNTE3MjdDMTQuNjIwNCA3LjcxNjE0IDE0LjUzNzIgNy45MDUxMyAxNC4zOTM2IDguMDQyNzJWOC4wNDI3MloiIGZpbGw9IiMyNkJFQzkiLz4KPC9zdmc+" width="19.50" height="19.50"></span><span class="lbl t-body-lg">iOS</span></button>
+                <button class="guide-tab" data-action="guide" data-guide="Android"><span class="ic ic-24"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjIxLjAwMiIgaGVpZ2h0PSIyMC4yNDg1IiB2aWV3Qm94PSIwIDAgMjEuMDAyIDIwLjI0ODUiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGlkPSJWZWN0b3IiIGQ9Ik0yMC45MjI2IDcuNjMyNTdDMjAuODI5IDcuMzM4NTkgMjAuNjQ4OSA3LjA3OTY1IDIwLjQwNTkgNi44ODk1NUMyMC4xNjI5IDYuNjk5NDUgMTkuODY4MiA2LjU4NzAxIDE5LjU2MDMgNi41NjY5TDEzLjk5MjQgNi4xNzcyNUwxMS45MjcgMC45NzYzMTlDMTEuODE1MiAwLjY4ODc4NyAxMS42MTkyIDAuNDQxNzI2IDExLjM2NDYgMC4yNjc1MTFDMTEuMTEgMC4wOTMyOTU3IDEwLjgwODggNS4yNTU2MmUtMDUgMTAuNTAwMyAwSDEwLjQ5ODhDMTAuMTkwOCAwLjAwMDU0OTM4NiA5Ljg5MDEgMC4wOTQwMzAyIDkuNjM2MDcgMC4yNjgyMTlDOS4zODIwNCAwLjQ0MjQwOCA5LjE4NjQ4IDAuNjg5MTk4IDkuMDc0OTcgMC45NzYzMTlMNi45Nzg3OCA2LjIwNzI3TDEuNDQxNjcgNi41NjY5QzEuMTMzNzkgNi41ODcwMSAwLjgzOTExMiA2LjY5OTQ1IDAuNTk2MDk2IDYuODg5NTVDMC4zNTMwNzkgNy4wNzk2NSAwLjE3MzAwMyA3LjMzODU5IDAuMDc5MzYyMSA3LjYzMjU3Qy0wLjAxOTQyMjkgNy45MzA3MyAtMC4wMjYxNDMgOC4yNTE3MiAwLjA2MDA3NjggOC41NTM3NUMwLjE0NjI5NyA4Ljg1NTc4IDAuMzIxNDYxIDkuMTI0ODUgMC41NjI3NjEgOS4zMjU5M0w0LjgyMjUzIDEyLjkyNjVMMy41NTU0NCAxNy45MTA2QzMuNDY4MSAxOC4yNDY0IDMuNDg0MTYgMTguNjAwNiAzLjYwMTUxIDE4LjkyNzFDMy43MTg4NyAxOS4yNTM1IDMuOTMyMDUgMTkuNTM3IDQuMjEzMTUgMTkuNzQwMkM0LjQ4NDU0IDE5LjkzNzcgNC44MDkwOSAyMC4wNDg5IDUuMTQ0NTUgMjAuMDU5M0M1LjQ4MDAxIDIwLjA2OTggNS44MTA4NSAxOS45NzkgNi4wOTQwMSAxOS43OTg4TDEwLjQ4ODUgMTcuMDE0OUMxMC40OTQ0IDE3LjAxMDUgMTAuNTAwMyAxNy4wMDc2IDEwLjUxMzQgMTcuMDE0OUwxNS4yNDIgMjAuMDEwNUMxNS40OTg3IDIwLjE3NDUgMTUuNzk4OSAyMC4yNTcyIDE2LjEwMzQgMjAuMjQ3OEMxNi40MDc5IDIwLjIzODQgMTYuNzAyNCAyMC4xMzczIDE2Ljk0ODUgMTkuOTU3OEMxNy4yMDMyIDE5Ljc3MzYgMTcuMzk2NCAxOS41MTY5IDE3LjUwMjggMTkuMjIxMkMxNy42MDkxIDE4LjkyNTQgMTcuNjIzOCAxOC42MDQ1IDE3LjU0NDcgMTguMzAwM0wxNi4xOTg1IDEyLjg1NTVMMjAuNDM5MiA5LjMyNTkzQzIwLjY4MDUgOS4xMjQ4NSAyMC44NTU3IDguODU1NzggMjAuOTQxOSA4LjU1Mzc1QzIxLjAyODEgOC4yNTE3MiAyMS4wMjE0IDcuOTMwNzMgMjAuOTIyNiA3LjYzMjU3WiIgZmlsbD0iIzI2QkVDOSIvPgo8L3N2Zz4=" width="21.00" height="20.25"></span><span class="lbl t-body-lg">Android</span></button>
+                <button class="guide-tab" data-action="guide" data-guide="分享"><span class="ic ic-24"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE4Ljg3MjEiIGhlaWdodD0iMTguODcyMyIgdmlld0JveD0iMCAwIDE4Ljg3MjEgMTguODcyMyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZD0iTTE3Ljg2MjggNS41NzY4MUwxLjk5MDY5IDAuMDgyNTQ1OEMxLjcyNDY4IC0wLjAwOTU1MTczIDEuNDM4MTIgLTAuMDI0OTMzMyAxLjE2Mzc3IDAuMDM4MTU5OUMwLjg4OTQzMiAwLjEwMTI1MyAwLjYzODM4MSAwLjI0MDI3NCAwLjQzOTMyOCAwLjQzOTMyOEMwLjI0MDI3NCAwLjYzODM4MSAwLjEwMTI1MyAwLjg4OTQzMiAwLjAzODE1OTkgMS4xNjM3N0MtMC4wMjQ5MzMzIDEuNDM4MTIgLTAuMDA5NTUxNjIgMS43MjQ2OCAwLjA4MjU0NiAxLjk5MDY5TDUuNTc2NzIgMTcuODYyOUM1LjY3NTY1IDE4LjE1OTIgNS44NjU5NiAxOC40MTY1IDYuMTIwMzEgMTguNTk3OUM2LjM3NDY2IDE4Ljc3OTIgNi42Nzk5NSAxOC44NzUyIDYuOTkyMzEgMTguODcyMkM3LjAwMTU1IDE4Ljg3MjIgNy4wMTA5OCAxOC44NzIxIDcuMDIwMjMgMTguODcxOUM3LjMzNzM5IDE4Ljg2OTkgNy42NDU0OCAxOC43NjU4IDcuODk4OTcgMTguNTc1MkM4LjE1MjQ1IDE4LjM4NDYgOC4zMzc4OCAxOC4xMTc0IDguNDI3ODUgMTcuODEzM0wxMC42MzYyIDEwLjYzNjNMMTcuODEzNCA4LjQyNzk0QzE4LjExNTcgOC4zMzQ4OSAxOC4zODA5IDguMTQ4NjUgMTguNTcxIDcuODk1ODNDMTguNzYxMSA3LjY0MzAyIDE4Ljg2NjQgNy4zMzY1NyAxOC44NzE5IDcuMDIwM0MxOC44Nzc0IDYuNzA0MDMgMTguNzgyOCA2LjM5NDEyIDE4LjYwMTUgNi4xMzQ4NkMxOC40MjAzIDUuODc1NjEgMTguMTYxNyA1LjY4MDI5IDE3Ljg2MjggNS41NzY4MUgxNy44NjI4WiIgZmlsbD0iIzI2QkVDOSIvPgo8L3N2Zz4=" width="18.87" height="18.87"></span><span class="lbl t-body-lg">分享</span></button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 常见问题 -->
+          <div class="card card--pad-v">
+            <div class="stack-20">
+              <div class="faq-head">
+                <span class="ttl t-h6 card-title">常见问题</span>
+                <span class="faq-more t-link-md" data-action="faq-more">查看更多</span>
+              </div>
+              <div class="faq-list">
+                <div class="faq-item">
+                  <button class="faq-q"><span class="qtext t-subtitle-lg">ESIM/WIFI常见问题</span><span class="ic ic-20 chev"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE0LjE2NjciIGhlaWdodD0iNy45MTY2NyIgdmlld0JveD0iMCAwIDE0LjE2NjcgNy45MTY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0wLjI0NDA3OCAwLjI0NDA3OEMwLjU2OTUxNSAtMC4wODEzNTkyIDEuMDk3MTUgLTAuMDgxMzU5MiAxLjQyMjU5IDAuMjQ0MDc4TDcuMDgzMzMgNS45MDQ4MkwxMi43NDQxIDAuMjQ0MDc4QzEzLjA2OTUgLTAuMDgxMzU5MiAxMy41OTcyIC0wLjA4MTM1OTIgMTMuOTIyNiAwLjI0NDA3OEMxNC4yNDggMC41Njk1MTUgMTQuMjQ4IDEuMDk3MTUgMTMuOTIyNiAxLjQyMjU5TDcuNjcyNTkgNy42NzI1OUM3LjM0NzE1IDcuOTk4MDMgNi44MTk1MSA3Ljk5ODAzIDYuNDk0MDggNy42NzI1OUwwLjI0NDA3OCAxLjQyMjU5Qy0wLjA4MTM1OTIgMS4wOTcxNSAtMC4wODEzNTkyIDAuNTY5NTE1IDAuMjQ0MDc4IDAuMjQ0MDc4WiIgZmlsbD0iIzIxMjEyMSIvPgo8L3N2Zz4=" width="14.17" height="7.92"></span></button>
+                  <div class="faq-a t-body-md">KKday ESIM/WIFI常见问题说明 KKday ESIM/WIFI常见问题说明 KKday ESIM/WIFI常见问题说明</div>
+                </div>
+                <div class="faq-item">
+                  <button class="faq-q"><span class="qtext t-subtitle-lg">ESIM/WIFI常见问题ESIM/WIFI常见问题ESIM/WIFI常见问题</span><span class="ic ic-20 chev"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE0LjE2NjciIGhlaWdodD0iNy45MTY2NyIgdmlld0JveD0iMCAwIDE0LjE2NjcgNy45MTY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0wLjI0NDA3OCAwLjI0NDA3OEMwLjU2OTUxNSAtMC4wODEzNTkyIDEuMDk3MTUgLTAuMDgxMzU5MiAxLjQyMjU5IDAuMjQ0MDc4TDcuMDgzMzMgNS45MDQ4MkwxMi43NDQxIDAuMjQ0MDc4QzEzLjA2OTUgLTAuMDgxMzU5MiAxMy41OTcyIC0wLjA4MTM1OTIgMTMuOTIyNiAwLjI0NDA3OEMxNC4yNDggMC41Njk1MTUgMTQuMjQ4IDEuMDk3MTUgMTMuOTIyNiAxLjQyMjU5TDcuNjcyNTkgNy42NzI1OUM3LjM0NzE1IDcuOTk4MDMgNi44MTk1MSA3Ljk5ODAzIDYuNDk0MDggNy42NzI1OUwwLjI0NDA3OCAxLjQyMjU5Qy0wLjA4MTM1OTIgMS4wOTcxNSAtMC4wODEzNTkyIDAuNTY5NTE1IDAuMjQ0MDc4IDAuMjQ0MDc4WiIgZmlsbD0iIzIxMjEyMSIvPgo8L3N2Zz4=" width="14.17" height="7.92"></span></button>
+                  <div class="faq-a t-body-md">KKday ESIM/WIFI常见问题说明 KKday ESIM/WIFI常见问题说明 KKday ESIM/WIFI常见问题说明 KKday ESIM/WIFI常见问题说明 KKday ESIM/WIFI常见问题说明 KKday ESIM/WIFI常见问题说明</div>
+                </div>
+                <div class="faq-item">
+                  <button class="faq-q"><span class="qtext t-subtitle-lg">ESIM/WIFI常见问题</span><span class="ic ic-20 chev"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE0LjE2NjciIGhlaWdodD0iNy45MTY2NyIgdmlld0JveD0iMCAwIDE0LjE2NjcgNy45MTY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0wLjI0NDA3OCAwLjI0NDA3OEMwLjU2OTUxNSAtMC4wODEzNTkyIDEuMDk3MTUgLTAuMDgxMzU5MiAxLjQyMjU5IDAuMjQ0MDc4TDcuMDgzMzMgNS45MDQ4MkwxMi43NDQxIDAuMjQ0MDc4QzEzLjA2OTUgLTAuMDgxMzU5MiAxMy41OTcyIC0wLjA4MTM1OTIgMTMuOTIyNiAwLjI0NDA3OEMxNC4yNDggMC41Njk1MTUgMTQuMjQ4IDEuMDk3MTUgMTMuOTIyNiAxLjQyMjU5TDcuNjcyNTkgNy42NzI1OUM3LjM0NzE1IDcuOTk4MDMgNi44MTk1MSA3Ljk5ODAzIDYuNDk0MDggNy42NzI1OUwwLjI0NDA3OCAxLjQyMjU5Qy0wLjA4MTM1OTIgMS4wOTcxNSAtMC4wODEzNTkyIDAuNTY5NTE1IDAuMjQ0MDc4IDAuMjQ0MDc4WiIgZmlsbD0iIzIxMjEyMSIvPgo8L3N2Zz4=" width="14.17" height="7.92"></span></button>
+                  <div class="faq-a t-body-md">KKday ESIM/WIFI常见问题说明 KKday ESIM/WIFI常见问题说明 KKday ESIM/WIFI常见问题说明</div>
+                </div>
+                <div class="faq-item">
+                  <button class="faq-q"><span class="qtext t-subtitle-lg">ESIM/WIFI常见问题</span><span class="ic ic-20 chev"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE0LjE2NjciIGhlaWdodD0iNy45MTY2NyIgdmlld0JveD0iMCAwIDE0LjE2NjcgNy45MTY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0wLjI0NDA3OCAwLjI0NDA3OEMwLjU2OTUxNSAtMC4wODEzNTkyIDEuMDk3MTUgLTAuMDgxMzU5MiAxLjQyMjU5IDAuMjQ0MDc4TDcuMDgzMzMgNS45MDQ4MkwxMi43NDQxIDAuMjQ0MDc4QzEzLjA2OTUgLTAuMDgxMzU5MiAxMy41OTcyIC0wLjA4MTM1OTIgMTMuOTIyNiAwLjI0NDA3OEMxNC4yNDggMC41Njk1MTUgMTQuMjQ4IDEuMDk3MTUgMTMuOTIyNiAxLjQyMjU5TDcuNjcyNTkgNy42NzI1OUM3LjM0NzE1IDcuOTk4MDMgNi44MTk1MSA3Ljk5ODAzIDYuNDk0MDggNy42NzI1OUwwLjI0NDA3OCAxLjQyMjU5Qy0wLjA4MTM1OTIgMS4wOTcxNSAtMC4wODEzNTkyIDAuNTY5NTE1IDAuMjQ0MDc4IDAuMjQ0MDc4WiIgZmlsbD0iIzIxMjEyMSIvPgo8L3N2Zz4=" width="14.17" height="7.92"></span></button>
+                  <div class="faq-a t-body-md">KKday ESIM/WIFI常见问题说明 KKday ESIM/WIFI常见问题说明 KKday ESIM/WIFI常见问题说明</div>
+                </div>
+                <div class="faq-item">
+                  <button class="faq-q"><span class="qtext t-subtitle-lg">ESIM/WIFI常见问题</span><span class="ic ic-20 chev"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE0LjE2NjciIGhlaWdodD0iNy45MTY2NyIgdmlld0JveD0iMCAwIDE0LjE2NjcgNy45MTY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0wLjI0NDA3OCAwLjI0NDA3OEMwLjU2OTUxNSAtMC4wODEzNTkyIDEuMDk3MTUgLTAuMDgxMzU5MiAxLjQyMjU5IDAuMjQ0MDc4TDcuMDgzMzMgNS45MDQ4MkwxMi43NDQxIDAuMjQ0MDc4QzEzLjA2OTUgLTAuMDgxMzU5MiAxMy41OTcyIC0wLjA4MTM1OTIgMTMuOTIyNiAwLjI0NDA3OEMxNC4yNDggMC41Njk1MTUgMTQuMjQ4IDEuMDk3MTUgMTMuOTIyNiAxLjQyMjU5TDcuNjcyNTkgNy42NzI1OUM3LjM0NzE1IDcuOTk4MDMgNi44MTk1MSA3Ljk5ODAzIDYuNDk0MDggNy42NzI1OUwwLjI0NDA3OCAxLjQyMjU5Qy0wLjA4MTM1OTIgMS4wOTcxNSAtMC4wODEzNTkyIDAuNTY5NTE1IDAuMjQ0MDc4IDAuMjQ0MDc4WiIgZmlsbD0iIzIxMjEyMSIvPgo8L3N2Zz4=" width="14.17" height="7.92"></span></button>
+                  <div class="faq-a t-body-md">KKday ESIM/WIFI常见问题说明 KKday ESIM/WIFI常见问题说明 KKday ESIM/WIFI常见问题说明</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /page -->
+      </div><!-- /con -->
+    </section>
+
   </div><!-- /app -->
   <div class="toast" id="toast"></div>
 </div>
@@ -416,21 +636,110 @@
     toastTimer = setTimeout(function () { toastEl.classList.remove('show'); }, 1800);
   }
 
-  // 交互占位（后续接入订购流程后续页面）
+  // ---------- 屏幕路由 ----------
+  var current = 'home';
+  function go(name) {
+    current = name;
+    document.querySelectorAll('.screen').forEach(function (s) {
+      s.classList.toggle('is-active', s.getAttribute('data-screen') === name);
+    });
+    window.scrollTo(0, 0);
+  }
+
+  // ---------- 目的地页状态 ----------
+  var state = { days: null, tab: 'daily', plan: null };
+
+  var PLANS = {
+    daily:     { note: '每日重置，用完降速', badgeOn: '4GB/天',
+                 opts: ['1GB/天','2GB/天','3GB/天','4GB/天','5GB/天','6GB/天','7GB/天','8GB/天','9GB/天','10GB/天'] },
+    total:     { note: '总流量用完即停，可随时加购', badgeOn: null,
+                 opts: ['1GB','3GB','5GB','10GB','20GB','30GB','50GB','100GB'] },
+    unlimited: { note: '不限流量，依公平使用原则', badgeOn: null,
+                 opts: ['每日 500MB 后降速','每日 1GB 后降速','全程高速'] }
+  };
+
+  function renderOpts() {
+    var cfg = PLANS[state.tab];
+    document.getElementById('dataNote').textContent = cfg.note;
+    var grid = document.getElementById('dataOpts');
+    grid.innerHTML = '';
+    cfg.opts.forEach(function (t) {
+      var b = document.createElement('button');
+      b.className = 'opt' + (state.plan === t ? ' sel' : '');
+      b.innerHTML = '<span class="t"></span><span class="p">NT$ 12起</span>' +
+        (cfg.badgeOn === t ? '<span class="badge">80%选择</span>' : '');
+      b.querySelector('.t').textContent = t;
+      b.addEventListener('click', function () {
+        state.plan = (state.plan === t) ? null : t;
+        renderOpts(); updateCta();
+      });
+      grid.appendChild(b);
+    });
+  }
+
+  function updateCta() {
+    var ok = state.days && state.plan;
+    var cta = document.getElementById('searchCta');
+    cta.classList.toggle('enabled', !!ok);
+    cta.disabled = !ok;
+  }
+
+  // 天数 chips 单选
+  document.querySelectorAll('#dayChips .chip').forEach(function (el) {
+    el.addEventListener('click', function () {
+      var v = el.getAttribute('data-days');
+      state.days = (state.days === v) ? null : v;
+      document.querySelectorAll('#dayChips .chip').forEach(function (c) {
+        c.classList.toggle('sel', c.getAttribute('data-days') === state.days);
+      });
+      var dv = document.getElementById('daysValue');
+      dv.textContent = state.days ? (state.days + ' 天') : '请选择';
+      dv.classList.toggle('has-value', !!state.days);
+      updateCta();
+    });
+  });
+
+  // 流量 tab 切换
+  document.querySelectorAll('#dataTabs .ftab').forEach(function (el) {
+    el.addEventListener('click', function () {
+      state.tab = el.getAttribute('data-tab');
+      state.plan = null;
+      document.querySelectorAll('#dataTabs .ftab').forEach(function (t) {
+        t.classList.toggle('sel', t === el);
+      });
+      renderOpts(); updateCta();
+    });
+  });
+
+  document.getElementById('searchCta').addEventListener('click', function () {
+    if (state.days && state.plan) {
+      toast('搜寻：' + document.getElementById('destName').textContent +
+            ' · ' + state.days + ' 天 · ' + state.plan + '（套餐列表开发中）');
+    }
+  });
+
+  // ---------- 通用动作 ----------
   document.querySelectorAll('[data-action]').forEach(function (el) {
     el.addEventListener('click', function () {
       var a = el.getAttribute('data-action');
-      if (a === 'pick-destination') toast('下一步：选择目的地（开发中）');
+      if (a === 'pick-destination') toast('目的地选择面板（开发中）');
+      else if (a === 'change-destination') go('home');
       else if (a === 'guide') toast('安装指南：' + el.getAttribute('data-guide') + '（开发中）');
       else if (a === 'faq-more') toast('常见问题列表（开发中）');
-      else if (a === 'back') toast('返回上一页');
+      else if (a === 'back') { if (current === 'destination') go('home'); else toast('返回上一页'); }
     });
   });
+
+  // 首页目的地 chip → 进入目的地页
   document.querySelectorAll('.chip[data-dest]').forEach(function (el) {
     el.addEventListener('click', function () {
-      toast(el.getAttribute('data-dest') + ' eSIM 方案（开发中）');
+      document.getElementById('destName').textContent = el.getAttribute('data-dest');
+      go('destination');
     });
   });
+
+  renderOpts();
+  updateCta();
 })();
 </script>
 

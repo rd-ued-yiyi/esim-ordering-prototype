@@ -46,6 +46,7 @@ subs = {
     "{{IC_star}}":         svg("star"),
     "{{IC_locationArrow}}":svg("locationArrow"),
     "{{IC_arrowDown}}":    svg("arrowDown"),
+    "{{IC_question}}":     svg("question"),
     "{{PICTO_tours}}":     svg("picto_tours", "picto"),
     "{{PICTO_cruise}}":    svg("picto_cruise", "picto"),
     "{{PICTO_travel}}":    svg("picto_travel", "picto"),
