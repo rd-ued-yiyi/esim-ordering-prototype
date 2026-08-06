@@ -5,11 +5,14 @@ import base64, re, pathlib
 ROOT = pathlib.Path(__file__).parent
 TPL = (ROOT / "src" / "template.html").read_text(encoding="utf-8")
 
-def svg(name, folder="icons"):
+def svg(name, folder="icons", recolor=None):
     """把 SVG 转成 data-URI <img>。内联 <svg> 会被 Artifact 的 sanitizer 过滤掉，
-    data-URI <img> 是官方支持的自包含方式，任何环境都不会被剥离。"""
+    data-URI <img> 是官方支持的自包含方式，任何环境都不会被剥离。
+    recolor=(旧色, 新色) 用于同一图标的不同颜色变体（如 arrowRight 的 cyan/深色版）。"""
     txt = (ROOT / "assets" / folder / f"{name}.svg").read_text(encoding="utf-8")
     txt = txt.replace(' preserveAspectRatio="none"', "")
+    if recolor:
+        txt = txt.replace(f'fill="{recolor[0]}"', f'fill="{recolor[1]}"')
     # 取 intrinsic 宽高，让 <img> 以原始尺寸在 .ic 盒内居中（保持比例不变形）
     w = re.search(r'width="([\d.]+)"', txt)
     h = re.search(r'height="([\d.]+)"', txt)
@@ -47,6 +50,7 @@ subs = {
     "{{IC_locationArrow}}":svg("locationArrow"),
     "{{IC_arrowDown}}":    svg("arrowDown"),
     "{{IC_question}}":     svg("question"),
+    "{{IC_arrowRightDark}}": svg("arrowRight", recolor=("#26BEC9", "#212121")),
     "{{PICTO_tours}}":     svg("picto_tours", "picto"),
     "{{PICTO_cruise}}":    svg("picto_cruise", "picto"),
     "{{PICTO_travel}}":    svg("picto_travel", "picto"),
