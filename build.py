@@ -30,6 +30,12 @@ def inline_svg_to_img(markup):
     b64 = base64.b64encode(markup.strip().encode("utf-8")).decode()
     return f'<img alt="" src="data:image/svg+xml;base64,{b64}"{wh}>'
 
+# 详情页小图标（Figma 无单独可导出的实体，按 16px 图框手绘，矢量占位 ~13px）
+DET_FILE = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M1.5 0h6L12 4.5V12.5A1.5 1.5 0 0 1 10.5 14h-9A1.5 1.5 0 0 1 0 12.5v-11A1.5 1.5 0 0 1 1.5 0Z" fill="#26BEC9"/><path d="M7.5 0 12 4.5H8.5a1 1 0 0 1-1-1V0Z" fill="#8ADEE3"/></svg>'
+DET_SPARK = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 0l1.2 3.8L14 5l-3.8 1.2L9 10 7.8 6.2 4 5l3.8-1.2L9 0Z" fill="#2EC4F2"/><path d="M3 8l.8 2.2L6 11l-2.2.8L3 14l-.8-2.2L0 11l2.2-.8L3 8Z" fill="#10D5E3"/></svg>'
+DET_SMILE = '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5.75" stroke="#212121" stroke-width="1.5"/><circle cx="4.6" cy="5.2" r=".9" fill="#212121"/><circle cx="8.4" cy="5.2" r=".9" fill="#212121"/><path d="M4.2 8.2a3 3 0 0 0 4.6 0" stroke="#212121" stroke-width="1.3" stroke-linecap="round"/></svg>'
+DET_NEUTRAL = '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5.75" stroke="#212121" stroke-width="1.5"/><circle cx="4.6" cy="5.2" r=".9" fill="#212121"/><circle cx="8.4" cy="5.2" r=".9" fill="#212121"/><path d="M4.3 8.8h4.4" stroke="#212121" stroke-width="1.3" stroke-linecap="round"/></svg>'
+
 SB_SIGNAL = '<svg xmlns="http://www.w3.org/2000/svg" width="17" height="11" viewBox="0 0 17 11" fill="none"><rect x="0" y="7" width="3" height="4" rx="1" fill="#fff"/><rect x="4.5" y="5" width="3" height="6" rx="1" fill="#fff"/><rect x="9" y="2.5" width="3" height="8.5" rx="1" fill="#fff"/><rect x="13.5" y="0" width="3" height="11" rx="1" fill="#fff"/></svg>'
 SB_WIFI = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M8 11.2 1 4.4a10 10 0 0 1 14 0L8 11.2Z" fill="#fff" opacity=".35"/><path d="M8 11.2 4 7.3a5.6 5.6 0 0 1 8 0L8 11.2Z" fill="#fff"/></svg>'
 SB_BATTERY = '<svg xmlns="http://www.w3.org/2000/svg" width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3" stroke="#fff" opacity=".4"/><rect x="2" y="2" width="18" height="8" rx="1.5" fill="#fff"/><path d="M23 4v4a2 2 0 0 0 0-4Z" fill="#fff" opacity=".5"/></svg>'
@@ -76,6 +82,13 @@ subs = {
     "{{IC_swapVertical}}": svg("swapVertical"),
     "{{IC_pencil}}":       svg("pencil"),
     "{{IC_filter}}":       svg("filter"),
+    "{{IC_file}}":         inline_svg_to_img(DET_FILE),
+    "{{IC_spark}}":        inline_svg_to_img(DET_SPARK),
+    "{{IC_smile}}":        inline_svg_to_img(DET_SMILE),
+    "{{IC_neutral}}":      inline_svg_to_img(DET_NEUTRAL),
+    "{{IMG_GUIDE1}}":      png_datauri("detail/guide1.png"),
+    "{{IMG_GUIDE2}}":      png_datauri("detail/guide2.png"),
+    "{{IMG_GUIDE3}}":      png_datauri("detail/guide3.png"),
     "{{PICTO_tours}}":     svg("picto_tours", "picto"),
     "{{PICTO_cruise}}":    svg("picto_cruise", "picto"),
     "{{PICTO_travel}}":    svg("picto_travel", "picto"),

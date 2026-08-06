@@ -21,4 +21,7 @@ git add -A && git commit -m "update" && git push   # 触发 Pages 重新部署
 ## 进度
 
 - [x] 第 1 页：主题落地页（hero / 目的地选择 / 为什么选 KKday / 安装指南 / FAQ）
-- [ ] 后续订购流程页面
+- [x] 第 2 页：目的地页（天数/流量选择、选择目的地 modal）
+- [x] 第 3 页：套餐列表页（条件 chips / 筛选 / 排序 / 仿真卡片）
+- [x] 套餐详情 Full-screen Modal（锚点 tab / 基本信息 / 评论区锚定 / 图文说明）
+- [ ] 订购流程页面

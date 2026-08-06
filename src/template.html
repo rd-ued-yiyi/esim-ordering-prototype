@@ -604,6 +604,131 @@
     width: 5px; height: 9px; border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(45deg);
   }
 
+  /* ================= 套餐详情 Full-screen Modal（Figma 871-78047） ================= */
+  .det-head { flex: 0 0 auto; background: #fff; }
+  .det-tabs {
+    display: flex; background: #fff; padding: 0 12px;
+    overflow-x: auto; scrollbar-width: none;
+    border-bottom: 1px solid var(--kk-border-lighter);  /* 置顶块只在下沿出线 */
+  }
+  .det-tabs::-webkit-scrollbar { display: none; }
+  .det-tab {
+    flex: 0 0 auto; padding: 12px;
+    font-size: 16px; line-height: 24px; color: var(--kk-text-darker);
+    position: relative; white-space: nowrap;
+  }
+  .det-tab.sel { color: #13A3B6; font-weight: 600; }
+  .det-tab.sel::after {
+    content: ''; position: absolute; left: 12px; right: 12px; bottom: 0;
+    height: 2px; background: var(--kk-primary-medium); border-radius: 2px 2px 0 0;
+  }
+  .det-body {
+    position: relative; flex: 1 1 0; min-height: 0;
+    overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain;
+    background: var(--kk-surface-light);
+  }
+  .det-sec { background: #fff; padding: 24px 20px 32px; }
+  .det-sec + .det-sec { margin-top: 8px; }
+  .det-cond { display: flex; align-items: center; gap: 8px;
+    font-size: 14px; line-height: 20px; font-weight: 600; color: #13A3B6; margin-bottom: 8px; }
+  .det-title { font-size: 22px; line-height: 28px; font-weight: 600; color: var(--kk-text-darker); margin: 0 0 8px; }
+  .det-sec .pkg-hr { margin: 24px 0; }
+  .det-policies { display: flex; flex-direction: column; gap: 8px; margin-top: 12px;
+    font-size: 14px; line-height: 20px; color: #13A3B6; }
+  .det-policies .perk { display: inline-flex; align-items: center; gap: 8px; }
+  .det-policies .perk.dark { color: var(--kk-text-darker); }
+  .det-policies .perk.link .pt { text-decoration: underline; }
+  .det-intro {
+    margin: 24px 0 0; font-size: 14px; line-height: 20px; color: var(--kk-text-darker);
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .det-intro.open { display: block; }
+  .det-more { display: inline-flex; align-items: center; gap: 4px; margin-top: 8px;
+    font-size: 14px; line-height: 20px; font-weight: 600; color: var(--kk-text-darker); }
+  .det-more .chev { transition: transform .2s; }
+  .det-more.open .chev { transform: rotate(180deg); }
+  .det-provider { margin-top: 24px; font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
+  .det-h2 { font-size: 18px; line-height: 26px; font-weight: 600; color: var(--kk-text-darker); margin: 32px 0 20px; }
+  .det-h5 { font-size: 22px; line-height: 28px; font-weight: 600; color: var(--kk-text-darker); margin: 0 0 20px; }
+  .det-sub { font-size: 16px; line-height: 24px; font-weight: 600; color: var(--kk-text-darker); margin: 24px 0 8px; }
+  /* 基本信息表（Figma 902-41074） */
+  .det-table { border: 1px solid var(--kk-border-lighter); border-radius: var(--r-md); overflow: hidden; }
+  .det-table .th { background: var(--kk-surface-lighter); padding: 12px 16px;
+    font-size: 14px; line-height: 20px; font-weight: 600; color: var(--kk-text-darker);
+    border-bottom: 1px solid var(--kk-border-lighter); }
+  .det-table .tr { display: flex; border-bottom: 1px solid var(--kk-border-lighter); }
+  .det-table .tr:last-child { border-bottom: 0; }
+  .det-table .td-k { flex: 0 0 120px; padding: 16px; font-size: 14px; line-height: 20px; color: var(--kk-text-dark); box-sizing: border-box; }
+  .det-table .td-v { flex: 1 1 0; min-width: 0; padding: 16px 16px 16px 16px; font-size: 14px; line-height: 20px; color: var(--kk-text-darker); }
+  /* 列表/条列 */
+  .det-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+  .det-list li { position: relative; padding-left: 16px; font-size: 14px; line-height: 20px; color: var(--kk-text-darker); }
+  .det-list li::before { content: ''; position: absolute; left: 2px; top: 8px;
+    width: 5px; height: 5px; border-radius: 50%; background: var(--kk-text-darker); }
+  .det-body-md { font-size: 14px; line-height: 20px; color: var(--kk-text-darker); margin: 0; }
+  .det-note { display: flex; gap: 8px; margin-top: 16px; font-size: 12px; line-height: 16px; color: var(--kk-text-dark); }
+  .det-note .nt { flex: 1 1 0; }
+  .det-note-ind { margin: 8px 0 0 24px; font-size: 12px; line-height: 18px; color: var(--kk-text-dark); }
+  .det-inc { display: flex; align-items: center; gap: 8px; font-size: 14px; line-height: 20px; color: var(--kk-text-darker); margin-top: 8px; }
+  /* 评论区（Review Section 871-78205） */
+  .det-score { display: flex; align-items: center; gap: 8px; }
+  .det-score .badge9 {
+    background: var(--kk-primary-medium); color: #fff; font-size: 24px; line-height: 30px; font-weight: 600;
+    padding: 4px 8px; border-radius: 16px 12px 12px 4px;
+  }
+  .det-score .gcol { display: flex; flex-direction: column; }
+  .det-score .gt { font-size: 18px; line-height: 26px; font-weight: 600; color: var(--kk-text-darker); }
+  .det-score .gc { font-size: 12px; line-height: 16px; color: var(--kk-text-dark); }
+  .det-ai {
+    margin-top: 12px; border-radius: 8px; padding: 16px 20px;
+    background: linear-gradient(150deg, #F0FBFC 11%, #F2FAFF 88%);
+  }
+  .det-ai .ai-t { display: flex; align-items: center; gap: 4px; margin-bottom: 8px;
+    font-size: 14px; line-height: 20px; font-weight: 600;
+    background: linear-gradient(90deg, #10D5E3, #2EC4F2 46%, #4DAAF7);
+    -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .det-ai .ai-b { font-size: 14px; line-height: 20px; color: var(--kk-text-darker); }
+  .det-kws { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .det-kw { display: inline-flex; align-items: center; gap: 4px;
+    background: #fff; border: 1px solid var(--kk-border-lighter); border-radius: var(--r-md);
+    padding: 8px 12px 8px 10px; font-size: 14px; line-height: 20px; color: var(--kk-text-darker); }
+  .det-shots { display: flex; gap: 4px; margin-top: 8px; }
+  .det-shot { flex: 1 1 0; aspect-ratio: 1; border-radius: 8px; position: relative; overflow: hidden;
+    background: linear-gradient(135deg, #DCEFF3 0%, #C4E4EA 60%, #A8D8E0 100%); }
+  .det-shot .ovl { position: absolute; inset: 0; background: rgba(0,0,0,.5);
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 14px; line-height: 20px; }
+  .det-reviews { display: flex; gap: 8px; margin-top: 8px; overflow-x: auto; scrollbar-width: none;
+    width: calc(100% + 40px); margin-left: -20px; margin-right: -20px; padding: 0 20px; }
+  .det-reviews::-webkit-scrollbar { display: none; }
+  .det-rcard { flex: 0 0 296px; box-sizing: border-box; height: 176px;
+    background: #fff; border: 1px solid var(--kk-border-lighter); border-radius: 12px;
+    padding: 16px; display: flex; flex-direction: column; justify-content: space-between; }
+  .det-rcard .rhead { display: flex; align-items: center; justify-content: space-between; }
+  .det-rcard .stars { display: flex; gap: 2px; }
+  .det-rcard .rdate { font-size: 14px; line-height: 20px; color: var(--kk-text-dark); }
+  .det-rcard .rtxt { margin-top: 8px; font-size: 14px; line-height: 20px; color: var(--kk-text-darker);
+    display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .det-rcard .rn2 { font-size: 12px; line-height: 16px; font-weight: 500; color: var(--kk-text-darker); }
+  .det-rcard .rrole { font-size: 12px; line-height: 16px; color: var(--kk-text-dark); }
+  .det-morebtn { display: block; width: 100%; margin-top: 20px;
+    border: 1px solid var(--kk-text-darker); border-radius: var(--r-md);
+    padding: 12px 24px; font-size: 16px; line-height: 24px; font-weight: 600; color: var(--kk-text-darker);
+    text-align: center; background: #fff; }
+  /* 图文说明 */
+  .det-fig { margin-top: 8px; }
+  .det-fig img { display: block; width: 100%; border-radius: var(--r-md); }
+  .det-pid { padding: 8px 0 16px; text-align: left; font-size: 12px; line-height: 16px; color: var(--kk-text-medium);
+    background: #fff; margin-top: 8px; padding-left: 20px; }
+  /* 优惠横幅 + 底部 CTA */
+  .det-coupon { flex: 0 0 auto; display: flex; align-items: center; gap: 8px;
+    background: #FDEFED; padding: 8px 16px; }
+  .det-coupon .tk { display: inline-flex; align-items: center; border: 1px solid #F0544C; border-radius: 6px;
+    padding: 2px 10px; font-size: 13px; line-height: 20px; font-weight: 600; color: #F0544C; background: #fff; position: relative; }
+  .det-coupon .claim { margin-left: auto; font-size: 14px; line-height: 20px; font-weight: 600; color: #F0544C; }
+  .det-foot { flex: 0 0 auto; background: #fff; border-top: 1px solid var(--kk-border-lighter);
+    padding: 12px 24px calc(12px + env(safe-area-inset-bottom, 0px)); }
+
   /* ================= 滚动置顶 header ================= */
   .page-header {
     position: fixed; top: 0; left: 0; right: 0; z-index: 30;
@@ -1184,6 +1309,205 @@
     <div class="cond-foot">
       <div class="cond-sum" id="condSum"></div>
       <button class="cta" id="condConfirm">确定</button>
+    </div>
+  </div>
+
+  <!-- ============ MODAL: 套餐详情（Full-screen，Figma 871-78047） ============ -->
+  <div class="dest-modal" id="detailModal" aria-hidden="true">
+    <div class="det-head">
+      <div class="dm-bar">
+        <button class="dm-close" id="detClose" aria-label="关闭"><span class="ic ic-24">{{IC_cross}}</span></button>
+        <span class="dm-title">详情</span>
+        <span class="dm-spacer"></span>
+      </div>
+      <div class="det-tabs" id="detTabs">
+        <button class="det-tab sel" data-sec="svc">服务说明</button>
+        <button class="det-tab" data-sec="howto">如何使用</button>
+        <button class="det-tab" data-sec="cancel">取消政策</button>
+        <button class="det-tab" data-sec="review" id="detTabReview">评论</button>
+        <button class="det-tab" data-sec="notice">购买须知</button>
+        <button class="det-tab" data-sec="imgs">图文详情</button>
+      </div>
+    </div>
+    <div class="det-body" id="detBody">
+
+      <section class="det-sec" data-sec="svc">
+        <div class="det-cond"><span class="ic ic-16">{{IC_file}}</span><span id="detCond"></span></div>
+        <h2 class="det-title" id="detTitle"></h2>
+        <div class="pkg-tags" id="detTags"></div>
+        <hr class="pkg-hr">
+        <div class="pkg-warns" id="detWarns"></div>
+        <div class="det-policies" id="detPolicies"></div>
+        <p class="det-intro" id="detIntro">依据购买天数，可额外享有 3GB~30GB 的热点分享流量。由连续两年荣获 Opensignal 网路可靠性全球大奖的电信网络提供连线，讯号覆盖率高，市区、离岛与山区都能稳定上网；搭配 KKday App 可随时查询剩余流量，客服 24 小时在线协助安装与连线问题。</p>
+        <button class="det-more" id="detMore">展开更多 <span class="ic ic-16 chev">{{IC_arrowDown}}</span></button>
+        <div class="det-provider" id="detProvider"></div>
+        <h3 class="det-h2" style="margin-bottom:20px;">基本信息</h3>
+        <div class="det-table">
+          <div class="th">卡片规格</div>
+          <div class="tr"><div class="td-k">SIM 卡片规格</div><div class="td-v">eSIM</div></div>
+          <div class="tr"><div class="td-k">卡片有效期</div><div class="td-v">2030-12-12 前有效</div></div>
+          <div class="tr"><div class="td-k">卡片供应商</div><div class="td-v" id="dtVendor"></div></div>
+          <div class="th">网络详情</div>
+          <div class="tr"><div class="td-k">电信商</div><div class="td-v" id="dtCarrier"></div></div>
+          <div class="tr"><div class="td-k">虚拟运营商MVNO</div><div class="td-v" id="dtMvno"></div></div>
+          <div class="tr"><div class="td-k">网络资源</div><div class="td-v" id="dtNet"></div></div>
+          <div class="tr"><div class="td-k">IP类型</div><div class="td-v" id="dtIp"></div></div>
+          <div class="tr"><div class="td-k">传输规格</div><div class="td-v" id="dtTrans"></div></div>
+          <div class="th">启用设定</div>
+          <div class="tr"><div class="td-k">启用方式</div><div class="td-v" id="dtActivate"></div></div>
+          <div class="tr"><div class="td-k">流量激活计算方式</div><div class="td-v" id="dtCalc"></div></div>
+          <div class="tr"><div class="td-k">套餐有效期</div><div class="td-v" id="dtValid"></div></div>
+          <div class="th">加值与限制</div>
+          <div class="tr"><div class="td-k">是否加值</div><div class="td-v" id="dtTopup"></div></div>
+          <div class="tr"><div class="td-k">不支援装置</div><div class="td-v">非全网通/锁网机型，以及不支援 eSIM 的部分旧款设备</div></div>
+          <div class="th">通话与简讯</div>
+          <div class="tr"><div class="td-k">是否含通话</div><div class="td-v" id="dtCall"></div></div>
+          <div class="tr"><div class="td-k">是否含短信</div><div class="td-v" id="dtSms"></div></div>
+          <div class="tr"><div class="td-k">支持热点</div><div class="td-v" id="dtHotspot"></div></div>
+        </div>
+      </section>
+
+      <section class="det-sec" data-sec="howto">
+        <h2 class="det-h5">如何使用</h2>
+        <ul class="det-list">
+          <li>前往 设定 &gt; 行动服务（蜂窝行动网路）</li>
+          <li>点选 加入 eSIM / 加入行动方案</li>
+          <li>扫描 KKday 凭证中的 QR Code</li>
+          <li>依照画面指示完成 eSIM 安装</li>
+          <li>可将此 eSIM 命名为「<span id="dtNick"></span>」以利辨识</li>
+        </ul>
+        <h3 class="det-sub">凭证使用方式</h3>
+        <ul class="det-list">
+          <li>电子凭证将寄送至 Email 信箱，请于指定地点兑换成实体票券</li>
+          <li>请出示列印的使用凭证，或可出示手机上的电子使用凭证</li>
+        </ul>
+        <h3 class="det-sub">兑换期限</h3>
+        <ul class="det-list">
+          <li>需要按照预订日期及当天开放时间内兑换</li>
+          <li>逾期失效</li>
+        </ul>
+        <h3 class="det-sub">使用效期</h3>
+        <ul class="det-list">
+          <li>需要按照预订日期及当天开放时间内使用</li>
+          <li>逾期失效</li>
+        </ul>
+      </section>
+
+      <section class="det-sec" data-sec="cancel">
+        <h2 class="det-h5">取消政策</h2>
+        <p class="det-body-md">商品一经订购完成后，即不可取消、更改订单，亦不得请求退款</p>
+        <div class="det-note"><span class="ic ic-16">{{IC_info}}</span><span class="nt">上述资讯以目前日期试算，实际请依订单资讯为主。</span></div>
+        <p class="det-note-ind">注意：由于站内商品来自全球各地，订单取消时间将依该供应商所在时区判定。供应商需 2–5 个工作天进行取消流程，依照您购买的商品取消政策收取手续费，并于取消流程完成后 14 个工作天内退款。</p>
+      </section>
+
+      <section class="det-sec" data-sec="review">
+        <h2 class="det-h5" style="margin-bottom:20px;">评论</h2>
+        <div class="det-score">
+          <span class="badge9" id="dtScore"></span>
+          <span class="gcol"><span class="gt" id="dtGrade"></span><span class="gc" id="dtRevCount"></span></span>
+        </div>
+        <div class="det-ai">
+          <div class="ai-t"><span class="ic ic-16">{{IC_spark}}</span>AI 精选旅客评论摘要</div>
+          <div class="ai-b">大多数旅客认为网速稳定、性价比高，扫码后数分钟内即可完成安装，落地即可上网；热点分享给同行设备也很实用。少数旅客反映山区讯号偶有波动、首次启用需要连接稳定 WiFi。整体而言适合自由行与商务出行，客服回应速度获得一致好评。</div>
+        </div>
+        <div class="det-kws">
+          <span class="det-kw"><span class="ic ic-16">{{IC_smile}}</span>网速</span>
+          <span class="det-kw"><span class="ic ic-16">{{IC_smile}}</span>性价比</span>
+          <span class="det-kw"><span class="ic ic-16">{{IC_smile}}</span>客服</span>
+          <span class="det-kw"><span class="ic ic-16">{{IC_neutral}}</span>稳定性</span>
+          <span class="det-kw"><span class="ic ic-16">{{IC_neutral}}</span>启用流程</span>
+          <span class="det-kw"><span class="ic ic-16">{{IC_neutral}}</span>讯号死角</span>
+        </div>
+        <h3 class="det-sub" style="margin-top:16px;">旅客实拍</h3>
+        <div class="det-shots">
+          <div class="det-shot"></div>
+          <div class="det-shot" style="background:linear-gradient(135deg,#E8E4D8,#CFC8B0 70%);"></div>
+          <div class="det-shot" style="background:linear-gradient(160deg,#D8E8E4,#AECFC8 70%);"></div>
+          <div class="det-shot"><div class="ovl">+75</div></div>
+        </div>
+        <h3 class="det-sub" style="margin-top:16px;">评语</h3>
+        <div class="det-reviews">
+          <div class="det-rcard">
+            <div>
+              <div class="rhead"><span class="stars" id="dtStars1"></span><span class="rdate">2025/03/30</span></div>
+              <div class="rtxt">五天的沖繩旅遊給家人買了個5GB總量的網路非常夠用！但如果需要導航的人，必須買個無限流量使用～ 但很方便！推薦！</div>
+            </div>
+            <div><div class="rn2">唯洳</div><div class="rrole">家人</div></div>
+          </div>
+          <div class="det-rcard">
+            <div>
+              <div class="rhead"><span class="stars" id="dtStars2"></span><span class="rdate">2025/04/02</span></div>
+              <div class="rtxt">不用插卡片非常方便，買完憑證馬上就寄來了</div>
+            </div>
+            <div><div class="rn2">曼蒂</div><div class="rrole">單人旅遊</div></div>
+          </div>
+          <div class="det-rcard">
+            <div>
+              <div class="rhead"><span class="stars" id="dtStars3"></span><span class="rdate">2025/03/26</span></div>
+              <div class="rtxt">服務態度非常好！發生意外線上處理積極！棒棒！</div>
+            </div>
+            <div><div class="rn2">建龍</div><div class="rrole">商務旅客</div></div>
+          </div>
+        </div>
+        <button class="det-morebtn" id="detMoreReviews">查看更多评论</button>
+      </section>
+
+      <section class="det-sec" data-sec="notice">
+        <h2 class="det-h5">购买须知</h2>
+        <ul class="det-list">
+          <li>网络速度将随地形、气候、建物遮蔽、使用人数及地点等因素改变，收讯不稳定时，请务必与技术客服联系。</li>
+          <li>为维护网络连线品质及公平使用原则，世界各国的电信公司有时会针对短时间内使用极大网络流量的顾客进行流量管制，故可能导致无法上网或降低网速，为确保可正常使用，请尽量避免长时间观看影片或更新软件等需大量消耗流量的工具。</li>
+        </ul>
+        <h3 class="det-sub">费用包含</h3>
+        <div class="det-inc"><span class="ic ic-16">{{IC_checkCircleLine}}</span>eSIM费用</div>
+        <div class="det-inc"><span class="ic ic-16">{{IC_checkCircleLine}}</span>eSIM其他费用</div>
+        <h3 class="det-sub">费用不包含</h3>
+        <div class="det-inc"><span class="ic ic-16">{{IC_crossCircleLine}}</span>以上未提及的费用</div>
+        <h3 class="det-sub">延长、逾期计费</h3>
+        <ul class="det-list">
+          <li id="dtExtend"></li>
+          <li>逾期未延长即自动停止服务，不另行收费</li>
+        </ul>
+        <h3 class="det-sub">额外费用</h3>
+        <ul class="det-list">
+          <li>加购流量：NT$99 / GB，用完可随时于 KKday App 加购</li>
+          <li>实体寄送：eSIM 为电子凭证，无实体运费</li>
+        </ul>
+        <div style="margin-top:24px;background:#FFF8E1;border-radius:8px;padding:16px;">
+          <div style="display:flex;align-items:center;gap:8px;font-size:14px;line-height:20px;font-weight:600;color:#212121;">
+            <span style="display:inline-flex;width:16px;height:16px;border-radius:50%;background:#F5A623;color:#fff;font-size:12px;align-items:center;justify-content:center;">!</span>注意事项
+          </div>
+          <ul class="det-list" style="margin-top:8px;">
+            <li>购买前请先在手机拨号键盘输入「*#06#」如显示EID序号即可使用eSIM</li>
+            <li>QR Code 仅能扫描一次，不支援重复安装，完成安装后请勿删除以确保服务正常使用</li>
+            <li>启用eSIM时请先连线稳定WiFi，避免网路不稳定导致启用失败，eSIM失效后无法补发</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="det-sec" data-sec="imgs">
+        <h2 class="det-h5">图文说明</h2>
+        <p class="det-body-md">支援iOS 一键安装：更新至iOS App 最新版本和iOS 17.4 以上，可以在KKday App 一键安装eSIM，市场唯一电信公司直营的日本eSIM，由KDDI电信提供本地网路服务</p>
+        <p class="det-body-md" style="margin-top:24px;">购买前请先确认手机可用eSIM，订购后无法取消订单退款。</p>
+        <div class="det-fig"><img alt="开启相机扫描 eSIM" src="{{IMG_GUIDE1}}"></div>
+        <p class="det-body-md" style="margin-top:24px;">启用eSIM前请先更新iOS至最新版本，并连线稳定WiFi，旧版iOS和网路不稳定是eSIM启用失败的常见原因。</p>
+        <div class="det-fig"><img alt="启用 eSIM 前先更新 iOS 并连线稳定 WiFi" src="{{IMG_GUIDE2}}"></div>
+        <p class="det-body-md" style="margin-top:24px;">开启相机扫描eSIM，点击「行动方案」。</p>
+        <div class="det-fig"><img alt="点击行动方案" src="{{IMG_GUIDE3}}"></div>
+      </section>
+
+      <div class="det-pid">产品编号： 123456</div>
+    </div>
+
+    <div class="det-coupon">
+      <span class="tk">95 折</span><span class="tk">TWD 100</span>
+      <button class="claim" id="detClaim">领取 ›</button>
+    </div>
+    <div class="det-foot">
+      <div class="pkg-buy">
+        <div class="pkg-price" id="detPrice"></div>
+        <button class="pkg-cta" id="detCta">订购</button>
+      </div>
     </div>
   </div>
 
@@ -2077,19 +2401,21 @@
     var base = basePrice();
     var d = state.days ? +state.days : 1;
     var out = [];
+    var cs = CARRIERS[dest] || CARRIERS['default'];
     for (var i = 0; i < 8; i++) {
       var v = vendors[i % vendors.length];
+      var carrier = cs[i % cs.length];
       var now = Math.round(base * (0.85 + (i * 37 % 46) / 100));
       var off = (i % 3 === 0);
       var perkSet = i % 4;
       out.push({
         title: PKG_TITLES[i % PKG_TITLES.length],
-        tags: (function () {
+        carrier: carrier,
+        tags: (function (c) {
           var t = PKG_TAGS[i % PKG_TAGS.length].slice();
-          var cs = CARRIERS[dest] || CARRIERS['default'];
-          t.splice(1, 0, cs[i % cs.length]);  // 电信商网络标签插在组合标签后
+          t.splice(1, 0, c);  // 电信商网络标签插在组合标签后
           return t;
-        })(),
+        })(carrier),
         perks: perkSet === 0 ? [['flash', '立即确认'], ['reload', '免费取消'], ['checkLine', '即日可用']]
              : perkSet === 1 ? [['reload', '免费取消'], ['calendarD', '最早可使用日: ' + fmtDate(2)]]
              : perkSet === 2 ? [['reloadD', '2天前可免费取消'], ['calendarD', '最早可使用日: ' + fmtDate(2)]]
@@ -2229,7 +2555,12 @@
       price.querySelector('.pkg-now .num').textContent = p.now.toLocaleString();
       if (p.was) price.querySelector('.pkg-was').textContent = 'NT$ ' + p.was.toLocaleString();
       price.querySelector('.pkg-per').textContent = '≈NT$' + p.perDay + '/天';
-      card.querySelector('.pkg-head').addEventListener('click', function () { toast('套餐详情页（开发中）'); });
+      // 整卡点击进入详情（默认状态）；点评论数 → 详情并锚定评论区；订购按钮不进详情
+      card.addEventListener('click', function (e) {
+        if (e.target.closest('.pkg-cta')) return;
+        if (e.target.closest('.rcount')) { openDetail(p, 'review'); return; }
+        openDetail(p);
+      });
       card.querySelector('.pkg-cta').addEventListener('click', function () { toast('订购流程（开发中）：' + p.title); });
       box.appendChild(card);
     });
@@ -2254,6 +2585,150 @@
     renderSortList();
     openSheet(document.getElementById('bsSort'));
   });
+
+  // ---------- 套餐详情 Full-screen Modal（Figma 871-78047） ----------
+  var detEl = document.getElementById('detailModal');
+  var detBody = document.getElementById('detBody');
+
+  function detGradeText(r) { return r >= 4.6 ? '非常好' : r >= 4.0 ? '很好' : ''; }
+  function detTransSpec() {
+    if (state.tab === 'daily') return '每日 ' + state.plan.replace('/天', '') + ' 高速，超量后限速 256Kbps 不限量';
+    if (state.tab === 'total') return state.plan.replace('共', '共 ') + ' 高速流量，用完即止（可随时加购）';
+    return state.plan === '最高网速（不限制）' ? '不限流量，全程不限速'
+         : '不限流量，达公平使用量后' + state.plan.replace('降速后 ', '限速 ');
+  }
+  function fillDetail(p) {
+    var dest = document.getElementById('destName').textContent;
+    var d = state.days ? +state.days : 1;
+    var multi = !document.getElementById('destNum').hidden;
+    document.getElementById('detCond').textContent = state.days + '天·' + tabFull(state.tab) + '·' + state.plan;
+    document.getElementById('detTitle').textContent = p.title;
+    var tags = document.getElementById('detTags'); tags.innerHTML = '';
+    p.tags.forEach(function (t) { var e = el('<span class="pkg-tag"></span>'); e.textContent = t; tags.appendChild(e); });
+    var warns = document.getElementById('detWarns'); warns.innerHTML = '';
+    warns.style.display = p.warns.length ? '' : 'none';
+    p.warns.forEach(function (w, i) {
+      if (i) warns.appendChild(el('<span class="wdiv"></span>'));
+      var e = el('<span></span>'); e.textContent = w; warns.appendChild(e);
+    });
+    // 政策行：沿用卡面 perks 语义（详情版文案更完整）+ 覆盖范围行（Figma 913-43597 带下划线）
+    var pol = document.getElementById('detPolicies'); pol.innerHTML = '';
+    p.perks.forEach(function (pk) {
+      var label = pk[1] === '立即确认' ? '立即确认并发送凭证' : pk[1] === '即日可用' ? '现在订购，立即使用' : pk[1];
+      var dark = pk[0] === 'reloadD' || pk[0] === 'calendarD' || pk[0] === 'crossD';
+      var e = el('<span class="perk' + (dark ? ' dark' : '') + '"><span class="ic ic-16">' + ICONS[PERK_ICONS[pk[0]]] + '</span><span class="pt"></span></span>');
+      e.querySelector('.pt').textContent = label;
+      pol.appendChild(e);
+    });
+    var covText;
+    if (multi) covText = '支持所选 ' + document.getElementById('destNum').textContent.replace(/[()]/g, '') + ' 个国家/地区';
+    else {
+      var region = GEO.regions.concat(GEO.hotRegions).filter(function (r) { return r.name === dest; })[0];
+      covText = region ? '支持 ' + dest + ' ' + region.count + ' 个国家/地区' : '支持 ' + dest + ' 全境网络';
+    }
+    var cov = el('<span class="perk dark link"><span class="ic ic-16">' + ICONS.earthLine + '</span><span class="pt"></span></span>');
+    cov.querySelector('.pt').textContent = covText;
+    pol.appendChild(cov);
+    // 展开更多重置
+    document.getElementById('detIntro').classList.remove('open');
+    var more = document.getElementById('detMore');
+    more.classList.remove('open');
+    more.firstChild.textContent = '展开更多 ';
+    document.getElementById('detProvider').textContent = '服务由 ' + p.vendor + '（' + p.carrier + '）提供';
+    // 基本信息（Figma 902-41074，动态格随卡/条件变化）
+    var isNative = p.title.indexOf('原生') >= 0 || p.title.indexOf('本地电信') >= 0;
+    var combo = p.tags[0];
+    document.getElementById('dtVendor').textContent = p.vendor;
+    document.getElementById('dtCarrier').textContent = p.carrier;
+    document.getElementById('dtMvno').textContent = isNative ? '否，电信商直营网络' : '是，接入 ' + p.carrier + ' 4G/5G 网络';
+    document.getElementById('dtNet').textContent = p.title.indexOf('4G·') === 0 ? '4G LTE' : '5G / 4G LTE';
+    document.getElementById('dtIp').textContent = p.title.indexOf('原生IP') >= 0 ? '原生 IP（当地出口）' : '动态 IP（共享出口）';
+    document.getElementById('dtTrans').textContent = detTransSpec();
+    document.getElementById('dtActivate').textContent = '抵达' + (multi ? '目的地' : dest) + '后扫码安装，自动连接当地网络';
+    document.getElementById('dtCalc').textContent = '首次成功连网后开始计算，以当地时间 00:00 为每日分界';
+    document.getElementById('dtValid').textContent = '启用后连续 ' + d + ' 天';
+    document.getElementById('dtTopup').textContent = p.tags.indexOf('可加值') >= 0 ? '支持，可于 KKday App 随时加购' : '不支持加值，流量用完即止';
+    document.getElementById('dtCall').textContent = combo.indexOf('通话') >= 0 ? '含' : '不含';
+    document.getElementById('dtSms').textContent = combo.indexOf('短信') >= 0 ? '含' : '不含';
+    document.getElementById('dtHotspot').textContent = combo.indexOf('热点') >= 0 ? '支持，可开启个人热点分享' : '不支持';
+    document.getElementById('dtNick').textContent = p.carrier + ' ' + (multi ? 'eSIM' : dest);
+    document.getElementById('dtExtend').textContent = state.days + ' 天方案：$' + p.perDay + ' × 天数（仅限延长 1–5 日者）';
+    // 评论区（数据与卡面一致）
+    document.getElementById('dtScore').textContent = p.rating.toFixed(1);
+    document.getElementById('dtGrade').textContent = detGradeText(p.rating) || '一般';
+    document.getElementById('dtRevCount').textContent = '依据 ' + p.reviews.toLocaleString() + ' 则评论';
+    document.getElementById('detTabReview').textContent = '评论（' + p.reviews + '）';
+    ['dtStars1', 'dtStars2', 'dtStars3'].forEach(function (id) {
+      var box = document.getElementById(id); box.innerHTML = '';
+      for (var i = 0; i < 5; i++) box.insertAdjacentHTML('beforeend', '<span class="ic ic-16">' + ICONS.star + '</span>');
+    });
+    // 底部价格
+    var price = document.getElementById('detPrice');
+    price.innerHTML = (p.was ? '<span class="pkg-off">-20%</span><br>' : '') +
+      '<span class="pkg-now"><span class="cur">NT$</span><span class="num"></span></span>' +
+      (p.was ? '<span class="pkg-was"></span>' : '') + '<div class="pkg-per"></div>';
+    price.querySelector('.num').textContent = p.now.toLocaleString();
+    if (p.was) price.querySelector('.pkg-was').textContent = 'NT$ ' + p.was.toLocaleString();
+    price.querySelector('.pkg-per').textContent = '≈NT$' + p.perDay + '/天';
+    document.getElementById('detCta').onclick = function () { toast('订购流程（开发中）：' + p.title); };
+  }
+  function openDetail(p, anchor) {
+    fillDetail(p);
+    detEl.classList.add('open');
+    detEl.setAttribute('aria-hidden', 'false');
+    lockBody();
+    // 默认回到顶部；点评论数进入 → 直接锚定评论区块（rAF 等 modal 可见后量 offsetTop）
+    requestAnimationFrame(function () {
+      var top = 0;
+      if (anchor) { var sec = detBody.querySelector('.det-sec[data-sec="' + anchor + '"]'); if (sec) top = sec.offsetTop; }
+      detBody.scrollTop = top;
+      detSpy();
+    });
+  }
+  function closeDetail() {
+    if (detEl.classList.contains('open')) unlockBody();
+    detEl.classList.remove('open');
+    detEl.setAttribute('aria-hidden', 'true');
+  }
+  // tab=锚点 + 垂直 scroll spy（与流量滚动带同套路）
+  var detGuard = 0;
+  function detSpy() {
+    if (Date.now() < detGuard) return;
+    var st = detBody.scrollTop + 9;
+    var act = 'svc';
+    detBody.querySelectorAll('.det-sec').forEach(function (s) {
+      if (s.offsetTop <= st) act = s.getAttribute('data-sec');
+    });
+    var tabs = document.getElementById('detTabs');
+    tabs.querySelectorAll('.det-tab').forEach(function (t) {
+      var sel = t.getAttribute('data-sec') === act;
+      t.classList.toggle('sel', sel);
+      if (sel) {
+        var tr = t.getBoundingClientRect(), br = tabs.getBoundingClientRect();
+        if (!br.width) return;
+        if (tr.left < br.left + 12) tabs.scrollLeft += tr.left - br.left - 12;
+        else if (tr.right > br.right - 12) tabs.scrollLeft += tr.right - br.right + 12;
+      }
+    });
+  }
+  detBody.addEventListener('scroll', detSpy, { passive: true });
+  document.querySelectorAll('.det-tab').forEach(function (t) {
+    t.addEventListener('click', function () {
+      var sec = detBody.querySelector('.det-sec[data-sec="' + t.getAttribute('data-sec') + '"]');
+      if (!sec) return;
+      detGuard = Date.now() + 700;
+      document.querySelectorAll('.det-tab').forEach(function (x) { x.classList.toggle('sel', x === t); });
+      detBody.scrollTo({ top: sec.offsetTop, behavior: 'smooth' });
+    });
+  });
+  document.getElementById('detClose').addEventListener('click', closeDetail);
+  document.getElementById('detMore').addEventListener('click', function () {
+    this.classList.toggle('open');
+    document.getElementById('detIntro').classList.toggle('open');
+    this.firstChild.textContent = this.classList.contains('open') ? '收起 ' : '展开更多 ';
+  });
+  document.getElementById('detClaim').addEventListener('click', function () { toast('优惠券已领取（原型演示）'); });
+  document.getElementById('detMoreReviews').addEventListener('click', function () { toast('完整评论列表（开发中）'); });
 
   // ---------- 修改搜寻条件 modal（Figma 871-80184） ----------
   var editState = { days: null, tab: 'daily', plan: null };
