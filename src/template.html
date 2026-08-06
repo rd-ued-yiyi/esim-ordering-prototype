@@ -256,6 +256,155 @@
   }
   .cta.enabled { background: var(--kk-primary-button); color: #fff; }
 
+  /* ================= 选择目的地 modal ================= */
+  .dest-modal {
+    position: fixed; inset: 0; z-index: 40;
+    max-width: 430px; margin: 0 auto;
+    background: #fff;
+    display: flex; flex-direction: column;
+    transform: translateY(100%); visibility: hidden;
+    transition: transform .3s ease, visibility .3s;
+  }
+  .dest-modal.open { transform: translateY(0); visibility: visible; }
+
+  .dm-head { flex: 0 0 auto; background: #fff; }
+  .dm-bar {
+    display: flex; align-items: center; height: 44px; padding: 4px 24px;
+    margin-top: env(safe-area-inset-top, 0px);
+  }
+  .dm-bar .dm-close { display: flex; align-items: center; }
+  .dm-bar .dm-title {
+    flex: 1 1 0; min-width: 0; text-align: center; padding: 0 20px;
+    font-size: 16px; line-height: 24px; font-weight: 600; color: var(--kk-text-darker);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .dm-bar .dm-spacer { width: 28px; }
+
+  .dm-search-wrap { padding: 12px 20px; }
+  .dm-search {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--kk-surface-lighter); border-radius: 100px;
+    padding: 10px 12px;
+  }
+  .dm-search input {
+    flex: 1 1 0; min-width: 0; border: 0; outline: 0; background: none;
+    font: inherit; font-size: 14px; line-height: 20px; color: var(--kk-text-darker);
+  }
+  .dm-search input::placeholder { color: var(--kk-text-light); }
+  .dm-search .dm-clear { display: none; }
+  .dm-search.has-kw .dm-clear {
+    display: flex; align-items: center; justify-content: center;
+    width: 16px; height: 16px; border-radius: 50%;
+    background: var(--kk-text-light); color: #fff;
+    font-size: 11px; line-height: 1; flex: 0 0 auto;
+  }
+
+  .dm-cats { display: flex; gap: 10px; padding: 0 20px 12px; overflow-x: auto; scrollbar-width: none; }
+  .dm-cats::-webkit-scrollbar { display: none; }
+  .dm-cat {
+    display: inline-flex; align-items: center;
+    background: #fff; border: 1px solid var(--kk-border-light);
+    border-radius: 999px; padding: 8px 12px;
+    font-size: 14px; line-height: 20px; color: var(--kk-text-darker);
+    white-space: nowrap; flex: 0 0 auto;
+  }
+  .dm-cat .cl { padding: 0 4px; }
+  .dm-cat.sel { background: var(--kk-primary-lighter); border-color: var(--kk-primary-medium); color: var(--kk-primary-medium); }
+  .dm-cat .ic-16 img { display: block; }
+
+  .dm-body { flex: 1 1 0; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .dm-pane { display: none; padding: 12px 0 32px; }
+  .dm-pane.act { display: block; }
+
+  .dm-group { padding: 0 20px; margin-bottom: 32px; }
+  .dm-group-head { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; }
+  .dm-group-head .gt {
+    flex: 1 1 0; min-width: 0; display: flex; align-items: center; gap: 8px;
+    font-size: 16px; line-height: 24px; font-weight: 600; color: var(--kk-text-darker);
+  }
+  .dm-group-head .gact { display: flex; align-items: center; padding: 2px; }
+  .dm-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+
+  /* 洲际锚点 tab */
+  .dm-conts {
+    position: sticky; top: 0; z-index: 2;
+    display: flex; gap: 0; background: #fff;
+    overflow-x: auto; scrollbar-width: none;
+    border-bottom: 1px solid var(--kk-border-lighter);
+    margin-bottom: 24px; padding: 0 12px;
+  }
+  .dm-conts::-webkit-scrollbar { display: none; }
+  .dm-cont {
+    flex: 0 0 auto; padding: 14px 12px;
+    font-size: 14px; line-height: 20px; color: var(--kk-text-darker);
+    position: relative; white-space: nowrap;
+  }
+  .dm-cont.sel { color: var(--kk-primary-medium); font-weight: 600; }
+  .dm-cont.sel::after {
+    content: ''; position: absolute; left: 12px; right: 12px; bottom: 0;
+    height: 2px; background: var(--kk-primary-medium); border-radius: 1px;
+  }
+
+  /* 多国区域行 */
+  .dm-rows { display: flex; flex-direction: column; gap: 12px; }
+  .dm-row {
+    display: flex; align-items: center; gap: 12px;
+    background: var(--kk-surface-light); border-radius: var(--r-md);
+    padding: 12px 16px; text-align: left; width: 100%;
+  }
+  .dm-row .rt { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+  .dm-row .rn { font-size: 14px; line-height: 20px; font-weight: 600; color: var(--kk-text-darker); }
+  .dm-row .rd { display: flex; align-items: center; gap: 6px; font-size: 12px; line-height: 16px; color: var(--kk-text-dark); }
+  .dm-row .rd .desc { flex: 1 1 0; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .dm-row .rd .cnt { display: inline-flex; align-items: center; gap: 4px; flex: 0 0 auto; }
+
+  /* 多国自由选择 checkbox */
+  .dm-check {
+    width: 20px; height: 20px; border-radius: var(--r-sm);
+    border: 2px solid var(--kk-border-light); background: #fff;
+    position: relative; flex: 0 0 auto;
+  }
+  .dm-check.on { background: var(--kk-primary-medium); border-color: var(--kk-primary-medium); }
+  .dm-check.on::after {
+    content: ''; position: absolute; left: 5px; top: 1.5px;
+    width: 5px; height: 9px;
+    border: solid #fff; border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+
+  .dm-foot {
+    flex: 0 0 auto; background: #fff;
+    border-top: 1px solid var(--kk-border-lighter);
+    padding: 16px 24px calc(16px + env(safe-area-inset-bottom, 0px));
+    display: none; flex-direction: column; gap: 8px;
+  }
+  .dm-foot.show { display: flex; }
+  .dm-foot .fnote { font-size: 12px; line-height: 16px; color: var(--kk-text-dark); }
+  .dm-foot .cta { background: rgba(26,182,193,.5); color: rgba(255,255,255,.9); }
+  .dm-foot .cta.enabled { background: var(--kk-primary-button); color: #fff; }
+
+  /* 搜索结果 */
+  .dm-results { display: none; padding: 4px 0 32px; }
+  .dm-results.act { display: block; }
+  .dm-result {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 12px 20px; width: 100%; text-align: left;
+  }
+  .dm-result .ic { margin-top: 2px; }
+  .dm-result .col { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+  .dm-result .nm { font-size: 14px; line-height: 20px; color: var(--kk-text-darker); }
+  .dm-result .nm mark { background: none; color: var(--kk-primary-medium); }
+  .dm-result .sub { font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
+  .dm-empty { display: none; flex-direction: column; align-items: center; gap: 16px; padding: 64px 20px; }
+  .dm-empty.act { display: flex; }
+  .dm-empty .qmark {
+    width: 80px; height: 80px; border-radius: 50%;
+    background: var(--kk-surface-light);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 34px; font-weight: 600; color: var(--kk-text-light);
+  }
+  .dm-empty .msg { font-size: 14px; line-height: 20px; color: var(--kk-text-darker); }
+
   /* ---------- toast ---------- */
   .toast {
     position: fixed; left: 50%; bottom: 32px; transform: translate(-50%, 20px);
@@ -531,6 +680,46 @@
     </section>
 
   </div><!-- /app -->
+
+  <!-- ============ MODAL: 选择目的地（从下往上展开 full-screen） ============ -->
+  <div class="dest-modal" id="destModal" aria-hidden="true">
+    <div class="dm-head">
+      <div class="dm-bar">
+        <button class="dm-close" id="dmClose" aria-label="关闭"><span class="ic ic-24">{{IC_cross}}</span></button>
+        <span class="dm-title">选择目的地</span>
+        <span class="dm-spacer"></span>
+      </div>
+      <div class="dm-search-wrap">
+        <div class="dm-search" id="dmSearch">
+          <span class="ic ic-16">{{IC_search}}</span>
+          <input id="dmInput" type="text" placeholder="输入国家或地区名称搜索" autocomplete="off">
+          <button class="dm-clear" id="dmClear" aria-label="清除">✕</button>
+        </div>
+      </div>
+      <div class="dm-cats" id="dmCats">
+        <button class="dm-cat sel" data-cat="country"><span class="ic ic-16">{{IC_locationLine}}</span><span class="cl">国家/地区</span></button>
+        <button class="dm-cat" data-cat="region"><span class="ic ic-16">{{IC_earthLine}}</span><span class="cl">多国区域</span></button>
+        <button class="dm-cat" data-cat="multi"><span class="ic ic-16">{{IC_plus}}</span><span class="cl">多国自由选择</span></button>
+      </div>
+    </div>
+
+    <div class="dm-body" id="dmBody">
+      <div class="dm-pane act" data-pane="country" id="paneCountry"></div>
+      <div class="dm-pane" data-pane="region" id="paneRegion"></div>
+      <div class="dm-pane" data-pane="multi" id="paneMulti"></div>
+      <div class="dm-results" id="dmResults"></div>
+      <div class="dm-empty" id="dmEmpty">
+        <div class="qmark">?</div>
+        <div class="msg" id="dmEmptyMsg">没有搜到，换个关键词试试</div>
+      </div>
+    </div>
+
+    <div class="dm-foot" id="dmFoot">
+      <span class="fnote">最多可选择30个</span>
+      <button class="cta" id="dmConfirm" disabled>确定</button>
+    </div>
+  </div>
+
   <div class="toast" id="toast"></div>
 </div>
 
@@ -637,12 +826,334 @@
     }
   });
 
+  // ================= 选择目的地 modal =================
+  var GEO = {
+    hot: ['日本','韩国','泰国','新加坡','澳大利亚','迪拜','法国','意大利','加拿大'],
+    continents: [
+      { name: '亚洲',   countries: ['日本','韩国','泰国','新加坡','马来西亚','越南','菲律宾','印度尼西亚','柬埔寨','中国香港','中国澳门','中国台湾','迪拜','土耳其'] },
+      { name: '欧洲',   countries: ['法国','意大利','德国','英国','西班牙','瑞士','荷兰','希腊','葡萄牙','奥地利','捷克','北欧地区'] },
+      { name: '北美洲', countries: ['美国','加拿大','墨西哥'] },
+      { name: '大洋洲', countries: ['澳大利亚','新西兰','斐济','关岛'] },
+      { name: '南美洲', countries: ['巴西','阿根廷','智利','秘鲁','哥伦比亚'] },
+      { name: '非洲',   countries: ['埃及','摩洛哥','南非','肯尼亚','毛里求斯'] }
+    ],
+    regions: [
+      { name: '亚洲通', desc: '日本、韩国、泰国、越南、马来西亚、土耳其、菲律宾', count: 12 },
+      { name: '欧洲', desc: '法国、意大利、德国、英国、西班牙、瑞士、荷兰', count: 35 },
+      { name: '东南亚', desc: '泰国、新加坡、马来西亚、越南、菲律宾、印度尼西亚', count: 8 },
+      { name: '中东&北非', desc: '阿联酋、沙特、卡塔尔、埃及、摩洛哥、约旦', count: 10 },
+      { name: '北美', desc: '美国、加拿大、墨西哥', count: 3 },
+      { name: '中美洲及加勒比地区', desc: '巴拿马、哥斯达黎加、牙买加、多米尼加', count: 9 },
+      { name: '大洋洲', desc: '澳大利亚、新西兰、斐济、关岛', count: 5 },
+      { name: '海湾阿拉伯', desc: '阿联酋、沙特、卡塔尔、科威特、巴林、阿曼', count: 6 }
+    ],
+    hotRegions: [
+      { name: '亚洲通', desc: '日本、韩国、泰国、越南、马来西亚、土耳其、菲律宾', count: 12 },
+      { name: '新马泰', desc: '新加坡、马来西亚、泰国', count: 3 },
+      { name: '中东&北非', desc: '阿联酋、沙特、卡塔尔、埃及、摩洛哥、约旦', count: 10 }
+    ]
+  };
+  var MAX_MULTI = 30;
+
+  var dm = {
+    el: document.getElementById('destModal'),
+    body: document.getElementById('dmBody'),
+    input: document.getElementById('dmInput'),
+    search: document.getElementById('dmSearch'),
+    results: document.getElementById('dmResults'),
+    empty: document.getElementById('dmEmpty'),
+    foot: document.getElementById('dmFoot'),
+    confirm: document.getElementById('dmConfirm'),
+    cat: 'country',
+    multiSel: []
+  };
+
+  // ---------- 历史（localStorage） ----------
+  function histGet(key, def) {
+    try { var v = JSON.parse(localStorage.getItem(key)); return Array.isArray(v) ? v : def; }
+    catch (e) { return def; }
+  }
+  function histAdd(key, name) {
+    var h = histGet(key, []).filter(function (x) { return x !== name; });
+    h.unshift(name);
+    try { localStorage.setItem(key, JSON.stringify(h.slice(0, 8))); } catch (e) {}
+  }
+  var HK_C = 'esim-hist-country', HK_R = 'esim-hist-region';
+  var HIST_C_DEF = ['日本','韩国','泰国','新加坡','澳大利亚'];
+  var HIST_R_DEF = ['亚洲通'];
+
+  // ---------- 渲染helpers ----------
+  var ICONS = {
+    fire: '{{IC_fire}}', trash: '{{IC_trash}}', globe: '{{IC_globe}}',
+    info: '{{IC_info}}', locGrey: '{{IC_locationGrey}}'
+  };
+  function el(html) {
+    var t = document.createElement('template');
+    t.innerHTML = html.trim();
+    return t.content.firstChild;
+  }
+  function groupEl(titleHTML, actionHTML) {
+    return el('<div class="dm-group"><div class="dm-group-head"><span class="gt">' + titleHTML + '</span>' +
+      (actionHTML || '') + '</div></div>');
+  }
+  function chipEl(label, onTap, selected) {
+    var c = el('<button class="chip' + (selected ? ' sel' : '') + '"><span class="chip-label t-body-md"></span></button>');
+    c.querySelector('.chip-label').textContent = label;
+    c.addEventListener('click', function () { onTap(label, c); });
+    return c;
+  }
+  function regionRowEl(r, onTap) {
+    var row = el('<button class="dm-row"><span class="ic ic-24">' + ICONS.globe + '</span>' +
+      '<span class="rt"><span class="rn"></span>' +
+      '<span class="rd"><span class="desc"></span><span class="cnt"><span></span>' +
+      '<span class="ic ic-16">' + ICONS.info + '</span></span></span></span></button>');
+    row.querySelector('.rn').textContent = r.name;
+    row.querySelector('.desc').textContent = r.desc;
+    row.querySelector('.cnt span').textContent = r.count + '个国家';
+    row.addEventListener('click', function () { onTap(r); });
+    return row;
+  }
+  function contTabsEl(paneEl, prefix) {
+    var bar = el('<div class="dm-conts"></div>');
+    GEO.continents.forEach(function (c, i) {
+      var t = el('<button class="dm-cont' + (i === 0 ? ' sel' : '') + '"></button>');
+      t.textContent = c.name;
+      t.addEventListener('click', function () {
+        bar.querySelectorAll('.dm-cont').forEach(function (x) { x.classList.remove('sel'); });
+        t.classList.add('sel');
+        var sec = paneEl.querySelector('[data-sec="' + prefix + i + '"]');
+        if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+      bar.appendChild(t);
+    });
+    return bar;
+  }
+
+  // ---------- Tab1 国家/地区 ----------
+  function renderCountryPane() {
+    var pane = document.getElementById('paneCountry');
+    pane.innerHTML = '';
+    var hist = histGet(HK_C, HIST_C_DEF);
+    if (hist.length) {
+      var g = groupEl('历史选择', '<button class="gact" data-hclear="c"><span class="ic ic-20">' + ICONS.trash + '</span></button>');
+      var chips = el('<div class="dm-chips"></div>');
+      hist.forEach(function (n) { chips.appendChild(chipEl(n, pickCountry)); });
+      g.appendChild(chips);
+      g.querySelector('[data-hclear]').addEventListener('click', function () {
+        try { localStorage.setItem(HK_C, '[]'); } catch (e) {}
+        renderCountryPane();
+      });
+      pane.appendChild(g);
+    }
+    var hot = groupEl('<span class="ic ic-20">' + ICONS.fire + '</span>热门');
+    var hotChips = el('<div class="dm-chips"></div>');
+    GEO.hot.forEach(function (n) { hotChips.appendChild(chipEl(n, pickCountry)); });
+    hot.appendChild(hotChips);
+    pane.appendChild(hot);
+
+    pane.appendChild(contTabsEl(pane, 'c'));
+    GEO.continents.forEach(function (c, i) {
+      var g = groupEl(c.name);
+      g.setAttribute('data-sec', 'c' + i);
+      var chips = el('<div class="dm-chips"></div>');
+      c.countries.forEach(function (n) { chips.appendChild(chipEl(n, pickCountry)); });
+      g.appendChild(chips);
+      pane.appendChild(g);
+    });
+  }
+  function pickCountry(name) {
+    histAdd(HK_C, name);
+    finishSelect(name);
+  }
+
+  // ---------- Tab2 多国区域 ----------
+  function renderRegionPane() {
+    var pane = document.getElementById('paneRegion');
+    pane.innerHTML = '';
+    var hist = histGet(HK_R, HIST_R_DEF);
+    if (hist.length) {
+      var g = groupEl('历史选择', '<button class="gact" data-hclear="r"><span class="ic ic-20">' + ICONS.trash + '</span></button>');
+      var rows = el('<div class="dm-rows"></div>');
+      hist.forEach(function (n) {
+        var r = GEO.regions.concat(GEO.hotRegions).filter(function (x) { return x.name === n; })[0];
+        if (r) rows.appendChild(regionRowEl(r, pickRegion));
+      });
+      g.appendChild(rows);
+      g.querySelector('[data-hclear]').addEventListener('click', function () {
+        try { localStorage.setItem(HK_R, '[]'); } catch (e) {}
+        renderRegionPane();
+      });
+      pane.appendChild(g);
+    }
+    var hot = groupEl('<span class="ic ic-20">' + ICONS.fire + '</span>热门');
+    var hotRows = el('<div class="dm-rows"></div>');
+    GEO.hotRegions.forEach(function (r) { hotRows.appendChild(regionRowEl(r, pickRegion)); });
+    hot.appendChild(hotRows);
+    pane.appendChild(hot);
+
+    var all = groupEl('区域');
+    var allRows = el('<div class="dm-rows"></div>');
+    GEO.regions.forEach(function (r) { allRows.appendChild(regionRowEl(r, pickRegion)); });
+    all.appendChild(allRows);
+    pane.appendChild(all);
+  }
+  function pickRegion(r) {
+    histAdd(HK_R, r.name);
+    finishSelect(r.name);
+  }
+
+  // ---------- Tab3 多国自由选择 ----------
+  function renderMultiPane() {
+    var pane = document.getElementById('paneMulti');
+    pane.innerHTML = '';
+    pane.appendChild(contTabsEl(pane, 'm'));
+    GEO.continents.forEach(function (c, i) {
+      var g = groupEl(c.name, '<button class="gact"><span class="dm-check" data-cont="' + i + '"></span></button>');
+      g.setAttribute('data-sec', 'm' + i);
+      var chips = el('<div class="dm-chips"></div>');
+      c.countries.forEach(function (n) {
+        chips.appendChild(chipEl(n, function (label, chipBtn) { toggleMulti(label, chipBtn); }, dm.multiSel.indexOf(n) >= 0));
+      });
+      g.appendChild(chips);
+      g.querySelector('.dm-check').addEventListener('click', function () { toggleContAll(i); });
+      pane.appendChild(g);
+    });
+    syncMultiUI();
+  }
+  function toggleMulti(name) {
+    var idx = dm.multiSel.indexOf(name);
+    if (idx >= 0) dm.multiSel.splice(idx, 1);
+    else {
+      if (dm.multiSel.length >= MAX_MULTI) { toast('最多可选择' + MAX_MULTI + '个'); return; }
+      dm.multiSel.push(name);
+    }
+    syncMultiUI();
+  }
+  function toggleContAll(i) {
+    var cs = GEO.continents[i].countries;
+    var allIn = cs.every(function (n) { return dm.multiSel.indexOf(n) >= 0; });
+    if (allIn) {
+      dm.multiSel = dm.multiSel.filter(function (n) { return cs.indexOf(n) < 0; });
+    } else {
+      cs.forEach(function (n) {
+        if (dm.multiSel.indexOf(n) < 0 && dm.multiSel.length < MAX_MULTI) dm.multiSel.push(n);
+      });
+    }
+    syncMultiUI();
+  }
+  function syncMultiUI() {
+    var pane = document.getElementById('paneMulti');
+    pane.querySelectorAll('.chip').forEach(function (c) {
+      var n = c.querySelector('.chip-label').textContent;
+      c.classList.toggle('sel', dm.multiSel.indexOf(n) >= 0);
+    });
+    pane.querySelectorAll('.dm-check').forEach(function (cb) {
+      var cs = GEO.continents[+cb.getAttribute('data-cont')].countries;
+      cb.classList.toggle('on', cs.every(function (n) { return dm.multiSel.indexOf(n) >= 0; }));
+    });
+    var n = dm.multiSel.length;
+    dm.confirm.classList.toggle('enabled', n > 0);
+    dm.confirm.disabled = n === 0;
+    dm.confirm.textContent = n > 0 ? ('确定 (' + n + ')') : '确定';
+  }
+  dm.confirm.addEventListener('click', function () {
+    if (!dm.multiSel.length) return;
+    var name = dm.multiSel.length === 1 ? dm.multiSel[0] : (dm.multiSel[0] + '等' + dm.multiSel.length + '国');
+    finishSelect(name);
+  });
+
+  // ---------- 搜索 ----------
+  function searchAll(kw) {
+    var out = [], seen = {};
+    GEO.continents.forEach(function (c) {
+      c.countries.forEach(function (n) {
+        if (n.indexOf(kw) >= 0 && !seen[n]) { seen[n] = 1; out.push({ type: 'country', name: n, sub: c.name + '·国家' }); }
+      });
+    });
+    GEO.regions.concat(GEO.hotRegions).forEach(function (r) {
+      if (r.name.indexOf(kw) >= 0 && !seen[r.name]) { seen[r.name] = 1; out.push({ type: 'region', name: r.name, sub: '区域·' + r.count + '个国家', region: r }); }
+    });
+    return out;
+  }
+  function renderSearch(kw) {
+    var showingSearch = kw.length > 0;
+    dm.search.classList.toggle('has-kw', showingSearch);
+    document.querySelectorAll('.dm-pane').forEach(function (p) {
+      p.classList.toggle('act', !showingSearch && p.getAttribute('data-pane') === dm.cat);
+    });
+    dm.foot.classList.toggle('show', !showingSearch && dm.cat === 'multi');
+    if (!showingSearch) {
+      dm.results.classList.remove('act'); dm.empty.classList.remove('act');
+      return;
+    }
+    var items = searchAll(kw);
+    dm.results.innerHTML = '';
+    if (!items.length) {
+      dm.results.classList.remove('act');
+      document.getElementById('dmEmptyMsg').textContent = '没有搜到' + kw + '，换个关键词试试';
+      dm.empty.classList.add('act');
+      return;
+    }
+    dm.empty.classList.remove('act');
+    items.forEach(function (it) {
+      var icon = it.type === 'country' ? ICONS.locGrey : ICONS.globe;
+      var row = el('<button class="dm-result"><span class="ic ic-20">' + icon + '</span>' +
+        '<span class="col"><span class="nm"></span><span class="sub"></span></span></button>');
+      row.querySelector('.nm').innerHTML = it.name.split(kw).join('<mark>' + kw + '</mark>');
+      row.querySelector('.sub').textContent = it.sub;
+      row.addEventListener('click', function () {
+        if (it.type === 'country') pickCountry(it.name); else pickRegion(it.region);
+      });
+      dm.results.appendChild(row);
+    });
+    dm.results.classList.add('act');
+  }
+  dm.input.addEventListener('input', function () { renderSearch(dm.input.value.trim()); });
+  document.getElementById('dmClear').addEventListener('click', function () {
+    dm.input.value = ''; renderSearch(''); dm.input.focus();
+  });
+
+  // ---------- modal 开关 / tab 切换 ----------
+  function openModal(cat) {
+    dm.cat = cat || 'country';
+    dm.input.value = '';
+    document.querySelectorAll('.dm-cat').forEach(function (c) {
+      c.classList.toggle('sel', c.getAttribute('data-cat') === dm.cat);
+    });
+    renderCountryPane(); renderRegionPane(); renderMultiPane();
+    renderSearch('');
+    dm.body.scrollTop = 0;
+    dm.el.classList.add('open');
+    dm.el.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal() {
+    dm.el.classList.remove('open');
+    dm.el.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+  function finishSelect(name) {
+    document.getElementById('destName').textContent = name;
+    closeModal();
+    go('destination');
+  }
+  document.getElementById('dmClose').addEventListener('click', closeModal);
+  document.querySelectorAll('.dm-cat').forEach(function (c) {
+    c.addEventListener('click', function () {
+      dm.cat = c.getAttribute('data-cat');
+      document.querySelectorAll('.dm-cat').forEach(function (x) { x.classList.toggle('sel', x === c); });
+      dm.input.value = '';
+      renderSearch('');
+      dm.body.scrollTop = 0;
+    });
+  });
+
   // ---------- 通用动作 ----------
   document.querySelectorAll('[data-action]').forEach(function (el) {
     el.addEventListener('click', function () {
       var a = el.getAttribute('data-action');
-      if (a === 'pick-destination') toast('目的地选择面板（开发中）');
-      else if (a === 'change-destination') go('home');
+      if (a === 'pick-destination') openModal('country');
+      else if (a === 'change-destination') openModal('country');
       else if (a === 'guide') toast('安装指南：' + el.getAttribute('data-guide') + '（开发中）');
       else if (a === 'faq-more') toast('常见问题列表（开发中）');
       else if (a === 'back') { if (current === 'destination') go('home'); else toast('返回上一页'); }
@@ -653,6 +1164,7 @@
   document.querySelectorAll('.chip[data-dest]').forEach(function (el) {
     el.addEventListener('click', function () {
       document.getElementById('destName').textContent = el.getAttribute('data-dest');
+      histAdd(HK_C, el.getAttribute('data-dest'));
       go('destination');
     });
   });

@@ -265,6 +265,155 @@
   }
   .cta.enabled { background: var(--kk-primary-button); color: #fff; }
 
+  /* ================= 选择目的地 modal ================= */
+  .dest-modal {
+    position: fixed; inset: 0; z-index: 40;
+    max-width: 430px; margin: 0 auto;
+    background: #fff;
+    display: flex; flex-direction: column;
+    transform: translateY(100%); visibility: hidden;
+    transition: transform .3s ease, visibility .3s;
+  }
+  .dest-modal.open { transform: translateY(0); visibility: visible; }
+
+  .dm-head { flex: 0 0 auto; background: #fff; }
+  .dm-bar {
+    display: flex; align-items: center; height: 44px; padding: 4px 24px;
+    margin-top: env(safe-area-inset-top, 0px);
+  }
+  .dm-bar .dm-close { display: flex; align-items: center; }
+  .dm-bar .dm-title {
+    flex: 1 1 0; min-width: 0; text-align: center; padding: 0 20px;
+    font-size: 16px; line-height: 24px; font-weight: 600; color: var(--kk-text-darker);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .dm-bar .dm-spacer { width: 28px; }
+
+  .dm-search-wrap { padding: 12px 20px; }
+  .dm-search {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--kk-surface-lighter); border-radius: 100px;
+    padding: 10px 12px;
+  }
+  .dm-search input {
+    flex: 1 1 0; min-width: 0; border: 0; outline: 0; background: none;
+    font: inherit; font-size: 14px; line-height: 20px; color: var(--kk-text-darker);
+  }
+  .dm-search input::placeholder { color: var(--kk-text-light); }
+  .dm-search .dm-clear { display: none; }
+  .dm-search.has-kw .dm-clear {
+    display: flex; align-items: center; justify-content: center;
+    width: 16px; height: 16px; border-radius: 50%;
+    background: var(--kk-text-light); color: #fff;
+    font-size: 11px; line-height: 1; flex: 0 0 auto;
+  }
+
+  .dm-cats { display: flex; gap: 10px; padding: 0 20px 12px; overflow-x: auto; scrollbar-width: none; }
+  .dm-cats::-webkit-scrollbar { display: none; }
+  .dm-cat {
+    display: inline-flex; align-items: center;
+    background: #fff; border: 1px solid var(--kk-border-light);
+    border-radius: 999px; padding: 8px 12px;
+    font-size: 14px; line-height: 20px; color: var(--kk-text-darker);
+    white-space: nowrap; flex: 0 0 auto;
+  }
+  .dm-cat .cl { padding: 0 4px; }
+  .dm-cat.sel { background: var(--kk-primary-lighter); border-color: var(--kk-primary-medium); color: var(--kk-primary-medium); }
+  .dm-cat .ic-16 img { display: block; }
+
+  .dm-body { flex: 1 1 0; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .dm-pane { display: none; padding: 12px 0 32px; }
+  .dm-pane.act { display: block; }
+
+  .dm-group { padding: 0 20px; margin-bottom: 32px; }
+  .dm-group-head { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; }
+  .dm-group-head .gt {
+    flex: 1 1 0; min-width: 0; display: flex; align-items: center; gap: 8px;
+    font-size: 16px; line-height: 24px; font-weight: 600; color: var(--kk-text-darker);
+  }
+  .dm-group-head .gact { display: flex; align-items: center; padding: 2px; }
+  .dm-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+
+  /* 洲际锚点 tab */
+  .dm-conts {
+    position: sticky; top: 0; z-index: 2;
+    display: flex; gap: 0; background: #fff;
+    overflow-x: auto; scrollbar-width: none;
+    border-bottom: 1px solid var(--kk-border-lighter);
+    margin-bottom: 24px; padding: 0 12px;
+  }
+  .dm-conts::-webkit-scrollbar { display: none; }
+  .dm-cont {
+    flex: 0 0 auto; padding: 14px 12px;
+    font-size: 14px; line-height: 20px; color: var(--kk-text-darker);
+    position: relative; white-space: nowrap;
+  }
+  .dm-cont.sel { color: var(--kk-primary-medium); font-weight: 600; }
+  .dm-cont.sel::after {
+    content: ''; position: absolute; left: 12px; right: 12px; bottom: 0;
+    height: 2px; background: var(--kk-primary-medium); border-radius: 1px;
+  }
+
+  /* 多国区域行 */
+  .dm-rows { display: flex; flex-direction: column; gap: 12px; }
+  .dm-row {
+    display: flex; align-items: center; gap: 12px;
+    background: var(--kk-surface-light); border-radius: var(--r-md);
+    padding: 12px 16px; text-align: left; width: 100%;
+  }
+  .dm-row .rt { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+  .dm-row .rn { font-size: 14px; line-height: 20px; font-weight: 600; color: var(--kk-text-darker); }
+  .dm-row .rd { display: flex; align-items: center; gap: 6px; font-size: 12px; line-height: 16px; color: var(--kk-text-dark); }
+  .dm-row .rd .desc { flex: 1 1 0; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .dm-row .rd .cnt { display: inline-flex; align-items: center; gap: 4px; flex: 0 0 auto; }
+
+  /* 多国自由选择 checkbox */
+  .dm-check {
+    width: 20px; height: 20px; border-radius: var(--r-sm);
+    border: 2px solid var(--kk-border-light); background: #fff;
+    position: relative; flex: 0 0 auto;
+  }
+  .dm-check.on { background: var(--kk-primary-medium); border-color: var(--kk-primary-medium); }
+  .dm-check.on::after {
+    content: ''; position: absolute; left: 5px; top: 1.5px;
+    width: 5px; height: 9px;
+    border: solid #fff; border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+
+  .dm-foot {
+    flex: 0 0 auto; background: #fff;
+    border-top: 1px solid var(--kk-border-lighter);
+    padding: 16px 24px calc(16px + env(safe-area-inset-bottom, 0px));
+    display: none; flex-direction: column; gap: 8px;
+  }
+  .dm-foot.show { display: flex; }
+  .dm-foot .fnote { font-size: 12px; line-height: 16px; color: var(--kk-text-dark); }
+  .dm-foot .cta { background: rgba(26,182,193,.5); color: rgba(255,255,255,.9); }
+  .dm-foot .cta.enabled { background: var(--kk-primary-button); color: #fff; }
+
+  /* 搜索结果 */
+  .dm-results { display: none; padding: 4px 0 32px; }
+  .dm-results.act { display: block; }
+  .dm-result {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 12px 20px; width: 100%; text-align: left;
+  }
+  .dm-result .ic { margin-top: 2px; }
+  .dm-result .col { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+  .dm-result .nm { font-size: 14px; line-height: 20px; color: var(--kk-text-darker); }
+  .dm-result .nm mark { background: none; color: var(--kk-primary-medium); }
+  .dm-result .sub { font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
+  .dm-empty { display: none; flex-direction: column; align-items: center; gap: 16px; padding: 64px 20px; }
+  .dm-empty.act { display: flex; }
+  .dm-empty .qmark {
+    width: 80px; height: 80px; border-radius: 50%;
+    background: var(--kk-surface-light);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 34px; font-weight: 600; color: var(--kk-text-light);
+  }
+  .dm-empty .msg { font-size: 14px; line-height: 20px; color: var(--kk-text-darker); }
+
   /* ---------- toast ---------- */
   .toast {
     position: fixed; left: 50%; bottom: 32px; transform: translate(-50%, 20px);
@@ -632,6 +781,46 @@
     </section>
 
   </div><!-- /app -->
+
+  <!-- ============ MODAL: 选择目的地（从下往上展开 full-screen） ============ -->
+  <div class="dest-modal" id="destModal" aria-hidden="true">
+    <div class="dm-head">
+      <div class="dm-bar">
+        <button class="dm-close" id="dmClose" aria-label="关闭"><span class="ic ic-24"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjEzLjA2NzciIGhlaWdodD0iMTMuMDY3NyIgdmlld0JveD0iMCAwIDEzLjA2NzcgMTMuMDY3NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgaWQ9IlZlY3RvciI+CjxwYXRoIGQ9Ik0xMi44NDgxIDEuMjgwMzNDMTMuMTQxIDAuOTg3NDM3IDEzLjE0MSAwLjUxMjU2MyAxMi44NDgxIDAuMjE5NjdDMTIuNTU1MiAtMC4wNzMyMjMzIDEyLjA4MDMgLTAuMDczMjIzMyAxMS43ODc0IDAuMjE5NjdMNi41MzM4NyA1LjQ3MzIxTDEuMjgwMzMgMC4yMTk2N0MwLjk4NzQzNyAtMC4wNzMyMjMzIDAuNTEyNTYzIC0wLjA3MzIyMzMgMC4yMTk2NyAwLjIxOTY3Qy0wLjA3MzIyMzMgMC41MTI1NjMgLTAuMDczMjIzMyAwLjk4NzQzNyAwLjIxOTY3IDEuMjgwMzNMNS40NzMyMSA2LjUzMzg3TDAuMjE5NjcgMTEuNzg3NEMtMC4wNzMyMjMzIDEyLjA4MDMgLTAuMDczMjIzMyAxMi41NTUyIDAuMjE5NjcgMTIuODQ4MUMwLjUxMjU2MyAxMy4xNDEgMC45ODc0MzcgMTMuMTQxIDEuMjgwMzMgMTIuODQ4MUw2LjUzMzg3IDcuNTk0NTNMMTEuNzg3NCAxMi44NDgxQzEyLjA4MDMgMTMuMTQxIDEyLjU1NTIgMTMuMTQxIDEyLjg0ODEgMTIuODQ4MUMxMy4xNDEgMTIuNTU1MiAxMy4xNDEgMTIuMDgwMyAxMi44NDgxIDExLjc4NzRMNy41OTQ1MyA2LjUzMzg3TDEyLjg0ODEgMS4yODAzM1oiIGZpbGw9ImJsYWNrIi8+CjwvZz4KPC9zdmc+" width="13.07" height="13.07"></span></button>
+        <span class="dm-title">选择目的地</span>
+        <span class="dm-spacer"></span>
+      </div>
+      <div class="dm-search-wrap">
+        <div class="dm-search" id="dmSearch">
+          <span class="ic ic-16"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjEyLjk5OTYiIGhlaWdodD0iMTMuMDAwMSIgdmlld0JveD0iMCAwIDEyLjk5OTYgMTMuMDAwMSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgaWQ9IlZlY3RvciI+CjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNNS43NSAxQzMuMTI2NjUgMSAxIDMuMTI2NjUgMSA1Ljc1QzEgOC4zNzMzNSAzLjEyNjY1IDEwLjUgNS43NSAxMC41QzguMzczMzUgMTAuNSAxMC41IDguMzczMzUgMTAuNSA1Ljc1QzEwLjUgMy4xMjY2NSA4LjM3MzM1IDEgNS43NSAxWk0wIDUuNzVDMCAyLjU3NDM2IDIuNTc0MzYgMCA1Ljc1IDBDOC45MjU2NCAwIDExLjUgMi41NzQzNiAxMS41IDUuNzVDMTEuNSA4LjkyNTY0IDguOTI1NjQgMTEuNSA1Ljc1IDExLjVDMi41NzQzNiAxMS41IDAgOC45MjU2NCAwIDUuNzVaIiBmaWxsPSIjMjEyMTIxIi8+CjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNOS4xMDg1NCA5LjEwODk3QzkuMzAzODEgOC45MTM3MSA5LjYyMDM5IDguOTEzNzEgOS44MTU2NSA5LjEwODk3TDEyLjg1MzIgMTIuMTQ2NUMxMy4wNDg0IDEyLjM0MTggMTMuMDQ4NCAxMi42NTg0IDEyLjg1MzIgMTIuODUzNkMxMi42NTc5IDEzLjA0ODkgMTIuMzQxMyAxMy4wNDg5IDEyLjE0NjEgMTIuODUzNkw5LjEwODU0IDkuODE2MDhDOC45MTMyOCA5LjYyMDgyIDguOTEzMjggOS4zMDQyMyA5LjEwODU0IDkuMTA4OTdaIiBmaWxsPSIjMjEyMTIxIi8+CjwvZz4KPC9zdmc+" width="13.00" height="13.00"></span>
+          <input id="dmInput" type="text" placeholder="输入国家或地区名称搜索" autocomplete="off">
+          <button class="dm-clear" id="dmClear" aria-label="清除">✕</button>
+        </div>
+      </div>
+      <div class="dm-cats" id="dmCats">
+        <button class="dm-cat sel" data-cat="country"><span class="ic ic-16"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjExIiBoZWlnaHQ9IjE0IiB2aWV3Qm94PSIwIDAgMTEgMTQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJWZWN0b3IiPgo8cGF0aCBkPSJNNS41IDguMDAwMDJDNS4wMDU1NSA4LjAwMDAyIDQuNTIyMiA3Ljg1MzM3IDQuMTExMDggNy41Nzg2N0MzLjY5OTk1IDcuMzAzOTcgMy4zNzk1MiA2LjkxMzU0IDMuMTkwMyA2LjQ1NjcyQzMuMDAxMDggNS45OTk5MSAyLjk1MTU4IDUuNDk3MjYgMy4wNDgwNCA1LjAxMjNDMy4xNDQ1IDQuNTI3MzUgMy4zODI2IDQuMDgxODcgMy43MzIyMyAzLjczMjIzQzQuMDgxODYgMy4zODI2IDQuNTI3MzMgMy4xNDQ0OSA1LjAxMjI4IDMuMDQ4MDNDNS40OTcyMyAyLjk1MTU3IDUuOTk5ODkgMy4wMDExIDYuNDU2NzEgMy4xOTAzMkM2LjkxMzUzIDMuMzc5NTQgNy4zMDM5NyAzLjY5OTk4IDcuNTc4NjggNC4xMTExQzcuODUzMzggNC41MjIyMiA4IDUuMDA1NTYgOCA1LjUwMDAyQzcuOTk4MjQgNi4xNjI1MiA3LjczNDI4IDYuNzk3MzkgNy4yNjU4MiA3LjI2NTg1QzYuNzk3MzYgNy43MzQzMSA2LjE2MjUgNy45OTgyNiA1LjUgOC4wMDAwMlpNNS41IDQuMDAwMDJDNS4yMDMzMyA0LjAwMDAyIDQuOTEzMzIgNC4wODggNC42NjY2NSA0LjI1MjgyQzQuNDE5OTggNC40MTc2NSA0LjIyNzcxIDQuNjUxOTEgNC4xMTQxOCA0LjkyNkM0LjAwMDY1IDUuMjAwMDkgMy45NzA5NCA1LjUwMTY5IDQuMDI4ODIgNS43OTI2NkM0LjA4NjcgNi4wODM2MyA0LjIyOTU3IDYuMzUwOTEgNC40MzkzNSA2LjU2MDY5QzQuNjQ5MTIgNi43NzA0NiA0LjkxNjQgNi45MTMzMyA1LjIwNzM3IDYuOTcxMjFDNS40OTgzNCA3LjAyOTA5IDUuNzk5OTQgNi45OTkzNyA2LjA3NDAzIDYuODg1ODRDNi4zNDgxMiA2Ljc3MjMxIDYuNTgyMzggNi41ODAwMiA2Ljc0NzIxIDYuMzMzMzVDNi45MTIwMyA2LjA4NjY4IDcgNS43OTY2OSA3IDUuNTAwMDJDNyA1LjEwMjE5IDYuODQxOTcgNC43MjA2NSA2LjU2MDY2IDQuNDM5MzVDNi4yNzkzNiA0LjE1ODA0IDUuODk3ODMgNC4wMDAwMiA1LjUgNC4wMDAwMloiIGZpbGw9IiMyNkJFQzkiLz4KPHBhdGggZD0iTTUuNSAxNEM1LjM5NzE5IDEzLjk5ODcgNS4yOTcyMSAxMy45NjYxIDUuMjEzMzQgMTMuOTA2N0M1LjAwMDAxIDEzLjc2IDAgMTAuMiAwIDUuNUMwIDQuMDQxMzEgMC41Nzk0NjEgMi42NDIzNyAxLjYxMDkxIDEuNjEwOTJDMi42NDIzNiAwLjU3OTQ3MSA0LjA0MTMxIDAgNS41IDBDNi45NTg2OSAwIDguMzU3NjQgMC41Nzk0NzEgOS4zODkwOSAxLjYxMDkyQzEwLjQyMDUgMi42NDIzNyAxMSA0LjA0MTMxIDExIDUuNUMxMSAxMC4xNjY3IDYgMTMuNzYgNS43ODY2NiAxMy45MDY3QzUuNzAyNzkgMTMuOTY2MSA1LjYwMjgxIDEzLjk5ODcgNS41IDE0Wk01LjUgMUM0LjkwODA5IDEuMDAwODEgNC4zMjIyMyAxLjExOTA3IDMuNzc2MzcgMS4zNDc5NEMzLjIzMDUgMS41NzY4MiAyLjczNTQ4IDEuOTExNzUgMi4zMiAyLjMzMzMzQzEuNDcyNDEgMy4xNzc5NiAwLjk5MzEyOCA0LjMyMzQyIDAuOTg2NjY0IDUuNTE5OThDMC45ODY2NjQgOS4wOTk5OCA0LjQ1MzMzIDEyLjA4IDUuNDg2NjYgMTIuODkzM0M2LjUyIDEyLjA4IDkuOTg2NjYgOS4wOTMzMSA5Ljk4NjY2IDUuNTE5OThDOS45ODAyIDQuMzIzNDIgOS41MDA5MiAzLjE3Nzk2IDguNjUzMzMgMi4zMzMzM0M3LjgyMDYxIDEuNDg4MzMgNi42ODYzMyAxLjAwODcyIDUuNSAxWiIgZmlsbD0iIzI2QkVDOSIvPgo8L2c+Cjwvc3ZnPg==" width="11.00" height="14.00"></span><span class="cl">国家/地区</span></button>
+        <button class="dm-cat" data-cat="region"><span class="ic ic-16"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjEzIiBoZWlnaHQ9IjEzIiB2aWV3Qm94PSIwIDAgMTMgMTMiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJWZWN0b3IiPgo8cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTYuNSAwQzIuOTEwMTUgMCAwIDIuOTEwMTUgMCA2LjVDMCAxMC4wODk5IDIuOTEwMTUgMTMgNi41IDEzQzEwLjA4OTkgMTMgMTMgMTAuMDg5OSAxMyA2LjVDMTMgMi45MTAxNSAxMC4wODk5IDAgNi41IDBaTTQuNzQ5MzUgMS4yODQ0OEMyLjcyMTUyIDEuOTY0ODYgMS4yMjExNSAzLjc5NDc3IDEuMDIyNDIgNkgzLjUwODcyQzMuNTYwMTggNC41MzE0NCAzLjgzNjcyIDMuMTkyNDggNC4yNzI1OSAyLjE3NDQ3QzQuNDExOTcgMS44NDg5NSA0LjU3MDkgMS41NDg1OSA0Ljc0OTM1IDEuMjg0NDhaTTguMjUwNjUgMS4yODQ0OEM4LjQyOTA5IDEuNTQ4NTggOC41ODgwMyAxLjg0ODk1IDguNzI3NDEgMi4xNzQ0N0M5LjE2MzI4IDMuMTkyNDggOS40Mzk4MyA0LjUzMTQ0IDkuNDkxMjggNkgxMS45Nzc2QzExLjc3ODkgMy43OTQ3NiAxMC4yNzg1IDEuOTY0ODYgOC4yNTA2NSAxLjI4NDQ4Wk04LjQ5MDYyIDZDOC40Mzk0OCA0LjY0Mjk5IDguMTgyNjcgMy40NDI4NSA3LjgwODEzIDIuNTY4MDdDNy41OTc3NyAyLjA3Njc4IDcuMzYwMTMgMS43MTExNiA3LjEyMTcyIDEuNDc1NjRDNi44ODU0NSAxLjI0MjI0IDYuNjc1OTIgMS4xNjEwOSA2LjUgMS4xNjEwOUM2LjMyNDA4IDEuMTYxMDkgNi4xMTQ1NSAxLjI0MjI0IDUuODc4MjggMS40NzU2NEM1LjYzOTg3IDEuNzExMTYgNS40MDIyMyAyLjA3Njc4IDUuMTkxODcgMi41NjgwN0M0LjgxNzMzIDMuNDQyODUgNC41NjA1MiA0LjY0Mjk5IDQuNTA5MzggNkg4LjQ5MDYyWk00LjUwOTM3IDdIOC40OTA2M0M4LjQzOTQ5IDguMzU3MDMgOC4xODI2NyA5LjU1NzE5IDcuODA4MTMgMTAuNDMyQzcuNTk3NzcgMTAuOTIzMyA3LjM2MDEzIDExLjI4ODkgNy4xMjE3MiAxMS41MjQ0QzYuODg1NDUgMTEuNzU3OCA2LjY3NTkyIDExLjgzOSA2LjUgMTEuODM5QzYuMzI0MDggMTEuODM5IDYuMTE0NTUgMTEuNzU3OCA1Ljg3ODI4IDExLjUyNDRDNS42Mzk4NyAxMS4yODg5IDUuNDAyMjMgMTAuOTIzMyA1LjE5MTg3IDEwLjQzMkM0LjgxNzMzIDkuNTU3MTkgNC41NjA1MiA4LjM1NzAzIDQuNTA5MzcgN1pNMy41MDg3MiA3SDEuMDIyNDJDMS4yMjExNCA5LjIwNTIyIDIuNzIxNSAxMS4wMzUxIDQuNzQ5MzIgMTEuNzE1NUM0LjU3MDg5IDExLjQ1MTQgNC40MTE5NiAxMS4xNTExIDQuMjcyNTkgMTAuODI1NkMzLjgzNjcyIDkuODA3NTUgMy41NjAxNyA4LjQ2ODU3IDMuNTA4NzIgN1pNOC4yNTA2OCAxMS43MTU1QzguNDI5MTEgMTEuNDUxNCA4LjU4ODA0IDExLjE1MTEgOC43Mjc0MSAxMC44MjU2QzkuMTYzMjkgOS44MDc1NSA5LjQzOTgzIDguNDY4NTcgOS40OTEyOCA3SDExLjk3NzZDMTEuNzc4OSA5LjIwNTIyIDEwLjI3ODUgMTEuMDM1MSA4LjI1MDY4IDExLjcxNTVaIiBmaWxsPSIjMjEyMTIxIi8+CjwvZz4KPC9zdmc+" width="13.00" height="13.00"></span><span class="cl">多国区域</span></button>
+        <button class="dm-cat" data-cat="multi"><span class="ic ic-16"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjEyIiBoZWlnaHQ9IjEyIiB2aWV3Qm94PSIwIDAgMTIgMTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGlkPSJWZWN0b3IiIGQ9Ik0xMS41IDUuNUg2LjVWMC41QzYuNSAwLjM2NzM5MiA2LjQ0NzMyIDAuMjQwMjE1IDYuMzUzNTUgMC4xNDY0NDdDNi4yNTk3OSAwLjA1MjY3ODUgNi4xMzI2MSAwIDYgMEM1Ljg2NzM5IDAgNS43NDAyMiAwLjA1MjY3ODUgNS42NDY0NSAwLjE0NjQ0N0M1LjU1MjY4IDAuMjQwMjE1IDUuNSAwLjM2NzM5MiA1LjUgMC41VjUuNUgwLjVDMC4zNjczOTIgNS41IDAuMjQwMjE1IDUuNTUyNjggMC4xNDY0NDcgNS42NDY0NUMwLjA1MjY3ODUgNS43NDAyMiAwIDUuODY3MzkgMCA2QzAgNi4xMzI2MSAwLjA1MjY3ODUgNi4yNTk3OSAwLjE0NjQ0NyA2LjM1MzU1QzAuMjQwMjE1IDYuNDQ3MzIgMC4zNjczOTIgNi41IDAuNSA2LjVINS41VjExLjVDNS41IDExLjYzMjYgNS41NTI2OCAxMS43NTk4IDUuNjQ2NDUgMTEuODUzNkM1Ljc0MDIyIDExLjk0NzMgNS44NjczOSAxMiA2IDEyQzYuMTMyNjEgMTIgNi4yNTk3OSAxMS45NDczIDYuMzUzNTUgMTEuODUzNkM2LjQ0NzMyIDExLjc1OTggNi41IDExLjYzMjYgNi41IDExLjVWNi41SDExLjVDMTEuNjMyNiA2LjUgMTEuNzU5OCA2LjQ0NzMyIDExLjg1MzYgNi4zNTM1NUMxMS45NDczIDYuMjU5NzkgMTIgNi4xMzI2MSAxMiA2QzEyIDUuODY3MzkgMTEuOTQ3MyA1Ljc0MDIyIDExLjg1MzYgNS42NDY0NUMxMS43NTk4IDUuNTUyNjggMTEuNjMyNiA1LjUgMTEuNSA1LjVaIiBmaWxsPSIjMjEyMTIxIi8+Cjwvc3ZnPg==" width="12.00" height="12.00"></span><span class="cl">多国自由选择</span></button>
+      </div>
+    </div>
+
+    <div class="dm-body" id="dmBody">
+      <div class="dm-pane act" data-pane="country" id="paneCountry"></div>
+      <div class="dm-pane" data-pane="region" id="paneRegion"></div>
+      <div class="dm-pane" data-pane="multi" id="paneMulti"></div>
+      <div class="dm-results" id="dmResults"></div>
+      <div class="dm-empty" id="dmEmpty">
+        <div class="qmark">?</div>
+        <div class="msg" id="dmEmptyMsg">没有搜到，换个关键词试试</div>
+      </div>
+    </div>
+
+    <div class="dm-foot" id="dmFoot">
+      <span class="fnote">最多可选择30个</span>
+      <button class="cta" id="dmConfirm" disabled>确定</button>
+    </div>
+  </div>
+
   <div class="toast" id="toast"></div>
 </div>
 
@@ -738,12 +927,334 @@
     }
   });
 
+  // ================= 选择目的地 modal =================
+  var GEO = {
+    hot: ['日本','韩国','泰国','新加坡','澳大利亚','迪拜','法国','意大利','加拿大'],
+    continents: [
+      { name: '亚洲',   countries: ['日本','韩国','泰国','新加坡','马来西亚','越南','菲律宾','印度尼西亚','柬埔寨','中国香港','中国澳门','中国台湾','迪拜','土耳其'] },
+      { name: '欧洲',   countries: ['法国','意大利','德国','英国','西班牙','瑞士','荷兰','希腊','葡萄牙','奥地利','捷克','北欧地区'] },
+      { name: '北美洲', countries: ['美国','加拿大','墨西哥'] },
+      { name: '大洋洲', countries: ['澳大利亚','新西兰','斐济','关岛'] },
+      { name: '南美洲', countries: ['巴西','阿根廷','智利','秘鲁','哥伦比亚'] },
+      { name: '非洲',   countries: ['埃及','摩洛哥','南非','肯尼亚','毛里求斯'] }
+    ],
+    regions: [
+      { name: '亚洲通', desc: '日本、韩国、泰国、越南、马来西亚、土耳其、菲律宾', count: 12 },
+      { name: '欧洲', desc: '法国、意大利、德国、英国、西班牙、瑞士、荷兰', count: 35 },
+      { name: '东南亚', desc: '泰国、新加坡、马来西亚、越南、菲律宾、印度尼西亚', count: 8 },
+      { name: '中东&北非', desc: '阿联酋、沙特、卡塔尔、埃及、摩洛哥、约旦', count: 10 },
+      { name: '北美', desc: '美国、加拿大、墨西哥', count: 3 },
+      { name: '中美洲及加勒比地区', desc: '巴拿马、哥斯达黎加、牙买加、多米尼加', count: 9 },
+      { name: '大洋洲', desc: '澳大利亚、新西兰、斐济、关岛', count: 5 },
+      { name: '海湾阿拉伯', desc: '阿联酋、沙特、卡塔尔、科威特、巴林、阿曼', count: 6 }
+    ],
+    hotRegions: [
+      { name: '亚洲通', desc: '日本、韩国、泰国、越南、马来西亚、土耳其、菲律宾', count: 12 },
+      { name: '新马泰', desc: '新加坡、马来西亚、泰国', count: 3 },
+      { name: '中东&北非', desc: '阿联酋、沙特、卡塔尔、埃及、摩洛哥、约旦', count: 10 }
+    ]
+  };
+  var MAX_MULTI = 30;
+
+  var dm = {
+    el: document.getElementById('destModal'),
+    body: document.getElementById('dmBody'),
+    input: document.getElementById('dmInput'),
+    search: document.getElementById('dmSearch'),
+    results: document.getElementById('dmResults'),
+    empty: document.getElementById('dmEmpty'),
+    foot: document.getElementById('dmFoot'),
+    confirm: document.getElementById('dmConfirm'),
+    cat: 'country',
+    multiSel: []
+  };
+
+  // ---------- 历史（localStorage） ----------
+  function histGet(key, def) {
+    try { var v = JSON.parse(localStorage.getItem(key)); return Array.isArray(v) ? v : def; }
+    catch (e) { return def; }
+  }
+  function histAdd(key, name) {
+    var h = histGet(key, []).filter(function (x) { return x !== name; });
+    h.unshift(name);
+    try { localStorage.setItem(key, JSON.stringify(h.slice(0, 8))); } catch (e) {}
+  }
+  var HK_C = 'esim-hist-country', HK_R = 'esim-hist-region';
+  var HIST_C_DEF = ['日本','韩国','泰国','新加坡','澳大利亚'];
+  var HIST_R_DEF = ['亚洲通'];
+
+  // ---------- 渲染helpers ----------
+  var ICONS = {
+    fire: '<img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjExLjU1NzgiIGhlaWdodD0iMTMuMTc4NSIgdmlld0JveD0iMCAwIDExLjU1NzggMTMuMTc4NSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZD0iTTcuMTI5NzcgMC41MzQ1NjlDNy4xNDEyOCAwLjM2ODUyOSA3LjA2OTQxIDAuMjA3NjQ5IDYuOTM4MDYgMC4xMDU0MjVDNi44MDY3MiAwLjAwMzIwMTA0IDYuNjMzMTIgLTAuMDI2OTY0NSA2LjQ3NDk4IDAuMDI0OTU5M0M1LjY3NTE0IDAuMjg3NTk2IDQuNzMwMDIgMS4xNTg1MSA0LjIzMTE1IDIuMzY1NzhDMy43NzA2MyAzLjQ4MDIzIDMuNjgwOTIgNC44OTU5OSA0LjQwMDc3IDYuNDQ0NzVDMy44OTYwNCA2LjU2Njk3IDMuNDU2NDMgNi41NDU0OSAzLjEyNzE4IDYuNDAxMDVDMi43MjYyNiA2LjIyNTE1IDIuMzcwMjIgNS44MTMxMyAyLjI5NDkzIDQuOTI2MzJDMi4yNzc2IDQuNzIyMjIgMi4xMzc1NCA0LjU0OTM0IDEuOTQxNDcgNC40OTAwNEMxLjc0NTQxIDQuNDMwNzMgMS41MzMwMSA0LjQ5NzAxIDEuNDA1NDcgNC42NTczQzAuMjc2MTMyIDYuMDc2NTQgLTAuMjgxNzU2IDguMDI3MzEgMC4xNDExOTQgOS43MzA1N0MwLjM1NDg2NSAxMC41OTEgMC44MTk0NDggMTEuMzg0NCAxLjU3OTUgMTEuOTkzNkMyLjMzNzQ1IDEyLjYwMSAzLjM2MTk5IDEzLjAwMzggNC42NjQ2OSAxMy4xMzM1QzQuODU5NiAxMy4xNTI5IDUuMDQ3OSAxMy4wNTY3IDUuMTQ2NDEgMTIuODg3NEM1LjI0NDkyIDEyLjcxODEgNS4yMzU1IDEyLjUwNjkgNS4xMjIzMSAxMi4zNDcxQzQuOTY5NjQgMTIuMTMxNCA0LjgyOTEzIDExLjY5OTEgNC45MTA3MiAxMS4yNDA3QzQuOTc3ODYgMTAuODYzNCA1LjIwMTQyIDEwLjQzNTYgNS43NzU1OSAxMC4wOTE1QzYuMjkwODEgMTAuNDQ3MSA2LjUxNTY3IDEwLjc5MjMgNi41OTY4NyAxMS4xMDhDNi42OTIwOSAxMS40NzgzIDYuNjE5MDMgMTEuOTE4OCA2LjM2NDY4IDEyLjQ2ODZDNi4yODY0OSAxMi42Mzc2IDYuMzA4NjkgMTIuODM2IDYuNDIyMjggMTIuOTgzNUM2LjUzNTg3IDEzLjEzMTEgNi43MjIwNCAxMy4yMDMzIDYuOTA1NCAxMy4xNzA5QzkuNjkyNDEgMTIuNjc4OCAxMS4xMDQ4IDExLjE0MTUgMTEuNDY1IDkuNDEwMTRDMTEuODEzMyA3LjczNjEgMTEuMTUxOSA1Ljk1NjE5IDkuOTY4NSA1LjAxODkzQzkuNzUwNDIgNC44NDYyMiA5LjUzOTEgNC42ODc3MyA5LjMzNjA0IDQuNTM1NDNDOC43ODIwOSA0LjExOTk3IDguMjg5NTUgMy43NTA1NiA3Ljg4ODkgMy4yNjQxM0M3LjM4MTAzIDIuNjQ3NTUgNy4wMzg4NSAxLjg0NjY3IDcuMTI5NzcgMC41MzQ1NjlaIiBmaWxsPSIjRUY3QTcwIi8+Cjwvc3ZnPg==" width="11.56" height="13.18">', trash: '<img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE0LjU4MzMiIGhlaWdodD0iMTYuMjUiIHZpZXdCb3g9IjAgMCAxNC41ODMzIDE2LjI1IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8ZyBpZD0iVW5pb24iPgo8cGF0aCBkPSJNNS4yMDgzMyA2LjY2NjY3QzUuNTUzNTEgNi42NjY2NyA1LjgzMzMzIDYuOTQ2NDkgNS44MzMzMyA3LjI5MTY3VjEyLjI5MTdDNS44MzMzMyAxMi42MzY4IDUuNTUzNTEgMTIuOTE2NyA1LjIwODMzIDEyLjkxNjdDNC44NjMxNiAxMi45MTY3IDQuNTgzMzMgMTIuNjM2OCA0LjU4MzMzIDEyLjI5MTdWNy4yOTE2N0M0LjU4MzMzIDYuOTQ2NDkgNC44NjMxNiA2LjY2NjY3IDUuMjA4MzMgNi42NjY2N1oiIGZpbGw9IiM3MjcyNzIiLz4KPHBhdGggZD0iTTEwIDcuMjkxNjdDMTAgNi45NDY0OSA5LjcyMDE4IDYuNjY2NjcgOS4zNzUgNi42NjY2N0M5LjAyOTgyIDYuNjY2NjcgOC43NSA2Ljk0NjQ5IDguNzUgNy4yOTE2N1YxMi4yOTE3QzguNzUgMTIuNjM2OCA5LjAyOTgyIDEyLjkxNjcgOS4zNzUgMTIuOTE2N0M5LjcyMDE4IDEyLjkxNjcgMTAgMTIuNjM2OCAxMCAxMi4yOTE3VjcuMjkxNjdaIiBmaWxsPSIjNzI3MjcyIi8+CjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNMy4zMzMzMyAyLjVWMi4yOTE2N0MzLjMzMzMzIDEuMDI2MDEgNC4zNTkzNSAwIDUuNjI1IDBIOC45NTgzM0MxMC4yMjQgMCAxMS4yNSAxLjAyNjAxIDExLjI1IDIuMjkxNjdWMi41SDEzLjk1ODNDMTQuMzAzNSAyLjUgMTQuNTgzMyAyLjc3OTgyIDE0LjU4MzMgMy4xMjVDMTQuNTgzMyAzLjQ3MDE4IDE0LjMwMzUgMy43NSAxMy45NTgzIDMuNzVIMTMuNzVWMTMuOTU4M0MxMy43NSAxNS4yMjQgMTIuNzI0IDE2LjI1IDExLjQ1ODMgMTYuMjVIMy4xMjVDMS44NTkzNSAxNi4yNSAwLjgzMzMzMyAxNS4yMjQgMC44MzMzMzMgMTMuOTU4M1YzLjc1SDAuNjI1QzAuMjc5ODIyIDMuNzUgMCAzLjQ3MDE4IDAgMy4xMjVDMCAyLjc3OTgyIDAuMjc5ODIyIDIuNSAwLjYyNSAyLjVIMy4zMzMzM1pNNC41ODMzMyAyLjI5MTY3QzQuNTgzMzMgMS43MTYzNyA1LjA0OTcgMS4yNSA1LjYyNSAxLjI1SDguOTU4MzNDOS41MzM2MyAxLjI1IDEwIDEuNzE2MzcgMTAgMi4yOTE2N1YyLjVINC41ODMzM1YyLjI5MTY3Wk0yLjA4MzMzIDMuNzVWMTMuOTU4M0MyLjA4MzMzIDE0LjUzMzYgMi41NDk3IDE1IDMuMTI1IDE1SDExLjQ1ODNDMTIuMDMzNiAxNSAxMi41IDE0LjUzMzYgMTIuNSAxMy45NTgzVjMuNzVIMi4wODMzM1oiIGZpbGw9IiM3MjcyNzIiLz4KPC9nPgo8L3N2Zz4=" width="14.58" height="16.25">', globe: '<img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE5LjUiIGhlaWdodD0iMTkuNSIgdmlld0JveD0iMCAwIDE5LjUgMTkuNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZD0iTTkuNzUgMEM3LjgyMTY0IDAgNS45MzY1NyAwLjU3MTgyOCA0LjMzMzE5IDEuNjQzMTdDMi43Mjk4MiAyLjcxNDUyIDEuNDgwMTMgNC4yMzcyNiAwLjc0MjE3OSA2LjAxODg0QzAuMDA0MjI0NTIgNy44MDA0MiAtMC4xODg4NTggOS43NjA4MiAwLjE4NzM0OCAxMS42NTIxQzAuNTYzNTU0IDEzLjU0MzQgMS40OTIxNSAxNS4yODA3IDIuODU1NzEgMTYuNjQ0M0M0LjIxOTI4IDE4LjAwNzkgNS45NTY1NiAxOC45MzY1IDcuODQ3ODcgMTkuMzEyN0M5LjczOTE5IDE5LjY4ODkgMTEuNjk5NiAxOS40OTU4IDEzLjQ4MTIgMTguNzU3OEMxNS4yNjI3IDE4LjAxOTkgMTYuNzg1NSAxNi43NzAyIDE3Ljg1NjggMTUuMTY2OEMxOC45MjgyIDEzLjU2MzQgMTkuNSAxMS42Nzg0IDE5LjUgOS43NUMxOS40OTczIDcuMTY0OTggMTguNDY5MiA0LjY4NjYxIDE2LjY0MTMgMi44NTg3MkMxNC44MTM0IDEuMDMwODQgMTIuMzM1IDAuMDAyNzI5ODMgOS43NSAwWk0xOCA5Ljc1QzE4LjAwMDggMTAuODA4NCAxNy43OTcxIDExLjg1NyAxNy40IDEyLjgzODFMMTMuMjA5NCAxMC4yNjA5QzEzLjAzMTIgMTAuMTUxIDEyLjgzMTkgMTAuMDc5OCAxMi42MjQ0IDEwLjA1MTlMMTAuNDg1IDkuNzYzMTJDMTAuMTkwMiA5LjcyNDY5IDkuODkwNjMgOS43NzQxIDkuNjIzOCA5LjkwNTE4QzkuMzU2OTYgMTAuMDM2MyA5LjEzNDc1IDEwLjI0MzIgOC45ODUgMTAuNUg4LjE2NzVMNy44MTEyNSA5Ljc2MzEyQzcuNzEyNzcgOS41NTc5NCA3LjU2ODYzIDkuMzc4MDIgNy4zODk4OCA5LjIzNzE0QzcuMjExMTQgOS4wOTYyNSA3LjAwMjUyIDguOTk4MTQgNi43OCA4Ljk1MDMxTDYuMDMgOC43ODgxMkw2Ljc2MzEzIDcuNUg4LjMyOTY5QzguNTgzMTkgNy40OTk1IDguODMyNDUgNy40MzUwMSA5LjA1NDM4IDcuMzEyNUwxMC4yMDI4IDYuNjc4NzVDMTAuMzAzNyA2LjYyMjUxIDEwLjM5OCA2LjU1NTIyIDEwLjQ4NDEgNi40NzgxMkwxMy4wMDY5IDQuMTk2MjVDMTMuMjU5OCAzLjk2OTU3IDEzLjQyNzkgMy42NjM0NSAxMy40ODM1IDMuMzI4MzhDMTMuNTM5MSAyLjk5MzMxIDEzLjQ3ODcgMi42NDkzMSAxMy4zMTI1IDIuMzUzMTJMMTMuMjc4OCAyLjI5MjE5QzE0LjY5MDQgMi45NjE1NiAxNS44ODMzIDQuMDE3NTYgMTYuNzE5IDUuMzM3NjFDMTcuNTU0NyA2LjY1NzY3IDE3Ljk5ODkgOC4xODc2NiAxOCA5Ljc1Wk0xLjUgOS43NUMxLjQ5ODc1IDguNTIzNzcgMS43NzIzMyA3LjMxMjg0IDIuMzAwNjMgNi4yMDYyNUwzLjM2Mzc1IDkuMDQ0MDZDMy40NTIzNSA5LjI3OTAyIDMuNTk4NTIgOS40ODc5OCAzLjc4ODg1IDkuNjUxNzhDMy45NzkxOCA5LjgxNTU4IDQuMjA3NTkgOS45Mjg5NyA0LjQ1MzEzIDkuOTgxNTZMNi40NjIxOSAxMC40MTM4TDYuODE5MzggMTEuMTU2MkM2Ljk0MzM0IDExLjQwODggNy4xMzU0NSAxMS42MjE2IDcuMzc0MDEgMTEuNzcwN0M3LjYxMjU2IDExLjkxOTggNy44ODgwNiAxMS45OTkyIDguMTY5MzggMTJIOC4zMDgxM0w3LjYzMDMyIDEzLjUyMTZDNy41MTA4OSAxMy43ODk1IDcuNDcyNjQgMTQuMDg2NSA3LjUyMDI5IDE0LjM3NkM3LjU2Nzk1IDE0LjY2NTQgNy42OTk0MiAxNC45MzQ1IDcuODk4NDQgMTUuMTVMNy45MTE1NyAxNS4xNjMxTDkuNzUgMTcuMDU2OUw5LjU2ODEzIDE3Ljk5NDRDNy40MTM1OSAxNy45NDQyIDUuMzYzOTYgMTcuMDU0MSAzLjg1NjYyIDE1LjUxMzhDMi4zNDkyNyAxMy45NzM1IDEuNTAzNTggMTEuOTA1MSAxLjUgOS43NVoiIGZpbGw9IiM5QzlEQTAiLz4KPC9zdmc+" width="19.50" height="19.50">',
+    info: '<img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjEzIiBoZWlnaHQ9IjEzIiB2aWV3Qm94PSIwIDAgMTMgMTMiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJWZWN0b3IiPgo8cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTYuNSAxQzMuNDYyNDMgMSAxIDMuNDYyNDMgMSA2LjVDMSA5LjUzNzU3IDMuNDYyNDMgMTIgNi41IDEyQzkuNTM3NTcgMTIgMTIgOS41Mzc1NyAxMiA2LjVDMTIgMy40NjI0MyA5LjUzNzU3IDEgNi41IDFaTTAgNi41QzAgMi45MTAxNSAyLjkxMDE1IDAgNi41IDBDMTAuMDg5OSAwIDEzIDIuOTEwMTUgMTMgNi41QzEzIDEwLjA4OTkgMTAuMDg5OSAxMyA2LjUgMTNDMi45MTAxNSAxMyAwIDEwLjA4OTkgMCA2LjVaIiBmaWxsPSIjNzI3MjcyIi8+CjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNNS41IDZDNS41IDUuNzIzODYgNS43MjM4NiA1LjUgNiA1LjVINi41QzYuNzc2MTQgNS41IDcgNS43MjM4NiA3IDZWOUM3LjI3NjE0IDkgNy41IDkuMjIzODYgNy41IDkuNUM3LjUgOS43NzYxNCA3LjI3NjE0IDEwIDcgMTBINi41QzYuMjIzODYgMTAgNiA5Ljc3NjE0IDYgOS41VjYuNUM1LjcyMzg2IDYuNSA1LjUgNi4yNzYxNCA1LjUgNloiIGZpbGw9IiM3MjcyNzIiLz4KPHBhdGggZD0iTTYuMzc1IDQuNUM2Ljc4OTIxIDQuNSA3LjEyNSA0LjE2NDIxIDcuMTI1IDMuNzVDNy4xMjUgMy4zMzU3OSA2Ljc4OTIxIDMgNi4zNzUgM0M1Ljk2MDc5IDMgNS42MjUgMy4zMzU3OSA1LjYyNSAzLjc1QzUuNjI1IDQuMTY0MjEgNS45NjA3OSA0LjUgNi4zNzUgNC41WiIgZmlsbD0iIzcyNzI3MiIvPgo8L2c+Cjwvc3ZnPg==" width="13.00" height="13.00">', locGrey: '<img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjExIiBoZWlnaHQ9IjE0IiB2aWV3Qm94PSIwIDAgMTEgMTQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJWZWN0b3IiPgo8cGF0aCBkPSJNNS41IDguMDAwMDJDNS4wMDU1NSA4LjAwMDAyIDQuNTIyMiA3Ljg1MzM3IDQuMTExMDggNy41Nzg2N0MzLjY5OTk1IDcuMzAzOTcgMy4zNzk1MiA2LjkxMzU0IDMuMTkwMyA2LjQ1NjcyQzMuMDAxMDggNS45OTk5MSAyLjk1MTU4IDUuNDk3MjYgMy4wNDgwNCA1LjAxMjNDMy4xNDQ1IDQuNTI3MzUgMy4zODI2IDQuMDgxODcgMy43MzIyMyAzLjczMjIzQzQuMDgxODYgMy4zODI2IDQuNTI3MzMgMy4xNDQ0OSA1LjAxMjI4IDMuMDQ4MDNDNS40OTcyMyAyLjk1MTU3IDUuOTk5ODkgMy4wMDExIDYuNDU2NzEgMy4xOTAzMkM2LjkxMzUzIDMuMzc5NTQgNy4zMDM5NyAzLjY5OTk4IDcuNTc4NjggNC4xMTExQzcuODUzMzggNC41MjIyMiA4IDUuMDA1NTYgOCA1LjUwMDAyQzcuOTk4MjQgNi4xNjI1MiA3LjczNDI4IDYuNzk3MzkgNy4yNjU4MiA3LjI2NTg1QzYuNzk3MzYgNy43MzQzMSA2LjE2MjUgNy45OTgyNiA1LjUgOC4wMDAwMlpNNS41IDQuMDAwMDJDNS4yMDMzMyA0LjAwMDAyIDQuOTEzMzIgNC4wODggNC42NjY2NSA0LjI1MjgyQzQuNDE5OTggNC40MTc2NSA0LjIyNzcxIDQuNjUxOTEgNC4xMTQxOCA0LjkyNkM0LjAwMDY1IDUuMjAwMDkgMy45NzA5NCA1LjUwMTY5IDQuMDI4ODIgNS43OTI2NkM0LjA4NjcgNi4wODM2MyA0LjIyOTU3IDYuMzUwOTEgNC40MzkzNSA2LjU2MDY5QzQuNjQ5MTIgNi43NzA0NiA0LjkxNjQgNi45MTMzMyA1LjIwNzM3IDYuOTcxMjFDNS40OTgzNCA3LjAyOTA5IDUuNzk5OTQgNi45OTkzNyA2LjA3NDAzIDYuODg1ODRDNi4zNDgxMiA2Ljc3MjMxIDYuNTgyMzggNi41ODAwMiA2Ljc0NzIxIDYuMzMzMzVDNi45MTIwMyA2LjA4NjY4IDcgNS43OTY2OSA3IDUuNTAwMDJDNyA1LjEwMjE5IDYuODQxOTcgNC43MjA2NSA2LjU2MDY2IDQuNDM5MzVDNi4yNzkzNiA0LjE1ODA0IDUuODk3ODMgNC4wMDAwMiA1LjUgNC4wMDAwMloiIGZpbGw9IiM5QzlEQTAiLz4KPHBhdGggZD0iTTUuNSAxNEM1LjM5NzE5IDEzLjk5ODcgNS4yOTcyMSAxMy45NjYxIDUuMjEzMzQgMTMuOTA2N0M1LjAwMDAxIDEzLjc2IDAgMTAuMiAwIDUuNUMwIDQuMDQxMzEgMC41Nzk0NjEgMi42NDIzNyAxLjYxMDkxIDEuNjEwOTJDMi42NDIzNiAwLjU3OTQ3MSA0LjA0MTMxIDAgNS41IDBDNi45NTg2OSAwIDguMzU3NjQgMC41Nzk0NzEgOS4zODkwOSAxLjYxMDkyQzEwLjQyMDUgMi42NDIzNyAxMSA0LjA0MTMxIDExIDUuNUMxMSAxMC4xNjY3IDYgMTMuNzYgNS43ODY2NiAxMy45MDY3QzUuNzAyNzkgMTMuOTY2MSA1LjYwMjgxIDEzLjk5ODcgNS41IDE0Wk01LjUgMUM0LjkwODA5IDEuMDAwODEgNC4zMjIyMyAxLjExOTA3IDMuNzc2MzcgMS4zNDc5NEMzLjIzMDUgMS41NzY4MiAyLjczNTQ4IDEuOTExNzUgMi4zMiAyLjMzMzMzQzEuNDcyNDEgMy4xNzc5NiAwLjk5MzEyOCA0LjMyMzQyIDAuOTg2NjY0IDUuNTE5OThDMC45ODY2NjQgOS4wOTk5OCA0LjQ1MzMzIDEyLjA4IDUuNDg2NjYgMTIuODkzM0M2LjUyIDEyLjA4IDkuOTg2NjYgOS4wOTMzMSA5Ljk4NjY2IDUuNTE5OThDOS45ODAyIDQuMzIzNDIgOS41MDA5MiAzLjE3Nzk2IDguNjUzMzMgMi4zMzMzM0M3LjgyMDYxIDEuNDg4MzMgNi42ODYzMyAxLjAwODcyIDUuNSAxWiIgZmlsbD0iIzlDOURBMCIvPgo8L2c+Cjwvc3ZnPg==" width="11.00" height="14.00">'
+  };
+  function el(html) {
+    var t = document.createElement('template');
+    t.innerHTML = html.trim();
+    return t.content.firstChild;
+  }
+  function groupEl(titleHTML, actionHTML) {
+    return el('<div class="dm-group"><div class="dm-group-head"><span class="gt">' + titleHTML + '</span>' +
+      (actionHTML || '') + '</div></div>');
+  }
+  function chipEl(label, onTap, selected) {
+    var c = el('<button class="chip' + (selected ? ' sel' : '') + '"><span class="chip-label t-body-md"></span></button>');
+    c.querySelector('.chip-label').textContent = label;
+    c.addEventListener('click', function () { onTap(label, c); });
+    return c;
+  }
+  function regionRowEl(r, onTap) {
+    var row = el('<button class="dm-row"><span class="ic ic-24">' + ICONS.globe + '</span>' +
+      '<span class="rt"><span class="rn"></span>' +
+      '<span class="rd"><span class="desc"></span><span class="cnt"><span></span>' +
+      '<span class="ic ic-16">' + ICONS.info + '</span></span></span></span></button>');
+    row.querySelector('.rn').textContent = r.name;
+    row.querySelector('.desc').textContent = r.desc;
+    row.querySelector('.cnt span').textContent = r.count + '个国家';
+    row.addEventListener('click', function () { onTap(r); });
+    return row;
+  }
+  function contTabsEl(paneEl, prefix) {
+    var bar = el('<div class="dm-conts"></div>');
+    GEO.continents.forEach(function (c, i) {
+      var t = el('<button class="dm-cont' + (i === 0 ? ' sel' : '') + '"></button>');
+      t.textContent = c.name;
+      t.addEventListener('click', function () {
+        bar.querySelectorAll('.dm-cont').forEach(function (x) { x.classList.remove('sel'); });
+        t.classList.add('sel');
+        var sec = paneEl.querySelector('[data-sec="' + prefix + i + '"]');
+        if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+      bar.appendChild(t);
+    });
+    return bar;
+  }
+
+  // ---------- Tab1 国家/地区 ----------
+  function renderCountryPane() {
+    var pane = document.getElementById('paneCountry');
+    pane.innerHTML = '';
+    var hist = histGet(HK_C, HIST_C_DEF);
+    if (hist.length) {
+      var g = groupEl('历史选择', '<button class="gact" data-hclear="c"><span class="ic ic-20">' + ICONS.trash + '</span></button>');
+      var chips = el('<div class="dm-chips"></div>');
+      hist.forEach(function (n) { chips.appendChild(chipEl(n, pickCountry)); });
+      g.appendChild(chips);
+      g.querySelector('[data-hclear]').addEventListener('click', function () {
+        try { localStorage.setItem(HK_C, '[]'); } catch (e) {}
+        renderCountryPane();
+      });
+      pane.appendChild(g);
+    }
+    var hot = groupEl('<span class="ic ic-20">' + ICONS.fire + '</span>热门');
+    var hotChips = el('<div class="dm-chips"></div>');
+    GEO.hot.forEach(function (n) { hotChips.appendChild(chipEl(n, pickCountry)); });
+    hot.appendChild(hotChips);
+    pane.appendChild(hot);
+
+    pane.appendChild(contTabsEl(pane, 'c'));
+    GEO.continents.forEach(function (c, i) {
+      var g = groupEl(c.name);
+      g.setAttribute('data-sec', 'c' + i);
+      var chips = el('<div class="dm-chips"></div>');
+      c.countries.forEach(function (n) { chips.appendChild(chipEl(n, pickCountry)); });
+      g.appendChild(chips);
+      pane.appendChild(g);
+    });
+  }
+  function pickCountry(name) {
+    histAdd(HK_C, name);
+    finishSelect(name);
+  }
+
+  // ---------- Tab2 多国区域 ----------
+  function renderRegionPane() {
+    var pane = document.getElementById('paneRegion');
+    pane.innerHTML = '';
+    var hist = histGet(HK_R, HIST_R_DEF);
+    if (hist.length) {
+      var g = groupEl('历史选择', '<button class="gact" data-hclear="r"><span class="ic ic-20">' + ICONS.trash + '</span></button>');
+      var rows = el('<div class="dm-rows"></div>');
+      hist.forEach(function (n) {
+        var r = GEO.regions.concat(GEO.hotRegions).filter(function (x) { return x.name === n; })[0];
+        if (r) rows.appendChild(regionRowEl(r, pickRegion));
+      });
+      g.appendChild(rows);
+      g.querySelector('[data-hclear]').addEventListener('click', function () {
+        try { localStorage.setItem(HK_R, '[]'); } catch (e) {}
+        renderRegionPane();
+      });
+      pane.appendChild(g);
+    }
+    var hot = groupEl('<span class="ic ic-20">' + ICONS.fire + '</span>热门');
+    var hotRows = el('<div class="dm-rows"></div>');
+    GEO.hotRegions.forEach(function (r) { hotRows.appendChild(regionRowEl(r, pickRegion)); });
+    hot.appendChild(hotRows);
+    pane.appendChild(hot);
+
+    var all = groupEl('区域');
+    var allRows = el('<div class="dm-rows"></div>');
+    GEO.regions.forEach(function (r) { allRows.appendChild(regionRowEl(r, pickRegion)); });
+    all.appendChild(allRows);
+    pane.appendChild(all);
+  }
+  function pickRegion(r) {
+    histAdd(HK_R, r.name);
+    finishSelect(r.name);
+  }
+
+  // ---------- Tab3 多国自由选择 ----------
+  function renderMultiPane() {
+    var pane = document.getElementById('paneMulti');
+    pane.innerHTML = '';
+    pane.appendChild(contTabsEl(pane, 'm'));
+    GEO.continents.forEach(function (c, i) {
+      var g = groupEl(c.name, '<button class="gact"><span class="dm-check" data-cont="' + i + '"></span></button>');
+      g.setAttribute('data-sec', 'm' + i);
+      var chips = el('<div class="dm-chips"></div>');
+      c.countries.forEach(function (n) {
+        chips.appendChild(chipEl(n, function (label, chipBtn) { toggleMulti(label, chipBtn); }, dm.multiSel.indexOf(n) >= 0));
+      });
+      g.appendChild(chips);
+      g.querySelector('.dm-check').addEventListener('click', function () { toggleContAll(i); });
+      pane.appendChild(g);
+    });
+    syncMultiUI();
+  }
+  function toggleMulti(name) {
+    var idx = dm.multiSel.indexOf(name);
+    if (idx >= 0) dm.multiSel.splice(idx, 1);
+    else {
+      if (dm.multiSel.length >= MAX_MULTI) { toast('最多可选择' + MAX_MULTI + '个'); return; }
+      dm.multiSel.push(name);
+    }
+    syncMultiUI();
+  }
+  function toggleContAll(i) {
+    var cs = GEO.continents[i].countries;
+    var allIn = cs.every(function (n) { return dm.multiSel.indexOf(n) >= 0; });
+    if (allIn) {
+      dm.multiSel = dm.multiSel.filter(function (n) { return cs.indexOf(n) < 0; });
+    } else {
+      cs.forEach(function (n) {
+        if (dm.multiSel.indexOf(n) < 0 && dm.multiSel.length < MAX_MULTI) dm.multiSel.push(n);
+      });
+    }
+    syncMultiUI();
+  }
+  function syncMultiUI() {
+    var pane = document.getElementById('paneMulti');
+    pane.querySelectorAll('.chip').forEach(function (c) {
+      var n = c.querySelector('.chip-label').textContent;
+      c.classList.toggle('sel', dm.multiSel.indexOf(n) >= 0);
+    });
+    pane.querySelectorAll('.dm-check').forEach(function (cb) {
+      var cs = GEO.continents[+cb.getAttribute('data-cont')].countries;
+      cb.classList.toggle('on', cs.every(function (n) { return dm.multiSel.indexOf(n) >= 0; }));
+    });
+    var n = dm.multiSel.length;
+    dm.confirm.classList.toggle('enabled', n > 0);
+    dm.confirm.disabled = n === 0;
+    dm.confirm.textContent = n > 0 ? ('确定 (' + n + ')') : '确定';
+  }
+  dm.confirm.addEventListener('click', function () {
+    if (!dm.multiSel.length) return;
+    var name = dm.multiSel.length === 1 ? dm.multiSel[0] : (dm.multiSel[0] + '等' + dm.multiSel.length + '国');
+    finishSelect(name);
+  });
+
+  // ---------- 搜索 ----------
+  function searchAll(kw) {
+    var out = [], seen = {};
+    GEO.continents.forEach(function (c) {
+      c.countries.forEach(function (n) {
+        if (n.indexOf(kw) >= 0 && !seen[n]) { seen[n] = 1; out.push({ type: 'country', name: n, sub: c.name + '·国家' }); }
+      });
+    });
+    GEO.regions.concat(GEO.hotRegions).forEach(function (r) {
+      if (r.name.indexOf(kw) >= 0 && !seen[r.name]) { seen[r.name] = 1; out.push({ type: 'region', name: r.name, sub: '区域·' + r.count + '个国家', region: r }); }
+    });
+    return out;
+  }
+  function renderSearch(kw) {
+    var showingSearch = kw.length > 0;
+    dm.search.classList.toggle('has-kw', showingSearch);
+    document.querySelectorAll('.dm-pane').forEach(function (p) {
+      p.classList.toggle('act', !showingSearch && p.getAttribute('data-pane') === dm.cat);
+    });
+    dm.foot.classList.toggle('show', !showingSearch && dm.cat === 'multi');
+    if (!showingSearch) {
+      dm.results.classList.remove('act'); dm.empty.classList.remove('act');
+      return;
+    }
+    var items = searchAll(kw);
+    dm.results.innerHTML = '';
+    if (!items.length) {
+      dm.results.classList.remove('act');
+      document.getElementById('dmEmptyMsg').textContent = '没有搜到' + kw + '，换个关键词试试';
+      dm.empty.classList.add('act');
+      return;
+    }
+    dm.empty.classList.remove('act');
+    items.forEach(function (it) {
+      var icon = it.type === 'country' ? ICONS.locGrey : ICONS.globe;
+      var row = el('<button class="dm-result"><span class="ic ic-20">' + icon + '</span>' +
+        '<span class="col"><span class="nm"></span><span class="sub"></span></span></button>');
+      row.querySelector('.nm').innerHTML = it.name.split(kw).join('<mark>' + kw + '</mark>');
+      row.querySelector('.sub').textContent = it.sub;
+      row.addEventListener('click', function () {
+        if (it.type === 'country') pickCountry(it.name); else pickRegion(it.region);
+      });
+      dm.results.appendChild(row);
+    });
+    dm.results.classList.add('act');
+  }
+  dm.input.addEventListener('input', function () { renderSearch(dm.input.value.trim()); });
+  document.getElementById('dmClear').addEventListener('click', function () {
+    dm.input.value = ''; renderSearch(''); dm.input.focus();
+  });
+
+  // ---------- modal 开关 / tab 切换 ----------
+  function openModal(cat) {
+    dm.cat = cat || 'country';
+    dm.input.value = '';
+    document.querySelectorAll('.dm-cat').forEach(function (c) {
+      c.classList.toggle('sel', c.getAttribute('data-cat') === dm.cat);
+    });
+    renderCountryPane(); renderRegionPane(); renderMultiPane();
+    renderSearch('');
+    dm.body.scrollTop = 0;
+    dm.el.classList.add('open');
+    dm.el.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal() {
+    dm.el.classList.remove('open');
+    dm.el.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+  function finishSelect(name) {
+    document.getElementById('destName').textContent = name;
+    closeModal();
+    go('destination');
+  }
+  document.getElementById('dmClose').addEventListener('click', closeModal);
+  document.querySelectorAll('.dm-cat').forEach(function (c) {
+    c.addEventListener('click', function () {
+      dm.cat = c.getAttribute('data-cat');
+      document.querySelectorAll('.dm-cat').forEach(function (x) { x.classList.toggle('sel', x === c); });
+      dm.input.value = '';
+      renderSearch('');
+      dm.body.scrollTop = 0;
+    });
+  });
+
   // ---------- 通用动作 ----------
   document.querySelectorAll('[data-action]').forEach(function (el) {
     el.addEventListener('click', function () {
       var a = el.getAttribute('data-action');
-      if (a === 'pick-destination') toast('目的地选择面板（开发中）');
-      else if (a === 'change-destination') go('home');
+      if (a === 'pick-destination') openModal('country');
+      else if (a === 'change-destination') openModal('country');
       else if (a === 'guide') toast('安装指南：' + el.getAttribute('data-guide') + '（开发中）');
       else if (a === 'faq-more') toast('常见问题列表（开发中）');
       else if (a === 'back') { if (current === 'destination') go('home'); else toast('返回上一页'); }
@@ -754,6 +1265,7 @@
   document.querySelectorAll('.chip[data-dest]').forEach(function (el) {
     el.addEventListener('click', function () {
       document.getElementById('destName').textContent = el.getAttribute('data-dest');
+      histAdd(HK_C, el.getAttribute('data-dest'));
       go('destination');
     });
   });
