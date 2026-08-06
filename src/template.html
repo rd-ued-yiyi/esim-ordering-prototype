@@ -540,9 +540,9 @@
 
   /* ================= 修改搜寻条件 modal / 排序 sheet ================= */
   .cond-body { flex: 1 1 0; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: none; display: flex; flex-direction: column; }
-  .cond-picker-wrap { flex: 0 0 auto; }
+  .cond-picker-wrap { flex: 1 1 auto; display: flex; flex-direction: column; justify-content: center; min-height: 252px; }
   .cond-flow {
-    position: relative; background: #fff; flex: 1 0 auto;
+    position: relative; background: #fff; flex: 0 0 auto;
     border-radius: var(--r-xl) var(--r-xl) 0 0;
     box-shadow: 0 -4px 16px rgba(38, 50, 56, .08);
     padding: 20px 24px 8px; display: flex; flex-direction: column; gap: 8px;
