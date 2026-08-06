@@ -180,6 +180,7 @@
   /* ================= 目的地页 ================= */
   /* 目的地 bar 容器：与下方卡片同级左对齐（16px，非 title-block 的 24px） */
   .destbar-block { padding: 8px 16px 0; }
+  [data-screen="destination"] .page { padding-top: 16px; }
   .dest-bar {
     display: flex; align-items: center; gap: 8px;
     height: 48px; max-width: 240px;
@@ -492,7 +493,7 @@
     white-space: nowrap;
   }
 
-  .pl-body { padding: 12px 16px 40px; }
+  .pl-body { padding: 12px 16px 24px; }
   .pl-note { display: flex; align-items: center; gap: 4px; font-size: 12px; line-height: 16px; color: var(--kk-primary-medium); }
   .pl-meta { display: flex; align-items: center; margin: 12px 0; }
   .pl-meta .cnt { flex: 1 1 0; font-size: 14px; line-height: 20px; color: var(--kk-text-dark); }
@@ -501,14 +502,14 @@
   .pkg-card { background: #fff; border-radius: var(--r-lg); padding: 16px; margin-bottom: 16px; }
   .pkg-head { display: flex; align-items: flex-start; gap: 8px; width: 100%; text-align: left; }
   .pkg-title { flex: 1 1 0; min-width: 0; font-size: 18px; line-height: 26px; font-weight: 600; color: var(--kk-text-darker); }
-  .pkg-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+  .pkg-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
   .pkg-tag { background: var(--kk-surface-light); border-radius: var(--r-sm); padding: 2px 4px;
     font-size: 12px; line-height: 16px; color: var(--kk-text-darker); }
-  .pkg-perks { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 12px;
+  .pkg-perks { display: flex; flex-wrap: wrap; gap: 6px 8px; margin-top: 16px;
     font-size: 14px; line-height: 20px; color: #13A3B6; }
   .pkg-perks .perk { display: inline-flex; align-items: center; gap: 4px; }
   .pkg-perks .perk.dark { color: var(--kk-text-darker); }
-  .pkg-warns { display: flex; align-items: center; gap: 8px; margin-top: 8px;
+  .pkg-warns { display: flex; align-items: center; gap: 8px; margin-top: 6px;
     font-size: 12px; line-height: 16px; color: #E78F37; }
   .pkg-warns .wdiv { width: 1px; height: 12px; background: var(--kk-border-lighter); }
   .pkg-vendor { margin-top: 16px; font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
@@ -519,7 +520,7 @@
   .pkg-rating .bought { margin-left: auto; display: inline-flex; align-items: center; gap: 2px;
     font-size: 12px; line-height: 16px; color: var(--kk-text-dark); }
   .pkg-rating .bought.hot { color: var(--kk-text-critical); }
-  .pkg-hr { border: 0; border-top: 1px solid var(--kk-border-lighter); margin: 12px 0; }
+  .pkg-hr { border: 0; border-top: 1px solid var(--kk-border-lighter); margin: 16px 0; }
   .pkg-buy { display: flex; align-items: center; gap: 12px; }
   .pkg-price { flex: 1 1 0; min-width: 0; }
   .pkg-off { display: inline-block; background: var(--kk-text-critical); color: #fff;
@@ -980,7 +981,7 @@
         <div class="pl-note"><span class="ic ic-16">{{IC_checkCircle}}</span>此设备支援使用 eSIM</div>
         <div class="pl-meta">
           <span class="cnt" id="plCount">34 项结果</span>
-          <button class="sort" id="plSort">排序<span class="ic ic-16">{{IC_swapVertical}}</span></button>
+          <button class="sort" id="plSort">排序<span class="ic ic-14">{{IC_swapVertical}}</span></button>
         </div>
         <div id="plList"></div>
       </div>
@@ -2002,7 +2003,7 @@
       rating.innerHTML = '<span class="ic ic-14">' + ICONS.star + '</span>' +
         '<span class="score"></span>' + (p.rating >= 4.5 ? '<span class="grade">非常好</span>' : '') +
         '<span class="rcount"></span>' +
-        '<span class="bought' + (p.hot ? ' hot' : '') + '">' + (p.hot ? '<span class="ic ic-14">' + ICONS.fire2 + '</span>' : '') + '<span class="bt"></span></span>';
+        '<span class="bought' + (p.hot ? ' hot' : '') + '">' + (p.hot ? '<span class="ic ic-16 ic-stretch">' + ICONS.fire2 + '</span>' : '') + '<span class="bt"></span></span>';
       rating.querySelector('.score').textContent = p.rating.toFixed(1);
       rating.querySelector('.rcount').textContent = '(' + p.reviews + ')';
       rating.querySelector('.bt').textContent = p.bought;
