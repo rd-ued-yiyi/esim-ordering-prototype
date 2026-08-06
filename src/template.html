@@ -164,6 +164,8 @@
   .faq-item.open .faq-a { display: block; }
 
   /* ================= 目的地页 ================= */
+  /* 目的地 bar 容器：与下方卡片同级左对齐（16px，非 title-block 的 24px） */
+  .destbar-block { padding: 8px 16px 0; }
   .dest-bar {
     display: flex; align-items: center; gap: 8px;
     height: 48px; max-width: 240px;
@@ -546,7 +548,7 @@
       </div>
 
       <div class="con">
-        <div class="title-block">
+        <div class="destbar-block">
           <button class="dest-bar" data-action="change-destination">
             <span class="ic ic-24">{{IC_location}}</span>
             <span class="name t-h6" id="destName">新加坡</span>
