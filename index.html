@@ -1807,6 +1807,11 @@
     document.querySelector('.dm-head').classList.toggle('divided', dm.body.scrollTop > 4);
     if (document.activeElement === dm.input) dm.input.blur();
   }, { passive: true });
+  // iOS：键盘展开时拖动列表滚的是 visual viewport，dm-body 的 scroll 不触发，
+  // header/search bar 会被一起推走——touchmove 一开始就收起键盘，视口复位、头部保持固定
+  dm.body.addEventListener('touchmove', function () {
+    if (document.activeElement === dm.input) dm.input.blur();
+  }, { passive: true });
   // bottom sheets 内容滚动：bar 加分割线
   document.querySelectorAll('.bsheet .bs-body').forEach(function (bb) {
     bb.addEventListener('scroll', function () {
