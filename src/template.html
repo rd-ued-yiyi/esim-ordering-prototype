@@ -91,6 +91,7 @@
     z-index: 0; pointer-events: none;
   }
   .app.no-hero .hero-svg { display: none !important; }
+  .app.no-hero { padding-top: 0; }
 
   /* ---------- header ---------- */
   .mheader {
@@ -458,15 +459,17 @@
   .pl-bar .pl-title { font-size: 18px; line-height: 26px; font-weight: 600; color: var(--kk-text-darker);
     max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-  .pl-conds {
-    display: flex; align-items: center; gap: 8px; padding: 4px 16px 8px;
+  .pl-conds { display: flex; align-items: center; gap: 8px; padding: 4px 16px 8px; overflow: hidden; }
+  .pl-cond-fixed { display: flex; align-items: center; gap: 8px; flex: 0 0 auto; }
+  .pl-cond-scroll {
+    display: flex; gap: 8px; flex: 1 1 0; min-width: 0;
     overflow-x: auto; scrollbar-width: none;
   }
-  .pl-conds::-webkit-scrollbar { display: none; }
+  .pl-cond-scroll::-webkit-scrollbar { display: none; }
   .cond-chip {
     display: inline-flex; align-items: center; gap: 4px; flex: 0 0 auto;
     background: var(--kk-surface-light); border-radius: var(--r-md);
-    padding: 8px 12px; font-size: 14px; line-height: 20px; color: var(--kk-text-darker);
+    padding: 8px 12px; font-size: 14px; line-height: 20px; font-weight: 600; color: var(--kk-text-darker);
     white-space: nowrap;
   }
   .cond-chip.sel {
@@ -533,6 +536,10 @@
   .cond-foot { padding: 12px 24px calc(16px + env(safe-area-inset-bottom, 0px)); }
   .cond-sum { font-size: 16px; line-height: 24px; font-weight: 600; color: var(--kk-text-darker); margin-bottom: 12px; }
   .cond-foot .cta { background: var(--kk-primary-button); color: #fff; }
+
+  /* 修改条件 modal：流量档全部换行呈现 */
+  .opts-wrap { overflow: visible; margin-top: -4px; }
+  .opts-wrap .opts-grid { display: flex; flex-wrap: wrap; width: 100%; padding-top: 4px; }
 
   .sort-list { padding: 4px 0 16px; }
   .sort-item { display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px 24px; text-align: left; }
@@ -957,7 +964,7 @@
             <span class="ic ic-20">{{IC_arrowDown}}</span>
           </button>
         </div>
-        <div class="pl-conds" id="plConds"></div>
+        <div class="pl-conds"><div class="pl-cond-fixed" id="plCondFixed"></div><div class="pl-cond-scroll" id="plCondScroll"></div></div>
         <div class="pl-filters">
           <button class="fpill" data-action="filter"><span class="ic ic-16">{{IC_filter}}</span>筛选</button>
           <button class="fpill" data-action="filter">本地/漫游<span class="ic ic-16">{{IC_arrowDown}}</span></button>
@@ -1110,7 +1117,7 @@
           <button class="ftab" data-tab="unlimited">无限流量</button>
         </div>
         <div class="field-note" id="condNote"></div>
-        <div class="opts-scroll"><div class="opts-grid" id="condOpts"></div></div>
+        <div class="opts-wrap"><div class="opts-grid" id="condOpts"></div></div>
       </div>
     </div>
     <div class="cond-foot">
@@ -1918,13 +1925,15 @@
   function renderPlans() {
     document.getElementById('plTitle').textContent = document.getElementById('destName').textContent;
     // 条件 chips：当前条件（点击回目的地页修改）+ 同 tab 相邻流量档快速切换
-    var conds = document.getElementById('plConds');
+    var fixed = document.getElementById('plCondFixed');
+    var conds = document.getElementById('plCondScroll');
+    fixed.innerHTML = '';
     conds.innerHTML = '';
     var edit = el('<button class="cond-chip sel"><span class="lb"></span><span class="ic ic-16">' + ICONS.pencil + '</span></button>');
     edit.querySelector('.lb').textContent = state.days + '天·' + tabShort();
     edit.addEventListener('click', function () { openCondModal(); });
-    conds.appendChild(edit);
-    conds.appendChild(el('<div class="cond-div"></div>'));
+    fixed.appendChild(edit);
+    fixed.appendChild(el('<div class="cond-div"></div>'));
     var opts = PLANS[state.tab].opts;
     var idx = 0;
     opts.forEach(function (o, i) { if (o.t === state.plan) idx = i; });
