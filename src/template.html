@@ -327,9 +327,10 @@
   .dm-head.searching { border-bottom: 1px solid var(--kk-border-lighter); }
   /* modal / bottom sheet 内容滚动时，固定头与内容用分割线区分（页面级 header 才用阴影） */
   .dm-head.divided, .bs-bar.divided, #condModal .dm-bar.divided { border-bottom: 1px solid var(--kk-border-lighter); }
-  /* 多国自由选择：洲际 tab 也置顶，分割线只留整个置顶块下沿（dm-conts 自带 border-bottom），
-     头部与洲际 tab 之间不出线（保留透明 1px 防止切换 pane 时高度跳动） */
-  .dest-modal.cat-multi .dm-head.divided { border-bottom-color: transparent; }
+  /* 国家/地区、多国自由选择两个 pane 的洲际 tab 也置顶：分割线只留整个置顶块下沿
+     （dm-conts 自带 border-bottom），头部与洲际 tab 之间不出线
+     （保留透明 1px 防止切换 pane 时高度跳动）；搜索态无洲际 tab，分割线照常 */
+  .dest-modal.has-conts .dm-head.divided:not(.searching) { border-bottom-color: transparent; }
 
   .dm-cats { display: flex; gap: 10px; padding: 0 20px 8px; overflow-x: auto; scrollbar-width: none; }
   .dm-cats::-webkit-scrollbar { display: none; }
@@ -1767,7 +1768,7 @@
     document.querySelectorAll('.dm-cat').forEach(function (c) {
       c.classList.toggle('sel', c.getAttribute('data-cat') === dm.cat);
     });
-    dm.el.classList.toggle('cat-multi', dm.cat === 'multi');
+    dm.el.classList.toggle('has-conts', dm.cat !== 'region');  // 国家/多国 pane 有置顶洲际 tab
     renderCountryPane(); renderRegionPane(); renderMultiPane();
     renderSearch('');
     dm.body.scrollTop = 0;
@@ -1870,7 +1871,7 @@
     c.addEventListener('click', function () {
       dm.cat = c.getAttribute('data-cat');
       document.querySelectorAll('.dm-cat').forEach(function (x) { x.classList.toggle('sel', x === c); });
-      dm.el.classList.toggle('cat-multi', dm.cat === 'multi');
+      dm.el.classList.toggle('has-conts', dm.cat !== 'region');  // 国家/多国 pane 有置顶洲际 tab
       dm.input.value = '';
       renderSearch('');
       dm.body.scrollTop = 0;
