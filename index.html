@@ -443,6 +443,76 @@
   }
   .dm-empty .msg { font-size: 14px; line-height: 20px; color: var(--kk-text-darker); }
 
+  /* ================= 滚动置顶 header ================= */
+  .page-header {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 30;
+    max-width: 430px; margin: 0 auto;
+    height: calc(44px + env(safe-area-inset-top, 0px));
+    padding: env(safe-area-inset-top, 0px) 24px 0;
+    background: #fff;
+    display: flex; align-items: center;
+    opacity: 0; pointer-events: none; transition: opacity .2s;
+  }
+  .page-header.show { opacity: 1; pointer-events: auto; }
+  .page-header .ph-back { display: flex; align-items: center; }
+  .page-header .ph-title {
+    flex: 1 1 0; min-width: 0; text-align: center; padding: 0 20px;
+    font-size: 16px; line-height: 24px; font-weight: 600; color: var(--kk-text-darker);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .page-header .ph-spacer { width: 24px; }
+
+  /* ================= bottom sheet 通用 ================= */
+  .bs-mask {
+    position: fixed; inset: 0; z-index: 50;
+    background: rgba(33,33,33,.6);
+    opacity: 0; visibility: hidden; transition: opacity .25s, visibility .25s;
+  }
+  .bs-mask.open { opacity: 1; visibility: visible; }
+  .bsheet {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 51;
+    max-width: 430px; margin: 0 auto;
+    background: #fff; border-radius: var(--r-xl) var(--r-xl) 0 0;
+    display: flex; flex-direction: column; max-height: 78vh;
+    transform: translateY(100%); visibility: hidden;
+    transition: transform .3s ease, visibility .3s;
+  }
+  .bsheet.open { transform: translateY(0); visibility: visible; }
+  .bs-handle { width: 36px; height: 4px; border-radius: 2px; background: var(--kk-border-light); margin: 8px auto 0; flex: 0 0 auto; }
+  .bs-bar {
+    display: flex; align-items: center; height: 44px; padding: 4px 24px; flex: 0 0 auto;
+  }
+  .bs-bar .bs-close { display: flex; align-items: center; }
+  .bs-bar .bs-title {
+    flex: 1 1 0; min-width: 0; text-align: center; padding: 0 20px;
+    font-size: 16px; line-height: 24px; font-weight: 600; color: var(--kk-text-darker);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .bs-bar .bs-spacer { width: 24px; }
+  .bs-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .bs-foot { flex: 0 0 auto; padding: 16px 24px calc(16px + env(safe-area-inset-bottom, 0px)); }
+  .bs-foot .cta { background: var(--kk-primary-button); color: #fff; }
+
+  /* 包含地区 sheet */
+  .bs-region-title { font-size: 16px; line-height: 24px; font-weight: 600; color: var(--kk-text-darker); padding: 8px 24px 12px; }
+  .bs-country-list { list-style: none; padding: 0 24px 8px; }
+  .bs-country-list li {
+    position: relative; padding: 8px 0 8px 16px;
+    font-size: 14px; line-height: 20px; color: var(--kk-text-darker);
+  }
+  .bs-country-list li::before {
+    content: ''; position: absolute; left: 2px; top: 15px;
+    width: 5px; height: 5px; border-radius: 50%; background: var(--kk-text-darker);
+  }
+
+  /* 天数 picker sheet */
+  .bs-days { padding: 8px 0; }
+  .bs-day {
+    width: 100%; padding: 8px 0; text-align: center;
+    font-size: 16px; line-height: 24px; color: var(--kk-text-light);
+  }
+  .bs-day.sel { color: var(--kk-text-darker); background: var(--kk-surface-light); font-weight: 600; }
+
   /* ---------- toast ---------- */
   .toast {
     position: fixed; left: 50%; bottom: 32px; transform: translate(-50%, 20px);
@@ -706,11 +776,11 @@
             <div class="group-20">
               <!-- 用卡天数 -->
               <div class="group-8">
-                <div class="field-head">
+                <button class="field-head" id="daysRow">
                   <span class="label-lg">用卡天数</span>
                   <span class="placeholder" id="daysValue">请选择</span>
                   <span class="ic ic-24"><span class="rot90 ic"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE0IiBoZWlnaHQ9IjgiIHZpZXdCb3g9IjAgMCAxNCA4IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cGF0aCBpZD0iVmVjdG9yIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTYuMjkyODkgMC4yOTI4OTNDNi42ODM0MiAtMC4wOTc2MzExIDcuMzE2NTggLTAuMDk3NjMxMSA3LjcwNzExIDAuMjkyODkzTDEzLjcwNzEgNi4yOTI4OUMxNC4wOTc2IDYuNjgzNDIgMTQuMDk3NiA3LjMxNjU4IDEzLjcwNzEgNy43MDcxMUMxMy4zMTY2IDguMDk3NjMgMTIuNjgzNCA4LjA5NzYzIDEyLjI5MjkgNy43MDcxMUw3IDIuNDE0MjFMMS43MDcxMSA3LjcwNzExQzEuMzE2NTggOC4wOTc2MyAwLjY4MzQxOCA4LjA5NzYzIDAuMjkyODkzIDcuNzA3MTFDLTAuMDk3NjMxMSA3LjMxNjU4IC0wLjA5NzYzMTEgNi42ODM0MiAwLjI5Mjg5MyA2LjI5Mjg5TDYuMjkyODkgMC4yOTI4OTNaIiBmaWxsPSIjMjEyMTIxIi8+Cjwvc3ZnPg==" width="14.00" height="8.00"></span></span>
-                </div>
+                </button>
                 <div class="chips-row" id="dayChips">
                   <button class="chip" data-days="1"><span class="chip-label t-body-md">1 天</span></button>
                   <button class="chip" data-days="2"><span class="chip-label t-body-md">2 天</span></button>
@@ -872,6 +942,41 @@
     </div>
   </div>
 
+  <!-- 滚动置顶 header -->
+  <div class="page-header" id="pageHeader">
+    <button class="ph-back" data-action="back" aria-label="返回"><span class="ic ic-24"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjcuOTE2NjciIGhlaWdodD0iMTQuMTY2NyIgdmlld0JveD0iMCAwIDcuOTE2NjcgMTQuMTY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciAoU3Ryb2tlKSIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik03LjY3MjU5IDAuMjQ0MDc4QzcuOTk4MDMgMC41Njk1MTUgNy45OTgwMyAxLjA5NzE1IDcuNjcyNTkgMS40MjI1OUwyLjAxMTg0IDcuMDgzMzNMNy42NzI1OSAxMi43NDQxQzcuOTk4MDMgMTMuMDY5NSA3Ljk5ODAzIDEzLjU5NzIgNy42NzI1OSAxMy45MjI2QzcuMzQ3MTUgMTQuMjQ4IDYuODE5NTEgMTQuMjQ4IDYuNDk0MDggMTMuOTIyNkwwLjI0NDA3OCA3LjY3MjU5Qy0wLjA4MTM1OTIgNy4zNDcxNSAtMC4wODEzNTkyIDYuODE5NTEgMC4yNDQwNzggNi40OTQwOEw2LjQ5NDA4IDAuMjQ0MDc4QzYuODE5NTEgLTAuMDgxMzU5MiA3LjM0NzE1IC0wLjA4MTM1OTIgNy42NzI1OSAwLjI0NDA3OFoiIGZpbGw9IiMyMTIxMjEiLz4KPC9zdmc+" width="7.92" height="14.17"></span></button>
+    <span class="ph-title">eSIM</span>
+    <span class="ph-spacer"></span>
+  </div>
+
+  <!-- bottom sheets -->
+  <div class="bs-mask" id="bsMask"></div>
+
+  <div class="bsheet" id="bsRegion">
+    <div class="bs-handle"></div>
+    <div class="bs-bar">
+      <button class="bs-close" data-bs-close aria-label="关闭"><span class="ic ic-24"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjEzLjA2NzciIGhlaWdodD0iMTMuMDY3NyIgdmlld0JveD0iMCAwIDEzLjA2NzcgMTMuMDY3NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgaWQ9IlZlY3RvciI+CjxwYXRoIGQ9Ik0xMi44NDgxIDEuMjgwMzNDMTMuMTQxIDAuOTg3NDM3IDEzLjE0MSAwLjUxMjU2MyAxMi44NDgxIDAuMjE5NjdDMTIuNTU1MiAtMC4wNzMyMjMzIDEyLjA4MDMgLTAuMDczMjIzMyAxMS43ODc0IDAuMjE5NjdMNi41MzM4NyA1LjQ3MzIxTDEuMjgwMzMgMC4yMTk2N0MwLjk4NzQzNyAtMC4wNzMyMjMzIDAuNTEyNTYzIC0wLjA3MzIyMzMgMC4yMTk2NyAwLjIxOTY3Qy0wLjA3MzIyMzMgMC41MTI1NjMgLTAuMDczMjIzMyAwLjk4NzQzNyAwLjIxOTY3IDEuMjgwMzNMNS40NzMyMSA2LjUzMzg3TDAuMjE5NjcgMTEuNzg3NEMtMC4wNzMyMjMzIDEyLjA4MDMgLTAuMDczMjIzMyAxMi41NTUyIDAuMjE5NjcgMTIuODQ4MUMwLjUxMjU2MyAxMy4xNDEgMC45ODc0MzcgMTMuMTQxIDEuMjgwMzMgMTIuODQ4MUw2LjUzMzg3IDcuNTk0NTNMMTEuNzg3NCAxMi44NDgxQzEyLjA4MDMgMTMuMTQxIDEyLjU1NTIgMTMuMTQxIDEyLjg0ODEgMTIuODQ4MUMxMy4xNDEgMTIuNTU1MiAxMy4xNDEgMTIuMDgwMyAxMi44NDgxIDExLjc4NzRMNy41OTQ1MyA2LjUzMzg3TDEyLjg0ODEgMS4yODAzM1oiIGZpbGw9ImJsYWNrIi8+CjwvZz4KPC9zdmc+" width="13.07" height="13.07"></span></button>
+      <span class="bs-title">包含地区</span>
+      <span class="bs-spacer"></span>
+    </div>
+    <div class="bs-body">
+      <div class="bs-region-title" id="bsRegionName"></div>
+      <ul class="bs-country-list" id="bsRegionList"></ul>
+    </div>
+    <div class="bs-foot"><button class="cta" data-bs-close>确定</button></div>
+  </div>
+
+  <div class="bsheet" id="bsDays">
+    <div class="bs-handle"></div>
+    <div class="bs-bar">
+      <button class="bs-close" data-bs-close aria-label="关闭"><span class="ic ic-24"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjEzLjA2NzciIGhlaWdodD0iMTMuMDY3NyIgdmlld0JveD0iMCAwIDEzLjA2NzcgMTMuMDY3NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgaWQ9IlZlY3RvciI+CjxwYXRoIGQ9Ik0xMi44NDgxIDEuMjgwMzNDMTMuMTQxIDAuOTg3NDM3IDEzLjE0MSAwLjUxMjU2MyAxMi44NDgxIDAuMjE5NjdDMTIuNTU1MiAtMC4wNzMyMjMzIDEyLjA4MDMgLTAuMDczMjIzMyAxMS43ODc0IDAuMjE5NjdMNi41MzM4NyA1LjQ3MzIxTDEuMjgwMzMgMC4yMTk2N0MwLjk4NzQzNyAtMC4wNzMyMjMzIDAuNTEyNTYzIC0wLjA3MzIyMzMgMC4yMTk2NyAwLjIxOTY3Qy0wLjA3MzIyMzMgMC41MTI1NjMgLTAuMDczMjIzMyAwLjk4NzQzNyAwLjIxOTY3IDEuMjgwMzNMNS40NzMyMSA2LjUzMzg3TDAuMjE5NjcgMTEuNzg3NEMtMC4wNzMyMjMzIDEyLjA4MDMgLTAuMDczMjIzMyAxMi41NTUyIDAuMjE5NjcgMTIuODQ4MUMwLjUxMjU2MyAxMy4xNDEgMC45ODc0MzcgMTMuMTQxIDEuMjgwMzMgMTIuODQ4MUw2LjUzMzg3IDcuNTk0NTNMMTEuNzg3NCAxMi44NDgxQzEyLjA4MDMgMTMuMTQxIDEyLjU1NTIgMTMuMTQxIDEyLjg0ODEgMTIuODQ4MUMxMy4xNDEgMTIuNTU1MiAxMy4xNDEgMTIuMDgwMyAxMi44NDgxIDExLjc4NzRMNy41OTQ1MyA2LjUzMzg3TDEyLjg0ODEgMS4yODAzM1oiIGZpbGw9ImJsYWNrIi8+CjwvZz4KPC9zdmc+" width="13.07" height="13.07"></span></button>
+      <span class="bs-title">选择用卡天数</span>
+      <span class="bs-spacer"></span>
+    </div>
+    <div class="bs-body"><div class="bs-days" id="bsDaysList"></div></div>
+    <div class="bs-foot"><button class="cta" id="bsDaysConfirm">确定</button></div>
+  </div>
+
   <div class="toast" id="toast"></div>
 </div>
 
@@ -944,18 +1049,21 @@
     cta.disabled = !ok;
   }
 
-  // 天数 chips 单选
+  // 天数选择（chips 与 bottom sheet picker 共用）
+  function setDays(v) {
+    state.days = v;
+    document.querySelectorAll('#dayChips .chip').forEach(function (c) {
+      c.classList.toggle('sel', c.getAttribute('data-days') === state.days);
+    });
+    var dv = document.getElementById('daysValue');
+    dv.textContent = state.days ? (state.days + ' 天') : '请选择';
+    dv.classList.toggle('has-value', !!state.days);
+    updateCta();
+  }
   document.querySelectorAll('#dayChips .chip').forEach(function (el) {
     el.addEventListener('click', function () {
       var v = el.getAttribute('data-days');
-      state.days = (state.days === v) ? null : v;
-      document.querySelectorAll('#dayChips .chip').forEach(function (c) {
-        c.classList.toggle('sel', c.getAttribute('data-days') === state.days);
-      });
-      var dv = document.getElementById('daysValue');
-      dv.textContent = state.days ? (state.days + ' 天') : '请选择';
-      dv.classList.toggle('has-value', !!state.days);
-      updateCta();
+      setDays(state.days === v ? null : v);
     });
   });
 
@@ -990,19 +1098,30 @@
       { name: '非洲',   countries: ['埃及','摩洛哥','南非','肯尼亚','毛里求斯'] }
     ],
     regions: [
-      { name: '亚洲通', desc: '日本、韩国、泰国、越南、马来西亚、土耳其、菲律宾', count: 12 },
-      { name: '欧洲', desc: '法国、意大利、德国、英国、西班牙、瑞士、荷兰', count: 35 },
-      { name: '东南亚', desc: '泰国、新加坡、马来西亚、越南、菲律宾、印度尼西亚', count: 8 },
-      { name: '中东&北非', desc: '阿联酋、沙特、卡塔尔、埃及、摩洛哥、约旦', count: 10 },
-      { name: '北美', desc: '美国、加拿大、墨西哥', count: 3 },
-      { name: '中美洲及加勒比地区', desc: '巴拿马、哥斯达黎加、牙买加、多米尼加', count: 9 },
-      { name: '大洋洲', desc: '澳大利亚、新西兰、斐济、关岛', count: 5 },
-      { name: '海湾阿拉伯', desc: '阿联酋、沙特、卡塔尔、科威特、巴林、阿曼', count: 6 }
+      { name: '亚洲通', desc: '日本、韩国、泰国、越南、马来西亚、土耳其、菲律宾', count: 12,
+        list: ['韩国','日本','泰国','越南','马来西亚','土耳其','菲律宾','新加坡','印度尼西亚','柬埔寨','中国香港','中国台湾'] },
+      { name: '欧洲', desc: '法国、意大利、德国、英国、西班牙、瑞士、荷兰', count: 35,
+        list: ['法国','意大利','德国','英国','西班牙','葡萄牙','瑞士','荷兰','比利时','奥地利','捷克','希腊','波兰','瑞典','挪威','丹麦','芬兰','冰岛','爱尔兰','匈牙利','克罗地亚','斯洛文尼亚','斯洛伐克','罗马尼亚','保加利亚','爱沙尼亚','拉脱维亚','立陶宛','卢森堡','马耳他','塞浦路斯','列支敦士登','摩纳哥','圣马力诺','安道尔'] },
+      { name: '东南亚', desc: '泰国、新加坡、马来西亚、越南、菲律宾、印度尼西亚', count: 8,
+        list: ['泰国','新加坡','马来西亚','越南','菲律宾','印度尼西亚','柬埔寨','老挝'] },
+      { name: '中东&北非', desc: '阿联酋、沙特、卡塔尔、埃及、摩洛哥、约旦', count: 10,
+        list: ['阿联酋','沙特阿拉伯','卡塔尔','科威特','巴林','阿曼','约旦','埃及','摩洛哥','突尼斯'] },
+      { name: '北美', desc: '美国、加拿大、墨西哥', count: 3,
+        list: ['美国','加拿大','墨西哥'] },
+      { name: '中美洲及加勒比地区', desc: '巴拿马、哥斯达黎加、牙买加、多米尼加', count: 9,
+        list: ['巴拿马','哥斯达黎加','危地马拉','洪都拉斯','萨尔瓦多','尼加拉瓜','牙买加','多米尼加','波多黎各'] },
+      { name: '大洋洲', desc: '澳大利亚、新西兰、斐济、关岛', count: 5,
+        list: ['澳大利亚','新西兰','斐济','关岛','塞班岛'] },
+      { name: '海湾阿拉伯', desc: '阿联酋、沙特、卡塔尔、科威特、巴林、阿曼', count: 6,
+        list: ['阿联酋','沙特阿拉伯','卡塔尔','科威特','巴林','阿曼'] }
     ],
     hotRegions: [
-      { name: '亚洲通', desc: '日本、韩国、泰国、越南、马来西亚、土耳其、菲律宾', count: 12 },
-      { name: '新马泰', desc: '新加坡、马来西亚、泰国', count: 3 },
-      { name: '中东&北非', desc: '阿联酋、沙特、卡塔尔、埃及、摩洛哥、约旦', count: 10 }
+      { name: '亚洲通', desc: '日本、韩国、泰国、越南、马来西亚、土耳其、菲律宾', count: 12,
+        list: ['韩国','日本','泰国','越南','马来西亚','土耳其','菲律宾','新加坡','印度尼西亚','柬埔寨','中国香港','中国台湾'] },
+      { name: '新马泰', desc: '新加坡、马来西亚、泰国', count: 3,
+        list: ['新加坡','马来西亚','泰国'] },
+      { name: '中东&北非', desc: '阿联酋、沙特、卡塔尔、埃及、摩洛哥、约旦', count: 10,
+        list: ['阿联酋','沙特阿拉伯','卡塔尔','科威特','巴林','阿曼','约旦','埃及','摩洛哥','突尼斯'] }
     ]
   };
   var MAX_MULTI = 30;
@@ -1063,6 +1182,11 @@
     row.querySelector('.desc').textContent = r.desc;
     row.querySelector('.cnt span').textContent = r.count + '个国家';
     row.addEventListener('click', function () { onTap(r); });
+    // 点「N个国家 ⓘ」→ 展开包含地区 bottom sheet（不触发行选择）
+    row.querySelector('.cnt').addEventListener('click', function (e) {
+      e.stopPropagation();
+      openRegionSheet(r);
+    });
     return row;
   }
   function contTabsEl(paneEl, prefix) {
@@ -1353,6 +1477,72 @@
       histAdd(HK_C, el.getAttribute('data-dest'));
       finishSelect(el.getAttribute('data-dest'), 'country');
     });
+  });
+
+  // ================= 滚动置顶 header =================
+  function onPageScroll() {
+    var y = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
+    document.getElementById('pageHeader').classList.toggle('show', y > 120);
+  }
+  window.addEventListener('scroll', onPageScroll, { passive: true });
+  document.addEventListener('scroll', onPageScroll, { passive: true });
+
+  // ================= bottom sheets =================
+  var bsMask = document.getElementById('bsMask');
+  function openSheet(el) {
+    bsMask.classList.add('open');
+    el.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeSheets() {
+    bsMask.classList.remove('open');
+    document.querySelectorAll('.bsheet').forEach(function (s) { s.classList.remove('open'); });
+    // 若目的地 modal 仍开着，保持锁定
+    if (!dm.el.classList.contains('open')) document.body.style.overflow = '';
+  }
+  bsMask.addEventListener('click', closeSheets);
+  document.querySelectorAll('[data-bs-close]').forEach(function (b) {
+    b.addEventListener('click', closeSheets);
+  });
+
+  // 包含地区 sheet
+  function openRegionSheet(r) {
+    document.getElementById('bsRegionName').textContent = r.name + ' 包含的地区';
+    var ul = document.getElementById('bsRegionList');
+    ul.innerHTML = '';
+    (r.list || r.desc.split('、')).forEach(function (n) {
+      var li = document.createElement('li');
+      li.textContent = n;
+      ul.appendChild(li);
+    });
+    document.querySelector('#bsRegion .bs-body').scrollTop = 0;
+    openSheet(document.getElementById('bsRegion'));
+  }
+
+  // 用卡天数 picker sheet
+  var DAYS_ALL = ['1','2','3','4','5','6','7','8','9','10','15','20','30'];
+  var pickerVal = null;
+  function renderDaysPicker() {
+    var box = document.getElementById('bsDaysList');
+    box.innerHTML = '';
+    DAYS_ALL.forEach(function (d) {
+      var b = document.createElement('button');
+      b.className = 'bs-day' + (pickerVal === d ? ' sel' : '');
+      b.textContent = d + ' 天';
+      b.addEventListener('click', function () { pickerVal = d; renderDaysPicker(); });
+      box.appendChild(b);
+    });
+  }
+  document.getElementById('daysRow').addEventListener('click', function () {
+    pickerVal = state.days || '4';
+    renderDaysPicker();
+    openSheet(document.getElementById('bsDays'));
+    var sel = document.querySelector('#bsDaysList .bs-day.sel');
+    if (sel) sel.scrollIntoView({ block: 'center' });
+  });
+  document.getElementById('bsDaysConfirm').addEventListener('click', function () {
+    setDays(pickerVal);
+    closeSheets();
   });
 
   renderOpts();
