@@ -1187,7 +1187,7 @@
     hot: ['日本','韩国','泰国','新加坡','澳大利亚','迪拜','法国','意大利','加拿大'],
     continents: [
       { name: '亚洲',   countries: ['日本','韩国','泰国','新加坡','马来西亚','越南','菲律宾','印度尼西亚','柬埔寨','香港','澳门','台湾','迪拜','土耳其'] },
-      { name: '欧洲',   countries: ['法国','意大利','德国','英国','西班牙','瑞士','荷兰','希腊','葡萄牙','奥地利','捷克','北欧地区'] },
+      { name: '欧洲',   countries: ['法国','意大利','德国','英国','西班牙','瑞士','荷兰','希腊','葡萄牙','奥地利','捷克'] },
       { name: '北美洲', countries: ['美国','加拿大','墨西哥'] },
       { name: '大洋洲', countries: ['澳大利亚','新西兰','斐济','关岛'] },
       { name: '南美洲', countries: ['巴西','阿根廷','智利','秘鲁','哥伦比亚'] },
@@ -1209,7 +1209,9 @@
       { name: '大洋洲', desc: '澳大利亚、新西兰、斐济、关岛', count: 5,
         list: ['澳大利亚','新西兰','斐济','关岛','塞班岛'] },
       { name: '海湾阿拉伯', desc: '阿联酋、沙特、卡塔尔、科威特、巴林、阿曼', count: 6,
-        list: ['阿联酋','沙特阿拉伯','卡塔尔','科威特','巴林','阿曼'] }
+        list: ['阿联酋','沙特阿拉伯','卡塔尔','科威特','巴林','阿曼'] },
+      { name: '北欧地区', desc: '瑞典、挪威、丹麦、芬兰、冰岛', count: 5,
+        list: ['瑞典','挪威','丹麦','芬兰','冰岛'] }
     ],
     hotRegions: [
       { name: '亚洲通', desc: '日本、韩国、泰国、越南、马来西亚、土耳其、菲律宾', count: 12,
@@ -1594,11 +1596,19 @@
     });
   });
 
-  // 首页目的地 chip → 进入目的地页
+  // 首页目的地 chip → 进入目的地页（亚洲通/东南亚/北欧地区等区域按区域类型处理）
+  function regionByName(name) {
+    var all = GEO.regions.concat(GEO.hotRegions);
+    for (var i = 0; i < all.length; i++) if (all[i].name === name) return all[i];
+    return null;
+  }
   document.querySelectorAll('.chip[data-dest]').forEach(function (el) {
     el.addEventListener('click', function () {
-      histAdd(HK_C, el.getAttribute('data-dest'));
-      finishSelect(el.getAttribute('data-dest'), 'country');
+      var n = el.getAttribute('data-dest');
+      var r = regionByName(n);
+      if (r) { pickRegion(r); return; }
+      histAdd(HK_C, n);
+      finishSelect(n, 'country');
     });
   });
 
