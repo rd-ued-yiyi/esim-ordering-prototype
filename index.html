@@ -541,15 +541,16 @@
 
   /* ================= 修改搜寻条件 modal / 排序 sheet ================= */
   .cond-body { flex: 1 1 0; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
-  .cond-picker-wrap { border-bottom: 1px solid var(--kk-border-lighter); }
-  .cond-flow { padding: 16px 24px 8px; display: flex; flex-direction: column; gap: 8px; }
+  .cond-picker-wrap { }
+  .cond-flow {
+    position: relative; background: #fff;
+    border-radius: var(--r-xl) var(--r-xl) 0 0;
+    box-shadow: 0 -4px 16px rgba(38, 50, 56, .08);
+    padding: 20px 24px 8px; display: flex; flex-direction: column; gap: 8px;
+  }
   .cond-foot { padding: 12px 24px calc(16px + env(safe-area-inset-bottom, 0px)); }
   .cond-sum { font-size: 16px; line-height: 24px; font-weight: 600; color: var(--kk-text-darker); margin-bottom: 12px; }
   .cond-foot .cta { background: var(--kk-primary-button); color: #fff; }
-
-  /* 修改条件 modal：流量档全部换行呈现 */
-  .opts-wrap { overflow: visible; margin-top: -4px; }
-  .opts-wrap .opts-grid { display: flex; flex-wrap: wrap; width: 100%; padding-top: 4px; }
 
   .sort-list { padding: 4px 0 16px; }
   .sort-item { display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px 24px; text-align: left; }
@@ -1219,7 +1220,7 @@
           <button class="ftab" data-tab="unlimited">无限流量</button>
         </div>
         <div class="field-note" id="condNote"></div>
-        <div class="opts-wrap"><div class="opts-grid" id="condOpts"></div></div>
+        <div class="opts-scroll"><div class="opts-grid" id="condOpts"></div></div>
       </div>
     </div>
     <div class="cond-foot">
