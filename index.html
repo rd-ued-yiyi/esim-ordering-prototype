@@ -336,6 +336,9 @@
   .dm-head.searching { border-bottom: 1px solid var(--kk-border-lighter); }
   /* modal / bottom sheet 内容滚动时，固定头与内容用分割线区分（页面级 header 才用阴影） */
   .dm-head.divided, .bs-bar.divided, #condModal .dm-bar.divided { border-bottom: 1px solid var(--kk-border-lighter); }
+  /* 多国自由选择：洲际 tab 也置顶，分割线只留整个置顶块下沿（dm-conts 自带 border-bottom），
+     头部与洲际 tab 之间不出线（保留透明 1px 防止切换 pane 时高度跳动） */
+  .dest-modal.cat-multi .dm-head.divided { border-bottom-color: transparent; }
 
   .dm-cats { display: flex; gap: 10px; padding: 0 20px 8px; overflow-x: auto; scrollbar-width: none; }
   .dm-cats::-webkit-scrollbar { display: none; }
@@ -1334,10 +1337,10 @@
                  opts: [ { t: '500MB/天', per: 15 }, { t: '1GB/天', per: 26 }, { t: '2GB/天', per: 42 },
                          { t: '3GB/天', per: 55 }, { t: '4GB/天', per: 66 }, { t: '5GB/天', per: 78 } ] },
     total:     { note: '总流量用完即停，可随时加购',
-                 opts: [ { t: '1GB', price: 149, gb: 1 }, { t: '3GB', price: 289, gb: 3 },
-                         { t: '5GB', price: 399, gb: 5 }, { t: '10GB', price: 619, gb: 10 },
-                         { t: '20GB', price: 999, gb: 20 }, { t: '30GB', price: 1290, gb: 30 },
-                         { t: '50GB', price: 1790, gb: 50 }, { t: '100GB', price: 2990, gb: 100 } ] },
+                 opts: [ { t: '共1GB', price: 149, gb: 1 }, { t: '共3GB', price: 289, gb: 3 },
+                         { t: '共5GB', price: 399, gb: 5 }, { t: '共10GB', price: 619, gb: 10 },
+                         { t: '共20GB', price: 999, gb: 20 }, { t: '共30GB', price: 1290, gb: 30 },
+                         { t: '共50GB', price: 1790, gb: 50 }, { t: '共100GB', price: 2990, gb: 100 } ] },
     unlimited: { note: '不限流量，达公平使用量后降至标示网速',
                  opts: [ { t: '降速后 128 Kbps', per: 45 }, { t: '降速后 256 Kbps', per: 52 },
                          { t: '降速后 384 Kbps', per: 58 }, { t: '降速后 512 Kbps', per: 65 },
@@ -1496,12 +1499,12 @@
   var GEO = {
     hot: ['日本','韩国','泰国','新加坡','澳大利亚','迪拜','法国','意大利','加拿大'],
     continents: [
-      { name: '亚洲',   countries: ['日本','韩国','泰国','新加坡','马来西亚','越南','菲律宾','印度尼西亚','柬埔寨','香港','澳门','台湾','迪拜','土耳其'] },
-      { name: '欧洲',   countries: ['法国','意大利','德国','英国','西班牙','瑞士','荷兰','希腊','葡萄牙','奥地利','捷克'] },
-      { name: '北美洲', countries: ['美国','加拿大','墨西哥'] },
-      { name: '大洋洲', countries: ['澳大利亚','新西兰','斐济','关岛'] },
-      { name: '南美洲', countries: ['巴西','阿根廷','智利','秘鲁','哥伦比亚'] },
-      { name: '非洲',   countries: ['埃及','摩洛哥','南非','肯尼亚','毛里求斯'] }
+      { name: '亚洲',   countries: ['日本','韩国','泰国','新加坡','马来西亚','越南','菲律宾','印度尼西亚','柬埔寨','老挝','缅甸','文莱','香港','澳门','台湾','印度','斯里兰卡','马尔代夫','尼泊尔','孟加拉国','蒙古','哈萨克斯坦','乌兹别克斯坦','迪拜','阿联酋','沙特阿拉伯','卡塔尔','科威特','巴林','阿曼','约旦','以色列','土耳其','格鲁吉亚','亚美尼亚','阿塞拜疆'] },
+      { name: '欧洲',   countries: ['法国','意大利','德国','英国','西班牙','瑞士','荷兰','希腊','葡萄牙','奥地利','捷克','比利时','波兰','瑞典','挪威','丹麦','芬兰','冰岛','爱尔兰','匈牙利','克罗地亚','斯洛文尼亚','斯洛伐克','罗马尼亚','保加利亚','塞尔维亚','黑山','波黑','北马其顿','阿尔巴尼亚','爱沙尼亚','拉脱维亚','立陶宛','卢森堡','马耳他','塞浦路斯','摩纳哥'] },
+      { name: '北美洲', countries: ['美国','加拿大','墨西哥','巴拿马','哥斯达黎加','危地马拉','洪都拉斯','萨尔瓦多','尼加拉瓜','牙买加','多米尼加','波多黎各','巴哈马','古巴'] },
+      { name: '大洋洲', countries: ['澳大利亚','新西兰','斐济','关岛','塞班岛','帕劳','巴布亚新几内亚','新喀里多尼亚','法属波利尼西亚'] },
+      { name: '南美洲', countries: ['巴西','阿根廷','智利','秘鲁','哥伦比亚','乌拉圭','巴拉圭','玻利维亚','厄瓜多尔','委内瑞拉'] },
+      { name: '非洲',   countries: ['埃及','摩洛哥','突尼斯','南非','肯尼亚','坦桑尼亚','乌干达','加纳','尼日利亚','毛里求斯','塞舌尔','留尼汪'] }
     ],
     regions: [
       { name: '亚洲通', desc: '日本、韩国、泰国、越南、马来西亚、土耳其、菲律宾', count: 12,
@@ -1865,6 +1868,7 @@
     document.querySelectorAll('.dm-cat').forEach(function (c) {
       c.classList.toggle('sel', c.getAttribute('data-cat') === dm.cat);
     });
+    dm.el.classList.toggle('cat-multi', dm.cat === 'multi');
     renderCountryPane(); renderRegionPane(); renderMultiPane();
     renderSearch('');
     dm.body.scrollTop = 0;
@@ -1967,6 +1971,7 @@
     c.addEventListener('click', function () {
       dm.cat = c.getAttribute('data-cat');
       document.querySelectorAll('.dm-cat').forEach(function (x) { x.classList.toggle('sel', x === c); });
+      dm.el.classList.toggle('cat-multi', dm.cat === 'multi');
       dm.input.value = '';
       renderSearch('');
       dm.body.scrollTop = 0;
@@ -2206,16 +2211,22 @@
       });
       conds.appendChild(c);
     });
-    // 选中档位不在可视区才滚动进来（不打断用户手动滚过的位置）；
+    // 点击切换：选中项平滑滚到可视区中央（scrollTo 自动夹取边界，滚不动时贴边）；
+    // 其余渲染（进页/排序）：仅在选中项跑出可视区时拉回，不打断用户手动滚过的位置。
     // rAF 等屏幕切到 plans 后再量尺寸（进页时 renderPlans 先于 go('plans')，隐藏态 rect 全 0）
     conds.scrollLeft = prevScroll;
     var selChip = conds.querySelector('.cond-chip.sel');
     if (selChip) requestAnimationFrame(function () {
       var sr = conds.getBoundingClientRect(), cr = selChip.getBoundingClientRect();
       if (!sr.width) return;
-      var pad = 16, target = null;
-      if (cr.left < sr.left + pad) target = conds.scrollLeft - (sr.left + pad - cr.left);
-      else if (cr.right > sr.right - pad) target = conds.scrollLeft + (cr.right - (sr.right - pad));
+      var target = null;
+      if (smoothCond) {
+        target = conds.scrollLeft + (cr.left + cr.width / 2) - (sr.left + sr.width / 2);
+      } else {
+        var pad = 16;
+        if (cr.left < sr.left + pad) target = conds.scrollLeft - (sr.left + pad - cr.left);
+        else if (cr.right > sr.right - pad) target = conds.scrollLeft + (cr.right - (sr.right - pad));
+      }
       if (target !== null) conds.scrollTo({ left: Math.max(0, target), behavior: smoothCond ? 'smooth' : 'auto' });
     });
 
