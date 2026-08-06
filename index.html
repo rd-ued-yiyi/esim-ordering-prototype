@@ -2901,11 +2901,16 @@
     });
     if (nd !== editState.days) {
       editState.days = nd;
-      // 天数切换 → 流量档联动刷新，滚动带回到最前并默认选中第一档
-      editState.tab = 'daily';
-      editState.plan = null;  // renderCondOpts 会落到过滤后的第一档
+      // 天数切换 → 原档位仍存在则保持选中；被过滤掉才回退到同计费组第一档
+      // （renderCondOpts 内部逻辑：plan 失效时落到当前 tab 过滤后的第一档，tab 不变）
       renderCondOpts();
-      document.getElementById('condOptsScroll').scrollLeft = 0;
+      // 滚动带把选中档位带到可视区中央（保留选择时它可能在组深处）
+      var sEl = document.getElementById('condOptsScroll');
+      var selOpt = document.querySelector('#condOpts .opt.sel');
+      if (selOpt) {
+        var sr = sEl.getBoundingClientRect(), cr = selOpt.getBoundingClientRect();
+        if (sr.width) sEl.scrollLeft += (cr.left + cr.width / 2) - (sr.left + sr.width / 2);
+      }
     }
     updateCondSum();
   }
