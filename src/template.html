@@ -72,6 +72,8 @@
 
   /* ---------- icon 盒 ---------- */
   .ic { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; }
+  /* icon 图片不得超出 .ic 盒（资产 intrinsic 尺寸可能大于盒，如 19.5px 的 checkCircle 放进 16px 盒） */
+  .ic img { max-width: 100%; max-height: 100%; object-fit: contain; }
   .ic-16 { width: 16px; height: 16px; }
   .ic-20 { width: 20px; height: 20px; }
   .ic-24 { width: 24px; height: 24px; }
@@ -305,12 +307,9 @@
   }
   .dm-search input::placeholder { color: var(--kk-text-light); }
   .dm-search .dm-clear { display: none; }
-  .dm-search.has-kw .dm-clear {
-    display: flex; align-items: center; justify-content: center;
-    width: 16px; height: 16px; border-radius: 50%;
-    background: var(--kk-text-light); color: #fff;
-    font-size: 11px; line-height: 1; flex: 0 0 auto;
-  }
+  .dm-search.has-kw .dm-clear { display: inline-flex; align-items: center; flex: 0 0 auto; }
+  /* 搜索态：header 区加底边框（Figma 848-41868） */
+  .dm-head.searching { border-bottom: 1px solid var(--kk-border-lighter); }
 
   .dm-cats { display: flex; gap: 10px; padding: 0 20px 12px; overflow-x: auto; scrollbar-width: none; }
   .dm-cats::-webkit-scrollbar { display: none; }
@@ -329,7 +328,7 @@
   .dm-cat.sel .ic-on { display: inline-flex; }
   .dm-cat.sel .ic-off { display: none; }
 
-  .dm-body { flex: 1 1 0; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .dm-body { flex: 1 1 0; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
   .dm-pane { display: none; padding: 12px 0 32px; }
   .dm-pane.act { display: block; }
 
@@ -419,7 +418,7 @@
   .dm-results.act { display: block; }
   .dm-result {
     display: flex; align-items: flex-start; gap: 12px;
-    padding: 12px 20px; width: 100%; text-align: left;
+    padding: 8px 20px; width: 100%; text-align: left;
   }
   .dm-result .ic { margin-top: 2px; }
   .dm-result .col { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
@@ -482,7 +481,7 @@
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
   .bs-bar .bs-spacer { width: 24px; }
-  .bs-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .bs-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
   .bs-foot { flex: 0 0 auto; padding: 16px 24px calc(16px + env(safe-area-inset-bottom, 0px)); }
   .bs-foot .cta { background: var(--kk-primary-button); color: #fff; }
 
@@ -506,7 +505,7 @@
   }
   .bs-wheel {
     position: relative; height: 100%; overflow-y: auto;
-    scrollbar-width: none; -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; -webkit-overflow-scrolling: touch; overscroll-behavior: contain;
     scroll-snap-type: y mandatory;
     padding: 108px 0;  /* (252-36)/2：首尾项也能滚到中间 */
   }
@@ -816,7 +815,7 @@
         <div class="dm-search" id="dmSearch">
           <span class="ic ic-16">{{IC_search}}</span>
           <input id="dmInput" type="text" placeholder="输入国家或地区名称搜索" autocomplete="off">
-          <button class="dm-clear" id="dmClear" aria-label="清除">✕</button>
+          <button class="dm-clear" id="dmClear" aria-label="清除"><span class="ic ic-16">{{IC_crossCircle}}</span></button>
         </div>
       </div>
       <div class="dm-cats" id="dmCats">
@@ -1072,7 +1071,9 @@
   // ---------- 渲染helpers ----------
   var ICONS = {
     fire: '{{IC_fire}}', trash: '{{IC_trash}}', globe: '{{IC_globe}}',
-    info: '{{IC_info}}', locGrey: '{{IC_locationGrey}}'
+    info: '{{IC_info}}',
+    locSearch: '{{IC_locationSearch}}',  // 搜索结果·国家行（Figma 848-41868：深色 location_line 20px）
+    earthLine: '{{IC_earthLine}}'        // 搜索结果·区域行（线框地球，非实心 globe）
   };
   function el(html) {
     var t = document.createElement('template');
@@ -1279,8 +1280,9 @@
   function renderSearch(kw) {
     var showingSearch = kw.length > 0;
     dm.search.classList.toggle('has-kw', showingSearch);
-    // 搜索态隐藏分类 pill（Figma 844-40780：搜索时直接显示结果列表）
+    // 搜索态隐藏分类 pill（Figma 844-40780：搜索时直接显示结果列表），header 加底边框
     document.getElementById('dmCats').style.display = showingSearch ? 'none' : '';
+    document.querySelector('.dm-head').classList.toggle('searching', showingSearch);
     document.querySelectorAll('.dm-pane').forEach(function (p) {
       p.classList.toggle('act', !showingSearch && p.getAttribute('data-pane') === dm.cat);
     });
@@ -1299,7 +1301,7 @@
     }
     dm.empty.classList.remove('act');
     items.forEach(function (it) {
-      var icon = it.type === 'country' ? ICONS.locGrey : ICONS.globe;
+      var icon = it.type === 'country' ? ICONS.locSearch : ICONS.earthLine;
       var row = el('<button class="dm-result"><span class="ic ic-20">' + icon + '</span>' +
         '<span class="col"><span class="nm"></span><span class="sub"></span></span></button>');
       row.querySelector('.nm').innerHTML = it.name.split(kw).join('<mark>' + kw + '</mark>');
@@ -1316,6 +1318,27 @@
     dm.input.value = ''; renderSearch(''); dm.input.focus();
   });
 
+  // ---------- body 滚动锁定（iOS 上 overflow:hidden 锁不住触摸滚动，会穿透露出背后页面） ----------
+  var lockY = 0, lockCount = 0;
+  function lockBody() {
+    if (++lockCount > 1) return;
+    lockY = window.scrollY || document.documentElement.scrollTop || 0;
+    document.body.style.position = 'fixed';
+    document.body.style.top = -lockY + 'px';
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.style.width = '100%';
+  }
+  function unlockBody() {
+    if (lockCount === 0 || --lockCount > 0) return;
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.left = '';
+    document.body.style.right = '';
+    document.body.style.width = '';
+    window.scrollTo(0, lockY);
+  }
+
   // ---------- modal 开关 / tab 切换 ----------
   function openModal(cat) {
     dm.cat = cat || 'country';
@@ -1328,12 +1351,12 @@
     dm.body.scrollTop = 0;
     dm.el.classList.add('open');
     dm.el.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
+    lockBody();
   }
   function closeModal() {
+    if (dm.el.classList.contains('open')) unlockBody();
     dm.el.classList.remove('open');
     dm.el.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
   }
   function finishSelect(name, type, count) {
     document.getElementById('destName').textContent = name;
@@ -1411,13 +1434,13 @@
   function openSheet(el) {
     bsMask.classList.add('open');
     el.classList.add('open');
-    document.body.style.overflow = 'hidden';
+    lockBody();
   }
   function closeSheets() {
+    var wasOpen = document.querySelector('.bsheet.open');
     bsMask.classList.remove('open');
     document.querySelectorAll('.bsheet').forEach(function (s) { s.classList.remove('open'); });
-    // 若目的地 modal 仍开着，保持锁定
-    if (!dm.el.classList.contains('open')) document.body.style.overflow = '';
+    if (wasOpen) unlockBody();  // 计数式锁：modal 若还开着会保持锁定
   }
   bsMask.addEventListener('click', closeSheets);
   document.querySelectorAll('[data-bs-close]').forEach(function (b) {

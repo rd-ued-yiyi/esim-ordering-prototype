@@ -61,6 +61,8 @@ subs = {
     "{{IC_plus}}":         svg("plus"),
     "{{IC_plusCyan}}":     svg("plus", recolor=("#212121", "#26BEC9")),
     "{{IC_trash}}":        svg("trash"),
+    "{{IC_locationSearch}}": svg("locationSearch"),
+    "{{IC_crossCircle}}":  svg("crossCircle"),
     "{{IC_globe}}":        svg("globe"),
     "{{IC_info}}":         svg("info"),
     "{{PICTO_tours}}":     svg("picto_tours", "picto"),
