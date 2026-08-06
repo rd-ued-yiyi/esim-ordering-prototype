@@ -486,6 +486,7 @@
     background: #fff; padding: 0 8px 0 16px;
     position: relative; z-index: 1;
     filter: drop-shadow(0 1px 2px rgba(38, 50, 56, .12));  /* Figma 795-35939 */
+    clip-path: inset(0 -8px -8px 0);  /* 投影只从右/下沿露出，上沿与左侧不漏 */
   }
   .pl-cond-scroll {
     display: flex; gap: 8px; flex: 1 1 0; min-width: 0;
@@ -2159,11 +2160,12 @@
   var PERK_ICONS = { flash: 'flash', reload: 'reload', checkLine: 'checkLine',
                      reloadD: 'reloadDark', calendarD: 'calendar', crossD: 'crossLine' };
 
-  function renderPlans() {
+  function renderPlans(smoothCond) {
     document.getElementById('plTitle').textContent = document.getElementById('destName').textContent;
     // 条件 chips：当前条件（点击回目的地页修改）+ 同 tab 相邻流量档快速切换
     var fixed = document.getElementById('plCondFixed');
     var conds = document.getElementById('plCondScroll');
+    var prevScroll = conds.scrollLeft;  // 保留用户手动滚动到的位置
     fixed.innerHTML = '';
     conds.innerHTML = '';
     var edit = el('<button class="cond-chip sel"><span class="lb"></span><span class="ic ic-16">' + ICONS.pencil + '</span></button>');
@@ -2182,13 +2184,22 @@
       c.textContent = o.t;
       c.addEventListener('click', function () {
         state.plan = o.t;
-        renderOpts(); updateCta(); renderPlans();
+        renderOpts(); updateCta(); renderPlans(true);  // 点击切换：平滑滚动缓冲
       });
       conds.appendChild(c);
     });
-    // 选中档位滚到可见位置
+    // 选中档位不在可视区才滚动进来（不打断用户手动滚过的位置）；
+    // rAF 等屏幕切到 plans 后再量尺寸（进页时 renderPlans 先于 go('plans')，隐藏态 rect 全 0）
+    conds.scrollLeft = prevScroll;
     var selChip = conds.querySelector('.cond-chip.sel');
-    if (selChip) conds.scrollLeft = Math.max(0, selChip.offsetLeft - conds.offsetLeft - 60);
+    if (selChip) requestAnimationFrame(function () {
+      var sr = conds.getBoundingClientRect(), cr = selChip.getBoundingClientRect();
+      if (!sr.width) return;
+      var pad = 16, target = null;
+      if (cr.left < sr.left + pad) target = conds.scrollLeft - (sr.left + pad - cr.left);
+      else if (cr.right > sr.right - pad) target = conds.scrollLeft + (cr.right - (sr.right - pad));
+      if (target !== null) conds.scrollTo({ left: Math.max(0, target), behavior: smoothCond ? 'smooth' : 'auto' });
+    });
 
     var list = buildPlans();
     if (sortMode === 0) list.sort(function (a, b) { return a.now - b.now; });
@@ -2362,7 +2373,7 @@
       t.classList.toggle('sel', t.getAttribute('data-tab') === state.tab);
     });
     setDays(editState.days);  // 内部会 renderOpts + updateCta
-    renderPlans();
+    renderPlans(true);
     closeCondModal();
     window.scrollTo(0, 0);
   });
