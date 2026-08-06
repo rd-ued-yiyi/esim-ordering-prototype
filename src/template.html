@@ -545,9 +545,12 @@
     position: relative; background: #fff; flex: 0 0 auto;
     border-radius: var(--r-xl) var(--r-xl) 0 0;
     box-shadow: 0 -4px 16px rgba(38, 50, 56, .08);
-    padding: 20px 24px 8px; display: flex; flex-direction: column; gap: 8px;
+    padding: 20px 24px 8px; margin-bottom: 16px;
+    display: flex; flex-direction: column; gap: 8px;
     align-content: flex-start;
   }
+  /* 流量档滚动区通栏：负 margin 延伸到屏幕边缘，内容滚动时不被两侧留白切断 */
+  .cond-flow .opts-scroll { width: calc(100% + 48px); margin-left: -24px; margin-right: -24px; padding-left: 24px; padding-right: 24px; }
   .cond-foot { border-top: 1px solid var(--kk-border-lighter); padding: 12px 24px calc(16px + env(safe-area-inset-bottom, 0px)); }
   .cond-sum { font-size: 16px; line-height: 24px; font-weight: 600; color: var(--kk-text-darker); margin-bottom: 12px; }
   .cond-foot .cta { background: var(--kk-primary-button); color: #fff; }
