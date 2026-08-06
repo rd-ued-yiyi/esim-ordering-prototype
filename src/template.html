@@ -687,7 +687,8 @@
     transition: transform .5s cubic-bezier(.35,.8,.3,1), opacity .5s ease;
     will-change: transform, opacity;
   }
-  .dest-bar.pulse, .pl-title-wrap.pulse { animation: barPulse .7s ease; border-radius: var(--r-md); }
+  .dest-bar.pulse, .pl-title-wrap.pulse { animation: barPulse .7s ease; }
+  .pl-title-wrap.pulse { border-radius: var(--r-md); }  /* 圆角只给列表页标题，勿影响 dest-bar 的 12px */
   @keyframes barPulse {
     0%   { box-shadow: 0 0 0 0 rgba(38,190,201,.45); }
     100% { box-shadow: 0 0 0 14px rgba(38,190,201,0); }
