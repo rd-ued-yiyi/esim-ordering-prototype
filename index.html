@@ -995,7 +995,7 @@
       <div class="bs-region-title" id="bsRegionName"></div>
       <ul class="bs-country-list" id="bsRegionList"></ul>
     </div>
-    <div class="bs-foot"><button class="cta" data-bs-close>确定</button></div>
+    <div class="bs-foot"><button class="cta" id="bsRegionConfirm">确定</button></div>
   </div>
 
   <div class="bsheet" id="bsHowto">
@@ -1589,8 +1589,10 @@
     b.addEventListener('click', closeSheets);
   });
 
-  // 包含地区 sheet
+  // 包含地区 sheet：确定 = 选定该区域（直达目的地页）
+  var regionSheetR = null;
   function openRegionSheet(r) {
+    regionSheetR = r;
     document.getElementById('bsRegionName').textContent = r.name + ' 包含的地区';
     var ul = document.getElementById('bsRegionList');
     ul.innerHTML = '';
@@ -1602,6 +1604,10 @@
     document.querySelector('#bsRegion .bs-body').scrollTop = 0;
     openSheet(document.getElementById('bsRegion'));
   }
+  document.getElementById('bsRegionConfirm').addEventListener('click', function () {
+    closeSheets();
+    if (regionSheetR) pickRegion(regionSheetR);
+  });
 
   // 用卡天数滚轮 picker：高亮条固定中间，滚动选项，中心项即选中
   var DAYS_ALL = ['1','2','3','4','5','6','7','8','9','10','15','20','30','40','50','60','90','120','180','365'];
