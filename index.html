@@ -531,9 +531,9 @@
   .pl-meta .sort { display: inline-flex; align-items: center; gap: 2px; font-size: 14px; line-height: 20px; color: var(--kk-text-dark); }
 
   .pkg-card { background: #fff; border-radius: var(--r-lg); padding: 16px; margin-bottom: 16px; }
-  .pkg-head { display: flex; align-items: flex-start; gap: 8px; width: 100%; text-align: left; }
+  .pkg-head { display: flex; align-items: flex-start; gap: 4px; width: 100%; text-align: left; }
   .pkg-title { flex: 1 1 0; min-width: 0; font-size: 18px; line-height: 26px; font-weight: 600; color: var(--kk-text-darker); }
-  .pkg-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+  .pkg-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
   .pkg-tag { background: var(--kk-surface-light); border-radius: var(--r-sm); padding: 2px 4px;
     font-size: 12px; line-height: 16px; color: var(--kk-text-darker); }
   .pkg-perks { display: flex; flex-wrap: wrap; gap: 6px 8px; margin-top: 16px;
@@ -544,22 +544,22 @@
     font-size: 12px; line-height: 16px; color: #E78F37; }
   .pkg-warns .wdiv { width: 1px; height: 12px; background: var(--kk-border-lighter); }
   .pkg-vendor { margin-top: 16px; font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
-  .pkg-rating { display: flex; align-items: center; gap: 4px; margin-top: 4px; }
+  .pkg-rating { display: flex; align-items: center; gap: 4px; margin-top: 2px; }
   .pkg-rating .score { font-size: 14px; line-height: 20px; font-weight: 600; color: #13A3B6; }
-  .pkg-rating .grade { font-size: 12px; line-height: 16px; color: #13A3B6; }
-  .pkg-rating .rcount { font-size: 14px; line-height: 20px; color: var(--kk-text-dark); text-decoration: underline; }
-  .pkg-rating .bought { margin-left: auto; display: inline-flex; align-items: center; gap: 2px;
+  .pkg-rating .grade { font-size: 12px; line-height: 16px; font-weight: 500; color: #13A3B6; }
+  .pkg-rating .rcount { font-size: 12px; line-height: 16px; color: var(--kk-text-darker); }
+  .pkg-rating .bought { margin-left: auto; display: inline-flex; align-items: center; gap: 4px;
     font-size: 12px; line-height: 16px; color: var(--kk-text-dark); }
   .pkg-rating .bought.hot { color: var(--kk-text-critical); }
   .pkg-hr { border: 0; border-top: 1px solid var(--kk-border-lighter); margin: 16px 0; }
-  .pkg-buy { display: flex; align-items: center; gap: 12px; }
+  .pkg-buy { display: flex; align-items: center; gap: 8px; }
   .pkg-price { flex: 1 1 0; min-width: 0; }
   .pkg-off { display: inline-block; background: var(--kk-text-critical); color: #fff;
     font-size: 12px; line-height: 16px; padding: 2px 4px; border-radius: var(--r-sm); margin-bottom: 4px; }
   .pkg-now { font-size: 16px; line-height: 16px; font-weight: 700; color: var(--kk-text-darker); }
   .pkg-now .cur { font-weight: 500; }
-  .pkg-was { font-size: 14px; color: var(--kk-text-medium); text-decoration: line-through; margin-left: 6px; }
-  .pkg-per { margin-top: 4px; font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
+  .pkg-was { font-size: 14px; line-height: 14px; color: var(--kk-text-medium); text-decoration: line-through; margin-left: 8px; }
+  .pkg-per { margin-top: 2px; font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
   .pkg-cta { background: var(--kk-primary-button); color: #fff; border-radius: var(--r-md);
     padding: 8px 20px; font-size: 16px; line-height: 24px; font-weight: 600; flex: 0 0 auto; }
 
@@ -2159,7 +2159,7 @@
     box.innerHTML = '';
     list.forEach(function (p) {
       var card = el('<div class="pkg-card">' +
-        '<button class="pkg-head"><span class="pkg-title"></span><span class="ic ic-20 chev-r"></span></button>' +
+        '<button class="pkg-head"><span class="pkg-title"></span><span class="ic ic-24 chev-r"></span></button>' +
         '<div class="pkg-tags"></div><div class="pkg-perks"></div><div class="pkg-warns"></div>' +
         '<div class="pkg-vendor"></div><div class="pkg-rating"></div><hr class="pkg-hr">' +
         '<div class="pkg-buy"><div class="pkg-price"></div><button class="pkg-cta">订购</button></div></div>');
@@ -2182,7 +2182,7 @@
       });
       card.querySelector('.pkg-vendor').textContent = p.vendor;
       var rating = card.querySelector('.pkg-rating');
-      rating.innerHTML = '<span class="ic ic-14">' + ICONS.star + '</span>' +
+      rating.innerHTML = '<span class="ic ic-16">' + ICONS.star + '</span>' +
         '<span class="score"></span>' + (p.rating >= 4.5 ? '<span class="grade">非常好</span>' : '') +
         '<span class="rcount"></span>' +
         '<span class="bought' + (p.hot ? ' hot' : '') + '">' + (p.hot ? '<span class="ic ic-16 ic-stretch">' + ICONS.fire2 + '</span>' : '') + '<span class="bt"></span></span>';
