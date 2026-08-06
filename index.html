@@ -506,6 +506,25 @@
     width: 5px; height: 5px; border-radius: 50%; background: var(--kk-text-darker);
   }
 
+  /* 选择建议 sheet：流量方案对照表 */
+  .bs-howto { padding: 0 24px 24px; }
+  .bs-howto-title { font-size: 16px; line-height: 24px; font-weight: 600; color: var(--kk-text-darker); padding: 8px 0 12px; }
+  .howto-table {
+    width: 100%; border: 1px solid var(--kk-border-lighter); border-radius: var(--r-md);
+    border-collapse: separate; border-spacing: 0; overflow: hidden;
+  }
+  .howto-table th {
+    background: var(--kk-surface-lighter); text-align: left;
+    font-size: 14px; line-height: 20px; font-weight: 600; color: var(--kk-text-darker);
+    padding: 12px 16px;
+  }
+  .howto-table td {
+    font-size: 14px; line-height: 20px; color: var(--kk-text-darker);
+    padding: 12px 16px; border-top: 1px solid var(--kk-border-lighter);
+    vertical-align: top;
+  }
+  .howto-table th:first-child, .howto-table td:first-child { width: 52%; }
+
   /* 天数滚轮 picker：高亮条固定在中间，选项滚动吸附（iOS wheel 风格） */
   .bs-picker { position: relative; height: 252px; overflow: hidden; }  /* 7 行 × 36px */
   .bs-highlight {
@@ -814,7 +833,7 @@
               <div class="group-8">
                 <div class="field-head">
                   <span class="label-sm">流量</span>
-                  <span class="hint">不知道怎么选<span class="ic ic-16"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjEzIiBoZWlnaHQ9IjEzIiB2aWV3Qm94PSIwIDAgMTMgMTMiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJWZWN0b3IiPgo8cGF0aCBkPSJNNi41IDEwLjE2NjdDNi44NjgxOSAxMC4xNjY3IDcuMTY2NjcgOS44NjgxOSA3LjE2NjY3IDkuNUM3LjE2NjY3IDkuMTMxODEgNi44NjgxOSA4LjgzMzMzIDYuNSA4LjgzMzMzQzYuMTMxODEgOC44MzMzMyA1LjgzMzMzIDkuMTMxODEgNS44MzMzMyA5LjVDNS44MzMzMyA5Ljg2ODE5IDYuMTMxODEgMTAuMTY2NyA2LjUgMTAuMTY2N1oiIGZpbGw9IiM5QzlEQTAiLz4KPHBhdGggZD0iTTYuOTM4OTUgMy4wNDM1NkM2LjUwMjUgMi45NTY3NCA2LjA1MDEgMy4wMDEzIDUuNjM4OTYgMy4xNzE2QzUuMjI3ODMgMy4zNDE4OSA0Ljg3NjQzIDMuNjMwMjggNC42MjkxOSA0LjAwMDI5QzQuMzgxOTYgNC4zNzAzIDQuMjUgNC44MDUzMiA0LjI1IDUuMjUwMzNDNC4yNSA1LjUyNjQ3IDQuNDczODYgNS43NTAzMyA0Ljc1IDUuNzUwMzNDNS4wMjYxNCA1Ljc1MDMzIDUuMjUgNS41MjY0NyA1LjI1IDUuMjUwMzNDNS4yNSA1LjAwMzEgNS4zMjMzMSA0Ljc2MTQzIDUuNDYwNjYgNC41NTU4NkM1LjU5ODAyIDQuMzUwMyA1Ljc5MzI0IDQuMTkwMDkgNi4wMjE2NSA0LjA5NTQ4QzYuMjUwMDUgNC4wMDA4NyA2LjUwMTM5IDMuOTc2MTEgNi43NDM4NiA0LjAyNDM0QzYuOTg2MzQgNC4wNzI1OCA3LjIwOTA3IDQuMTkxNjMgNy4zODM4OCA0LjM2NjQ0QzcuNTU4NyA0LjU0MTI2IDcuNjc3NzUgNC43NjM5OSA3LjcyNTk4IDUuMDA2NDZDNy43NzQyMSA1LjI0ODk0IDcuNzQ5NDYgNS41MDAyNyA3LjY1NDg1IDUuNzI4NjhDNy41NjAyNCA1Ljk1NzA5IDcuNDAwMDMgNi4xNTIzMSA3LjE5NDQ2IDYuMjg5NjZDNi45ODg5IDYuNDI3MDIgNi43NDcyMyA2LjUwMDMzIDYuNSA2LjUwMDMzQzYuMzY3MzkgNi41MDAzMyA2LjI0MDIyIDYuNTUzMDEgNi4xNDY0NSA2LjY0Njc3QzYuMDUyNjggNi43NDA1NCA2IDYuODY3NzIgNiA3LjAwMDMzVjcuNTAwMzNDNiA3Ljc3NjQ3IDYuMjIzODYgOC4wMDAzMyA2LjUgOC4wMDAzM0M2Ljc3NjE0IDguMDAwMzMgNyA3Ljc3NjQ3IDcgNy41MDAzM1Y3LjQ0NDA3QzcuMjY2MjYgNy4zODMzOCA3LjUyMDY0IDcuMjc0NDEgNy43NTAwMyA3LjEyMTEzQzguMTIwMDQgNi44NzM5IDguNDA4NDMgNi41MjI1IDguNTc4NzMgNi4xMTEzNkM4Ljc0OTAzIDUuNzAwMjMgOC43OTM1OCA1LjI0NzgzIDguNzA2NzcgNC44MTEzN0M4LjYxOTk1IDQuMzc0OTIgOC40MDU2NiAzLjk3NCA4LjA5MDk5IDMuNjU5MzRDNy43NzYzMiAzLjM0NDY3IDcuMzc1NDEgMy4xMzAzOCA2LjkzODk1IDMuMDQzNTZaIiBmaWxsPSIjOUM5REEwIi8+CjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNMCA2LjVDMCAyLjkxMDE1IDIuOTEwMTUgMCA2LjUgMEMxMC4wODk5IDAgMTMgMi45MTAxNSAxMyA2LjVDMTMgMTAuMDg5OSAxMC4wODk5IDEzIDYuNSAxM0MyLjkxMDE1IDEzIDAgMTAuMDg5OSAwIDYuNVpNNi41IDFDMy40NjI0MyAxIDEgMy40NjI0MyAxIDYuNUMxIDkuNTM3NTcgMy40NjI0MyAxMiA2LjUgMTJDOS41Mzc1NyAxMiAxMiA5LjUzNzU3IDEyIDYuNUMxMiAzLjQ2MjQzIDkuNTM3NTcgMSA2LjUgMVoiIGZpbGw9IiM5QzlEQTAiLz4KPC9nPgo8L3N2Zz4=" width="13.00" height="13.00"></span></span>
+                  <button class="hint" id="howtoHint">不知道怎么选<span class="ic ic-16"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjEzIiBoZWlnaHQ9IjEzIiB2aWV3Qm94PSIwIDAgMTMgMTMiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJWZWN0b3IiPgo8cGF0aCBkPSJNNi41IDEwLjE2NjdDNi44NjgxOSAxMC4xNjY3IDcuMTY2NjcgOS44NjgxOSA3LjE2NjY3IDkuNUM3LjE2NjY3IDkuMTMxODEgNi44NjgxOSA4LjgzMzMzIDYuNSA4LjgzMzMzQzYuMTMxODEgOC44MzMzMyA1LjgzMzMzIDkuMTMxODEgNS44MzMzMyA5LjVDNS44MzMzMyA5Ljg2ODE5IDYuMTMxODEgMTAuMTY2NyA2LjUgMTAuMTY2N1oiIGZpbGw9IiM5QzlEQTAiLz4KPHBhdGggZD0iTTYuOTM4OTUgMy4wNDM1NkM2LjUwMjUgMi45NTY3NCA2LjA1MDEgMy4wMDEzIDUuNjM4OTYgMy4xNzE2QzUuMjI3ODMgMy4zNDE4OSA0Ljg3NjQzIDMuNjMwMjggNC42MjkxOSA0LjAwMDI5QzQuMzgxOTYgNC4zNzAzIDQuMjUgNC44MDUzMiA0LjI1IDUuMjUwMzNDNC4yNSA1LjUyNjQ3IDQuNDczODYgNS43NTAzMyA0Ljc1IDUuNzUwMzNDNS4wMjYxNCA1Ljc1MDMzIDUuMjUgNS41MjY0NyA1LjI1IDUuMjUwMzNDNS4yNSA1LjAwMzEgNS4zMjMzMSA0Ljc2MTQzIDUuNDYwNjYgNC41NTU4NkM1LjU5ODAyIDQuMzUwMyA1Ljc5MzI0IDQuMTkwMDkgNi4wMjE2NSA0LjA5NTQ4QzYuMjUwMDUgNC4wMDA4NyA2LjUwMTM5IDMuOTc2MTEgNi43NDM4NiA0LjAyNDM0QzYuOTg2MzQgNC4wNzI1OCA3LjIwOTA3IDQuMTkxNjMgNy4zODM4OCA0LjM2NjQ0QzcuNTU4NyA0LjU0MTI2IDcuNjc3NzUgNC43NjM5OSA3LjcyNTk4IDUuMDA2NDZDNy43NzQyMSA1LjI0ODk0IDcuNzQ5NDYgNS41MDAyNyA3LjY1NDg1IDUuNzI4NjhDNy41NjAyNCA1Ljk1NzA5IDcuNDAwMDMgNi4xNTIzMSA3LjE5NDQ2IDYuMjg5NjZDNi45ODg5IDYuNDI3MDIgNi43NDcyMyA2LjUwMDMzIDYuNSA2LjUwMDMzQzYuMzY3MzkgNi41MDAzMyA2LjI0MDIyIDYuNTUzMDEgNi4xNDY0NSA2LjY0Njc3QzYuMDUyNjggNi43NDA1NCA2IDYuODY3NzIgNiA3LjAwMDMzVjcuNTAwMzNDNiA3Ljc3NjQ3IDYuMjIzODYgOC4wMDAzMyA2LjUgOC4wMDAzM0M2Ljc3NjE0IDguMDAwMzMgNyA3Ljc3NjQ3IDcgNy41MDAzM1Y3LjQ0NDA3QzcuMjY2MjYgNy4zODMzOCA3LjUyMDY0IDcuMjc0NDEgNy43NTAwMyA3LjEyMTEzQzguMTIwMDQgNi44NzM5IDguNDA4NDMgNi41MjI1IDguNTc4NzMgNi4xMTEzNkM4Ljc0OTAzIDUuNzAwMjMgOC43OTM1OCA1LjI0NzgzIDguNzA2NzcgNC44MTEzN0M4LjYxOTk1IDQuMzc0OTIgOC40MDU2NiAzLjk3NCA4LjA5MDk5IDMuNjU5MzRDNy43NzYzMiAzLjM0NDY3IDcuMzc1NDEgMy4xMzAzOCA2LjkzODk1IDMuMDQzNTZaIiBmaWxsPSIjOUM5REEwIi8+CjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNMCA2LjVDMCAyLjkxMDE1IDIuOTEwMTUgMCA2LjUgMEMxMC4wODk5IDAgMTMgMi45MTAxNSAxMyA2LjVDMTMgMTAuMDg5OSAxMC4wODk5IDEzIDYuNSAxM0MyLjkxMDE1IDEzIDAgMTAuMDg5OSAwIDYuNVpNNi41IDFDMy40NjI0MyAxIDEgMy40NjI0MyAxIDYuNUMxIDkuNTM3NTcgMy40NjI0MyAxMiA2LjUgMTJDOS41Mzc1NyAxMiAxMiA5LjUzNzU3IDEyIDYuNUMxMiAzLjQ2MjQzIDkuNTM3NTcgMSA2LjUgMVoiIGZpbGw9IiM5QzlEQTAiLz4KPC9nPgo8L3N2Zz4=" width="13.00" height="13.00"></span></button>
                 </div>
                 <div class="ftabs" id="dataTabs">
                   <button class="ftab sel" data-tab="daily">每日固定流量</button>
@@ -977,6 +996,28 @@
       <ul class="bs-country-list" id="bsRegionList"></ul>
     </div>
     <div class="bs-foot"><button class="cta" data-bs-close>确定</button></div>
+  </div>
+
+  <div class="bsheet" id="bsHowto">
+    <div class="bs-handle"></div>
+    <div class="bs-bar">
+      <button class="bs-close" data-bs-close aria-label="关闭"><span class="ic ic-24"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjEzLjA2NzciIGhlaWdodD0iMTMuMDY3NyIgdmlld0JveD0iMCAwIDEzLjA2NzcgMTMuMDY3NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgaWQ9IlZlY3RvciI+CjxwYXRoIGQ9Ik0xMi44NDgxIDEuMjgwMzNDMTMuMTQxIDAuOTg3NDM3IDEzLjE0MSAwLjUxMjU2MyAxMi44NDgxIDAuMjE5NjdDMTIuNTU1MiAtMC4wNzMyMjMzIDEyLjA4MDMgLTAuMDczMjIzMyAxMS43ODc0IDAuMjE5NjdMNi41MzM4NyA1LjQ3MzIxTDEuMjgwMzMgMC4yMTk2N0MwLjk4NzQzNyAtMC4wNzMyMjMzIDAuNTEyNTYzIC0wLjA3MzIyMzMgMC4yMTk2NyAwLjIxOTY3Qy0wLjA3MzIyMzMgMC41MTI1NjMgLTAuMDczMjIzMyAwLjk4NzQzNyAwLjIxOTY3IDEuMjgwMzNMNS40NzMyMSA2LjUzMzg3TDAuMjE5NjcgMTEuNzg3NEMtMC4wNzMyMjMzIDEyLjA4MDMgLTAuMDczMjIzMyAxMi41NTUyIDAuMjE5NjcgMTIuODQ4MUMwLjUxMjU2MyAxMy4xNDEgMC45ODc0MzcgMTMuMTQxIDEuMjgwMzMgMTIuODQ4MUw2LjUzMzg3IDcuNTk0NTNMMTEuNzg3NCAxMi44NDgxQzEyLjA4MDMgMTMuMTQxIDEyLjU1NTIgMTMuMTQxIDEyLjg0ODEgMTIuODQ4MUMxMy4xNDEgMTIuNTU1MiAxMy4xNDEgMTIuMDgwMyAxMi44NDgxIDExLjc4NzRMNy41OTQ1MyA2LjUzMzg3TDEyLjg0ODEgMS4yODAzM1oiIGZpbGw9ImJsYWNrIi8+CjwvZz4KPC9zdmc+" width="13.07" height="13.07"></span></button>
+      <span class="bs-title">选择建议</span>
+      <span class="bs-spacer"></span>
+    </div>
+    <div class="bs-body">
+      <div class="bs-howto">
+        <div class="bs-howto-title">流量方案如何选择？</div>
+        <table class="howto-table">
+          <tr><th>使用习惯</th><th>建议</th></tr>
+          <tr><td>轻度（地图导航 + 讯息文字聊天）</td><td>每日固定流量 1GB/天</td></tr>
+          <tr><td>中度（滑社群 + 发限动/照片 + 导航）</td><td>每日固定流量 2–3GB/天</td></tr>
+          <tr><td>重度（看影片 + 滑短影音 + 开热点）</td><td>不限流量</td></tr>
+          <tr><td>用量平均 + 行程天数长</td><td>总流量 天数X1.5GB</td></tr>
+          <tr><td>用量不均（某几天爆量开会/发影片）</td><td>自订总容量（自由分配）</td></tr>
+        </table>
+      </div>
+    </div>
   </div>
 
   <div class="bsheet" id="bsDays">
@@ -1594,6 +1635,12 @@
   document.getElementById('bsDaysConfirm').addEventListener('click', function () {
     setDays(pickerVal);
     closeSheets();
+  });
+
+  // 「不知道怎么选 ?」→ 选择建议 sheet
+  document.getElementById('howtoHint').addEventListener('click', function () {
+    document.querySelector('#bsHowto .bs-body').scrollTop = 0;
+    openSheet(document.getElementById('bsHowto'));
   });
 
   renderOpts();
