@@ -255,6 +255,12 @@
   .opts-scroll { margin-top: -4px; position: relative; }
   .opts-row { display: flex; gap: 24px; width: max-content; padding-top: 4px; }  /* 三组拼合，组间 24px */
   .opts-grid { display: grid; grid-auto-flow: column; grid-template-rows: repeat(2, auto); gap: 8px; width: max-content; }
+  /* 计费类目之间的虚线分隔（画在 24px 组间隙中点） */
+  .opts-grid + .opts-grid { position: relative; }
+  .opts-grid + .opts-grid::before {
+    content: ''; position: absolute; left: -12px; top: 4px; bottom: 4px;
+    border-left: 1px dashed var(--kk-border-light);
+  }
   .opt {
     position: relative;
     display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
