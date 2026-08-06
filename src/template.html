@@ -1241,11 +1241,21 @@
   function optPriceLabel(o) { return priceLabelFor(o, state.days ? +state.days : 0); }
   // 推荐 badge 随天数联动（仅每日固定流量）
   function badgeForTab(tab, d) {
-    if (tab !== 'daily') return null;
-    if (!d) return '4GB/天';
-    if (d <= 3) return '2GB/天';
-    if (d <= 10) return '4GB/天';
-    return '3GB/天';  // 长天数省钱档
+    if (tab === 'daily') {
+      if (!d) return '4GB/天';
+      if (d <= 3) return '2GB/天';
+      if (d <= 10) return '4GB/天';
+      return '3GB/天';  // 长天数省钱档
+    }
+    if (tab === 'total') {
+      // 推荐最接近「天数×1GB」的总量档
+      var opts = filteredOpts('total', d);
+      var target = (d || 5);
+      var best = opts[0];
+      opts.forEach(function (o) { if (Math.abs(o.gb - target) < Math.abs(best.gb - target)) best = o; });
+      return best.t;
+    }
+    return '每日 1GB 高速';  // 无限流量推荐中间档
   }
   function badgeFor() { return badgeForTab(state.tab, state.days ? +state.days : 0); }
 
@@ -1255,12 +1265,8 @@
     if (tab === 'total' && d) {
       var fit = opts.filter(function (o) { return o.gb >= d * 0.2; });
       if (fit.length < 2) fit = PLANS.total.opts.slice(-2);
-      // 奇数档补回一档凑偶：2 行网格末列不留空缺
-      if (fit.length % 2) {
-        var removed = opts.filter(function (o) { return fit.indexOf(o) < 0; });
-        if (removed.length) fit.unshift(removed[removed.length - 1]);
-        else fit = fit.slice(0, -1);
-      }
+      // 奇数档去掉最小档凑偶：既不留末列空缺，也不把不合理的小档带回来
+      if (fit.length % 2 && fit.length > 2) fit = fit.slice(1);
       opts = fit;
     }
     return opts;
@@ -2148,10 +2154,14 @@
   function updateCondWheel() {
     var idx = Math.round(condWheel.scrollTop / DAY_H);
     idx = Math.max(0, Math.min(DAYS_ALL.length - 1, idx));
-    editState.days = DAYS_ALL[idx];
+    var nd = DAYS_ALL[idx];
     condWheel.querySelectorAll('.bs-day').forEach(function (el2, i) {
       el2.classList.toggle('sel', i === idx);
     });
+    if (nd !== editState.days) {
+      editState.days = nd;
+      renderCondOpts();  // 天数切换 → 流量档联动（过滤/价格/badge 实时刷新）
+    }
     updateCondSum();
   }
   condWheel.addEventListener('scroll', updateCondWheel, { passive: true });
