@@ -463,7 +463,9 @@
   .pl-head {
     position: sticky; top: 0; z-index: 20; background: #fff;
     padding-top: max(8px, env(safe-area-inset-top, 0px));
+    transition: box-shadow .2s;
   }
+  .pl-head.scrolled { box-shadow: var(--el-fixed); }  /* 页面滑动时固定头部投影（Figma 913-43602） */
   .pl-bar { display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 16px; }
   .pl-bar .pl-back { display: flex; align-items: center; padding: 4px; }
   .pl-bar .pl-title-wrap { display: flex; align-items: center; gap: 4px; min-width: 0; }
@@ -496,11 +498,19 @@
   }
   .cond-div { width: 1px; height: 24px; background: var(--kk-border-lighter); flex: 0 0 auto; }
 
-  .pl-filters {
-    display: flex; gap: 8px; padding: 12px 16px;
+  .pl-filters { display: flex; align-items: center; padding: 12px 0; overflow: hidden; }
+  .pl-filter-fixed {
+    flex: 0 0 auto; background: #fff; padding: 0 4px 0 16px;
+    position: relative; z-index: 1;
+    box-shadow: var(--el-action);
+  }
+  .pl-filter-scroll {
+    display: flex; gap: 8px; flex: 1 1 0; min-width: 0;
+    padding: 0 16px 0 4px;
     overflow-x: auto; scrollbar-width: none;
   }
-  .pl-filters::-webkit-scrollbar { display: none; }
+  .pl-filter-scroll::-webkit-scrollbar { display: none; }
+  .fpill.sel { background: var(--kk-primary-lighter); border-color: var(--kk-primary-medium); color: #13A3B6; }
   .fpill {
     display: inline-flex; align-items: center; gap: 4px; flex: 0 0 auto;
     height: 32px; box-sizing: border-box;
@@ -1082,10 +1092,16 @@
         </div>
         <div class="pl-conds"><div class="pl-cond-fixed" id="plCondFixed"></div><div class="pl-cond-scroll" id="plCondScroll"></div></div>
         <div class="pl-filters">
-          <button class="fpill" data-action="filter"><span class="ic ic-16"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjEyIiBoZWlnaHQ9IjkiIHZpZXdCb3g9IjAgMCAxMiA5IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8ZyBpZD0iVmVjdG9yIj4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0yLjgyMjQ2IDEuMjUwMDNMMC41MDAwMDkgMS4yNDk5OUMwLjIyMzg2NyAxLjI0OTk4IDQuOTI3NTZlLTA2IDEuNDczODQgMCAxLjc0OTk4Qy00LjkyNzA3ZS0wNiAyLjAyNjEyIDAuMjIzODQ5IDIuMjQ5OTggMC40OTk5OTEgMi4yNDk5OUwyLjgyMjQ4IDIuMjUwMDNDMy4wMzc2MyAyLjk3Mjg5IDMuNzA3MjYgMy41IDQuNSAzLjVDNS4yOTI3NCAzLjUgNS45NjIzNyAyLjk3Mjg5IDYuMTc3NTIgMi4yNTAwNEwxMS41IDIuMjQ5OTlDMTEuNzc2MSAyLjI0OTk5IDEyIDIuMDI2MTMgMTIgMS43NDk5OUMxMiAxLjQ3Mzg0IDExLjc3NjEgMS4yNDk5OSAxMS41IDEuMjQ5OTlMNi4xNzc1NCAxLjI1MDA0QzUuOTYyNDEgMC41MjcxNDUgNS4yOTI3NyAwIDQuNSAwQzMuNzA3MjMgMCAzLjAzNzU5IDAuNTI3MTQzIDIuODIyNDYgMS4yNTAwM1pNMy43NSAxLjc1QzMuNzUgMS4zMzU3OSA0LjA4NTc5IDEgNC41IDFDNC45MTQyMSAxIDUuMjUgMS4zMzU3OSA1LjI1IDEuNzVDNS4yNSAyLjE2NDIxIDQuOTE0MjEgMi41IDQuNSAyLjVDNC4wODU3OSAyLjUgMy43NTAwMSAyLjE2NDIxIDMuNzUgMS43NUMzLjc1IDEuNzUgMy43NSAxLjc1IDMuNzUgMS43NVoiIGZpbGw9ImJsYWNrIi8+CjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNMC41IDYuNzUwMDFMNi44MjI0NyA2Ljc1QzcuMDM3NjEgNi4wMjcxMyA3LjcwNzI1IDUuNSA4LjUgNS41QzkuMjkyNzYgNS41IDkuOTYyMzkgNi4wMjcxMyAxMC4xNzc1IDYuNzVMMTEuNSA2Ljc1MDAxQzExLjc3NjEgNi43NTAwMSAxMiA2Ljk3Mzg3IDEyIDcuMjUwMDFDMTIgNy41MjYxNiAxMS43NzYxIDcuNzUwMDEgMTEuNSA3Ljc1MDAxTDEwLjE3NzUgNy43NUM5Ljk2MjM5IDguNDcyODcgOS4yOTI3NSA5IDguNSA5QzcuNzA3MjUgOSA3LjAzNzYxIDguNDcyODcgNi44MjI0NyA3Ljc1TDAuNSA3Ljc1MDAxQzAuMjIzODU4IDcuNzUwMDEgMCA3LjUyNjE1IDAgNy4yNTAwMUMwIDYuOTczODcgMC4yMjM4NTcgNi43NTAwMSAwLjUgNi43NTAwMVpNOC41IDYuNUM4LjA4NTc5IDYuNSA3Ljc1IDYuODM1NzkgNy43NSA3LjI1QzcuNzUgNy42NjQyMSA4LjA4NTc5IDggOC41IDhDOC45MTQyMSA4IDkuMjUgNy42NjQyMSA5LjI1IDcuMjVDOS4yNSA2LjgzNTc5IDguOTE0MjEgNi41IDguNSA2LjVaIiBmaWxsPSJibGFjayIvPgo8L2c+Cjwvc3ZnPg==" width="12.00" height="9.00"></span>筛选</button>
-          <button class="fpill" data-action="filter">本地/漫游<span class="ic ic-16"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE0LjE2NjciIGhlaWdodD0iNy45MTY2NyIgdmlld0JveD0iMCAwIDE0LjE2NjcgNy45MTY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0wLjI0NDA3OCAwLjI0NDA3OEMwLjU2OTUxNSAtMC4wODEzNTkyIDEuMDk3MTUgLTAuMDgxMzU5MiAxLjQyMjU5IDAuMjQ0MDc4TDcuMDgzMzMgNS45MDQ4MkwxMi43NDQxIDAuMjQ0MDc4QzEzLjA2OTUgLTAuMDgxMzU5MiAxMy41OTcyIC0wLjA4MTM1OTIgMTMuOTIyNiAwLjI0NDA3OEMxNC4yNDggMC41Njk1MTUgMTQuMjQ4IDEuMDk3MTUgMTMuOTIyNiAxLjQyMjU5TDcuNjcyNTkgNy42NzI1OUM3LjM0NzE1IDcuOTk4MDMgNi44MTk1MSA3Ljk5ODAzIDYuNDk0MDggNy42NzI1OUwwLjI0NDA3OCAxLjQyMjU5Qy0wLjA4MTM1OTIgMS4wOTcxNSAtMC4wODEzNTkyIDAuNTY5NTE1IDAuMjQ0MDc4IDAuMjQ0MDc4WiIgZmlsbD0iIzIxMjEyMSIvPgo8L3N2Zz4=" width="14.17" height="7.92"></span></button>
-          <button class="fpill" data-action="filter">eSIM类型<span class="ic ic-16"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE0LjE2NjciIGhlaWdodD0iNy45MTY2NyIgdmlld0JveD0iMCAwIDE0LjE2NjcgNy45MTY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0wLjI0NDA3OCAwLjI0NDA3OEMwLjU2OTUxNSAtMC4wODEzNTkyIDEuMDk3MTUgLTAuMDgxMzU5MiAxLjQyMjU5IDAuMjQ0MDc4TDcuMDgzMzMgNS45MDQ4MkwxMi43NDQxIDAuMjQ0MDc4QzEzLjA2OTUgLTAuMDgxMzU5MiAxMy41OTcyIC0wLjA4MTM1OTIgMTMuOTIyNiAwLjI0NDA3OEMxNC4yNDggMC41Njk1MTUgMTQuMjQ4IDEuMDk3MTUgMTMuOTIyNiAxLjQyMjU5TDcuNjcyNTkgNy42NzI1OUM3LjM0NzE1IDcuOTk4MDMgNi44MTk1MSA3Ljk5ODAzIDYuNDk0MDggNy42NzI1OUwwLjI0NDA3OCAxLjQyMjU5Qy0wLjA4MTM1OTIgMS4wOTcxNSAtMC4wODEzNTkyIDAuNTY5NTE1IDAuMjQ0MDc4IDAuMjQ0MDc4WiIgZmlsbD0iIzIxMjEyMSIvPgo8L3N2Zz4=" width="14.17" height="7.92"></span></button>
-          <button class="fpill" data-action="filter">支持热点<span class="ic ic-16"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE0LjE2NjciIGhlaWdodD0iNy45MTY2NyIgdmlld0JveD0iMCAwIDE0LjE2NjcgNy45MTY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0wLjI0NDA3OCAwLjI0NDA3OEMwLjU2OTUxNSAtMC4wODEzNTkyIDEuMDk3MTUgLTAuMDgxMzU5MiAxLjQyMjU5IDAuMjQ0MDc4TDcuMDgzMzMgNS45MDQ4MkwxMi43NDQxIDAuMjQ0MDc4QzEzLjA2OTUgLTAuMDgxMzU5MiAxMy41OTcyIC0wLjA4MTM1OTIgMTMuOTIyNiAwLjI0NDA3OEMxNC4yNDggMC41Njk1MTUgMTQuMjQ4IDEuMDk3MTUgMTMuOTIyNiAxLjQyMjU5TDcuNjcyNTkgNy42NzI1OUM3LjM0NzE1IDcuOTk4MDMgNi44MTk1MSA3Ljk5ODAzIDYuNDk0MDggNy42NzI1OUwwLjI0NDA3OCAxLjQyMjU5Qy0wLjA4MTM1OTIgMS4wOTcxNSAtMC4wODEzNTkyIDAuNTY5NTE1IDAuMjQ0MDc4IDAuMjQ0MDc4WiIgZmlsbD0iIzIxMjEyMSIvPgo8L3N2Zz4=" width="14.17" height="7.92"></span></button>
+          <div class="pl-filter-fixed">
+            <button class="fpill" data-action="filter"><span class="ic ic-16"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjEyIiBoZWlnaHQ9IjkiIHZpZXdCb3g9IjAgMCAxMiA5IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8ZyBpZD0iVmVjdG9yIj4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0yLjgyMjQ2IDEuMjUwMDNMMC41MDAwMDkgMS4yNDk5OUMwLjIyMzg2NyAxLjI0OTk4IDQuOTI3NTZlLTA2IDEuNDczODQgMCAxLjc0OTk4Qy00LjkyNzA3ZS0wNiAyLjAyNjEyIDAuMjIzODQ5IDIuMjQ5OTggMC40OTk5OTEgMi4yNDk5OUwyLjgyMjQ4IDIuMjUwMDNDMy4wMzc2MyAyLjk3Mjg5IDMuNzA3MjYgMy41IDQuNSAzLjVDNS4yOTI3NCAzLjUgNS45NjIzNyAyLjk3Mjg5IDYuMTc3NTIgMi4yNTAwNEwxMS41IDIuMjQ5OTlDMTEuNzc2MSAyLjI0OTk5IDEyIDIuMDI2MTMgMTIgMS43NDk5OUMxMiAxLjQ3Mzg0IDExLjc3NjEgMS4yNDk5OSAxMS41IDEuMjQ5OTlMNi4xNzc1NCAxLjI1MDA0QzUuOTYyNDEgMC41MjcxNDUgNS4yOTI3NyAwIDQuNSAwQzMuNzA3MjMgMCAzLjAzNzU5IDAuNTI3MTQzIDIuODIyNDYgMS4yNTAwM1pNMy43NSAxLjc1QzMuNzUgMS4zMzU3OSA0LjA4NTc5IDEgNC41IDFDNC45MTQyMSAxIDUuMjUgMS4zMzU3OSA1LjI1IDEuNzVDNS4yNSAyLjE2NDIxIDQuOTE0MjEgMi41IDQuNSAyLjVDNC4wODU3OSAyLjUgMy43NTAwMSAyLjE2NDIxIDMuNzUgMS43NUMzLjc1IDEuNzUgMy43NSAxLjc1IDMuNzUgMS43NVoiIGZpbGw9ImJsYWNrIi8+CjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNMC41IDYuNzUwMDFMNi44MjI0NyA2Ljc1QzcuMDM3NjEgNi4wMjcxMyA3LjcwNzI1IDUuNSA4LjUgNS41QzkuMjkyNzYgNS41IDkuOTYyMzkgNi4wMjcxMyAxMC4xNzc1IDYuNzVMMTEuNSA2Ljc1MDAxQzExLjc3NjEgNi43NTAwMSAxMiA2Ljk3Mzg3IDEyIDcuMjUwMDFDMTIgNy41MjYxNiAxMS43NzYxIDcuNzUwMDEgMTEuNSA3Ljc1MDAxTDEwLjE3NzUgNy43NUM5Ljk2MjM5IDguNDcyODcgOS4yOTI3NSA5IDguNSA5QzcuNzA3MjUgOSA3LjAzNzYxIDguNDcyODcgNi44MjI0NyA3Ljc1TDAuNSA3Ljc1MDAxQzAuMjIzODU4IDcuNzUwMDEgMCA3LjUyNjE1IDAgNy4yNTAwMUMwIDYuOTczODcgMC4yMjM4NTcgNi43NTAwMSAwLjUgNi43NTAwMVpNOC41IDYuNUM4LjA4NTc5IDYuNSA3Ljc1IDYuODM1NzkgNy43NSA3LjI1QzcuNzUgNy42NjQyMSA4LjA4NTc5IDggOC41IDhDOC45MTQyMSA4IDkuMjUgNy42NjQyMSA5LjI1IDcuMjVDOS4yNSA2LjgzNTc5IDguOTE0MjEgNi41IDguNSA2LjVaIiBmaWxsPSJibGFjayIvPgo8L2c+Cjwvc3ZnPg==" width="12.00" height="9.00"></span>筛选</button>
+          </div>
+          <div class="pl-filter-scroll">
+            <button class="fpill" data-action="filter">本地/漫游<span class="ic ic-16"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE0LjE2NjciIGhlaWdodD0iNy45MTY2NyIgdmlld0JveD0iMCAwIDE0LjE2NjcgNy45MTY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0wLjI0NDA3OCAwLjI0NDA3OEMwLjU2OTUxNSAtMC4wODEzNTkyIDEuMDk3MTUgLTAuMDgxMzU5MiAxLjQyMjU5IDAuMjQ0MDc4TDcuMDgzMzMgNS45MDQ4MkwxMi43NDQxIDAuMjQ0MDc4QzEzLjA2OTUgLTAuMDgxMzU5MiAxMy41OTcyIC0wLjA4MTM1OTIgMTMuOTIyNiAwLjI0NDA3OEMxNC4yNDggMC41Njk1MTUgMTQuMjQ4IDEuMDk3MTUgMTMuOTIyNiAxLjQyMjU5TDcuNjcyNTkgNy42NzI1OUM3LjM0NzE1IDcuOTk4MDMgNi44MTk1MSA3Ljk5ODAzIDYuNDk0MDggNy42NzI1OUwwLjI0NDA3OCAxLjQyMjU5Qy0wLjA4MTM1OTIgMS4wOTcxNSAtMC4wODEzNTkyIDAuNTY5NTE1IDAuMjQ0MDc4IDAuMjQ0MDc4WiIgZmlsbD0iIzIxMjEyMSIvPgo8L3N2Zz4=" width="14.17" height="7.92"></span></button>
+            <button class="fpill" data-action="filter">eSIM类型<span class="ic ic-16"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE0LjE2NjciIGhlaWdodD0iNy45MTY2NyIgdmlld0JveD0iMCAwIDE0LjE2NjcgNy45MTY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0wLjI0NDA3OCAwLjI0NDA3OEMwLjU2OTUxNSAtMC4wODEzNTkyIDEuMDk3MTUgLTAuMDgxMzU5MiAxLjQyMjU5IDAuMjQ0MDc4TDcuMDgzMzMgNS45MDQ4MkwxMi43NDQxIDAuMjQ0MDc4QzEzLjA2OTUgLTAuMDgxMzU5MiAxMy41OTcyIC0wLjA4MTM1OTIgMTMuOTIyNiAwLjI0NDA3OEMxNC4yNDggMC41Njk1MTUgMTQuMjQ4IDEuMDk3MTUgMTMuOTIyNiAxLjQyMjU5TDcuNjcyNTkgNy42NzI1OUM3LjM0NzE1IDcuOTk4MDMgNi44MTk1MSA3Ljk5ODAzIDYuNDk0MDggNy42NzI1OUwwLjI0NDA3OCAxLjQyMjU5Qy0wLjA4MTM1OTIgMS4wOTcxNSAtMC4wODEzNTkyIDAuNTY5NTE1IDAuMjQ0MDc4IDAuMjQ0MDc4WiIgZmlsbD0iIzIxMjEyMSIvPgo8L3N2Zz4=" width="14.17" height="7.92"></span></button>
+            <button class="fpill fquick" data-action="fquick">支持热点</button>
+            <button class="fpill fquick" data-action="fquick">中文</button>
+            <button class="fpill" data-action="filter">行程时长<span class="ic ic-16"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE0LjE2NjciIGhlaWdodD0iNy45MTY2NyIgdmlld0JveD0iMCAwIDE0LjE2NjcgNy45MTY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0wLjI0NDA3OCAwLjI0NDA3OEMwLjU2OTUxNSAtMC4wODEzNTkyIDEuMDk3MTUgLTAuMDgxMzU5MiAxLjQyMjU5IDAuMjQ0MDc4TDcuMDgzMzMgNS45MDQ4MkwxMi43NDQxIDAuMjQ0MDc4QzEzLjA2OTUgLTAuMDgxMzU5MiAxMy41OTcyIC0wLjA4MTM1OTIgMTMuOTIyNiAwLjI0NDA3OEMxNC4yNDggMC41Njk1MTUgMTQuMjQ4IDEuMDk3MTUgMTMuOTIyNiAxLjQyMjU5TDcuNjcyNTkgNy42NzI1OUM3LjM0NzE1IDcuOTk4MDMgNi44MTk1MSA3Ljk5ODAzIDYuNDk0MDggNy42NzI1OUwwLjI0NDA3OCAxLjQyMjU5Qy0wLjA4MTM1OTIgMS4wOTcxNSAtMC4wODEzNTkyIDAuNTY5NTE1IDAuMjQ0MDc4IDAuMjQ0MDc4WiIgZmlsbD0iIzIxMjEyMSIvPgo8L3N2Zz4=" width="14.17" height="7.92"></span></button>
+          </div>
         </div>
       </div>
       <div class="pl-body">
@@ -1331,7 +1347,14 @@
     var opts = PLANS[tab].opts;
     if (tab === 'total' && d) {
       var fit = opts.filter(function (o) { return o.gb >= d * 0.2; });
-      opts = fit.length >= 2 ? fit : PLANS.total.opts.slice(-2);
+      if (fit.length < 2) fit = PLANS.total.opts.slice(-2);
+      // 奇数档补回一档凑偶：2 行网格末列不留空缺
+      if (fit.length % 2) {
+        var removed = opts.filter(function (o) { return fit.indexOf(o) < 0; });
+        if (removed.length) fit.unshift(removed[removed.length - 1]);
+        else fit = fit.slice(0, -1);
+      }
+      opts = fit;
     }
     return opts;
   }
@@ -1908,6 +1931,7 @@
       else if (a === 'back') { if (current === 'destination') go('home'); else if (current === 'plans') go('destination'); else toast('返回上一页'); }
       else if (a === 'back-plans') go('destination');
       else if (a === 'filter') toast('筛选面板（开发中）');
+      else if (a === 'fquick') el.classList.toggle('sel');
     });
   });
 
@@ -1931,6 +1955,8 @@
   function onPageScroll() {
     var y = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
     document.getElementById('pageHeader').classList.toggle('show', y > 120 && current !== 'plans');
+    var ph = document.querySelector('.pl-head');
+    if (ph) ph.classList.toggle('scrolled', y > 4 && current === 'plans');
   }
   window.addEventListener('scroll', onPageScroll, { passive: true });
   document.addEventListener('scroll', onPageScroll, { passive: true });
@@ -2023,8 +2049,8 @@
   };
   var PKG_TITLES = [
     '5G·漫游·原生网络·{v}',
-    '5G·漫游·原生网络·扫码激活·支持通话简讯',
-    '5G·漫游·原生网络·支持简讯',
+    '5G·漫游·原生网络·扫码激活',
+    '5G·漫游·原生网络·高速稳定',
     '4G/5G·本地网络·即插即用',
     '5G·漫游·双网切换·{v}'
   ];

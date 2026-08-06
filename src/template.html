@@ -454,7 +454,9 @@
   .pl-head {
     position: sticky; top: 0; z-index: 20; background: #fff;
     padding-top: max(8px, env(safe-area-inset-top, 0px));
+    transition: box-shadow .2s;
   }
+  .pl-head.scrolled { box-shadow: var(--el-fixed); }  /* 页面滑动时固定头部投影（Figma 913-43602） */
   .pl-bar { display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 16px; }
   .pl-bar .pl-back { display: flex; align-items: center; padding: 4px; }
   .pl-bar .pl-title-wrap { display: flex; align-items: center; gap: 4px; min-width: 0; }
@@ -487,11 +489,19 @@
   }
   .cond-div { width: 1px; height: 24px; background: var(--kk-border-lighter); flex: 0 0 auto; }
 
-  .pl-filters {
-    display: flex; gap: 8px; padding: 12px 16px;
+  .pl-filters { display: flex; align-items: center; padding: 12px 0; overflow: hidden; }
+  .pl-filter-fixed {
+    flex: 0 0 auto; background: #fff; padding: 0 4px 0 16px;
+    position: relative; z-index: 1;
+    box-shadow: var(--el-action);
+  }
+  .pl-filter-scroll {
+    display: flex; gap: 8px; flex: 1 1 0; min-width: 0;
+    padding: 0 16px 0 4px;
     overflow-x: auto; scrollbar-width: none;
   }
-  .pl-filters::-webkit-scrollbar { display: none; }
+  .pl-filter-scroll::-webkit-scrollbar { display: none; }
+  .fpill.sel { background: var(--kk-primary-lighter); border-color: var(--kk-primary-medium); color: #13A3B6; }
   .fpill {
     display: inline-flex; align-items: center; gap: 4px; flex: 0 0 auto;
     height: 32px; box-sizing: border-box;
@@ -981,10 +991,16 @@
         </div>
         <div class="pl-conds"><div class="pl-cond-fixed" id="plCondFixed"></div><div class="pl-cond-scroll" id="plCondScroll"></div></div>
         <div class="pl-filters">
-          <button class="fpill" data-action="filter"><span class="ic ic-16">{{IC_filter}}</span>筛选</button>
-          <button class="fpill" data-action="filter">本地/漫游<span class="ic ic-16">{{IC_arrowDown}}</span></button>
-          <button class="fpill" data-action="filter">eSIM类型<span class="ic ic-16">{{IC_arrowDown}}</span></button>
-          <button class="fpill" data-action="filter">支持热点<span class="ic ic-16">{{IC_arrowDown}}</span></button>
+          <div class="pl-filter-fixed">
+            <button class="fpill" data-action="filter"><span class="ic ic-16">{{IC_filter}}</span>筛选</button>
+          </div>
+          <div class="pl-filter-scroll">
+            <button class="fpill" data-action="filter">本地/漫游<span class="ic ic-16">{{IC_arrowDown}}</span></button>
+            <button class="fpill" data-action="filter">eSIM类型<span class="ic ic-16">{{IC_arrowDown}}</span></button>
+            <button class="fpill fquick" data-action="fquick">支持热点</button>
+            <button class="fpill fquick" data-action="fquick">中文</button>
+            <button class="fpill" data-action="filter">行程时长<span class="ic ic-16">{{IC_arrowDown}}</span></button>
+          </div>
         </div>
       </div>
       <div class="pl-body">
@@ -1230,7 +1246,14 @@
     var opts = PLANS[tab].opts;
     if (tab === 'total' && d) {
       var fit = opts.filter(function (o) { return o.gb >= d * 0.2; });
-      opts = fit.length >= 2 ? fit : PLANS.total.opts.slice(-2);
+      if (fit.length < 2) fit = PLANS.total.opts.slice(-2);
+      // 奇数档补回一档凑偶：2 行网格末列不留空缺
+      if (fit.length % 2) {
+        var removed = opts.filter(function (o) { return fit.indexOf(o) < 0; });
+        if (removed.length) fit.unshift(removed[removed.length - 1]);
+        else fit = fit.slice(0, -1);
+      }
+      opts = fit;
     }
     return opts;
   }
@@ -1807,6 +1830,7 @@
       else if (a === 'back') { if (current === 'destination') go('home'); else if (current === 'plans') go('destination'); else toast('返回上一页'); }
       else if (a === 'back-plans') go('destination');
       else if (a === 'filter') toast('筛选面板（开发中）');
+      else if (a === 'fquick') el.classList.toggle('sel');
     });
   });
 
@@ -1830,6 +1854,8 @@
   function onPageScroll() {
     var y = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
     document.getElementById('pageHeader').classList.toggle('show', y > 120 && current !== 'plans');
+    var ph = document.querySelector('.pl-head');
+    if (ph) ph.classList.toggle('scrolled', y > 4 && current === 'plans');
   }
   window.addEventListener('scroll', onPageScroll, { passive: true });
   document.addEventListener('scroll', onPageScroll, { passive: true });
@@ -1922,8 +1948,8 @@
   };
   var PKG_TITLES = [
     '5G·漫游·原生网络·{v}',
-    '5G·漫游·原生网络·扫码激活·支持通话简讯',
-    '5G·漫游·原生网络·支持简讯',
+    '5G·漫游·原生网络·扫码激活',
+    '5G·漫游·原生网络·高速稳定',
     '4G/5G·本地网络·即插即用',
     '5G·漫游·双网切换·{v}'
   ];
