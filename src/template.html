@@ -901,7 +901,7 @@
                   <button class="hint" id="howtoHint">不知道怎么选<span class="ic ic-16">{{IC_question}}</span></button>
                 </div>
                 <div class="ftabs" id="dataTabs">
-                  <button class="ftab sel" data-tab="daily">每日固定流量</button>
+                  <button class="ftab sel" data-tab="daily">每日流量</button>
                   <button class="ftab" data-tab="total">总流量</button>
                   <button class="ftab" data-tab="unlimited">无限流量</button>
                 </div>
@@ -1110,8 +1110,8 @@
         <div class="bs-howto-title">流量方案如何选择？</div>
         <table class="howto-table">
           <tr><th>使用习惯</th><th>建议</th></tr>
-          <tr><td>轻度（地图导航 + 讯息文字聊天）</td><td>每日固定流量 1GB/天</td></tr>
-          <tr><td>中度（滑社群 + 发限动/照片 + 导航）</td><td>每日固定流量 2–3GB/天</td></tr>
+          <tr><td>轻度（地图导航 + 讯息文字聊天）</td><td>每日流量 1GB/天</td></tr>
+          <tr><td>中度（滑社群 + 发限动/照片 + 导航）</td><td>每日流量 2–3GB/天</td></tr>
           <tr><td>重度（看影片 + 滑短影音 + 开热点）</td><td>不限流量</td></tr>
           <tr><td>用量平均 + 行程天数长</td><td>总流量 天数X1.5GB</td></tr>
           <tr><td>用量不均（某几天爆量开会/发影片）</td><td>自订总容量（自由分配）</td></tr>
@@ -1151,7 +1151,7 @@
       <div class="cond-flow">
         <div class="field-head"><span class="label-sm">流量</span></div>
         <div class="ftabs" id="condTabs">
-          <button class="ftab" data-tab="daily">每日固定流量</button>
+          <button class="ftab" data-tab="daily">每日流量</button>
           <button class="ftab" data-tab="total">总流量</button>
           <button class="ftab" data-tab="unlimited">无限流量</button>
         </div>
@@ -1242,7 +1242,7 @@
     return 'NT$ ' + o.price + '起';
   }
   function optPriceLabel(o) { return priceLabelFor(o, state.days ? +state.days : 0); }
-  // 推荐 badge 随天数联动（仅每日固定流量）
+  // 推荐 badge 随天数联动（仅每日流量）
   function badgeForTab(tab, d) {
     if (tab === 'daily') {
       if (!d) return '3GB/天';
@@ -2174,7 +2174,7 @@
   }
   condWheel.addEventListener('scroll', updateCondWheel, { passive: true });
 
-  function tabFull(tab) { return tab === 'daily' ? '每日固定流量' : tab === 'total' ? '总流量' : '无限流量'; }
+  function tabFull(tab) { return tab === 'daily' ? '每日流量' : tab === 'total' ? '总流量' : '无限流量'; }
   function updateCondSum() {
     document.getElementById('condSum').textContent =
       editState.days + '天·' + tabFull(editState.tab) + (editState.plan ? '·' + editState.plan : '');
