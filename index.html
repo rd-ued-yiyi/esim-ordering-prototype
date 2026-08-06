@@ -1452,13 +1452,12 @@
   function renderCountryPane() {
     var pane = document.getElementById('paneCountry');
     pane.innerHTML = '';
-    var cur = currentSel();
-    var curC = cur.type === 'country' ? cur.name : null;
+
     var hist = histGet(HK_C, HIST_C_DEF).slice(0, 5);  // modal 最多显示 5 个
     if (hist.length) {
       var g = groupEl('最近选择', '<button class="gact" data-hclear="c"><span class="ic ic-20">' + ICONS.trash + '</span></button>');
       var chips = el('<div class="dm-chips"></div>');
-      hist.forEach(function (n) { chips.appendChild(chipEl(n, pickCountry, n === curC)); });
+      hist.forEach(function (n) { chips.appendChild(chipEl(n, pickCountry)); });
       g.appendChild(chips);
       g.querySelector('[data-hclear]').addEventListener('click', function () {
         try { localStorage.setItem(HK_C, '[]'); } catch (e) {}
@@ -1468,7 +1467,7 @@
     }
     var hot = groupEl('<span class="ic ic-20 ic-stretch">' + ICONS.fire + '</span>热门');
     var hotChips = el('<div class="dm-chips"></div>');
-    GEO.hot.forEach(function (n) { hotChips.appendChild(chipEl(n, pickCountry, n === curC)); });
+    GEO.hot.forEach(function (n) { hotChips.appendChild(chipEl(n, pickCountry)); });
     hot.appendChild(hotChips);
     pane.appendChild(hot);
 
@@ -1477,7 +1476,7 @@
       var g = groupEl(c.name);
       g.setAttribute('data-sec', 'c' + i);
       var chips = el('<div class="dm-chips"></div>');
-      c.countries.forEach(function (n) { chips.appendChild(chipEl(n, pickCountry, n === curC)); });
+      c.countries.forEach(function (n) { chips.appendChild(chipEl(n, pickCountry)); });
       g.appendChild(chips);
       pane.appendChild(g);
     });
