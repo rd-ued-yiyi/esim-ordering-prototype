@@ -10,6 +10,9 @@
 <!-- eSIM 订购流程原型 · 第 1 页：主题落地页 -->
 <!-- 基于 KKday Web Design System tokens · Figma node 648-800 高保真还原 -->
 <style>
+  /* 禁用浏览器原生下拉刷新（Chrome/Safari 顶部过度滚动触发，非本页功能） */
+  html, body { overscroll-behavior-y: none; }
+
   /* ---------- KKday DS tokens (subset) ---------- */
   :root {
     --kk-primary-medium: #26BEC9;
@@ -2104,12 +2107,13 @@
   });
 
   // ================= 套餐列表页（仿真数据） =================
+  // 供应商=真实会在 OTA 上架的分销商/电信商（KDDI/SoftBank 是网络不是供应商；Airalo/Nomad 是竞品直营平台；KT Olleh 品牌已弃用）
   var VENDORS = {
-    '日本': ['Singtel', 'KDDI', 'SoftBank', 'NTT Docomo', 'IIJmio'],
-    '韩国': ['SK Telecom', 'KT Olleh', 'LG U+', 'Singtel'],
-    '泰国': ['AIS', 'dtac', 'TrueMove H', 'Singtel'],
+    '日本': ['Joytel 乐游', 'DJB', '翔翼通讯', 'Telecom Square', 'IIJmio'],
+    '韩国': ['SK Telecom', 'KT', 'LG U+', 'Joytel 乐游'],
+    '泰国': ['AIS', 'dtac', 'TrueMove H', 'Joytel 乐游'],
     '新加坡': ['Singtel', 'StarHub', 'M1'],
-    'default': ['Singtel', 'Airalo', 'Ubigi', 'Nomad', '3HK']
+    'default': ['Joytel 乐游', 'Ubigi', '翔翼通讯', 'Telecom Square', '3HK']
   };
   var PKG_TITLES = [
     '5G·漫游·原生网络·扫码激活',
