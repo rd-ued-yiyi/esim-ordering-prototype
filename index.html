@@ -100,7 +100,7 @@
     z-index: 0; pointer-events: none;
   }
   .app.no-hero .hero-svg { display: none !important; }
-  .app.no-hero { padding-top: 0; }
+  .app.no-hero { padding-top: 0; overflow-x: visible; }
 
   /* ---------- header ---------- */
   .mheader {
@@ -468,7 +468,7 @@
   .pl-bar .pl-title { font-size: 18px; line-height: 26px; font-weight: 600; color: var(--kk-text-darker);
     max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-  .pl-conds { display: flex; align-items: center; gap: 8px; padding: 4px 16px 8px; overflow: hidden; }
+  .pl-conds { display: flex; align-items: center; gap: 8px; padding: 4px 16px 0; overflow: hidden; }
   .pl-cond-fixed { display: flex; align-items: center; gap: 8px; flex: 0 0 auto; }
   .pl-cond-scroll {
     display: flex; gap: 8px; flex: 1 1 0; min-width: 0;
@@ -489,7 +489,7 @@
   .cond-div { width: 1px; height: 24px; background: var(--kk-border-lighter); flex: 0 0 auto; }
 
   .pl-filters {
-    display: flex; gap: 8px; padding: 4px 16px 12px;
+    display: flex; gap: 8px; padding: 12px 16px;
     overflow-x: auto; scrollbar-width: none;
   }
   .pl-filters::-webkit-scrollbar { display: none; }
@@ -506,11 +506,11 @@
   .pl-meta .cnt { flex: 1 1 0; font-size: 14px; line-height: 20px; color: var(--kk-text-dark); }
   .pl-meta .sort { display: inline-flex; align-items: center; gap: 2px; font-size: 14px; line-height: 20px; color: var(--kk-text-dark); }
 
-  .pkg-card { background: #fff; border-radius: var(--r-xl); padding: 16px; margin-bottom: 16px; }
+  .pkg-card { background: #fff; border-radius: var(--r-lg); padding: 16px; margin-bottom: 16px; }
   .pkg-head { display: flex; align-items: flex-start; gap: 8px; width: 100%; text-align: left; }
   .pkg-title { flex: 1 1 0; min-width: 0; font-size: 18px; line-height: 26px; font-weight: 600; color: var(--kk-text-darker); }
   .pkg-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
-  .pkg-tag { background: var(--kk-surface-light); border-radius: var(--r-sm); padding: 2px 6px;
+  .pkg-tag { background: var(--kk-surface-light); border-radius: var(--r-sm); padding: 2px 4px;
     font-size: 12px; line-height: 16px; color: var(--kk-text-darker); }
   .pkg-perks { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 12px;
     font-size: 14px; line-height: 20px; color: #13A3B6; }
@@ -523,7 +523,7 @@
   .pkg-rating { display: flex; align-items: center; gap: 4px; margin-top: 4px; }
   .pkg-rating .score { font-size: 14px; line-height: 20px; font-weight: 600; color: #13A3B6; }
   .pkg-rating .grade { font-size: 12px; line-height: 16px; color: #13A3B6; }
-  .pkg-rating .rcount { font-size: 12px; line-height: 16px; color: var(--kk-text-dark); text-decoration: underline; }
+  .pkg-rating .rcount { font-size: 14px; line-height: 20px; color: var(--kk-text-dark); text-decoration: underline; }
   .pkg-rating .bought { margin-left: auto; display: inline-flex; align-items: center; gap: 2px;
     font-size: 12px; line-height: 16px; color: var(--kk-text-dark); }
   .pkg-rating .bought.hot { color: var(--kk-text-critical); }
@@ -532,7 +532,8 @@
   .pkg-price { flex: 1 1 0; min-width: 0; }
   .pkg-off { display: inline-block; background: var(--kk-text-critical); color: #fff;
     font-size: 12px; line-height: 16px; padding: 2px 4px; border-radius: var(--r-sm); margin-bottom: 4px; }
-  .pkg-now { font-size: 16px; font-weight: 700; color: var(--kk-text-darker); }
+  .pkg-now { font-size: 16px; line-height: 16px; font-weight: 700; color: var(--kk-text-darker); }
+  .pkg-now .cur { font-weight: 500; }
   .pkg-was { font-size: 14px; color: var(--kk-text-medium); text-decoration: line-through; margin-left: 6px; }
   .pkg-per { margin-top: 4px; font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
   .pkg-cta { background: var(--kk-primary-button); color: #fff; border-radius: var(--r-md);
@@ -2089,7 +2090,7 @@
       });
       card.querySelector('.pkg-vendor').textContent = p.vendor;
       var rating = card.querySelector('.pkg-rating');
-      rating.innerHTML = '<span class="ic ic-16">' + ICONS.star + '</span>' +
+      rating.innerHTML = '<span class="ic ic-14">' + ICONS.star + '</span>' +
         '<span class="score"></span>' + (p.rating >= 4.5 ? '<span class="grade">非常好</span>' : '') +
         '<span class="rcount"></span>' +
         '<span class="bought' + (p.hot ? ' hot' : '') + '">' + (p.hot ? '<span class="ic ic-14">' + ICONS.fire2 + '</span>' : '') + '<span class="bt"></span></span>';
@@ -2100,7 +2101,8 @@
       price.innerHTML = (p.was ? '<span class="pkg-off">-20%</span><br>' : '') +
         '<span class="pkg-now"></span>' + (p.was ? '<span class="pkg-was"></span>' : '') +
         '<div class="pkg-per"></div>';
-      price.querySelector('.pkg-now').textContent = 'NT$' + p.now.toLocaleString();
+      price.querySelector('.pkg-now').innerHTML = '<span class="cur">NT$</span><span class="num"></span>';
+      price.querySelector('.pkg-now .num').textContent = p.now.toLocaleString();
       if (p.was) price.querySelector('.pkg-was').textContent = 'NT$ ' + p.was.toLocaleString();
       price.querySelector('.pkg-per').textContent = '≈NT$' + p.perDay + '/天';
       card.querySelector('.pkg-head').addEventListener('click', function () { toast('套餐详情页（开发中）'); });
