@@ -65,6 +65,7 @@ subs = {
     "{{IC_locationSearch}}": svg("locationSearch"),
     "{{IC_crossCircle}}":  svg("crossCircle"),
     "{{IC_globe}}":        svg("globe"),
+    "{{IC_globeSel}}":     svg("globeSel"),
     "{{IC_info}}":         svg("info"),
     "{{PICTO_tours}}":     svg("picto_tours", "picto"),
     "{{PICTO_cruise}}":    svg("picto_cruise", "picto"),
