@@ -1491,7 +1491,7 @@
 
   document.getElementById('searchCta').addEventListener('click', function () {
     if (state.days && state.plan) {
-      renderPlans();
+      renderPlans('center');  // 进页：选中档位瞬时定位到可视区中央
       go('plans');
     }
   });
@@ -2185,7 +2185,7 @@
   var PERK_ICONS = { flash: 'flash', reload: 'reload', checkLine: 'checkLine',
                      reloadD: 'reloadDark', calendarD: 'calendar', crossD: 'crossLine' };
 
-  function renderPlans(smoothCond) {
+  function renderPlans(centerSel) {
     document.getElementById('plTitle').textContent = document.getElementById('destName').textContent;
     // 条件 chips：当前条件（点击回目的地页修改）+ 同 tab 相邻流量档快速切换
     var fixed = document.getElementById('plCondFixed');
@@ -2209,12 +2209,14 @@
       c.textContent = o.t;
       c.addEventListener('click', function () {
         state.plan = o.t;
-        renderOpts(); updateCta(); renderPlans(true);  // 点击切换：平滑滚动缓冲
+        renderOpts(); updateCta(); renderPlans('smooth');  // 点击切换：平滑滚到中央
       });
       conds.appendChild(c);
     });
-    // 点击切换：选中项平滑滚到可视区中央（scrollTo 自动夹取边界，滚不动时贴边）；
-    // 其余渲染（进页/排序）：仅在选中项跑出可视区时拉回，不打断用户手动滚过的位置。
+    // centerSel='smooth'（点击切换/modal 确定）：选中项平滑滚到可视区中央；
+    // centerSel='center'（进入列表页）：选中项瞬时定位到中央（不播进场动画）；
+    // 不传（排序等重渲染）：仅在选中项跑出可视区时拉回，不打断用户手动滚过的位置。
+    // scrollTo 自动夹取边界，滚不动时贴边。
     // rAF 等屏幕切到 plans 后再量尺寸（进页时 renderPlans 先于 go('plans')，隐藏态 rect 全 0）
     conds.scrollLeft = prevScroll;
     var selChip = conds.querySelector('.cond-chip.sel');
@@ -2222,14 +2224,14 @@
       var sr = conds.getBoundingClientRect(), cr = selChip.getBoundingClientRect();
       if (!sr.width) return;
       var target = null;
-      if (smoothCond) {
+      if (centerSel) {
         target = conds.scrollLeft + (cr.left + cr.width / 2) - (sr.left + sr.width / 2);
       } else {
         var pad = 16;
         if (cr.left < sr.left + pad) target = conds.scrollLeft - (sr.left + pad - cr.left);
         else if (cr.right > sr.right - pad) target = conds.scrollLeft + (cr.right - (sr.right - pad));
       }
-      if (target !== null) conds.scrollTo({ left: Math.max(0, target), behavior: smoothCond ? 'smooth' : 'auto' });
+      if (target !== null) conds.scrollTo({ left: Math.max(0, target), behavior: centerSel === 'smooth' ? 'smooth' : 'auto' });
     });
 
     var list = buildPlans();
@@ -2406,7 +2408,7 @@
       t.classList.toggle('sel', t.getAttribute('data-tab') === state.tab);
     });
     setDays(editState.days);  // 内部会 renderOpts + updateCta
-    renderPlans(true);
+    renderPlans('smooth');
     closeCondModal();
     window.scrollTo(0, 0);
   });
