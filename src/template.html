@@ -191,10 +191,10 @@
   .field-head .label-sm { font-size: 14px; line-height: 20px; font-weight: 600; color: var(--kk-text-darker); white-space: nowrap; }
   .field-head .hint { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
 
-  /* chip / tab / option 选中态（inset 阴影模拟边框，避免尺寸跳动） */
+  /* chip / tab / option 选中态（inset 阴影模拟 1px 边框，避免尺寸跳动） */
   .chip.sel, .opt.sel {
     background: var(--kk-primary-lighter);
-    box-shadow: inset 0 0 0 1.5px var(--kk-primary-medium);
+    box-shadow: inset 0 0 0 1px var(--kk-primary-medium);
   }
   .chip.sel .chip-label { color: #13A3B6; }
 
@@ -290,7 +290,8 @@
   }
   .dm-search input {
     flex: 1 1 0; min-width: 0; border: 0; outline: 0; background: none;
-    font: inherit; font-size: 14px; line-height: 20px; color: var(--kk-text-darker);
+    /* 16px：iOS Safari 对 <16px 的输入框聚焦时会自动放大页面 */
+    font: inherit; font-size: 16px; line-height: 20px; color: var(--kk-text-darker);
   }
   .dm-search input::placeholder { color: var(--kk-text-light); }
   .dm-search .dm-clear { display: none; }
@@ -313,6 +314,10 @@
   .dm-cat .cl { padding: 0 4px; }
   .dm-cat.sel { background: var(--kk-primary-lighter); border-color: var(--kk-primary-medium); color: var(--kk-primary-medium); }
   .dm-cat .ic-16 img { display: block; }
+  /* 分类 icon 随选中态换色：默认显示深色版，选中显示 cyan 版 */
+  .dm-cat .ic-on { display: none; }
+  .dm-cat.sel .ic-on { display: inline-flex; }
+  .dm-cat.sel .ic-off { display: none; }
 
   .dm-body { flex: 1 1 0; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; }
   .dm-pane { display: none; padding: 12px 0 32px; }
@@ -337,11 +342,11 @@
   }
   .dm-conts::-webkit-scrollbar { display: none; }
   .dm-cont {
-    flex: 0 0 auto; padding: 14px 12px;
-    font-size: 14px; line-height: 20px; color: var(--kk-text-darker);
+    flex: 0 0 auto; padding: 12px;
+    font-size: 16px; line-height: 24px; color: var(--kk-text-darker);
     position: relative; white-space: nowrap;
   }
-  .dm-cont.sel { color: var(--kk-primary-medium); font-weight: 600; }
+  .dm-cont.sel { color: #13A3B6; font-weight: 600; }
   .dm-cont.sel::after {
     content: ''; position: absolute; left: 12px; right: 12px; bottom: 0;
     height: 2px; background: var(--kk-primary-medium); border-radius: 1px;
@@ -373,6 +378,12 @@
     border: solid #fff; border-width: 0 2px 2px 0;
     transform: rotate(45deg);
   }
+  /* 部分选中（indeterminate）：cyan 底 + minus 横线，对齐 Figma KKCheckbox */
+  .dm-check.part { background: var(--kk-primary-medium); border-color: var(--kk-primary-medium); }
+  .dm-check.part::after {
+    content: ''; position: absolute; left: 3px; top: 7px;
+    width: 10px; height: 2px; background: #fff; border-radius: 1px;
+  }
 
   .dm-foot {
     flex: 0 0 auto; background: #fff;
@@ -381,8 +392,16 @@
     display: none; flex-direction: column; gap: 8px;
   }
   .dm-foot.show { display: flex; }
-  .dm-foot .fnote { font-size: 12px; line-height: 16px; color: var(--kk-text-dark); }
-  .dm-foot .cta { background: rgba(26,182,193,.5); color: rgba(255,255,255,.9); }
+  .dm-foot .fdesc { display: flex; gap: 8px; font-size: 12px; line-height: 16px; color: var(--kk-text-dark); }
+  .dm-foot .fdesc b { color: var(--kk-primary-medium); font-weight: 500; }
+  .dm-foot .fbtns { display: flex; gap: 8px; width: 100%; }
+  .dm-foot .btn-clear {
+    border: 1px solid var(--kk-text-dark); border-radius: var(--r-md);
+    padding: 12px 24px; font-size: 16px; line-height: 24px; font-weight: 600;
+    color: var(--kk-text-darker); background: #fff; flex: 0 0 auto; display: none;
+  }
+  .dm-foot.has-sel .btn-clear { display: block; }
+  .dm-foot .cta { flex: 1 1 0; min-width: 0; background: rgba(26,182,193,.5); color: rgba(255,255,255,.9); }
   .dm-foot .cta.enabled { background: var(--kk-primary-button); color: #fff; }
 
   /* 搜索结果 */
@@ -699,9 +718,15 @@
         </div>
       </div>
       <div class="dm-cats" id="dmCats">
-        <button class="dm-cat sel" data-cat="country"><span class="ic ic-16">{{IC_locationLine}}</span><span class="cl">国家/地区</span></button>
-        <button class="dm-cat" data-cat="region"><span class="ic ic-16">{{IC_earthLine}}</span><span class="cl">多国区域</span></button>
-        <button class="dm-cat" data-cat="multi"><span class="ic ic-16">{{IC_plus}}</span><span class="cl">多国自由选择</span></button>
+        <button class="dm-cat sel" data-cat="country">
+          <span class="ic ic-16 ic-off">{{IC_locationDark}}</span><span class="ic ic-16 ic-on">{{IC_locationLine}}</span><span class="cl">国家/地区</span>
+        </button>
+        <button class="dm-cat" data-cat="region">
+          <span class="ic ic-16 ic-off">{{IC_earthLine}}</span><span class="ic ic-16 ic-on">{{IC_earthCyan}}</span><span class="cl">多国区域</span>
+        </button>
+        <button class="dm-cat" data-cat="multi">
+          <span class="ic ic-16 ic-off">{{IC_plus}}</span><span class="ic ic-16 ic-on">{{IC_plusCyan}}</span><span class="cl">多国自由选择</span>
+        </button>
       </div>
     </div>
 
@@ -717,8 +742,14 @@
     </div>
 
     <div class="dm-foot" id="dmFoot">
-      <span class="fnote">最多可选择30个</span>
-      <button class="cta" id="dmConfirm" disabled>确定</button>
+      <div class="fdesc">
+        <span>最多可选择30个</span>
+        <span id="dmSelInfo" hidden>已选择 <b id="dmSelCount">0</b> 个</span>
+      </div>
+      <div class="fbtns">
+        <button class="btn-clear" id="dmClearSel">清除</button>
+        <button class="cta" id="dmConfirm" disabled>确定</button>
+      </div>
     </div>
   </div>
 
@@ -1051,13 +1082,21 @@
     });
     pane.querySelectorAll('.dm-check').forEach(function (cb) {
       var cs = GEO.continents[+cb.getAttribute('data-cont')].countries;
-      cb.classList.toggle('on', cs.every(function (n) { return dm.multiSel.indexOf(n) >= 0; }));
+      var hit = cs.filter(function (n) { return dm.multiSel.indexOf(n) >= 0; }).length;
+      cb.classList.toggle('on', hit === cs.length);           // 全选：勾
+      cb.classList.toggle('part', hit > 0 && hit < cs.length); // 部分：minus（indeterminate）
     });
     var n = dm.multiSel.length;
     dm.confirm.classList.toggle('enabled', n > 0);
     dm.confirm.disabled = n === 0;
-    dm.confirm.textContent = n > 0 ? ('确定 (' + n + ')') : '确定';
+    document.getElementById('dmSelInfo').hidden = n === 0;
+    document.getElementById('dmSelCount').textContent = n;
+    dm.foot.classList.toggle('has-sel', n > 0);
   }
+  document.getElementById('dmClearSel').addEventListener('click', function () {
+    dm.multiSel = [];
+    syncMultiUI();
+  });
   dm.confirm.addEventListener('click', function () {
     if (!dm.multiSel.length) return;
     var name = dm.multiSel.length === 1 ? dm.multiSel[0] : (dm.multiSel[0] + '等' + dm.multiSel.length + '国');
