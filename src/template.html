@@ -90,6 +90,7 @@
     width: 100%; height: auto;
     z-index: 0; pointer-events: none;
   }
+  .app.no-hero .hero-svg { display: none !important; }
 
   /* ---------- header ---------- */
   .mheader {
@@ -445,6 +446,85 @@
     font-size: 34px; font-weight: 600; color: var(--kk-text-light);
   }
   .dm-empty .msg { font-size: 14px; line-height: 20px; color: var(--kk-text-darker); }
+
+  /* ================= 套餐列表页 ================= */
+  .pl-head {
+    position: sticky; top: 0; z-index: 20; background: #fff;
+    padding-top: max(8px, env(safe-area-inset-top, 0px));
+  }
+  .pl-bar { display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 16px; }
+  .pl-bar .pl-back { display: flex; align-items: center; padding: 4px; }
+  .pl-bar .pl-title-wrap { display: flex; align-items: center; gap: 4px; min-width: 0; }
+  .pl-bar .pl-title { font-size: 18px; line-height: 26px; font-weight: 600; color: var(--kk-text-darker);
+    max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  .pl-conds {
+    display: flex; align-items: center; gap: 8px; padding: 4px 16px 8px;
+    overflow-x: auto; scrollbar-width: none;
+  }
+  .pl-conds::-webkit-scrollbar { display: none; }
+  .cond-chip {
+    display: inline-flex; align-items: center; gap: 4px; flex: 0 0 auto;
+    background: var(--kk-surface-light); border-radius: var(--r-md);
+    padding: 8px 12px; font-size: 14px; line-height: 20px; color: var(--kk-text-darker);
+    white-space: nowrap;
+  }
+  .cond-chip.sel {
+    background: var(--kk-primary-lighter);
+    box-shadow: inset 0 0 0 1px var(--kk-primary-medium);
+    color: #13A3B6;
+  }
+  .cond-div { width: 1px; height: 24px; background: var(--kk-border-lighter); flex: 0 0 auto; }
+
+  .pl-filters {
+    display: flex; gap: 8px; padding: 4px 16px 12px;
+    overflow-x: auto; scrollbar-width: none;
+  }
+  .pl-filters::-webkit-scrollbar { display: none; }
+  .fpill {
+    display: inline-flex; align-items: center; gap: 4px; flex: 0 0 auto;
+    background: #fff; border: 1px solid var(--kk-border-light); border-radius: 999px;
+    padding: 8px 12px; font-size: 14px; line-height: 20px; color: var(--kk-text-darker);
+    white-space: nowrap;
+  }
+
+  .pl-body { padding: 12px 16px 40px; }
+  .pl-note { display: flex; align-items: center; gap: 4px; font-size: 12px; line-height: 16px; color: var(--kk-primary-medium); }
+  .pl-meta { display: flex; align-items: center; margin: 12px 0; }
+  .pl-meta .cnt { flex: 1 1 0; font-size: 14px; line-height: 20px; color: var(--kk-text-dark); }
+  .pl-meta .sort { display: inline-flex; align-items: center; gap: 2px; font-size: 14px; line-height: 20px; color: var(--kk-text-dark); }
+
+  .pkg-card { background: #fff; border-radius: var(--r-xl); padding: 16px; margin-bottom: 16px; }
+  .pkg-head { display: flex; align-items: flex-start; gap: 8px; width: 100%; text-align: left; }
+  .pkg-title { flex: 1 1 0; min-width: 0; font-size: 18px; line-height: 26px; font-weight: 600; color: var(--kk-text-darker); }
+  .pkg-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+  .pkg-tag { background: var(--kk-surface-light); border-radius: var(--r-sm); padding: 2px 6px;
+    font-size: 12px; line-height: 16px; color: var(--kk-text-darker); }
+  .pkg-perks { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 12px;
+    font-size: 14px; line-height: 20px; color: #13A3B6; }
+  .pkg-perks .perk { display: inline-flex; align-items: center; gap: 4px; }
+  .pkg-perks .perk.dark { color: var(--kk-text-darker); }
+  .pkg-warns { display: flex; align-items: center; gap: 8px; margin-top: 8px;
+    font-size: 12px; line-height: 16px; color: #E78F37; }
+  .pkg-warns .wdiv { width: 1px; height: 12px; background: var(--kk-border-lighter); }
+  .pkg-vendor { margin-top: 16px; font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
+  .pkg-rating { display: flex; align-items: center; gap: 4px; margin-top: 4px; }
+  .pkg-rating .score { font-size: 14px; line-height: 20px; font-weight: 600; color: #13A3B6; }
+  .pkg-rating .grade { font-size: 12px; line-height: 16px; color: #13A3B6; }
+  .pkg-rating .rcount { font-size: 12px; line-height: 16px; color: var(--kk-text-dark); text-decoration: underline; }
+  .pkg-rating .bought { margin-left: auto; display: inline-flex; align-items: center; gap: 2px;
+    font-size: 12px; line-height: 16px; color: var(--kk-text-dark); }
+  .pkg-rating .bought.hot { color: var(--kk-text-critical); }
+  .pkg-hr { border: 0; border-top: 1px solid var(--kk-border-lighter); margin: 12px 0; }
+  .pkg-buy { display: flex; align-items: center; gap: 12px; }
+  .pkg-price { flex: 1 1 0; min-width: 0; }
+  .pkg-off { display: inline-block; background: var(--kk-text-critical); color: #fff;
+    font-size: 12px; line-height: 16px; padding: 2px 4px; border-radius: var(--r-sm); margin-bottom: 4px; }
+  .pkg-now { font-size: 16px; font-weight: 700; color: var(--kk-text-darker); }
+  .pkg-was { font-size: 14px; color: var(--kk-text-medium); text-decoration: line-through; margin-left: 6px; }
+  .pkg-per { margin-top: 4px; font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
+  .pkg-cta { background: var(--kk-primary-button); color: #fff; border-radius: var(--r-md);
+    padding: 8px 20px; font-size: 16px; line-height: 24px; font-weight: 600; flex: 0 0 auto; }
 
   /* ================= 滚动置顶 header ================= */
   .page-header {
@@ -848,6 +928,35 @@
       </div><!-- /con -->
     </section>
 
+
+    <!-- ============ SCREEN: 套餐列表页 ============ -->
+    <section class="screen" data-screen="plans">
+      <div class="pl-head">
+        <div class="pl-bar">
+          <button class="pl-back" data-action="back-plans" aria-label="返回"><span class="ic ic-24">{{IC_back}}</span></button>
+          <button class="pl-title-wrap" data-action="change-destination">
+            <span class="pl-title" id="plTitle">日本</span>
+            <span class="ic ic-20">{{IC_arrowDown}}</span>
+          </button>
+        </div>
+        <div class="pl-conds" id="plConds"></div>
+        <div class="pl-filters">
+          <button class="fpill" data-action="filter"><span class="ic ic-16">{{IC_filter}}</span>筛选</button>
+          <button class="fpill" data-action="filter">本地/漫游<span class="ic ic-16">{{IC_arrowDown}}</span></button>
+          <button class="fpill" data-action="filter">eSIM类型<span class="ic ic-16">{{IC_arrowDown}}</span></button>
+          <button class="fpill" data-action="filter">支持热点<span class="ic ic-16">{{IC_arrowDown}}</span></button>
+        </div>
+      </div>
+      <div class="pl-body">
+        <div class="pl-note"><span class="ic ic-16">{{IC_checkCircle}}</span>此设备支援使用 eSIM</div>
+        <div class="pl-meta">
+          <span class="cnt" id="plCount">34 项结果</span>
+          <button class="sort" id="plSort">排序<span class="ic ic-16">{{IC_swapVertical}}</span></button>
+        </div>
+        <div id="plList"></div>
+      </div>
+    </section>
+
   </div><!-- /app -->
 
   <!-- ============ MODAL: 选择目的地（从下往上展开 full-screen） ============ -->
@@ -992,6 +1101,7 @@
     document.querySelectorAll('.screen').forEach(function (s) {
       s.classList.toggle('is-active', s.getAttribute('data-screen') === name);
     });
+    document.querySelector('.app').classList.toggle('no-hero', name === 'plans');
     window.scrollTo(0, 0);
   }
 
@@ -1103,8 +1213,8 @@
 
   document.getElementById('searchCta').addEventListener('click', function () {
     if (state.days && state.plan) {
-      toast('搜寻：' + document.getElementById('destName').textContent +
-            ' · ' + state.days + ' 天 · ' + state.plan + '（套餐列表开发中）');
+      renderPlans();
+      go('plans');
     }
   });
 
@@ -1184,6 +1294,9 @@
   var ICONS = {
     fire: '{{IC_fire}}', trash: '{{IC_trash}}', globe: '{{IC_globe}}',
     info: '{{IC_info}}', globeSel: '{{IC_globeSel}}',
+    flash: '{{IC_flash}}', reload: '{{IC_currencyReload}}', reloadDark: '{{IC_currencyReloadDark}}',
+    checkLine: '{{IC_checkCircleLine}}', calendar: '{{IC_calendar}}', crossLine: '{{IC_crossCircleLine}}',
+    pencil: '{{IC_pencil}}', star: '{{IC_star}}', fire2: '{{IC_fire}}', chevDark: '{{IC_arrowRightDark}}',
     locSearch: '{{IC_locationSearch}}',  // 搜索结果·国家行（Figma 848-41868：深色 location_line 20px）
     earthLine: '{{IC_earthLine}}'        // 搜索结果·区域行（线框地球，非实心 globe）
   };
@@ -1563,7 +1676,9 @@
       else if (a === 'change-destination') openModal(lastType()); // 再次打开默认进入上次所选类目
       else if (a === 'guide') toast('安装指南：' + el.getAttribute('data-guide') + '（开发中）');
       else if (a === 'faq-more') toast('常见问题列表（开发中）');
-      else if (a === 'back') { if (current === 'destination') go('home'); else toast('返回上一页'); }
+      else if (a === 'back') { if (current === 'destination') go('home'); else if (current === 'plans') go('destination'); else toast('返回上一页'); }
+      else if (a === 'back-plans') go('destination');
+      else if (a === 'filter') toast('筛选面板（开发中）');
     });
   });
 
@@ -1586,7 +1701,7 @@
   // ================= 滚动置顶 header =================
   function onPageScroll() {
     var y = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
-    document.getElementById('pageHeader').classList.toggle('show', y > 120);
+    document.getElementById('pageHeader').classList.toggle('show', y > 120 && current !== 'plans');
   }
   window.addEventListener('scroll', onPageScroll, { passive: true });
   document.addEventListener('scroll', onPageScroll, { passive: true });
@@ -1668,6 +1783,159 @@
     document.querySelector('#bsHowto .bs-body').scrollTop = 0;
     openSheet(document.getElementById('bsHowto'));
   });
+
+  // ================= 套餐列表页（仿真数据） =================
+  var VENDORS = {
+    '日本': ['Singtel', 'KDDI', 'SoftBank', 'NTT Docomo', 'IIJmio'],
+    '韩国': ['SK Telecom', 'KT Olleh', 'LG U+', 'Singtel'],
+    '泰国': ['AIS', 'dtac', 'TrueMove H', 'Singtel'],
+    '新加坡': ['Singtel', 'StarHub', 'M1'],
+    'default': ['Singtel', 'Airalo', 'Ubigi', 'Nomad', '3HK']
+  };
+  var PKG_TITLES = [
+    '5G·漫游·原生网络·{v}',
+    '5G·漫游·原生网络·扫码激活·支持通话简讯',
+    '5G·漫游·原生网络·支持简讯',
+    '4G/5G·本地网络·即插即用',
+    '5G·漫游·双网切换·{v}'
+  ];
+  var sortMode = 0;  // 0 推荐 1 价格低→高 2 价格高→低
+
+  function fmtDate(offsetDays) {
+    var d = new Date(Date.now() + offsetDays * 864e5);
+    var m = ('0' + (d.getMonth() + 1)).slice(-2), day = ('0' + d.getDate()).slice(-2);
+    return d.getFullYear() + '-' + m + '-' + day;
+  }
+  function basePrice() {
+    var cfg = PLANS[state.tab];
+    for (var i = 0; i < cfg.opts.length; i++) {
+      var o = cfg.opts[i];
+      if (o.t === state.plan) {
+        var d = state.days ? +state.days : 1;
+        return o.per ? Math.round(o.per * d * daysDiscount(d)) : o.price;
+      }
+    }
+    return 300;
+  }
+  function tabShort() { return state.tab === 'daily' ? '每日' : state.tab === 'total' ? '总量' : '无限'; }
+
+  function buildPlans() {
+    var dest = document.getElementById('destName').textContent;
+    var vendors = VENDORS[dest] || VENDORS['default'];
+    var base = basePrice();
+    var d = state.days ? +state.days : 1;
+    var out = [];
+    for (var i = 0; i < 8; i++) {
+      var v = vendors[i % vendors.length];
+      var now = Math.round(base * (0.85 + (i * 37 % 46) / 100));
+      var off = (i % 3 === 0);
+      var perkSet = i % 4;
+      out.push({
+        title: PKG_TITLES[i % PKG_TITLES.length].replace('{v}', v),
+        tags: ['含通话', '可以加值', '支持AI', '支持热点'].slice(0, 2 + (i % 3)),
+        perks: perkSet === 0 ? [['flash', '立即确认'], ['reload', '免费取消'], ['checkLine', '即日可用']]
+             : perkSet === 1 ? [['reload', '免费取消'], ['calendarD', '最早可使用日: ' + fmtDate(2)]]
+             : perkSet === 2 ? [['reloadD', '2天前可免费取消'], ['calendarD', '最早可使用日: ' + fmtDate(2)]]
+             : [['crossD', '不可取消'], ['calendarD', '最早可使用日: ' + fmtDate(3)]],
+        warns: i % 4 === 0 ? ['需实名认证', '需提供航班'] : i % 4 === 3 ? ['需实名认证'] : [],
+        vendor: v,
+        rating: [4.6, 4.8, 3.0, 4.2, 4.5][i % 5],
+        reviews: [234, 1024, 234, 89, 456][i % 5],
+        bought: i % 3 === 0 ? '10k+ 已购' : (12 + i * 7) + ' 已购',
+        hot: i % 3 === 0,
+        now: now,
+        was: off ? Math.round(now / 0.8) : null,
+        perDay: Math.round(now / d)
+      });
+    }
+    return out;
+  }
+
+  var PERK_ICONS = { flash: 'flash', reload: 'reload', checkLine: 'checkLine',
+                     reloadD: 'reloadDark', calendarD: 'calendar', crossD: 'crossLine' };
+
+  function renderPlans() {
+    document.getElementById('plTitle').textContent = document.getElementById('destName').textContent;
+    // 条件 chips：当前条件（点击回目的地页修改）+ 同 tab 相邻流量档快速切换
+    var conds = document.getElementById('plConds');
+    conds.innerHTML = '';
+    var edit = el('<button class="cond-chip sel"><span class="lb"></span><span class="ic ic-16">' + ICONS.pencil + '</span></button>');
+    edit.querySelector('.lb').textContent = state.days + '天·' + tabShort();
+    edit.addEventListener('click', function () { go('destination'); });
+    conds.appendChild(edit);
+    conds.appendChild(el('<div class="cond-div"></div>'));
+    var opts = PLANS[state.tab].opts;
+    var idx = 0;
+    opts.forEach(function (o, i) { if (o.t === state.plan) idx = i; });
+    opts.slice(Math.max(0, idx - 1), Math.max(0, idx - 1) + 3).forEach(function (o) {
+      var c = el('<button class="cond-chip' + (o.t === state.plan ? ' sel' : '') + '"></button>');
+      c.textContent = o.t;
+      c.addEventListener('click', function () {
+        state.plan = o.t;
+        renderOpts(); updateCta(); renderPlans();
+      });
+      conds.appendChild(c);
+    });
+
+    var list = buildPlans();
+    if (sortMode === 1) list.sort(function (a, b) { return a.now - b.now; });
+    if (sortMode === 2) list.sort(function (a, b) { return b.now - a.now; });
+    document.getElementById('plCount').textContent = (26 + list.length) + ' 项结果';
+    document.getElementById('plSort').childNodes[0].textContent =
+      sortMode === 0 ? '排序' : sortMode === 1 ? '价格低→高' : '价格高→低';
+
+    var box = document.getElementById('plList');
+    box.innerHTML = '';
+    list.forEach(function (p) {
+      var card = el('<div class="pkg-card">' +
+        '<button class="pkg-head"><span class="pkg-title"></span><span class="ic ic-20 chev-r"></span></button>' +
+        '<div class="pkg-tags"></div><div class="pkg-perks"></div><div class="pkg-warns"></div>' +
+        '<div class="pkg-vendor"></div><div class="pkg-rating"></div><hr class="pkg-hr">' +
+        '<div class="pkg-buy"><div class="pkg-price"></div><button class="pkg-cta">订购</button></div></div>');
+      card.querySelector('.chev-r').innerHTML = '<span class="rot90 ic">' + ICONS.chevDark + '</span>';
+      card.querySelector('.pkg-title').textContent = p.title;
+      var tags = card.querySelector('.pkg-tags');
+      p.tags.forEach(function (t) { var e = el('<span class="pkg-tag"></span>'); e.textContent = t; tags.appendChild(e); });
+      var perks = card.querySelector('.pkg-perks');
+      p.perks.forEach(function (pk) {
+        var dark = pk[0] === 'reloadD' || pk[0] === 'calendarD' || pk[0] === 'crossD';
+        var e = el('<span class="perk' + (dark ? ' dark' : '') + '"><span class="ic ic-16">' + ICONS[PERK_ICONS[pk[0]]] + '</span><span class="pt"></span></span>');
+        e.querySelector('.pt').textContent = pk[1];
+        perks.appendChild(e);
+      });
+      var warns = card.querySelector('.pkg-warns');
+      if (!p.warns.length) warns.style.display = 'none';
+      p.warns.forEach(function (w, i) {
+        if (i) warns.appendChild(el('<span class="wdiv"></span>'));
+        var e = el('<span></span>'); e.textContent = w; warns.appendChild(e);
+      });
+      card.querySelector('.pkg-vendor').textContent = p.vendor;
+      var rating = card.querySelector('.pkg-rating');
+      rating.innerHTML = '<span class="ic ic-16">' + ICONS.star + '</span>' +
+        '<span class="score"></span>' + (p.rating >= 4.5 ? '<span class="grade">非常好</span>' : '') +
+        '<span class="rcount"></span>' +
+        '<span class="bought' + (p.hot ? ' hot' : '') + '">' + (p.hot ? '<span class="ic ic-14">' + ICONS.fire2 + '</span>' : '') + '<span class="bt"></span></span>';
+      rating.querySelector('.score').textContent = p.rating.toFixed(1);
+      rating.querySelector('.rcount').textContent = '(' + p.reviews + ')';
+      rating.querySelector('.bt').textContent = p.bought;
+      var price = card.querySelector('.pkg-price');
+      price.innerHTML = (p.was ? '<span class="pkg-off">-20%</span><br>' : '') +
+        '<span class="pkg-now"></span>' + (p.was ? '<span class="pkg-was"></span>' : '') +
+        '<div class="pkg-per"></div>';
+      price.querySelector('.pkg-now').textContent = 'NT$' + p.now.toLocaleString();
+      if (p.was) price.querySelector('.pkg-was').textContent = 'NT$ ' + p.was.toLocaleString();
+      price.querySelector('.pkg-per').textContent = '≈NT$' + p.perDay + '/天';
+      card.querySelector('.pkg-head').addEventListener('click', function () { toast('套餐详情页（开发中）'); });
+      card.querySelector('.pkg-cta').addEventListener('click', function () { toast('订购流程（开发中）：' + p.title); });
+      box.appendChild(card);
+    });
+  }
+  document.getElementById('plSort').addEventListener('click', function () {
+    sortMode = (sortMode + 1) % 3;
+    renderPlans();
+    window.scrollTo(0, 0);
+  });
+
 
   renderOpts();
   updateCta();
