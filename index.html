@@ -2213,11 +2213,25 @@
                      reloadD: 'reloadDark', calendarD: 'calendar', crossD: 'crossLine' };
 
   function renderPlans(centerSel) {
-    document.getElementById('plTitle').textContent = document.getElementById('destName').textContent;
+    var titleEl = document.getElementById('plTitle');
+    var fullTitle = document.getElementById('destName').textContent;
+    titleEl.textContent = fullTitle;
     // 多国自由选择：标题旁同样显示数量 (N)（Figma 970-49427），与目的地页 destNum 同步
     var tNum = document.getElementById('plTitleNum'), dNum = document.getElementById('destNum');
     tNum.hidden = dNum.hidden;
     tNum.textContent = dNum.textContent;
+    // CSS ellipsis 的「…」画在最后一个完整字后，被丢掉的字留下最多近一个字宽的空白，
+    // 数量 (N) 会显得离省略号很远——改为 JS 截断到刚好放下「…」，盒子收紧后 (N) 紧跟 8px
+    requestAnimationFrame(function () {
+      if (!titleEl.clientWidth || titleEl.scrollWidth <= titleEl.clientWidth + 1) return;
+      var lo = 1, hi = fullTitle.length - 1;
+      while (lo < hi) {
+        var mid = Math.ceil((lo + hi) / 2);
+        titleEl.textContent = fullTitle.slice(0, mid).replace(/\s+$/, '') + '…';
+        if (titleEl.scrollWidth <= titleEl.clientWidth + 1) lo = mid; else hi = mid - 1;
+      }
+      titleEl.textContent = fullTitle.slice(0, lo).replace(/\s+$/, '') + '…';
+    });
     // 条件 chips：当前条件（点击回目的地页修改）+ 同 tab 相邻流量档快速切换
     var fixed = document.getElementById('plCondFixed');
     var conds = document.getElementById('plCondScroll');
