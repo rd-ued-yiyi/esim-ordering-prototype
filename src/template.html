@@ -2800,7 +2800,11 @@
     });
     if (nd !== editState.days) {
       editState.days = nd;
-      renderCondOpts();  // 天数切换 → 流量档联动（过滤/价格/badge 实时刷新）
+      // 天数切换 → 流量档联动刷新，滚动带回到最前并默认选中第一档
+      editState.tab = 'daily';
+      editState.plan = null;  // renderCondOpts 会落到过滤后的第一档
+      renderCondOpts();
+      document.getElementById('condOptsScroll').scrollLeft = 0;
     }
     updateCondSum();
   }
