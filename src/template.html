@@ -2163,8 +2163,10 @@
       });
       card.querySelector('.pkg-vendor').textContent = p.vendor;
       var rating = card.querySelector('.pkg-rating');
+      // 评分描述：4.6-5.0 非常好 / 4.0-4.5 很好；3.5-3.9 的「好」刻意不显示（中性评价加正向标签反而放大平庸感）
+      var grade = p.rating >= 4.6 ? '非常好' : p.rating >= 4.0 ? '很好' : '';
       rating.innerHTML = '<span class="ic ic-16">' + ICONS.star + '</span>' +
-        '<span class="score"></span>' + (p.rating >= 4.5 ? '<span class="grade">非常好</span>' : '') +
+        '<span class="score"></span>' + (grade ? '<span class="grade">' + grade + '</span>' : '') +
         '<span class="rcount"></span>' +
         '<span class="bought' + (p.hot ? ' hot' : '') + '">' + (p.hot ? '<span class="ic ic-14">' + ICONS.fire2 + '</span>' : '') + '<span class="bt"></span></span>';
       rating.querySelector('.score').textContent = p.rating.toFixed(1);
