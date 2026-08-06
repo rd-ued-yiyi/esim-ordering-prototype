@@ -1317,7 +1317,7 @@
 
   // 仿真价格模型（NT$）：每日固定/无限流量按天计价（长天数有折扣），总流量一口价
   // 价格参照 2026 台湾市售亚洲 eSIM 行情（每日固定 1GB≈NT$25-30/天；总流量对齐 Airalo/Nomad 档位价；
-  // 无限流量=每日高速额度用完降速 NT$55-90/天、全程不限速 NT$130-150/天）
+  // 无限流量按降速后网速分档 NT$45-168/天，最高档=全程不限速）
   var PLANS = {
     daily:     { note: '每日重置，用完降速',
                  opts: [ { t: '500MB/天', per: 15 }, { t: '1GB/天', per: 26 }, { t: '2GB/天', per: 42 },
@@ -1327,9 +1327,12 @@
                          { t: '5GB', price: 399, gb: 5 }, { t: '10GB', price: 619, gb: 10 },
                          { t: '20GB', price: 999, gb: 20 }, { t: '30GB', price: 1290, gb: 30 },
                          { t: '50GB', price: 1790, gb: 50 }, { t: '100GB', price: 2990, gb: 100 } ] },
-    unlimited: { note: '不限流量，依公平使用原则',
-                 opts: [ { t: '每日 1GB 高速', per: 58 }, { t: '每日 3GB 高速', per: 88 },
-                         { t: '全程高速', per: 138 } ] }
+    unlimited: { note: '不限流量，达公平使用量后降至标示网速',
+                 opts: [ { t: '降速后 128 Kbps', per: 45 }, { t: '降速后 256 Kbps', per: 52 },
+                         { t: '降速后 384 Kbps', per: 58 }, { t: '降速后 512 Kbps', per: 65 },
+                         { t: '降速后 1 Mbps', per: 78 }, { t: '降速后 3 Mbps', per: 95 },
+                         { t: '降速后 5 Mbps', per: 110 }, { t: '降速后 10 Mbps', per: 128 },
+                         { t: '降速后 20 Mbps', per: 145 }, { t: '最高网速（不限制）', per: 168 } ] }
   };
   function daysDiscount(d) { return d >= 30 ? 0.85 : d >= 15 ? 0.9 : d >= 7 ? 0.95 : 1; }
   function priceLabelFor(o, d) {
@@ -1356,7 +1359,7 @@
       opts.forEach(function (o) { if (Math.abs(o.gb - target) < Math.abs(best.gb - target)) best = o; });
       return best.t;
     }
-    return '每日 3GB 高速';  // 无限流量推荐中间档
+    return '降速后 1 Mbps';  // 无限流量推荐主流降速档
   }
   function badgeFor() { return badgeForTab(state.tab, state.days ? +state.days : 0); }
 
