@@ -1006,7 +1006,7 @@
   var GEO = {
     hot: ['日本','韩国','泰国','新加坡','澳大利亚','迪拜','法国','意大利','加拿大'],
     continents: [
-      { name: '亚洲',   countries: ['日本','韩国','泰国','新加坡','马来西亚','越南','菲律宾','印度尼西亚','柬埔寨','中国香港','中国澳门','中国台湾','迪拜','土耳其'] },
+      { name: '亚洲',   countries: ['日本','韩国','泰国','新加坡','马来西亚','越南','菲律宾','印度尼西亚','柬埔寨','香港','澳门','台湾','迪拜','土耳其'] },
       { name: '欧洲',   countries: ['法国','意大利','德国','英国','西班牙','瑞士','荷兰','希腊','葡萄牙','奥地利','捷克','北欧地区'] },
       { name: '北美洲', countries: ['美国','加拿大','墨西哥'] },
       { name: '大洋洲', countries: ['澳大利亚','新西兰','斐济','关岛'] },
@@ -1015,7 +1015,7 @@
     ],
     regions: [
       { name: '亚洲通', desc: '日本、韩国、泰国、越南、马来西亚、土耳其、菲律宾', count: 12,
-        list: ['韩国','日本','泰国','越南','马来西亚','土耳其','菲律宾','新加坡','印度尼西亚','柬埔寨','中国香港','中国台湾'] },
+        list: ['韩国','日本','泰国','越南','马来西亚','土耳其','菲律宾','新加坡','印度尼西亚','柬埔寨','香港','台湾'] },
       { name: '欧洲', desc: '法国、意大利、德国、英国、西班牙、瑞士、荷兰', count: 35,
         list: ['法国','意大利','德国','英国','西班牙','葡萄牙','瑞士','荷兰','比利时','奥地利','捷克','希腊','波兰','瑞典','挪威','丹麦','芬兰','冰岛','爱尔兰','匈牙利','克罗地亚','斯洛文尼亚','斯洛伐克','罗马尼亚','保加利亚','爱沙尼亚','拉脱维亚','立陶宛','卢森堡','马耳他','塞浦路斯','列支敦士登','摩纳哥','圣马力诺','安道尔'] },
       { name: '东南亚', desc: '泰国、新加坡、马来西亚、越南、菲律宾、印度尼西亚', count: 8,
@@ -1033,7 +1033,7 @@
     ],
     hotRegions: [
       { name: '亚洲通', desc: '日本、韩国、泰国、越南、马来西亚、土耳其、菲律宾', count: 12,
-        list: ['韩国','日本','泰国','越南','马来西亚','土耳其','菲律宾','新加坡','印度尼西亚','柬埔寨','中国香港','中国台湾'] },
+        list: ['韩国','日本','泰国','越南','马来西亚','土耳其','菲律宾','新加坡','印度尼西亚','柬埔寨','香港','台湾'] },
       { name: '新马泰', desc: '新加坡、马来西亚、泰国', count: 3,
         list: ['新加坡','马来西亚','泰国'] },
       { name: '中东&北非', desc: '阿联酋、沙特、卡塔尔、埃及、摩洛哥、约旦', count: 10,
@@ -1246,7 +1246,7 @@
       cb.classList.toggle('part', hit > 0 && hit < cs.length); // 部分：minus（indeterminate）
     });
     var n = dm.multiSel.length;
-    dm.confirm.classList.toggle('enabled', n > 0);
+    dm.confirm.classList.toggle('enabled', n >= 2);  // 多国组合至少选择 2 个
     dm.confirm.disabled = n === 0;
     document.getElementById('dmSelInfo').hidden = n === 0;
     document.getElementById('dmSelCount').textContent = n;
@@ -1258,6 +1258,7 @@
   });
   dm.confirm.addEventListener('click', function () {
     if (!dm.multiSel.length) return;
+    if (dm.multiSel.length < 2) { toast('多国组合请至少选择 2 个目的地'); return; }
     // 多国态：bar 显示国家列表（超出省略）+ (N)，见 Figma 871-76702
     finishSelect(dm.multiSel.join(' '), 'multi', dm.multiSel.length);
   });
@@ -1278,6 +1279,8 @@
   function renderSearch(kw) {
     var showingSearch = kw.length > 0;
     dm.search.classList.toggle('has-kw', showingSearch);
+    // 搜索态隐藏分类 pill（Figma 844-40780：搜索时直接显示结果列表）
+    document.getElementById('dmCats').style.display = showingSearch ? 'none' : '';
     document.querySelectorAll('.dm-pane').forEach(function (p) {
       p.classList.toggle('act', !showingSearch && p.getAttribute('data-pane') === dm.cat);
     });
@@ -1436,7 +1439,7 @@
   }
 
   // 用卡天数滚轮 picker：高亮条固定中间，滚动选项，中心项即选中
-  var DAYS_ALL = ['1','2','3','4','5','6','7','8','9','10','15','20','30'];
+  var DAYS_ALL = ['1','2','3','4','5','6','7','8','9','10','15','20','30','40','50','60','90','120','180','365'];
   var DAY_H = 36;
   var pickerVal = null;
   var wheel = document.getElementById('bsDaysList');
