@@ -460,10 +460,16 @@
   .pl-bar .pl-title { font-size: 18px; line-height: 26px; font-weight: 600; color: var(--kk-text-darker);
     max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-  .pl-conds { display: flex; align-items: center; gap: 8px; padding: 4px 16px 0; overflow: hidden; }
-  .pl-cond-fixed { display: flex; align-items: center; gap: 8px; flex: 0 0 auto; }
+  .pl-conds { display: flex; align-items: stretch; padding: 4px 0 0; overflow: hidden; }
+  .pl-cond-fixed {
+    display: flex; align-items: center; flex: 0 0 auto;
+    background: #fff; padding: 0 8px 0 16px;
+    position: relative; z-index: 1;
+    box-shadow: var(--el-action);  /* 与滚动区的分隔用投影，非竖线（Figma 795-35687） */
+  }
   .pl-cond-scroll {
     display: flex; gap: 8px; flex: 1 1 0; min-width: 0;
+    padding: 0 16px 0 8px;
     overflow-x: auto; scrollbar-width: none;
   }
   .pl-cond-scroll::-webkit-scrollbar { display: none; }
@@ -1945,7 +1951,6 @@
     edit.querySelector('.lb').textContent = state.days + '天·' + tabShort();
     edit.addEventListener('click', function () { openCondModal(); });
     fixed.appendChild(edit);
-    fixed.appendChild(el('<div class="cond-div"></div>'));
     // 当前计费方式下的全部流量档（含天数过滤逻辑，与目的地页一致），选中项高亮
     var d0 = state.days ? +state.days : 0;
     var opts = PLANS[state.tab].opts;
