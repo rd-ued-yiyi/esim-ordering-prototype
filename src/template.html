@@ -325,6 +325,8 @@
   .dm-search.has-kw .dm-clear { display: inline-flex; align-items: center; flex: 0 0 auto; }
   /* 搜索态：header 区加底边框（Figma 848-41868） */
   .dm-head.searching { border-bottom: 1px solid var(--kk-border-lighter); }
+  /* modal / bottom sheet 内容滚动时，固定头与内容用分割线区分（页面级 header 才用阴影） */
+  .dm-head.divided, .bs-bar.divided, #condModal .dm-bar.divided { border-bottom: 1px solid var(--kk-border-lighter); }
 
   .dm-cats { display: flex; gap: 10px; padding: 0 20px 8px; overflow-x: auto; scrollbar-width: none; }
   .dm-cats::-webkit-scrollbar { display: none; }
@@ -591,7 +593,7 @@
     display: flex; align-items: center;
     opacity: 0; pointer-events: none; transition: opacity .2s;
   }
-  .page-header.show { opacity: 1; pointer-events: auto; }
+  .page-header.show { opacity: 1; pointer-events: auto; box-shadow: var(--el-fixed); }
   .page-header .ph-back { display: flex; align-items: center; }
   .page-header .ph-title {
     flex: 1 1 0; min-width: 0; text-align: center; padding: 0 20px;
@@ -1693,6 +1695,18 @@
     dm.results.classList.add('act');
   }
   dm.input.addEventListener('input', function () { renderSearch(dm.input.value.trim()); });
+  // modal 内容滚动：固定头加分割线；滚动动作收起键盘
+  dm.body.addEventListener('scroll', function () {
+    document.querySelector('.dm-head').classList.toggle('divided', dm.body.scrollTop > 4);
+    if (document.activeElement === dm.input) dm.input.blur();
+  }, { passive: true });
+  // bottom sheets 内容滚动：bar 加分割线
+  document.querySelectorAll('.bsheet .bs-body').forEach(function (bb) {
+    bb.addEventListener('scroll', function () {
+      var bar = bb.closest('.bsheet').querySelector('.bs-bar');
+      if (bar) bar.classList.toggle('divided', bb.scrollTop > 4);
+    }, { passive: true });
+  });
   document.getElementById('dmClear').addEventListener('click', function () {
     dm.input.value = ''; renderSearch(''); dm.input.focus();
   });
@@ -2170,6 +2184,12 @@
   bindSpy(document.getElementById('condOptsScroll'),
           document.getElementById('condTabs'),
           document.getElementById('condNote'));
+  (function () {
+    var cb = document.querySelector('#condModal .cond-body');
+    cb.addEventListener('scroll', function () {
+      document.querySelector('#condModal .dm-bar').classList.toggle('divided', cb.scrollTop > 4);
+    }, { passive: true });
+  })();
   function condTouchGuard(e) {
     var t = e.target;
     if (t.closest && (t.closest('.bs-wheel') || t.closest('.opts-scroll'))) return;  // 内部滚动区放行
