@@ -989,7 +989,7 @@
               </div>
             </div>
 
-            <button class="cta" id="searchCta" disabled>搜寻套餐</button>
+            <button class="cta enabled" id="searchCta">搜寻套餐</button>
           </div>
 
           <!-- 为什么选择 KKday -->
@@ -1285,7 +1285,7 @@
   }
 
   // ---------- 目的地页状态 ----------
-  var state = { days: null, tab: 'daily', plan: null };
+  var state = { days: '1', daysTouched: false, tab: 'daily', plan: '1GB/天' };
 
   // 仿真价格模型（NT$）：每日固定/无限流量按天计价（长天数有折扣），总流量一口价
   var PLANS = {
@@ -1332,8 +1332,8 @@
       var fit = opts.filter(function (o) { return o.gb >= d * 0.2; });
       opts = fit.length >= 2 ? fit : cfg.opts.slice(-2);
     }
-    // 已选档位被过滤掉时清空选择
-    if (state.plan && !opts.some(function (o) { return o.t === state.plan; })) state.plan = null;
+    // 已选档位被过滤掉时回落到第一个档
+    if (!state.plan || !opts.some(function (o) { return o.t === state.plan; })) state.plan = opts[0].t;
     var badge = badgeFor();
     var grid = document.getElementById('dataOpts');
     grid.innerHTML = '';
@@ -1345,7 +1345,7 @@
       b.querySelector('.t').textContent = o.t;
       b.querySelector('.p').textContent = optPriceLabel(o);
       b.addEventListener('click', function () {
-        state.plan = (state.plan === o.t) ? null : o.t;
+        state.plan = o.t;
         renderOpts(); updateCta();
       });
       grid.appendChild(b);
@@ -1353,28 +1353,27 @@
   }
 
   function updateCta() {
-    var ok = state.days && state.plan;
     var cta = document.getElementById('searchCta');
-    cta.classList.toggle('enabled', !!ok);
-    cta.disabled = !ok;
+    cta.classList.add('enabled');
+    cta.disabled = false;
   }
 
   // 天数选择（chips 与 bottom sheet picker 共用）
-  function setDays(v) {
-    state.days = v;
+  function setDays(v, touched) {
+    state.days = v || '1';
+    if (touched) state.daysTouched = true;
     document.querySelectorAll('#dayChips .chip').forEach(function (c) {
       c.classList.toggle('sel', c.getAttribute('data-days') === state.days);
     });
     var dv = document.getElementById('daysValue');
-    dv.textContent = state.days ? (state.days + ' 天') : '请选择';
-    dv.classList.toggle('has-value', !!state.days);
+    dv.textContent = state.days + ' 天';
+    dv.classList.toggle('has-value', state.daysTouched);  // 未主动选时浅灰，主动选后深色
     renderOpts();  // 天数变化联动流量档：起价重算、档位过滤、推荐 badge 调整
     updateCta();
   }
   document.querySelectorAll('#dayChips .chip').forEach(function (el) {
     el.addEventListener('click', function () {
-      var v = el.getAttribute('data-days');
-      setDays(state.days === v ? null : v);
+      setDays(el.getAttribute('data-days'), true);
     });
   });
 
@@ -1382,7 +1381,7 @@
   document.querySelectorAll('#dataTabs .ftab').forEach(function (el) {
     el.addEventListener('click', function () {
       state.tab = el.getAttribute('data-tab');
-      state.plan = null;
+      state.plan = PLANS[state.tab].opts[0].t;
       document.querySelectorAll('#dataTabs .ftab').forEach(function (t) {
         t.classList.toggle('sel', t === el);
       });
@@ -1959,7 +1958,7 @@
     });
   });
   document.getElementById('bsDaysConfirm').addEventListener('click', function () {
-    setDays(pickerVal);
+    setDays(pickerVal, true);
     closeSheets();
   });
 
@@ -2248,8 +2247,7 @@
   });
 
 
-  renderOpts();
-  updateCta();
+  setDays(state.days, false);  // 初始化默认选中态（1 天浅灰 + 第一个流量档）
   renderHomeHist();
 })();
 </script>
