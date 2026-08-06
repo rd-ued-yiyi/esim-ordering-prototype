@@ -251,9 +251,10 @@
 
   .opts-scroll { width: 100%; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
   .opts-scroll::-webkit-scrollbar { display: none; }
-  /* 顶部留白 4px 给第一排 badge(top:-4px)，再用负 margin 抵消——note→卡顶净间距保持 8px（Figma） */
-  .opts-scroll { margin-top: -4px; }
-  .opts-grid { display: grid; grid-auto-flow: column; grid-template-rows: repeat(2, auto); gap: 8px; width: max-content; padding-top: 4px; }
+  /* 顶部留白 4px 给第一排 badge(top:-4px)，负 margin 抵消——净间距 8px */
+  .opts-scroll { margin-top: -4px; position: relative; }
+  .opts-row { display: flex; gap: 24px; width: max-content; padding-top: 4px; }  /* 三组拼合，组间 24px */
+  .opts-grid { display: grid; grid-auto-flow: column; grid-template-rows: repeat(2, auto); gap: 8px; width: max-content; }
   .opt {
     position: relative;
     display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
@@ -887,7 +888,7 @@
                   <button class="ftab" data-tab="unlimited">无限流量</button>
                 </div>
                 <div class="field-note" id="dataNote">每日重置，用完降速</div>
-                <div class="opts-scroll"><div class="opts-grid" id="dataOpts"></div></div>
+                <div class="opts-scroll" id="dataOptsScroll"><div class="opts-row" id="dataOpts"></div></div>
               </div>
             </div>
 
@@ -1131,7 +1132,7 @@
           <button class="ftab" data-tab="unlimited">无限流量</button>
         </div>
         <div class="field-note" id="condNote"></div>
-        <div class="opts-scroll"><div class="opts-grid" id="condOpts"></div></div>
+        <div class="opts-scroll" id="condOptsScroll"><div class="opts-row" id="condOpts"></div></div>
       </div>
     </div>
     <div class="cond-foot">
@@ -1224,34 +1225,82 @@
   }
   function badgeFor() { return badgeForTab(state.tab, state.days ? +state.days : 0); }
 
-  function renderOpts() {
-    var cfg = PLANS[state.tab];
-    document.getElementById('dataNote').textContent = cfg.note;
-    var d = state.days ? +state.days : 0;
-    var opts = cfg.opts;
-    // 总流量档与天数联动：容量太小不适合长行程的档位隐藏（至少保留最大两档）
-    if (state.tab === 'total' && d) {
+  // ---------- 拼合流量选项：三种计费一条滚动带；tab=锚点 + scroll spy ----------
+  function filteredOpts(tab, d) {
+    var opts = PLANS[tab].opts;
+    if (tab === 'total' && d) {
       var fit = opts.filter(function (o) { return o.gb >= d * 0.2; });
-      opts = fit.length >= 2 ? fit : cfg.opts.slice(-2);
+      opts = fit.length >= 2 ? fit : PLANS.total.opts.slice(-2);
     }
-    // 已选档位被过滤掉时回落到第一个档
-    if (!state.plan || !opts.some(function (o) { return o.t === state.plan; })) state.plan = opts[0].t;
-    var badge = badgeFor();
-    var grid = document.getElementById('dataOpts');
-    grid.innerHTML = '';
-    opts.forEach(function (o) {
-      var b = document.createElement('button');
-      b.className = 'opt' + (state.plan === o.t ? ' sel' : '');
-      b.innerHTML = '<span class="t"></span><span class="p"></span>' +
-        (badge === o.t ? '<span class="badge">80%选择</span>' : '');
-      b.querySelector('.t').textContent = o.t;
-      b.querySelector('.p').textContent = optPriceLabel(o);
-      b.addEventListener('click', function () {
-        state.plan = o.t;
-        renderOpts(); updateCta();
+    return opts;
+  }
+  function buildMergedRow(rowEl, d, selTab, selPlan, onPick) {
+    rowEl.innerHTML = '';
+    ['daily', 'total', 'unlimited'].forEach(function (tab) {
+      var badge = badgeForTab(tab, d);
+      var grid = el('<div class="opts-grid" data-g="' + tab + '"></div>');
+      filteredOpts(tab, d).forEach(function (o) {
+        var b = el('<button class="opt' + (selTab === tab && selPlan === o.t ? ' sel' : '') + '"><span class="t"></span><span class="p"></span>' +
+          (badge === o.t ? '<span class="badge">80%选择</span>' : '') + '</button>');
+        b.querySelector('.t').textContent = o.t;
+        b.querySelector('.p').textContent = priceLabelFor(o, d);
+        b.addEventListener('click', function () { onPick(tab, o.t); });
+        grid.appendChild(b);
       });
-      grid.appendChild(b);
+      rowEl.appendChild(grid);
     });
+  }
+  function groupStart(scrollEl, tab) {
+    var g = scrollEl.querySelector('.opts-grid[data-g="' + tab + '"]');
+    if (!g) return 0;
+    return g.getBoundingClientRect().left - scrollEl.getBoundingClientRect().left + scrollEl.scrollLeft;
+  }
+  function setTabsActive(tabsEl, noteEl, tab) {
+    tabsEl.querySelectorAll('.ftab').forEach(function (t) {
+      t.classList.toggle('sel', t.getAttribute('data-tab') === tab);
+    });
+    noteEl.textContent = PLANS[tab].note;
+  }
+  function bindSpy(scrollEl, tabsEl, noteEl) {
+    var guardUntil = 0;
+    scrollEl.addEventListener('scroll', function () {
+      if (Date.now() < guardUntil) return;  // 锚点平滑滚动期间不抢 tab
+      var x = scrollEl.scrollLeft + scrollEl.clientWidth * 0.3;
+      var act = 'daily';
+      ['total', 'unlimited'].forEach(function (tab) {
+        if (groupStart(scrollEl, tab) <= x) act = tab;
+      });
+      setTabsActive(tabsEl, noteEl, act);
+    }, { passive: true });
+    tabsEl.querySelectorAll('.ftab').forEach(function (t) {
+      t.addEventListener('click', function () {
+        var tab = t.getAttribute('data-tab');
+        guardUntil = Date.now() + 600;
+        setTabsActive(tabsEl, noteEl, tab);
+        scrollEl.scrollTo({ left: groupStart(scrollEl, tab), behavior: 'smooth' });
+      });
+    });
+  }
+
+  function renderOpts() {
+    var d = state.days ? +state.days : 0;
+    if (!state.plan || !filteredOpts(state.tab, d).some(function (o) { return o.t === state.plan; })) {
+      state.plan = filteredOpts(state.tab, d)[0].t;
+    }
+    var scrollEl = document.getElementById('dataOptsScroll');
+    var keep = scrollEl.scrollLeft;
+    buildMergedRow(document.getElementById('dataOpts'), d, state.tab, state.plan, function (tab, plan) {
+      state.tab = tab;
+      state.plan = plan;
+      document.querySelectorAll('#dataOpts .opt').forEach(function (b) {
+        b.classList.toggle('sel', b.closest('.opts-grid').getAttribute('data-g') === tab &&
+          b.querySelector('.t').textContent === plan);
+      });
+      setTabsActive(document.getElementById('dataTabs'), document.getElementById('dataNote'), tab);
+      updateCta();
+    });
+    scrollEl.scrollLeft = keep;
+    setTabsActive(document.getElementById('dataTabs'), document.getElementById('dataNote'), state.tab);
   }
 
   function updateCta() {
@@ -1279,17 +1328,10 @@
     });
   });
 
-  // 流量 tab 切换
-  document.querySelectorAll('#dataTabs .ftab').forEach(function (el) {
-    el.addEventListener('click', function () {
-      state.tab = el.getAttribute('data-tab');
-      state.plan = PLANS[state.tab].opts[0].t;
-      document.querySelectorAll('#dataTabs .ftab').forEach(function (t) {
-        t.classList.toggle('sel', t === el);
-      });
-      renderOpts(); updateCta();
-    });
-  });
+  // 流量 tab = 锚点 + scroll spy（拼合滚动带）
+  bindSpy(document.getElementById('dataOptsScroll'),
+          document.getElementById('dataTabs'),
+          document.getElementById('dataNote'));
 
   document.getElementById('searchCta').addEventListener('click', function () {
     if (state.days && state.plan) {
@@ -2074,39 +2116,28 @@
       editState.days + '天·' + tabFull(editState.tab) + (editState.plan ? '·' + editState.plan : '');
   }
   function renderCondOpts() {
-    document.getElementById('condNote').textContent = PLANS[editState.tab].note;
-    document.querySelectorAll('#condTabs .ftab').forEach(function (t) {
-      t.classList.toggle('sel', t.getAttribute('data-tab') === editState.tab);
-    });
     var d = editState.days ? +editState.days : 0;
-    var opts = PLANS[editState.tab].opts;
-    if (editState.tab === 'total' && d) {
-      var fit = opts.filter(function (o) { return o.gb >= d * 0.2; });
-      opts = fit.length >= 2 ? fit : PLANS.total.opts.slice(-2);
+    if (!editState.plan || !filteredOpts(editState.tab, d).some(function (o) { return o.t === editState.plan; })) {
+      editState.plan = filteredOpts(editState.tab, d)[0].t;
     }
-    if (editState.plan && !opts.some(function (o) { return o.t === editState.plan; })) editState.plan = opts[0].t;
-    var badge = badgeForTab(editState.tab, d);
-    var grid = document.getElementById('condOpts');
-    grid.innerHTML = '';
-    opts.forEach(function (o) {
-      var b = el('<button class="opt' + (editState.plan === o.t ? ' sel' : '') + '"><span class="t"></span><span class="p"></span>' +
-        (badge === o.t ? '<span class="badge">80%选择</span>' : '') + '</button>');
-      b.querySelector('.t').textContent = o.t;
-      b.querySelector('.p').textContent = priceLabelFor(o, d);
-      b.addEventListener('click', function () {
-        editState.plan = o.t;
-        renderCondOpts(); updateCondSum();
+    var scrollEl = document.getElementById('condOptsScroll');
+    var keep = scrollEl.scrollLeft;
+    buildMergedRow(document.getElementById('condOpts'), d, editState.tab, editState.plan, function (tab, plan) {
+      editState.tab = tab;
+      editState.plan = plan;
+      document.querySelectorAll('#condOpts .opt').forEach(function (b) {
+        b.classList.toggle('sel', b.closest('.opts-grid').getAttribute('data-g') === tab &&
+          b.querySelector('.t').textContent === plan);
       });
-      grid.appendChild(b);
+      setTabsActive(document.getElementById('condTabs'), document.getElementById('condNote'), tab);
+      updateCondSum();
     });
+    scrollEl.scrollLeft = keep;
+    setTabsActive(document.getElementById('condTabs'), document.getElementById('condNote'), editState.tab);
   }
-  document.querySelectorAll('#condTabs .ftab').forEach(function (t) {
-    t.addEventListener('click', function () {
-      editState.tab = t.getAttribute('data-tab');
-      editState.plan = null;
-      renderCondOpts(); updateCondSum();
-    });
-  });
+  bindSpy(document.getElementById('condOptsScroll'),
+          document.getElementById('condTabs'),
+          document.getElementById('condNote'));
   function condTouchGuard(e) {
     var t = e.target;
     if (t.closest && (t.closest('.bs-wheel') || t.closest('.opts-scroll'))) return;  // 内部滚动区放行
@@ -2126,6 +2157,9 @@
       var idx = Math.max(0, DAYS_ALL.indexOf(editState.days));
       condWheel.scrollTop = idx * DAY_H;
       updateCondWheel();
+      var sEl = document.getElementById('condOptsScroll');
+      sEl.scrollLeft = groupStart(sEl, editState.tab);  // 定位到当前计费方式组
+      setTimeout(function () { sEl.scrollLeft = groupStart(sEl, editState.tab); }, 350);  // 开场动画结束后兜底
     });
   }
   function closeCondModal() {
