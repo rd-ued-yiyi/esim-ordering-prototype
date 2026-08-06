@@ -326,7 +326,7 @@
   /* 搜索态：header 区加底边框（Figma 848-41868） */
   .dm-head.searching { border-bottom: 1px solid var(--kk-border-lighter); }
 
-  .dm-cats { display: flex; gap: 10px; padding: 0 20px; overflow-x: auto; scrollbar-width: none; }
+  .dm-cats { display: flex; gap: 10px; padding: 0 20px 8px; overflow-x: auto; scrollbar-width: none; }
   .dm-cats::-webkit-scrollbar { display: none; }
   .dm-cat {
     display: inline-flex; align-items: center;
@@ -1125,14 +1125,14 @@
     <div class="bs-handle"></div>
     <div class="bs-bar">
       <button class="bs-close" data-bs-close aria-label="关闭"><span class="ic ic-24"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjEzLjA2NzciIGhlaWdodD0iMTMuMDY3NyIgdmlld0JveD0iMCAwIDEzLjA2NzcgMTMuMDY3NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgaWQ9IlZlY3RvciI+CjxwYXRoIGQ9Ik0xMi44NDgxIDEuMjgwMzNDMTMuMTQxIDAuOTg3NDM3IDEzLjE0MSAwLjUxMjU2MyAxMi44NDgxIDAuMjE5NjdDMTIuNTU1MiAtMC4wNzMyMjMzIDEyLjA4MDMgLTAuMDczMjIzMyAxMS43ODc0IDAuMjE5NjdMNi41MzM4NyA1LjQ3MzIxTDEuMjgwMzMgMC4yMTk2N0MwLjk4NzQzNyAtMC4wNzMyMjMzIDAuNTEyNTYzIC0wLjA3MzIyMzMgMC4yMTk2NyAwLjIxOTY3Qy0wLjA3MzIyMzMgMC41MTI1NjMgLTAuMDczMjIzMyAwLjk4NzQzNyAwLjIxOTY3IDEuMjgwMzNMNS40NzMyMSA2LjUzMzg3TDAuMjE5NjcgMTEuNzg3NEMtMC4wNzMyMjMzIDEyLjA4MDMgLTAuMDczMjIzMyAxMi41NTUyIDAuMjE5NjcgMTIuODQ4MUMwLjUxMjU2MyAxMy4xNDEgMC45ODc0MzcgMTMuMTQxIDEuMjgwMzMgMTIuODQ4MUw2LjUzMzg3IDcuNTk0NTNMMTEuNzg3NCAxMi44NDgxQzEyLjA4MDMgMTMuMTQxIDEyLjU1NTIgMTMuMTQxIDEyLjg0ODEgMTIuODQ4MUMxMy4xNDEgMTIuNTU1MiAxMy4xNDEgMTIuMDgwMyAxMi44NDgxIDExLjc4NzRMNy41OTQ1MyA2LjUzMzg3TDEyLjg0ODEgMS4yODAzM1oiIGZpbGw9ImJsYWNrIi8+CjwvZz4KPC9zdmc+" width="13.07" height="13.07"></span></button>
-      <span class="bs-title">包含地区</span>
+      <span class="bs-title">包含国家/地区</span>
       <span class="bs-spacer"></span>
     </div>
     <div class="bs-body">
       <div class="bs-region-title" id="bsRegionName"></div>
       <ul class="bs-country-list" id="bsRegionList"></ul>
     </div>
-    <div class="bs-foot"><button class="cta" id="bsRegionConfirm">确定</button></div>
+    <div class="bs-foot"><button class="cta" id="bsRegionConfirm">确定选择</button></div>
   </div>
 
   <div class="bsheet" id="bsHowto">
@@ -1829,7 +1829,7 @@
   var regionSheetR = null;
   function openRegionSheet(r) {
     regionSheetR = r;
-    document.getElementById('bsRegionName').textContent = r.name + ' 包含的地区';
+    document.getElementById('bsRegionName').textContent = r.name + ' 包含的国家/地区';
     var ul = document.getElementById('bsRegionList');
     ul.innerHTML = '';
     (r.list || r.desc.split('、')).forEach(function (n) {
