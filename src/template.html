@@ -172,12 +172,12 @@
   .faq-item:last-child { border-bottom: 0; }
   .faq-q {
     display: flex; align-items: center; gap: 16px;
-    padding: 12px 0; cursor: pointer; width: 100%; background: none; border: 0; text-align: left;
+    padding: 20px 0; cursor: pointer; width: 100%; background: none; border: 0; text-align: left;  /* Figma 行节奏 64（20+24+20） */
   }
   .faq-q .qtext { flex: 1 1 0; min-width: 0; color: var(--kk-text-darker); }
   .faq-q .chev { transition: transform .2s ease; }
   .faq-item.open .faq-q .chev { transform: rotate(180deg); }
-  .faq-a { display: none; padding: 0 0 16px; color: var(--kk-text-darker); }
+  .faq-a { display: none; padding: 0 0 20px; color: var(--kk-text-darker); }
   .faq-item.open .faq-a { display: block; }
 
   /* ================= 目的地页 ================= */
@@ -1758,6 +1758,19 @@
     dv.textContent = state.days + ' 天';
     dv.classList.toggle('has-value', state.daysTouched);  // 未主动选时浅灰，主动选后深色
     renderOpts();  // 天数变化联动流量档：起价重算、档位过滤、推荐 badge 调整
+    // 与修改条件 modal 同规则：切天数后把选中档位平滑居中带回可视区（spy 加保护窗不抢 tab）
+    var os = document.getElementById('dataOptsScroll');
+    if (os._spyGuard) os._spyGuard(700);
+    requestAnimationFrame(function () {
+      var sel = document.querySelector('#dataOpts .opt.sel');
+      if (!sel) return;
+      var sr = os.getBoundingClientRect(), cr = sel.getBoundingClientRect();
+      if (!sr.width) return;
+      os.scrollTo({
+        left: Math.max(0, os.scrollLeft + (cr.left + cr.width / 2) - (sr.left + sr.width / 2)),
+        behavior: 'smooth'
+      });
+    });
     updateCta();
   }
   document.querySelectorAll('#dayChips .chip').forEach(function (el) {
