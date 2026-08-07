@@ -718,7 +718,7 @@
   .det-sec[data-sec="imgs"] { padding: 24px; }
   /* 首屏方案卡（Figma 1009-43088）：condition+标题+标签 装进 2px 描边白卡 */
   .det-hero { display: flex; flex-direction: column; gap: 8px;
-    border: 2px solid #CEF0F3; border-radius: 8px; padding: 16px; }
+    border: 2px solid #CEF0F3; border-radius: 12px; padding: 16px; }
   .det-hero .det-cond { margin-bottom: 0; }
   .det-hero .det-title { margin: 0; }
   .det-hero .pkg-tags { margin-top: 0; }
@@ -1690,14 +1690,18 @@
 
       <section class="det-sec" data-sec="imgs">
         <h2 class="det-h5">图文说明</h2>
-        <!-- 架构＝摘要描述 + 图文（caption 8px→图）；文字与图片取自 KKday 商品 243815 商品说明 -->
-        <p class="det-body-md">此商品文案由机器翻译提供，相关用语可能与惯用论述、原文内容有所差异，请知悉。</p>
-        <p class="det-body-md" style="margin-top:24px;">购买前请先确认手机可用 eSIM，订购后无法取消订单退款。</p>
-        <div class="det-fig"><img alt="拨打 *#06# 检查手机是否支援 eSIM（装置资讯有 EID 序号）" src="{{IMG_KK_STEP1}}"></div>
-        <p class="det-body-md" style="margin-top:24px;">启用 eSIM 前请先更新 iOS 至最新版本，并连线稳定 WiFi，旧版 iOS 和网络不稳定是 eSIM 启用失败的常见原因。</p>
-        <div class="det-fig"><img alt="启用前先更新 iOS 并连线稳定 WiFi" src="{{IMG_KK_STEP2}}"></div>
-        <p class="det-body-md" style="margin-top:24px;">开启相机扫描 eSIM，点击「行动方案」。</p>
-        <div class="det-fig"><img alt="开启相机扫描 eSIM QR 码" src="{{IMG_KK_STEP3}}"></div>
+        <!-- 架构＝摘要描述 + 图文（一眼过：全量图片滑动看完）；图片取自 KKday 商品 243815 商品说明 -->
+        <p class="det-body-md">本商品由 KDDI 原生网络提供，落地即用、免换实体卡。下方图文涵盖装置支援确认、安装设定到使用提醒，滑动即可一次看完。</p>
+        <div class="det-fig" style="margin-top:24px;"><img alt="可用 eSIM 的手机：拨号输入 *#06# 查看 EID 序号" src="{{IMG_KK_1}}"></div>
+        <div class="det-fig"><img alt="启用 eSIM 前先更新 iOS 并连线稳定 WiFi" src="{{IMG_KK_2}}"></div>
+        <div class="det-fig"><img alt="开启相机扫描 eSIM，点击「行动方案」" src="{{IMG_KK_3}}"></div>
+        <div class="det-fig"><img alt="启用约 2–3 分钟，请保持连线" src="{{IMG_KK_4}}"></div>
+        <div class="det-fig"><img alt="选择行动方案标签，可自订 eSIM 名称" src="{{IMG_KK_5}}"></div>
+        <div class="det-fig"><img alt="选择预设号码" src="{{IMG_KK_6}}"></div>
+        <div class="det-fig"><img alt="iMessage / FaceTime 设定" src="{{IMG_KK_7}}"></div>
+        <div class="det-fig"><img alt="行动数据选择 eSIM，数据漫游保持关闭" src="{{IMG_KK_8}}"></div>
+        <div class="det-fig"><img alt="手动加入 eSIM 启用码" src="{{IMG_KK_9}}"></div>
+        <div class="det-fig"><img alt="手动加入 eSIM 步骤" src="{{IMG_KK_10}}"></div>
       </section>
 
       <div class="det-pid">产品编号： 123456</div>
