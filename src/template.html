@@ -162,7 +162,8 @@
     background: #fff; cursor: pointer;
   }
   .guide-tab .lbl { color: var(--kk-text-darker); }
-  .guide-tab .ic svg { width: 20px; height: 20px; display: block; }  /* 维持原图标视觉尺寸（~20px），非撑满 24 */
+  .guide-tab .ic { width: 32px; height: 32px; }  /* 安装指南 tile 图标按设计稿放大 */
+  .guide-tab .ic svg { width: 32px; height: 32px; display: block; }
 
   /* ---------- faq card ---------- */
   .faq-head { display: flex; align-items: center; gap: 20px; }
@@ -862,24 +863,28 @@
   .cpn-desc { margin-top: 4px; font-size: 12px; line-height: 16px; color: var(--kk-text-dark); }
   .cpn-exp { margin-top: 4px; font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
   /* 评论页 */
-  .rv-summary { flex: 0 0 auto; display: flex; align-items: center; gap: 8px; padding: 16px 20px 12px; background: #fff; }
+  .rv-scroll { flex: 1 1 0; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain;
+    background: var(--kk-surface-light); }
+  .rv-summary { display: flex; align-items: center; gap: 8px; padding: 16px 20px 12px; background: #fff; }
+  #rvKws { background: #fff; }  /* 与评分块连成同一白色区块 */
   .rv-summary .badge9 { background: var(--kk-primary-medium); color: #fff; font-size: 24px; line-height: 30px; font-weight: 600;
     padding: 4px 8px; border-radius: 16px 12px 12px 4px; }
   .rv-summary .gcol { display: flex; flex-direction: column; }
   .rv-summary .gt { font-size: 18px; line-height: 26px; font-weight: 600; color: var(--kk-text-darker); }
   .rv-summary .gc { font-size: 12px; line-height: 16px; color: var(--kk-text-dark); }
-  .rv-filters { flex: 0 0 auto; background: #fff; border-bottom: 1px solid var(--kk-border-lighter); }
+  /* 排序 bar：随内容滚动，触顶后吸附在标题栏下方 */
+  .rv-sortbar { position: sticky; top: 0; z-index: 2; background: #fff;
+    padding-top: 4px; border-bottom: 1px solid var(--kk-border-lighter); }
   .rv-sorts { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding: 0 20px 12px; }
   .rv-sorts::-webkit-scrollbar { display: none; }
   .rv-sort { flex: 0 0 auto; border: 1px solid var(--kk-border-light); background: #fff; border-radius: 999px;
     padding: 6px 16px; font-size: 14px; line-height: 20px; color: var(--kk-text-darker); cursor: pointer; }
   .rv-sort.sel { background: var(--kk-primary-lighter); border-color: var(--kk-primary-medium); color: #13A3B6; }
-  .rv-body { flex: 1 1 0; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain;
-    background: var(--kk-surface-light); }
+  .rv-body { background: var(--kk-surface-light); }
   .rv-item { background: #fff; padding: 20px; border-bottom: 1px solid var(--kk-border-lighter); }
   .rv-head { display: flex; align-items: center; gap: 12px; }
-  .rv-ava { width: 40px; height: 40px; border-radius: 50%; flex: 0 0 auto; background: linear-gradient(135deg,#8FD3E8,#C4E4EA); overflow: hidden; }
-  .rv-ava img { width: 100%; height: 100%; object-fit: cover; }
+  .rv-ava { width: 40px; height: 40px; border-radius: 50%; flex: 0 0 auto; overflow: hidden; }
+  .rv-ava svg, .rv-ava img { display: block; width: 100%; height: 100%; object-fit: cover; }
   .rv-who { flex: 1 1 0; min-width: 0; }
   .rv-name { display: block; font-size: 14px; line-height: 20px; font-weight: 500; color: var(--kk-text-darker); }
   .rv-role { display: block; font-size: 12px; line-height: 16px; color: var(--kk-text-dark); }
@@ -1752,15 +1757,15 @@
         <span class="dm-spacer"></span>
       </div>
     </div>
-    <div class="rv-summary">
-      <span class="badge9" id="rvScore">4.6</span>
-      <span class="gcol"><span class="gt" id="rvGrade">非常好</span><span class="gc" id="rvCount">依据 234 则评论</span></span>
-    </div>
-    <div class="rv-filters">
-      <div class="rv-sorts" id="rvSorts"></div>
+    <div class="rv-scroll" id="rvScroll">
+      <div class="rv-summary">
+        <span class="badge9" id="rvScore">4.6</span>
+        <span class="gcol"><span class="gt" id="rvGrade">非常好</span><span class="gc" id="rvCount">依据 234 则评论</span></span>
+      </div>
       <div class="det-kws" id="rvKws" style="padding:0 20px 16px;"></div>
+      <div class="rv-sortbar"><div class="rv-sorts" id="rvSorts"></div></div>
+      <div class="rv-body" id="rvBody"></div>
     </div>
-    <div class="rv-body" id="rvBody"></div>
   </div>
 
   <div class="toast" id="toast"></div>
@@ -3237,6 +3242,9 @@
       if (i) warns.appendChild(el('<span class="wdiv"></span>'));
       var e = el('<span></span>'); e.textContent = w; warns.appendChild(e);
     });
+    // 供应商信息上方间距恒定（距「展开更多」24px），不因黄色提醒是否显示而变：
+    // 有提醒时提醒紧贴供应商（4px），无提醒时供应商自身补足 24px
+    document.getElementById('detProvider').style.marginTop = p.warns.length ? '4px' : '24px';
     // 政策行：沿用卡面 perks 语义（详情版文案更完整）+ 覆盖范围行（Figma 913-43597 带下划线）
     var pol = document.getElementById('detPolicies'); pol.innerHTML = '';
     p.perks.forEach(function (pk) {
@@ -3524,6 +3532,17 @@
     { name: '芝麻', role: '亲子', dep: '2025/07/02', at: '2025/07/04', stars: 4, title: '亲子出游首选', text: '一家四口共用热点很方便，导航看影片都顺，客服回覆也快。' },
     { name: 'Ray', role: '商务旅客', dep: '2025/05/22', at: '2025/05/24', stars: 5, title: '落地即用', text: '飞机落地开机就自动连上，完全不用设定，对商务出差太友善了。' }
   ];
+  // 评论用户头像：配色首字母头像（自包含、按用户稳定分配一种配色，视觉上有随机感）
+  var AVA_COLORS = [['#FCE1E4','#DA6C82'],['#DBE8FB','#4E82E3'],['#E1F1E3','#3F9C63'],['#FBEFD3','#CE8E24'],
+    ['#EBE1FB','#7D57C9'],['#D5F0F2','#128FA0'],['#FCE6D2','#D9722F'],['#E3E9F1','#516384'],['#F5E1EF','#B45BA0']];
+  function rvAvatar(name, i) {
+    var c = AVA_COLORS[i % AVA_COLORS.length];
+    var ch = (name || '?').trim().charAt(0).toUpperCase();
+    return '<svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">' +
+      '<rect width="40" height="40" fill="' + c[0] + '"/>' +
+      '<text x="20" y="21" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif" font-size="17" font-weight="600" fill="' +
+      c[1] + '" text-anchor="middle" dominant-baseline="central">' + ch + '</text></svg>';
+  }
   function renderReviewPage() {
     document.getElementById('rvScore').textContent = reviewP.rating.toFixed(1);
     document.getElementById('rvGrade').textContent = reviewP.rating >= 4.6 ? '非常好' : reviewP.rating >= 4.0 ? '很好' : '一般';
@@ -3544,7 +3563,7 @@
       kws.appendChild(e);
     });
     var body = document.getElementById('rvBody'); body.innerHTML = '';
-    REVIEWS.forEach(function (r) {
+    REVIEWS.forEach(function (r, idx) {
       var stars = '';
       for (var i = 0; i < 5; i++) stars += '<span class="ic ic-16">' + (i < r.stars ? ICONS.star : ICONS.starGrey) + '</span>';
       var it = el('<div class="rv-item"><div class="rv-head"><span class="rv-ava"></span>' +
@@ -3553,6 +3572,7 @@
         '<div class="rv-stars">' + stars + '</div>' +
         '<div class="rv-title"></div><div class="rv-text"></div>' +
         '<div class="rv-help"><span class="ic ic-16">' + ICONS.thumb + '</span>有帮助吗?</div></div>');
+      it.querySelector('.rv-ava').innerHTML = rvAvatar(r.name, idx);
       it.querySelector('.rv-name').textContent = r.name;
       it.querySelector('.rv-role').textContent = r.role;
       it.querySelector('.rv-dates').innerHTML = '出发日 ' + r.dep + '<br>评论于 ' + r.at;
@@ -3560,7 +3580,7 @@
       it.querySelector('.rv-text').textContent = r.text;
       body.appendChild(it);
     });
-    body.scrollTop = 0;
+    document.getElementById('rvScroll').scrollTop = 0;
   }
   var reviewP = { rating: 4.6, reviews: 234 };
   document.getElementById('detMoreReviews').addEventListener('click', function () {
