@@ -588,7 +588,7 @@
   .pkg-rating .bought { margin-left: auto; display: inline-flex; align-items: center; gap: 4px;
     font-size: 12px; line-height: 16px; color: var(--kk-text-dark); }
   .pkg-rating .bought.hot { color: var(--kk-text-critical); }
-  .pkg-hr { border: 0; border-top: 1px solid var(--kk-border-lighter); margin: 16px 0; }
+  .pkg-hr { border: 0; border-top: 1px solid var(--kk-border-lighter); margin: 12px 0 16px; }  /* Figma 863-74100 调整后：评分→线 12，线→价格 16 */
   .pkg-buy { display: flex; align-items: center; gap: 8px; }
   .pkg-price { flex: 1 1 0; min-width: 0; }
   .pkg-off { display: inline-block; background: var(--kk-text-critical); color: #fff;
@@ -2747,10 +2747,11 @@
       price.querySelector('.pkg-now .num').textContent = p.now.toLocaleString();
       if (p.was) price.querySelector('.pkg-was').textContent = 'NT$ ' + p.was.toLocaleString();
       price.querySelector('.pkg-per').textContent = '≈NT$' + p.perDay + '/天';
-      // 整卡点击进入详情（默认状态）；点评论数 → 详情并锚定评论区；订购按钮不进详情
+      // 整卡点击进入详情（默认状态）；点评分整块（星星+分数+评语+评论数）→ 详情并锚定评论区；
+      // 「已购」销量在同一行但语义不同，走默认详情；订购按钮不进详情
       card.addEventListener('click', function (e) {
         if (e.target.closest('.pkg-cta')) return;
-        if (e.target.closest('.rcount')) { openDetail(p, 'review'); return; }
+        if (e.target.closest('.pkg-rating') && !e.target.closest('.bought')) { openDetail(p, 'review'); return; }
         openDetail(p);
       });
       card.querySelector('.pkg-cta').addEventListener('click', function () {
