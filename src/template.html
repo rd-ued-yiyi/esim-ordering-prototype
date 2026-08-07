@@ -681,7 +681,7 @@
   .det-table .th { background: var(--kk-surface-lighter); padding: 12px 16px;
     font-size: 14px; line-height: 20px; font-weight: 600; color: var(--kk-text-darker);
     border-bottom: 1px solid var(--kk-border-lighter); }
-  .det-table .tr { display: flex; border-bottom: 1px solid var(--kk-border-lighter); }
+  .det-table .tr { display: flex; align-items: flex-start; border-bottom: 1px solid var(--kk-border-lighter); }  /* 两列顶对齐 */
   .det-table .tr:last-child { border-bottom: 0; }
   .det-table .td-k { flex: 0 0 120px; padding: 16px; font-size: 14px; line-height: 20px; color: var(--kk-text-dark); box-sizing: border-box; }
   .det-table .td-v { flex: 1 1 0; min-width: 0; padding: 16px 16px 16px 16px; font-size: 14px; line-height: 20px; color: var(--kk-text-darker); }
@@ -760,7 +760,7 @@
   .det-fig { margin-top: 8px; }
   .det-fig img { display: block; width: 100%; border-radius: var(--r-md); }
   .det-pid { padding: 8px 0 16px; text-align: center; font-size: 12px; line-height: 16px; color: var(--kk-text-medium);
-    background: #fff; margin-top: 8px; }
+    margin-top: 8px; }  /* 无白底，透出 det-body 灰底 */
   /* 优惠横幅 + 底部 CTA */
   /* 优惠横幅（Figma 936-48931）：critical-lighter 底 + 32px coupon picto + 真实票券描边资产 + 领取> */
   .det-coupon { flex: 0 0 auto; display: flex; align-items: center; gap: 12px;
@@ -1428,7 +1428,7 @@
           <div class="tr"><div class="td-k">传输规格</div><div class="td-v" id="dtTrans"></div></div>
         </div>
         <!-- 规格总览：本商品支持的所有规格档位（只读，非可切换；超 3 行可展开/收起，Figma 998-42155） -->
-        <h3 class="det-h2" style="margin-top:32px;">规格总览</h3>
+        <h3 class="det-h2" style="margin-top:32px;">套餐规格总览</h3>
         <div class="det-table">
           <div class="tr"><div class="td-k">用卡天数</div><div class="td-v" id="dtSpecDays"></div></div>
           <div class="tr"><div class="td-k">计费方式</div><div class="td-v" id="dtSpecBilling"></div></div>
@@ -2785,7 +2785,16 @@
       pol.appendChild(cov);
     }
     // 规格总览：本商品支持的所有档位（只读），并把用户当前选择标为「✓当前」（Figma 998-42155）
-    var areaList = multi ? dest.split(' ').filter(Boolean) : (region ? region.list : [dest]);
+    // 套餐规格总览的「支持地区」= 商品覆盖的完整地区列表（比适用范围更全，故常有多国可展开）：
+    // 多国→所选；区域→区域国家；单一→取含该国的区域/大洲的完整清单
+    var areaList;
+    if (multi) areaList = dest.split(' ').filter(Boolean);
+    else if (region) areaList = region.list;
+    else {
+      var act = GEO.continents.filter(function (c) { return c.countries.indexOf(dest) >= 0; })[0];
+      var arg = GEO.regions.concat(GEO.hotRegions).filter(function (r) { return r.list.indexOf(dest) >= 0; })[0];
+      areaList = act ? act.countries : (arg ? arg.list : [dest]);  // 优先大洲完整清单（更全，必超 3 行）
+    }
     // 用卡天数：代表档 ≤ 商品上限，并确保含当前所选天数，数值升序
     var dayNums = ['1', '2', '3', '5', '7', '10', '15', '20', '30', '60', '90']
       .filter(function (n) { return +n <= (p.maxDays || 30); });
