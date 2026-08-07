@@ -74,6 +74,10 @@ def png_datauri(name):
     b = (ROOT / "assets" / name).read_bytes()
     return "data:image/png;base64," + base64.b64encode(b).decode()
 
+def img_datauri(name, mime="image/webp"):
+    b = (ROOT / "assets" / name).read_bytes()
+    return "data:" + mime + ";base64," + base64.b64encode(b).decode()
+
 def svg_datauri(markup):
     """返回裸 data-URI 字符串（不包 <img>），供 JS 里当 src 用（评论实拍缩图）。"""
     return "data:image/svg+xml;base64," + base64.b64encode(markup.strip().encode("utf-8")).decode()
@@ -171,6 +175,11 @@ subs = {
     "{{IMG_GUIDE1}}":      png_datauri("detail/guide1.png"),
     "{{IMG_GUIDE2}}":      png_datauri("detail/guide2.png"),
     "{{IMG_GUIDE3}}":      png_datauri("detail/guide3.png"),
+    # KKday 商品 243815 商品说明·图文介绍原图（内联，自包含）
+    "{{IMG_KK_BANNER}}":   img_datauri("intro/kddi-banner.webp"),
+    "{{IMG_KK_STEP1}}":    img_datauri("intro/step1.webp"),
+    "{{IMG_KK_STEP2}}":    img_datauri("intro/step2.webp"),
+    "{{IMG_KK_STEP3}}":    img_datauri("intro/step3.webp"),
     "{{PICTO_tours}}":     svg("picto_tours", "picto"),
     "{{PICTO_cruise}}":    svg("picto_cruise", "picto"),
     "{{PICTO_travel}}":    svg("picto_travel", "picto"),
