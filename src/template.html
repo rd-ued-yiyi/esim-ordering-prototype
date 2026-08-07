@@ -3331,6 +3331,7 @@
   // 点选日期即确定：写回来源草稿/状态并关闭日历、返回来源
   function commitDate(pick) {
     document.getElementById('dateSheet').classList.remove('open');
+    unlockBody();  // 释放日历自身的 body 锁（openDateSheet 时 lockBody 过）；否则计数不平衡会让列表页锁死无法滑动
     if (dateReturn === 'filter') { fDraft.date = pick; renderFilterSheet(); setApplyBtn(document.getElementById('fsApply'), fDraft); }
     else if (dateReturn === 'cat') { fDraft.date = pick; renderCatOpts(); setApplyBtn(document.getElementById('catApply'), fDraft); }
     else { fState.date = pick; closeSheets(); renderPlans(); window.scrollTo(0, 0); }
