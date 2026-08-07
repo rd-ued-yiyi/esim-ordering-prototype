@@ -1033,12 +1033,17 @@
     transition: transform .5s cubic-bezier(.35,.8,.3,1), opacity .5s ease;
     will-change: transform, opacity;
   }
-  .dest-bar.pulse, .pl-title-wrap.pulse { animation: barPulse .7s ease; }
+  /* 选择/切换目的地：选框轻微「弹一下」+ cyan 涟漪（叠加，均轻量克制） */
+  .dest-bar.pulse, .pl-title-wrap.pulse { animation: barPulse .7s ease, barPop .34s cubic-bezier(.34,1.5,.5,1); }
   .pl-title-wrap.pulse { border-radius: var(--r-md); }  /* 圆角只给列表页标题，勿影响 dest-bar 的 12px */
   @keyframes barPulse {
     0%   { box-shadow: 0 0 0 0 rgba(38,190,201,.45); }
     100% { box-shadow: 0 0 0 14px rgba(38,190,201,0); }
   }
+  @keyframes barPop { 0% { transform: scale(.965); } 100% { transform: scale(1); } }
+  /* 点按触感：目的地 chip / 搜索框 / 选框按下轻微内缩 */
+  .dest-card .chip, .search-bar, .dest-bar, .pl-title-wrap { transition: transform .12s ease; }
+  .dest-card .chip:active, .search-bar:active, .dest-bar:active, .pl-title-wrap:active { transform: scale(.97); }
 
   /* ---------- toast ---------- */
   .toast {
@@ -2083,7 +2088,27 @@
       { name: '海湾阿拉伯', desc: '阿联酋、沙特、卡塔尔、科威特、巴林、阿曼', count: 6,
         list: ['阿联酋','沙特阿拉伯','卡塔尔','科威特','巴林','阿曼'] },
       { name: '北欧地区', desc: '瑞典、挪威、丹麦、芬兰、冰岛', count: 5,
-        list: ['瑞典','挪威','丹麦','芬兰','冰岛'] }
+        list: ['瑞典','挪威','丹麦','芬兰','冰岛'] },
+      { name: '环球通', desc: '美国、日本、韩国、法国、英国、德国、澳大利亚', count: 16,
+        list: ['美国','日本','韩国','法国','英国','德国','意大利','西班牙','澳大利亚','加拿大','泰国','新加坡','阿联酋','土耳其','巴西','南非'] },
+      { name: '日韩双国', desc: '日本、韩国', count: 2,
+        list: ['日本','韩国'] },
+      { name: '港澳台', desc: '香港、澳门、台湾', count: 3,
+        list: ['香港','澳门','台湾'] },
+      { name: '西欧', desc: '法国、德国、荷兰、比利时、瑞士、奥地利', count: 7,
+        list: ['法国','德国','荷兰','比利时','卢森堡','瑞士','奥地利'] },
+      { name: '东欧', desc: '波兰、捷克、匈牙利、罗马尼亚、保加利亚', count: 7,
+        list: ['波兰','捷克','匈牙利','罗马尼亚','保加利亚','斯洛伐克','斯洛文尼亚'] },
+      { name: '英国&爱尔兰', desc: '英国、爱尔兰', count: 2,
+        list: ['英国','爱尔兰'] },
+      { name: '南亚', desc: '印度、斯里兰卡、尼泊尔、孟加拉国、马尔代夫', count: 6,
+        list: ['印度','斯里兰卡','尼泊尔','孟加拉国','马尔代夫','不丹'] },
+      { name: '南美', desc: '巴西、阿根廷、智利、秘鲁、哥伦比亚、乌拉圭', count: 8,
+        list: ['巴西','阿根廷','智利','秘鲁','哥伦比亚','乌拉圭','厄瓜多尔','玻利维亚'] },
+      { name: '非洲通', desc: '南非、肯尼亚、埃及、摩洛哥、坦桑尼亚', count: 10,
+        list: ['南非','肯尼亚','埃及','摩洛哥','坦桑尼亚','加纳','尼日利亚','突尼斯','乌干达','毛里求斯'] },
+      { name: '高加索&中亚', desc: '格鲁吉亚、亚美尼亚、阿塞拜疆、哈萨克斯坦', count: 5,
+        list: ['格鲁吉亚','亚美尼亚','阿塞拜疆','哈萨克斯坦','乌兹别克斯坦'] }
     ],
     hotRegions: [
       { name: '亚洲通', desc: '日本、韩国、泰国、越南、马来西亚、土耳其、菲律宾', count: 12,
@@ -3279,9 +3304,9 @@
     if (p.promo === 'special') return '<span class="pkg-off pkg-off--special">特别优惠</span><br>';
     return '';
   }
-  // 除「免费取消 / 不可取消」外，其余均套用「取消日期 | 手续费」表格样式（Figma 1029-74628）
+  // 除「免费取消 / 不可取消」外，其余均套用「取消日期（含） | 政策」表格样式（Figma 1029-74628）
   function cxlTable(rows) {
-    return '<div class="cxl-table"><div class="r head"><div class="c">取消日期</div><div class="c">手续费</div></div>' +
+    return '<div class="cxl-table"><div class="r head"><div class="c">取消日期（含）</div><div class="c">政策</div></div>' +
       rows.map(function (r) { return '<div class="r"><div class="c">' + r[0] + '</div><div class="c">' + r[1] + '</div></div>'; }).join('') +
       '</div>';
   }
@@ -3289,15 +3314,22 @@
     var body;
     if (type === 'free') {
       body = '<p class="det-body-md">免费取消</p>';
-    } else if (type === 'cond') {  // 免费或不可：3天前免费(0%) / 0~2天不可(100%)
-      body = cxlTable([['所选日期 3 天（含）前', '0%'], ['所选日期 0～2 天（含）前', '100%']]);
-    } else if (type === 'fee') {   // 收费取消：阶梯手续费
-      body = cxlTable([['所选日期 7 天（含）前', '0%'], ['所选日期 3～6 天（含）前', '50%'], ['所选日期 0～2 天（含）前', '100%']]);
+    } else if (type === 'cond') {  // 免费或不可：3天前免费 / 0~2天不可
+      body = cxlTable([
+        ['所选日期 3 天前', '未使用可免费取消'],
+        ['所选日期 0～2 天前', '不可取消、更改订单、也不可请求退款']
+      ]);
+    } else if (type === 'fee') {   // 收费取消：阶梯政策（Figma 1029-74628）
+      body = cxlTable([
+        ['所选日期 10 天前', '未使用可免费取消'],
+        ['所选日期 3～5 天前', '手续费 50%'],
+        ['所选日期 0～2 天前', '手续费 100%'],
+        ['所选日期 0 天前', '不可取消、更改订单、也不可请求退款']
+      ]);
     } else {
       body = '<p class="det-body-md">商品一经订购完成后，即不可取消、更改订单，亦不得请求退款</p>';
     }
-    // 表格态（条件/收费）首行提示为「试算」说明；免费/不可态首行为「注意」
-    var note1 = (type === 'cond' || type === 'fee') ? '上述资讯以目前日期试算，实际请依订购资讯为主。' : '注意';
+    var note1 = '注意';  // Figma 1029-74628：提示首行统一为「注意」
     return '<div class="cxl-wrap">' + body +
       '<div class="cxl-note"><span class="ic ic-16">' + ICONS.info + '</span>' +
       '<div class="cxl-note-txt"><p>' + note1 + '</p><p>' + CXL_SUPPLIER + '</p></div></div></div>';
