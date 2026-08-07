@@ -659,11 +659,13 @@
     font-size: 14px; line-height: 20px; font-weight: 600; color: #13A3B6; margin-bottom: 8px; }
   .det-title { font-size: 22px; line-height: 28px; font-weight: 600; color: var(--kk-text-darker); margin: 0 0 8px; }
   .det-sec .pkg-hr { margin: 24px 0; }
+  /* 首屏政策 icon+text：20px 图标 + 6px gap（Figma 902-41283，调整后） */
   .det-policies { display: flex; flex-direction: column; gap: 8px; margin-top: 12px;
     font-size: 14px; line-height: 20px; color: #13A3B6; }
-  .det-policies .perk { display: inline-flex; align-items: center; gap: 8px; }
+  .det-policies .perk { display: inline-flex; align-items: center; gap: 6px; }
+  .det-policies .perk .ic { width: 20px; height: 20px; }
   .det-policies .perk.dark { color: var(--kk-text-darker); }
-  .det-policies .perk.link .pt { text-decoration: underline; }
+  .det-policies .perk.link .pt { text-decoration: underline; text-underline-offset: 2px; }
   .det-intro {
     margin: 24px 0 0; font-size: 14px; line-height: 20px; color: var(--kk-text-darker);
     display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
@@ -696,7 +698,9 @@
   .det-note { display: flex; gap: 8px; margin-top: 16px; font-size: 12px; line-height: 16px; color: var(--kk-text-dark); }
   .det-note .nt { flex: 1 1 0; }
   .det-note-ind { margin: 8px 0 0 24px; font-size: 12px; line-height: 18px; color: var(--kk-text-dark); }
-  .det-inc { display: flex; align-items: center; gap: 8px; font-size: 14px; line-height: 20px; color: var(--kk-text-darker); margin-top: 8px; }
+  /* 费用包含/不包含 icon+text：20px 图标 + 6px gap（Figma 989-42080，调整后） */
+  .det-inc { display: flex; align-items: center; gap: 6px; font-size: 14px; line-height: 20px; color: var(--kk-text-darker); margin-top: 8px; }
+  .det-inc .ic { width: 20px; height: 20px; }
   /* 评论区（Review Section 871-78205） */
   .det-score { display: flex; align-items: center; gap: 8px; }
   .det-score .badge9 {
@@ -721,7 +725,8 @@
     padding: 8px 12px 8px 10px; font-size: 14px; line-height: 20px; color: var(--kk-text-darker); }
   .det-shots { display: flex; gap: 4px; margin-top: 8px; }
   .det-shot { flex: 1 1 0; aspect-ratio: 1; border-radius: 8px; position: relative; overflow: hidden;
-    background: linear-gradient(135deg, #DCEFF3 0%, #C4E4EA 60%, #A8D8E0 100%); }
+    background: var(--kk-surface-light); }
+  .det-shot > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
   .det-shot .ovl { position: absolute; inset: 0; background: rgba(0,0,0,.5);
     display: flex; align-items: center; justify-content: center;
     color: #fff; font-size: 14px; line-height: 20px; }
@@ -751,8 +756,10 @@
   /* 优惠横幅（Figma 936-48931）：critical-lighter 底 + 32px coupon picto + 真实票券描边资产 + 领取> */
   .det-coupon { flex: 0 0 auto; display: flex; align-items: center; gap: 12px;
     background: #FFF2F2; padding: 6px 8px; }
-  .det-coupon .cp-pic { width: 32px; height: 32px; flex: 0 0 auto;
-    display: inline-flex; align-items: center; justify-content: center; }
+  .det-coupon .cp-pic { width: 32px; height: 32px; flex: 0 0 auto; display: block; }
+  /* 整数尺寸 + contain：picto 原始尺寸是分数(30.95×27.2)，flex 居中会落在半像素上，
+     retina 下渲染成模糊边缘；固定 32×32 整数框消除亚像素定位，contain 保比例不变形 */
+  .det-coupon .cp-pic img { width: 32px; height: 32px; object-fit: contain; display: block; }
   .det-coupon .tks { display: inline-flex; align-items: center; gap: 8px; }
   .det-coupon .tkt { position: relative; height: 24px; flex: 0 0 auto;
     display: inline-flex; align-items: center; justify-content: center; }
@@ -1479,21 +1486,12 @@
         <div class="det-provider" id="detProvider"></div>
         <hr class="pkg-hr">
         <h3 class="det-h2">基本信息</h3>
+        <!-- 顺序按调整后的 Figma 902-41074：卡片规格 / 加值与限制 / 通话与简讯 / 启用设定 / 网络详情 -->
         <div class="det-table">
           <div class="th">卡片规格</div>
           <div class="tr"><div class="td-k">SIM 卡片规格</div><div class="td-v">eSIM</div></div>
           <div class="tr"><div class="td-k">卡片有效期</div><div class="td-v">2030-12-12 前有效</div></div>
           <div class="tr"><div class="td-k">卡片供应商</div><div class="td-v" id="dtVendor"></div></div>
-          <div class="th">网络详情</div>
-          <div class="tr"><div class="td-k">电信商</div><div class="td-v" id="dtCarrier"></div></div>
-          <div class="tr"><div class="td-k">虚拟运营商MVNO</div><div class="td-v" id="dtMvno"></div></div>
-          <div class="tr"><div class="td-k">网络资源</div><div class="td-v" id="dtNet"></div></div>
-          <div class="tr"><div class="td-k">IP类型</div><div class="td-v" id="dtIp"></div></div>
-          <div class="tr"><div class="td-k">传输规格</div><div class="td-v" id="dtTrans"></div></div>
-          <div class="th">启用设定</div>
-          <div class="tr"><div class="td-k">启用方式</div><div class="td-v" id="dtActivate"></div></div>
-          <div class="tr"><div class="td-k">流量激活计算方式</div><div class="td-v" id="dtCalc"></div></div>
-          <div class="tr"><div class="td-k">套餐有效期</div><div class="td-v" id="dtValid"></div></div>
           <div class="th">加值与限制</div>
           <div class="tr"><div class="td-k">是否加值</div><div class="td-v" id="dtTopup"></div></div>
           <div class="tr"><div class="td-k">不支援装置</div><div class="td-v">非全网通/锁网机型，以及不支援 eSIM 的部分旧款设备</div></div>
@@ -1501,6 +1499,16 @@
           <div class="tr"><div class="td-k">是否含通话</div><div class="td-v" id="dtCall"></div></div>
           <div class="tr"><div class="td-k">是否含短信</div><div class="td-v" id="dtSms"></div></div>
           <div class="tr"><div class="td-k">支持热点</div><div class="td-v" id="dtHotspot"></div></div>
+          <div class="th">启用设定</div>
+          <div class="tr"><div class="td-k">启用方式</div><div class="td-v" id="dtActivate"></div></div>
+          <div class="tr"><div class="td-k">流量激活计算方式</div><div class="td-v" id="dtCalc"></div></div>
+          <div class="tr"><div class="td-k">套餐有效期</div><div class="td-v" id="dtValid"></div></div>
+          <div class="th">网络详情</div>
+          <div class="tr"><div class="td-k">电信商</div><div class="td-v" id="dtCarrier"></div></div>
+          <div class="tr"><div class="td-k">虚拟运营商MVNO</div><div class="td-v" id="dtMvno"></div></div>
+          <div class="tr"><div class="td-k">网络资源</div><div class="td-v" id="dtNet"></div></div>
+          <div class="tr"><div class="td-k">IP类型</div><div class="td-v" id="dtIp"></div></div>
+          <div class="tr"><div class="td-k">传输规格</div><div class="td-v" id="dtTrans"></div></div>
         </div>
       </section>
 
@@ -1556,11 +1564,11 @@
           <span class="det-kw"><span class="ic ic-16"><img alt="" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMyIgaGVpZ2h0PSIxMyIgdmlld0JveD0iMCAwIDEzIDEzIiBmaWxsPSJub25lIj48Y2lyY2xlIGN4PSI2LjUiIGN5PSI2LjUiIHI9IjUuNzUiIHN0cm9rZT0iIzIxMjEyMSIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48Y2lyY2xlIGN4PSI0LjYiIGN5PSI1LjIiIHI9Ii45IiBmaWxsPSIjMjEyMTIxIi8+PGNpcmNsZSBjeD0iOC40IiBjeT0iNS4yIiByPSIuOSIgZmlsbD0iIzIxMjEyMSIvPjxwYXRoIGQ9Ik00LjMgOC44aDQuNCIgc3Ryb2tlPSIjMjEyMTIxIiBzdHJva2Utd2lkdGg9IjEuMyIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PC9zdmc+" width="13" height="13"></span>讯号死角</span>
         </div>
         <h3 class="det-sub" style="margin-top:16px;">旅客实拍</h3>
-        <div class="det-shots">
-          <div class="det-shot"></div>
-          <div class="det-shot" style="background:linear-gradient(135deg,#E8E4D8,#CFC8B0 70%);"></div>
-          <div class="det-shot" style="background:linear-gradient(160deg,#D8E8E4,#AECFC8 70%);"></div>
-          <div class="det-shot"><div class="ovl">+75</div></div>
+        <div class="det-shots" id="detShots">
+          <div class="det-shot"><img alt=""></div>
+          <div class="det-shot"><img alt=""></div>
+          <div class="det-shot"><img alt=""></div>
+          <div class="det-shot"><img alt=""><div class="ovl">+75</div></div>
         </div>
         <h3 class="det-sub" style="margin-top:16px;">评语</h3>
         <div class="det-reviews">
@@ -2784,6 +2792,7 @@
   // ---------- 套餐详情 Full-screen Modal（Figma 871-78047） ----------
   var detEl = document.getElementById('detailModal');
   var detBody = document.getElementById('detBody');
+  var SHOT_IMGS = ["data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MCA4MCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJzIiB4MT0iMCIgeTE9IjAiIHgyPSIwIiB5Mj0iMSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjOEZEM0U4Ii8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjRDZGMEY1Ii8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiBmaWxsPSJ1cmwoI3MpIi8+PGNpcmNsZSBjeD0iNjAiIGN5PSIyMCIgcj0iOSIgZmlsbD0iI0ZGRTA4QSIvPjxwYXRoIGQ9Ik0wIDUyIFE0MCA0NCA4MCA1MiBWNjQgSDBaIiBmaWxsPSIjM0ZBOUM5Ii8+PHBhdGggZD0iTTAgNjIgUTQwIDU2IDgwIDYyIFY4MCBIMFoiIGZpbGw9IiNFQUQ5QTgiLz48L3N2Zz4=","data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MCA4MCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJtIiB4MT0iMCIgeTE9IjAiIHgyPSIwIiB5Mj0iMSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjQkZFM0YyIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjRUFGNkZCIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiBmaWxsPSJ1cmwoI20pIi8+PGNpcmNsZSBjeD0iMjIiIGN5PSIyMCIgcj0iNyIgZmlsbD0iI0ZGRTdBNiIvPjxwYXRoIGQ9Ik0tNCA4MCBMMjYgMzQgTDQ0IDYyIFoiIGZpbGw9IiM3RkE4QkYiLz48cGF0aCBkPSJNMjAgNDIgTDI2IDM0IEwzMiA0MiBMMjggNDUgTDI0IDQyWiIgZmlsbD0iI2ZmZiIvPjxwYXRoIGQ9Ik0zMCA4MCBMNTggNDAgTDg2IDgwIFoiIGZpbGw9IiM1RThBQTYiLz48cGF0aCBkPSJNNTIgNDggTDU4IDQwIEw2NCA0OCBMNjAgNTEgTDU2IDQ4WiIgZmlsbD0iI2ZmZiIvPjwvc3ZnPg==","data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MCA4MCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJjIiB4MT0iMCIgeTE9IjAiIHgyPSIwIiB5Mj0iMSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjM0I0RTc2Ii8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjOEE2RTlFIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiBmaWxsPSJ1cmwoI2MpIi8+PGNpcmNsZSBjeD0iNjIiIGN5PSIxOCIgcj0iNiIgZmlsbD0iI0ZERjNDNCIvPjxnIGZpbGw9IiMyQTM1NTYiPjxyZWN0IHg9IjYiIHk9IjQ0IiB3aWR0aD0iMTIiIGhlaWdodD0iMzYiLz48cmVjdCB4PSIyMiIgeT0iMzQiIHdpZHRoPSIxNCIgaGVpZ2h0PSI0NiIvPjxyZWN0IHg9IjQwIiB5PSI0OCIgd2lkdGg9IjEyIiBoZWlnaHQ9IjMyIi8+PHJlY3QgeD0iNTYiIHk9IjM4IiB3aWR0aD0iMTYiIGhlaWdodD0iNDIiLz48L2c+PGcgZmlsbD0iI0ZGRDg2QiI+PHJlY3QgeD0iMjYiIHk9IjQwIiB3aWR0aD0iMyIgaGVpZ2h0PSIzIi8+PHJlY3QgeD0iMzIiIHk9IjQwIiB3aWR0aD0iMyIgaGVpZ2h0PSIzIi8+PHJlY3QgeD0iNjAiIHk9IjQ0IiB3aWR0aD0iMyIgaGVpZ2h0PSIzIi8+PHJlY3QgeD0iNjYiIHk9IjQ0IiB3aWR0aD0iMyIgaGVpZ2h0PSIzIi8+PC9nPjwvc3ZnPg==","data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MCA4MCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJ0IiB4MT0iMCIgeTE9IjAiIHgyPSIwIiB5Mj0iMSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjRjVDNkIwIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjRjhFM0QyIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiBmaWxsPSJ1cmwoI3QpIi8+PHBhdGggZD0iTTAgNjYgUTQwIDYwIDgwIDY2IFY4MCBIMFoiIGZpbGw9IiM5Q0MzOEYiLz48ZyBmaWxsPSIjQzc0NTJFIj48cmVjdCB4PSIxNiIgeT0iMjYiIHdpZHRoPSI0OCIgaGVpZ2h0PSI3IiByeD0iMSIvPjxyZWN0IHg9IjIwIiB5PSIzNCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQiLz48cmVjdCB4PSIyMiIgeT0iMzAiIHdpZHRoPSI3IiBoZWlnaHQ9IjQwIi8+PHJlY3QgeD0iNTEiIHk9IjMwIiB3aWR0aD0iNyIgaGVpZ2h0PSI0MCIvPjwvZz48L3N2Zz4=","data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MCA4MCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJrIiB4MT0iMCIgeTE9IjAiIHgyPSIwIiB5Mj0iMSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjNkZBOERDIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjQzlFMkY1Ii8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiBmaWxsPSJ1cmwoI2spIi8+PGVsbGlwc2UgY3g9IjI2IiBjeT0iNTgiIHJ4PSIyNiIgcnk9IjEwIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIuODUiLz48ZWxsaXBzZSBjeD0iNTgiIGN5PSI2NCIgcng9IjI0IiByeT0iOSIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iLjkiLz48cGF0aCBkPSJNNDQgMjQgbDE4IDggLTE2IDMgLTMgOSAtNCAtMTAgLTggLTIgWiIgZmlsbD0iI0YyRjZGQSIvPjwvc3ZnPg==","data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MCA4MCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJsIiB4MT0iMCIgeTE9IjAiIHgyPSIwIiB5Mj0iMSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjN0EzQjRFIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjQzU2QjVDIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiBmaWxsPSJ1cmwoI2wpIi8+PGc+PGVsbGlwc2UgY3g9IjIwIiBjeT0iMzAiIHJ4PSI4IiByeT0iMTAiIGZpbGw9IiNGN0IyNjciLz48ZWxsaXBzZSBjeD0iNDQiIGN5PSIyMiIgcng9IjciIHJ5PSI5IiBmaWxsPSIjRjQ4NDVGIi8+PGVsbGlwc2UgY3g9IjY0IiBjeT0iMzQiIHJ4PSI4IiByeT0iMTAiIGZpbGw9IiNGN0IyNjciLz48L2c+PHJlY3QgeD0iMCIgeT0iOCIgd2lkdGg9IjgwIiBoZWlnaHQ9IjIiIGZpbGw9IiM0QTI1MzAiLz48L3N2Zz4="];  // 旅客实拍矢量缩图池
 
   function detGradeText(r) { return r >= 4.6 ? '非常好' : r >= 4.0 ? '很好' : ''; }
   function detTransSpec() {
@@ -2869,6 +2878,10 @@
       var box = document.getElementById(id); box.innerHTML = '';
       for (var i = 0; i < 5; i++) box.insertAdjacentHTML('beforeend', '<span class="ic ic-16">' + ICONS.star + '</span>');
     });
+    // 旅客实拍：从缩图池随机洗牌取 4 张（每次开详情都不同，仿真感）
+    var pool = SHOT_IMGS.slice();
+    for (var si = pool.length - 1; si > 0; si--) { var sj = (si * 7 + p.reviews) % (si + 1); var tmp = pool[si]; pool[si] = pool[sj]; pool[sj] = tmp; }
+    document.querySelectorAll('#detShots .det-shot img').forEach(function (im, idx) { im.src = pool[idx % pool.length]; });
     // 底部价格
     var price = document.getElementById('detPrice');
     price.innerHTML = (p.was ? '<span class="pkg-off">-20%</span><br>' : '') +
