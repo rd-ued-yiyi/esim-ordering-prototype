@@ -22,6 +22,15 @@ def svg(name, folder="icons", recolor=None):
     b64 = base64.b64encode(txt.strip().encode("utf-8")).decode()
     return f'<img alt="" src="data:image/svg+xml;base64,{b64}"{wh}>'
 
+def raw_svg(name, folder="icons"):
+    """返回原始内联 <svg>（去掉固定 width/height，保留 viewBox），由 CSS 控制尺寸。
+    内联矢量在 iOS Safari 下按显示分辨率栅格化，不会像 <img> data-URI 那样先按 intrinsic
+    小尺寸栅格化再放大而糊。GitHub Pages 无 sanitizer，内联 SVG 可用（hero 亦为内联）。"""
+    txt = (ROOT / "assets" / folder / f"{name}.svg").read_text(encoding="utf-8")
+    txt = txt.replace(' preserveAspectRatio="none"', "").replace(' overflow="visible"', "")
+    txt = re.sub(r'(<svg\b[^>]*?)\s+width="[\d.]+"\s+height="[\d.]+"', r'\1', txt, count=1)
+    return txt.strip()
+
 def inline_svg_to_img(markup):
     """把一段内联 SVG 字符串转成 data-URI <img>（用于状态栏手绘图标）。"""
     w = re.search(r'width="([\d.]+)"', markup)
@@ -109,7 +118,7 @@ subs = {
     "{{IC_smile}}":        inline_svg_to_img(DET_SMILE),
     "{{IC_neutral}}":      inline_svg_to_img(DET_NEUTRAL),
     "{{IC_checkSm}}":      inline_svg_to_img(DET_CHECK),
-    "{{IC_couponPicto}}":  svg("coupon-picto", "detail"),
+    "{{IC_couponPicto}}":  raw_svg("coupon-picto", "detail"),  # 内联矢量，避免 iOS 下 <img> 栅格化模糊
     "{{IC_ticket1}}":      svg("ticket1", "detail"),
     "{{IC_ticket1dash}}":  svg("ticket1-dash", "detail"),
     "{{IC_ticket2}}":      svg("ticket2", "detail"),

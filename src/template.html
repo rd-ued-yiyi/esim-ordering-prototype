@@ -681,7 +681,7 @@
   .det-table .th { background: var(--kk-surface-lighter); padding: 12px 16px;
     font-size: 14px; line-height: 20px; font-weight: 600; color: var(--kk-text-darker);
     border-bottom: 1px solid var(--kk-border-lighter); }
-  .det-table .tr { display: flex; align-items: center; border-bottom: 1px solid var(--kk-border-lighter); }  /* 两列垂直居中对齐 */
+  .det-table .tr { display: flex; border-bottom: 1px solid var(--kk-border-lighter); }
   .det-table .tr:last-child { border-bottom: 0; }
   .det-table .td-k { flex: 0 0 120px; padding: 16px; font-size: 14px; line-height: 20px; color: var(--kk-text-dark); box-sizing: border-box; }
   .det-table .td-v { flex: 1 1 0; min-width: 0; padding: 16px 16px 16px 16px; font-size: 14px; line-height: 20px; color: var(--kk-text-darker); }
@@ -766,9 +766,9 @@
   .det-coupon { flex: 0 0 auto; display: flex; align-items: center; gap: 12px;
     background: #FFF2F2; padding: 6px 8px; }
   .det-coupon .cp-pic { width: 32px; height: 32px; flex: 0 0 auto; display: block; }
-  /* 整数尺寸 + contain：picto 原始尺寸是分数(30.95×27.2)，flex 居中会落在半像素上，
-     retina 下渲染成模糊边缘；固定 32×32 整数框消除亚像素定位，contain 保比例不变形 */
-  .det-coupon .cp-pic img { width: 32px; height: 32px; object-fit: contain; display: block; }
+  /* 内联矢量按显示分辨率栅格化，任意 DPI 清晰（此前用 <img> data-URI，iOS 会先按
+     30.95×27 的 intrinsic 小尺寸栅格化再放大 → 模糊，object-fit 也救不了） */
+  .det-coupon .cp-pic svg { width: 32px; height: 32px; display: block; }
   .det-coupon .tks { display: inline-flex; align-items: center; gap: 8px; }
   .det-coupon .tkt { position: relative; height: 24px; flex: 0 0 auto;
     display: inline-flex; align-items: center; justify-content: center; }
