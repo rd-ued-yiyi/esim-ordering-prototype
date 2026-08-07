@@ -1917,19 +1917,32 @@
   // 重建流量带后统一定位：等 layout 提交（rAF）再把「选中档位」滚入可视区并居中，
   // 越界钳制到 [0, maxScroll]。取代旧的「恢复 stale scrollLeft」写法——那会在档位数量
   // 变化（切天数、换目的地）后把带子留在越界位置 → 右侧空白 / 看不到选中项。
+  // 把选中档位滚到可视区中央（越界钳制）。关键：**验证并重试直到真正落位**——
+  // iOS 在滚轮惯性/scroll-snap settling 期间会静默吞掉对本元素的程序性 scrollTo，
+  // 单次 scrollTo（哪怕加 rAF）会失败，选中项停在重建后的 scrollLeft=0（被挤到边缘）。
+  // 用 token 让新调用作废旧循环；每 70ms 校验 scrollLeft 是否到位，没到就再试，最多约 1s，
+  // 惯性一停就会成功落位并自动停止。瞬时定位（smooth=false）时才做重试校验。
   function revealOpt(scrollEl, smooth) {
     if (!scrollEl) return;
-    if (scrollEl._spyGuard) scrollEl._spyGuard(smooth ? 700 : 500);
-    var run = function () {
+    if (scrollEl._spyGuard) scrollEl._spyGuard(smooth ? 700 : 900);
+    var token = scrollEl._revealToken = (scrollEl._revealToken || 0) + 1;
+    var tries = 0;
+    function run() {
+      if (scrollEl._revealToken !== token) return;  // 被更新的调用取代
       var selEl = scrollEl.querySelector('.opt.sel');
-      if (!selEl || !scrollEl.clientWidth) return;
+      if (!selEl || !scrollEl.clientWidth) { if (++tries < 15) setTimeout(run, 70); return; }
       var sr = scrollEl.getBoundingClientRect(), cr = selEl.getBoundingClientRect();
       var max = Math.max(0, scrollEl.scrollWidth - scrollEl.clientWidth);
-      var t = scrollEl.scrollLeft + (cr.left + cr.width / 2) - (sr.left + sr.width / 2);
-      scrollEl.scrollTo({ left: Math.max(0, Math.min(max, t)), behavior: smooth ? 'smooth' : 'auto' });
-    };
-    run();                       // 同步定位：DOM 已重建，getBoundingClientRect 强制回流，度量准确
-    requestAnimationFrame(run);   // 兜底：容器刚显示 / 开场动画未定型时再补正一次
+      var target = Math.max(0, Math.min(max, scrollEl.scrollLeft + (cr.left + cr.width / 2) - (sr.left + sr.width / 2)));
+      scrollEl.scrollTo({ left: target, behavior: smooth ? 'smooth' : 'auto' });
+      if (smooth || ++tries >= 15) return;  // 平滑滚动不校验；瞬时滚动校验是否落位
+      setTimeout(function () {
+        if (scrollEl._revealToken !== token) return;
+        if (Math.abs(scrollEl.scrollLeft - target) > 2) run();  // iOS 惯性期吞掉了 → 再试
+      }, 70);
+    }
+    run();
+    requestAnimationFrame(run);
   }
   function groupStart(scrollEl, tab) {
     var g = scrollEl.querySelector('.opts-grid[data-g="' + tab + '"]');
