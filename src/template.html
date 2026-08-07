@@ -685,6 +685,11 @@
   .det-table .tr:last-child { border-bottom: 0; }
   .det-table .td-k { flex: 0 0 120px; padding: 16px; font-size: 14px; line-height: 20px; color: var(--kk-text-dark); box-sizing: border-box; }
   .det-table .td-v { flex: 1 1 0; min-width: 0; padding: 16px 16px 16px 16px; font-size: 14px; line-height: 20px; color: var(--kk-text-darker); }
+  .det-table .td-v .v-inner { font-size: 14px; line-height: 20px; }
+  /* 规格值超 3 行的「展开/收起」：深色下划线内联链接（Figma 998-42227） */
+  .det-table .clamp-toggle { border: 0; background: none; padding: 0; cursor: pointer;
+    font-size: 14px; line-height: 20px; color: var(--kk-text-darker);
+    text-decoration: underline; text-underline-offset: 2px; }
   /* 列表/条列 */
   .det-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
   .det-list li { position: relative; padding-left: 16px; font-size: 14px; line-height: 20px; color: var(--kk-text-darker); }
@@ -1414,9 +1419,9 @@
           <div class="tr"><div class="td-k">IP类型</div><div class="td-v" id="dtIp"></div></div>
           <div class="tr"><div class="td-k">传输规格</div><div class="td-v" id="dtTrans"></div></div>
         </div>
-        <!-- 规格总览：本商品支持的所有规格档位（只读，非可切换；告诉用户商品覆盖范围） -->
-        <div class="det-table" style="margin-top:8px;">
-          <div class="th">规格总览</div>
+        <!-- 规格总览：本商品支持的所有规格档位（只读，非可切换；超 3 行可展开/收起，Figma 998-42155） -->
+        <h3 class="det-h2" style="margin-top:32px;">规格总览</h3>
+        <div class="det-table">
           <div class="tr"><div class="td-k">用卡天数</div><div class="td-v" id="dtSpecDays"></div></div>
           <div class="tr"><div class="td-k">计费方式</div><div class="td-v" id="dtSpecBilling"></div></div>
           <div class="tr"><div class="td-k">流量额度</div><div class="td-v" id="dtSpecData"></div></div>
@@ -2828,13 +2833,52 @@
       withLoading(this, function () { toast('订购流程（开发中）：' + p.title); });
     };
   }
+  // 规格值超过 3 行 → 夹取到 3 行并在行尾内联「展开」，点击展开全部并显示「收起」（Figma 998-42155）
+  function clampCell(td) {
+    if (!td) return;
+    var full = td.textContent;           // fillDetail 每次已重置为完整文本
+    var LINE = 20, MAXH = LINE * 3 + 2;   // 3 行
+    td.innerHTML = '';
+    var inner = document.createElement('div');
+    inner.className = 'v-inner'; inner.textContent = full;
+    td.appendChild(inner);
+    if (inner.scrollHeight <= MAXH) return;  // 3 行以内不显示展开
+    var expanded = false;
+    function mkBtn(t) {
+      var b = document.createElement('button');
+      b.className = 'clamp-toggle'; b.textContent = t;
+      b.addEventListener('click', function () { expanded = !expanded; draw(); });
+      return b;
+    }
+    function draw() {
+      inner.innerHTML = '';
+      if (expanded) {
+        inner.appendChild(document.createTextNode(full + ' '));
+        inner.appendChild(mkBtn('收起'));
+      } else {
+        var lo = 0, hi = full.length;
+        while (lo < hi) {
+          var mid = Math.ceil((lo + hi) / 2);
+          inner.textContent = full.slice(0, mid) + '… 展开';
+          if (inner.scrollHeight <= MAXH) lo = mid; else hi = mid - 1;
+        }
+        inner.innerHTML = '';
+        inner.appendChild(document.createTextNode(full.slice(0, lo).replace(/[、\s]+$/, '') + '… '));
+        inner.appendChild(mkBtn('展开'));
+      }
+    }
+    draw();
+  }
   function openDetail(p, anchor) {
     fillDetail(p);
     detEl.classList.add('open');
     detEl.setAttribute('aria-hidden', 'false');
     lockBody();
-    // 默认回到顶部；点评论数进入 → 直接锚定评论区块（rAF 等 modal 可见后量 offsetTop）
+    // rAF 等 modal 可见后：先对超 3 行的规格值做展开/收起夹取（会改变高度），再算锚点 offsetTop
     requestAnimationFrame(function () {
+      ['dtSpecData', 'dtSpecArea', 'dtSpecDays', 'dtSpecBilling'].forEach(function (id) {
+        clampCell(document.getElementById(id));
+      });
       var top = 0;
       if (anchor) { var sec = detBody.querySelector('.det-sec[data-sec="' + anchor + '"]'); if (sec) top = sec.offsetTop; }
       detBody.scrollTop = top;
