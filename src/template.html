@@ -1036,14 +1036,13 @@
     transition: transform .5s cubic-bezier(.35,.8,.3,1), opacity .5s ease;
     will-change: transform, opacity;
   }
-  /* 选择/切换目的地：选框轻微「弹一下」+ cyan 涟漪（叠加，均轻量克制） */
-  .dest-bar.pulse, .pl-title-wrap.pulse { animation: barPulse .7s ease, barPop .34s cubic-bezier(.34,1.5,.5,1); }
+  /* 选择/切换目的地：仅保留轻微 cyan 涟漪（去掉 scale 弹跳，避免「晃动」观感） */
+  .dest-bar.pulse, .pl-title-wrap.pulse { animation: barPulse .7s ease; }
   .pl-title-wrap.pulse { border-radius: var(--r-md); }  /* 圆角只给列表页标题，勿影响 dest-bar 的 12px */
   @keyframes barPulse {
     0%   { box-shadow: 0 0 0 0 rgba(38,190,201,.45); }
     100% { box-shadow: 0 0 0 14px rgba(38,190,201,0); }
   }
-  @keyframes barPop { 0% { transform: scale(.965); } 100% { transform: scale(1); } }
   /* 点按触感：目的地 chip / 搜索框 / 选框按下轻微内缩 */
   .dest-card .chip, .search-bar, .dest-bar, .pl-title-wrap { transition: transform .12s ease; }
   .dest-card .chip:active, .search-bar:active, .dest-bar:active, .pl-title-wrap:active { transform: scale(.97); }
@@ -2840,7 +2839,7 @@
           (i % 3 !== 2) ? ['flash', '立即确认', false] : ['send', '24小时内回复确认', true],
           (i % 4 === 0) ? ['reload', '免费取消', false]
             : (i % 4 === 1) ? ['reloadD', '3天前可免费取消', true]
-            : (i % 4 === 2) ? ['reloadD', '可付费取消', true]
+            : (i % 4 === 2) ? ['reloadD', '10天前可免费取消', true]
             : ['crossD', '不可取消', true],
           (i % 2 === 0) ? ['checkLine', '即日可用', false]
             : ['calendarD', '最早可使用日: ' + fmtDate(2), true]
