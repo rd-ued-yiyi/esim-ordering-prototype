@@ -113,6 +113,7 @@ subs = {
     "{{IC_arrowDown}}":    svg("arrowDown"),
     "{{IC_question}}":     svg("question"),
     "{{IC_arrowRightDark}}": svg("arrowRight", recolor=("#26BEC9", "#212121")),
+    "{{IC_arrowRightGrey}}": svg("arrowRight", recolor=("#26BEC9", "#9C9DA0")),  # 套餐卡标题箭头（设计稿 $color-text-medium）
     "{{IC_cross}}":        svg("cross"),
     "{{IC_search}}":       svg("search"),
     "{{IC_locationLine}}": svg("locationLine"),
