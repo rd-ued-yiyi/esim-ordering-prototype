@@ -3065,7 +3065,7 @@
     return [
       { type: 'date' },
       { type: 'expand', cat: 'cardType' },
-      { type: 'expand', cat: 'activate' },
+      { type: 'quick', key: '一键激活' },
       { type: 'quick', key: '5G' },
       { type: 'quick', key: '支持热点' },
       { type: 'quick', key: '免费取消' },
@@ -3113,6 +3113,7 @@
       }
       if (p.now < st.priceMin || (st.priceMax < 12000 && p.now > st.priceMax)) return false;
       var q = st.quick || {};
+      if (q['一键激活'] && p.tags.indexOf('一键安装') < 0) return false;
       if (q['5G'] && p.title.indexOf('5G') < 0) return false;
       if (q['支持热点'] && p.tags[0].indexOf('热点') < 0) return false;
       if (q['免费取消'] && !p.perks.some(function (x) { return x[1].indexOf('免费取消') >= 0; })) return false;
@@ -3346,7 +3347,7 @@
   function renderCancelPolicy(type) {
     var body;
     if (type === 'free') {
-      body = '<p class="det-body-md">免费取消</p>';
+      body = '<p class="det-body-md">未使用可免费取消</p>';
     } else if (type === 'cond') {  // 免费或不可：3天前免费 / 0~2天不可
       body = cxlTable([
         ['所选日期 3 天前', '未使用可免费取消'],
