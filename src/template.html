@@ -709,12 +709,19 @@
   /* 区块左右内距按 Figma 各不相同：服务说明 16 / 其余 20 / 图文说明 24 */
   .det-sec[data-sec="svc"] { padding-left: 16px; padding-right: 16px; }
   .det-sec[data-sec="imgs"] { padding: 24px; }
-  .det-cond { display: flex; align-items: center; gap: 8px;
-    font-size: 14px; line-height: 20px; font-weight: 600; color: #13A3B6; margin-bottom: 8px; }
-  .det-title { font-size: 22px; line-height: 28px; font-weight: 600; color: var(--kk-text-darker); margin: 0 0 8px; }
+  /* 首屏方案卡（Figma 1009-43088）：condition+标题+标签 装进 2px 描边白卡 */
+  .det-hero { display: flex; flex-direction: column; gap: 8px;
+    border: 2px solid #CEF0F3; border-radius: 8px; padding: 16px; }
+  .det-hero .det-cond { margin-bottom: 0; }
+  .det-hero .det-title { margin: 0; }
+  .det-hero .pkg-tags { margin-top: 0; }
+  .det-cond { display: flex; align-items: center; gap: 6px;
+    font-size: 14px; line-height: 20px; font-weight: 600; color: #13A3B6; }
+  .det-cond .ic { width: 20px; height: 20px; }
+  .det-title { font-size: 20px; line-height: 26px; font-weight: 600; color: var(--kk-text-darker); }
   .det-sec .pkg-hr { margin: 24px 0; }
-  /* 首屏政策 icon+text：20px 图标 + 6px gap（Figma 902-41283，调整后） */
-  .det-policies { display: flex; flex-direction: column; gap: 8px; margin-top: 12px;
+  /* 首屏政策 icon+text：20px 图标 + 6px gap（Figma 902-41283，调整后）；距上方方案卡 24px */
+  .det-policies { display: flex; flex-direction: column; gap: 8px; margin-top: 24px;
     font-size: 14px; line-height: 20px; color: #13A3B6; }
   .det-policies .perk { display: inline-flex; align-items: center; gap: 6px; }
   .det-policies .perk .ic { width: 20px; height: 20px; }
@@ -1495,10 +1502,11 @@
     <div class="det-body" id="detBody">
 
       <section class="det-sec" data-sec="svc">
-        <div class="det-cond"><span class="ic ic-16">{{IC_file}}</span><span id="detCond"></span></div>
-        <h2 class="det-title" id="detTitle"></h2>
-        <div class="pkg-tags" id="detTags"></div>
-        <hr class="pkg-hr">
+        <div class="det-hero">
+          <div class="det-cond"><span class="ic ic-20">{{IC_file}}</span><span id="detCond"></span></div>
+          <h2 class="det-title" id="detTitle"></h2>
+          <div class="pkg-tags" id="detTags"></div>
+        </div>
         <div class="det-policies" id="detPolicies"></div>
         <p class="det-intro" id="detIntro">依据购买天数，可额外享有 3GB~30GB 的热点分享流量。由连续两年荣获 Opensignal 网路可靠性全球大奖的电信网络提供连线，讯号覆盖率高，市区、离岛与山区都能稳定上网；搭配 KKday App 可随时查询剩余流量，客服 24 小时在线协助安装与连线问题。</p>
         <button class="det-more" id="detMore">展开更多 <span class="ic ic-16 chev">{{IC_arrowDown}}</span></button>
