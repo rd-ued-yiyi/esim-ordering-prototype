@@ -1588,7 +1588,7 @@
         </div>
       </div>
       <div class="cond-flow">
-        <div class="field-head"><span class="label-sm">流量</span></div>
+        <div class="field-head"><span class="label-sm">选择流量</span></div>
         <div class="ftabs" id="condTabs">
           <button class="ftab" data-tab="daily">每日流量</button>
           <button class="ftab" data-tab="total">总流量</button>
@@ -1966,7 +1966,7 @@
                          { t: '降速后 384 Kbps', per: 58 }, { t: '降速后 512 Kbps', per: 65 },
                          { t: '降速后 1 Mbps', per: 78 }, { t: '降速后 3 Mbps', per: 95 },
                          { t: '降速后 5 Mbps', per: 110 }, { t: '降速后 10 Mbps', per: 128 },
-                         { t: '降速后 20 Mbps', per: 145 }, { t: '最高网速（不限制）', per: 168 } ] }
+                         { t: '降速后 20 Mbps', per: 145 }, { t: '不降速', per: 168 } ] }
   };
   function daysDiscount(d) { return d >= 30 ? 0.85 : d >= 15 ? 0.9 : d >= 7 ? 0.95 : 1; }
   function priceLabelFor(o, d) {
@@ -2906,7 +2906,7 @@
     }
     return 300;
   }
-  function tabShort() { return state.tab === 'daily' ? '每日' : state.tab === 'total' ? '总量' : '无限'; }
+  function tabShort() { return state.tab === 'daily' ? '每日流量' : state.tab === 'total' ? '总流量' : '无限流量'; }
 
   function buildPlans() {
     var dest = document.getElementById('destName').textContent;
@@ -3391,7 +3391,7 @@
   function detTransSpec() {
     if (state.tab === 'daily') return '每日 ' + state.plan.replace('/天', '') + ' 高速，超量后限速 256Kbps 不限量';
     if (state.tab === 'total') return state.plan.replace('共', '共 ') + ' 高速流量，用完即止（可随时加购）';
-    return state.plan === '最高网速（不限制）' ? '不限流量，全程不限速'
+    return state.plan === '不降速' ? '不限流量，全程不限速'
          : '不限流量，达公平使用量后' + state.plan.replace('降速后 ', '限速 ');
   }
   // 取消政策四态（Figma 1029-74421）：免费 / 不可 / 免费或不可(条件) / 收费(手续费表)
