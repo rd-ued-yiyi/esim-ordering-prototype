@@ -100,6 +100,10 @@
      轨迹路点复用设计稿椭圆轨道；opacity 在绕到球背面时淡出做遮挡感。 */
   #hero-dot { transform-box: view-box; will-change: transform, opacity;
     animation: heroDotOrbit 6s linear infinite, heroDotFade 6s linear infinite; }
+  /* 第二颗更小的球：同一椭圆轨道，相位差 180°（-3s）→ 始终在大球对角，一起转 */
+  #hero-dot2 { transform-box: view-box; will-change: transform, opacity;
+    animation: heroDotOrbit 6s linear infinite, heroDotFade 6s linear infinite;
+    animation-delay: -3s, -3s; }
   @keyframes heroDotOrbit {
     0% { transform: translate(-0.607px, -0.061px); }
     4% { transform: translate(-2.25px, -6.56px); }
@@ -133,7 +137,7 @@
     21%, 43% { opacity: 0; }
     47%, 100% { opacity: 1; }
   }
-  @media (prefers-reduced-motion: reduce) { #hero-dot { animation: none; } }
+  @media (prefers-reduced-motion: reduce) { #hero-dot, #hero-dot2 { animation: none; } }
 
   /* ---------- header ---------- */
   .mheader {
