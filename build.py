@@ -118,6 +118,9 @@ subs = {
     "{{IC_earthCyan}}":    svg("earthLine", recolor=("#212121", "#26BEC9")),
     "{{IC_plus}}":         svg("plus"),
     "{{IC_plusCyan}}":     svg("plus", recolor=("#212121", "#26BEC9")),
+    # 多国自由选择：circlesPlus（三圆 + 加号＝自由添加多个，Figma 662-30456）
+    "{{IC_multi}}":        svg("circlesPlus"),
+    "{{IC_multiCyan}}":    svg("circlesPlus", recolor=("#212121", "#26BEC9")),
     "{{IC_trash}}":        svg("trash"),
     "{{IC_trashLight}}":   svg("trash", recolor=("#727272", "#9C9DA0")),
     "{{IC_locationSearch}}": svg("locationSearch"),
