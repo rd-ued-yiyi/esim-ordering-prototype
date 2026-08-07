@@ -618,6 +618,59 @@
     width: 5px; height: 9px; border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(45deg);
   }
 
+  /* ================= 筛选 sheet（总筛选 970-50754 / 单类目 984-14319 / 日期 970-49610） ================= */
+  .bsheet.tall { max-height: 88vh; }
+  .fs-clear { font-size: 14px; line-height: 20px; color: var(--kk-text-darker); text-decoration: underline;
+    text-underline-offset: 2px; background: none; border: 0; cursor: pointer; }
+  .fs-body { padding: 0 24px; }
+  .fs-sec { padding: 24px 0; border-bottom: 1px solid var(--kk-border-lighter); }
+  .fs-sec:last-child { border-bottom: 0; }
+  .fs-sec .fs-h { font-size: 16px; line-height: 24px; font-weight: 600; color: var(--kk-text-darker); margin: 0 0 16px; }
+  .fs-opts { display: flex; flex-wrap: wrap; gap: 12px; }
+  /* 筛选选项 pill（圆角胶囊，多选/单选高亮） */
+  .fopt { display: inline-flex; align-items: center; gap: 4px; box-sizing: border-box;
+    min-height: 40px; padding: 8px 16px; border-radius: 999px;
+    border: 1px solid var(--kk-border-light); background: #fff;
+    font-size: 14px; line-height: 20px; color: var(--kk-text-darker); white-space: nowrap; cursor: pointer; }
+  .fopt.sel { background: var(--kk-primary-lighter); border-color: var(--kk-primary-medium); color: #13A3B6; font-weight: 600; }
+  .fopt .chev-sm img { width: 9.4px; height: 5.2px; }
+  /* 价格区间滑块 */
+  .fs-price-val { font-size: 14px; line-height: 20px; color: var(--kk-text-medium); margin: 0 0 16px; }
+  .fs-range { position: relative; height: 24px; }
+  .fs-range .track { position: absolute; left: 0; right: 0; top: 11px; height: 2px; background: var(--kk-border-light); border-radius: 2px; }
+  .fs-range .fill { position: absolute; top: 11px; height: 2px; background: var(--kk-primary-medium); border-radius: 2px; }
+  .fs-range input[type=range] { position: absolute; left: -2px; right: -2px; width: calc(100% + 4px); top: 0; margin: 0;
+    -webkit-appearance: none; appearance: none; background: none; pointer-events: none; height: 24px; }
+  .fs-range input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; pointer-events: auto;
+    width: 24px; height: 24px; border-radius: 50%; background: #fff; border: 1px solid var(--kk-border-light);
+    box-shadow: 0 1px 4px rgba(38,50,56,.2); cursor: pointer; }
+  .fs-foot { flex: 0 0 auto; padding: 12px 24px calc(12px + env(safe-area-inset-bottom, 0px));
+    box-shadow: 0 -2px 8px rgba(38,50,56,.06); }
+  .fs-foot .cta { background: var(--kk-primary-button); color: #fff; }
+  /* 日期日历 */
+  .cal-week { display: grid; grid-template-columns: repeat(7, 1fr); flex: 0 0 auto;
+    padding: 4px 12px 8px; border-bottom: 1px solid var(--kk-border-lighter); background: #fff; }
+  .cal-week span { text-align: center; font-size: 14px; line-height: 24px; color: var(--kk-text-dark); }
+  .cal-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain; padding: 0 12px; }
+  .cal-mon { font-size: 16px; line-height: 24px; font-weight: 600; color: var(--kk-text-darker); padding: 20px 4px 8px; }
+  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); }
+  .cal-cell { aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
+    font-size: 16px; color: var(--kk-text-darker); position: relative; }
+  .cal-cell.pad { visibility: hidden; }
+  .cal-cell.past { color: var(--kk-text-light); text-decoration: line-through; pointer-events: none; }
+  .cal-cell.today { color: var(--kk-primary-medium); font-weight: 600; }
+  .cal-cell.pick { cursor: pointer; }
+  .cal-cell.sel { color: #fff; }
+  .cal-cell.sel::before { content: ''; position: absolute; width: 40px; height: 40px; border-radius: 50%;
+    background: var(--kk-primary-medium); z-index: 0; }
+  .cal-cell span { position: relative; z-index: 1; }
+  .cal-foot { flex: 0 0 auto; border-top: 1px solid var(--kk-border-lighter);
+    padding: 16px 24px calc(16px + env(safe-area-inset-bottom, 0px)); display: flex; align-items: center; gap: 12px; }
+  .cal-foot .lbl { flex: 1 1 auto; font-size: 14px; line-height: 20px; color: var(--kk-text-darker); }
+  .cal-foot .cta { flex: 0 0 auto; width: auto; padding: 10px 24px; background: var(--kk-primary-button); color: #fff; }
+  .cal-foot .cta[disabled] { background: rgba(26,182,193,.4); color: rgba(255,255,255,.6); }
+
   /* ================= 套餐详情 Full-screen Modal（Figma 871-78047） ================= */
   .det-head { flex: 0 0 auto; background: #fff; }
   .det-tabs {
@@ -1207,15 +1260,9 @@
         <div class="pl-conds"><div class="pl-cond-fixed" id="plCondFixed"></div><div class="pl-cond-scroll" id="plCondScroll"></div></div>
         <div class="pl-filters">
           <div class="pl-filter-fixed">
-            <button class="fpill ficon" data-action="filter"><span class="ic ic-16">{{IC_filter}}</span>筛选</button>
+            <button class="fpill ficon" id="plFilterBtn"><span class="ic ic-16">{{IC_filter}}</span>筛选</button>
           </div>
-          <div class="pl-filter-scroll">
-            <button class="fpill" data-action="filter">可用日期<span class="ic ic-16 chev-sm">{{IC_arrowDown}}</span></button>
-            <button class="fpill" data-action="filter">本地/漫游<span class="ic ic-16 chev-sm">{{IC_arrowDown}}</span></button>
-            <button class="fpill fquick" data-action="fquick">支持热点</button>
-            <button class="fpill fquick" data-action="fquick">免费取消</button>
-            <button class="fpill fquick" data-action="fquick">立即确认</button>
-          </div>
+          <div class="pl-filter-scroll" id="plFilterScroll"></div>
         </div>
       </div>
       <div class="pl-body">
@@ -1596,6 +1643,45 @@
     <div class="sort-list" id="sortList"></div>
   </div>
 
+  <!-- 总筛选 sheet（Figma 970-50754） -->
+  <div class="bsheet tall" id="filterSheet">
+    <div class="bs-handle"></div>
+    <div class="bs-bar">
+      <button class="bs-close" data-bs-close aria-label="关闭"><span class="ic ic-24">{{IC_cross}}</span></button>
+      <span class="bs-title">筛选</span>
+      <button class="fs-clear" id="fsClear">清除</button>
+    </div>
+    <div class="bs-body"><div class="fs-body" id="fsBody"></div></div>
+    <div class="fs-foot"><button class="cta" id="fsApply">确定</button></div>
+  </div>
+
+  <!-- 单类目筛选 sheet（Figma 984-14319） -->
+  <div class="bsheet" id="catSheet">
+    <div class="bs-handle"></div>
+    <div class="bs-bar">
+      <button class="bs-close" data-bs-close aria-label="关闭"><span class="ic ic-24">{{IC_cross}}</span></button>
+      <span class="bs-title" id="catTitle"></span>
+      <span class="bs-spacer"></span>
+    </div>
+    <div class="bs-body"><div class="fs-body" style="padding-bottom:24px;"><div class="fs-opts" id="catOpts"></div></div></div>
+  </div>
+
+  <!-- 使用日期日历 sheet（Figma 970-49610） -->
+  <div class="bsheet tall" id="dateSheet">
+    <div class="bs-handle"></div>
+    <div class="bs-bar">
+      <button class="bs-close" data-bs-close aria-label="关闭"><span class="ic ic-24">{{IC_cross}}</span></button>
+      <span class="bs-title">选择日期</span>
+      <span class="bs-spacer"></span>
+    </div>
+    <div class="cal-week"><span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span></div>
+    <div class="cal-body" id="calBody"></div>
+    <div class="cal-foot">
+      <span class="lbl" id="calLbl">请选择使用日期</span>
+      <button class="cta" id="calApply" disabled>确定</button>
+    </div>
+  </div>
+
   <div class="toast" id="toast"></div>
 </div>
 
@@ -1908,7 +1994,8 @@
     pencil: '{{IC_pencil}}', star: '{{IC_star}}', fire2: '{{IC_fire}}', chevDark: '{{IC_arrowRightDark}}',
     locSearch: '{{IC_locationSearch}}',  // 搜索结果·国家行（Figma 848-41868：深色 location_line 20px）
     earthLine: '{{IC_earthLine}}',       // 搜索结果·区域行（线框地球，非实心 globe）
-    checkSm: '{{IC_checkSm}}'             // 规格总览「✓当前」badge 的对勾
+    checkSm: '{{IC_checkSm}}',            // 规格总览「✓当前」badge 的对勾
+    arrowDownSm: '{{IC_arrowDown}}'       // 筛选 pill 下拉箭头
   };
   function el(html) {
     var t = document.createElement('template');
@@ -2324,8 +2411,6 @@
       else if (a === 'faq-more') toast('常见问题列表（开发中）');
       else if (a === 'back') { if (current === 'destination') go('home'); else if (current === 'plans') go('destination'); else toast('返回上一页'); }
       else if (a === 'back-plans') go('destination');
-      else if (a === 'filter') toast('筛选面板（开发中）');
-      else if (a === 'fquick') el.classList.toggle('sel');
     });
   });
 
@@ -2639,11 +2724,14 @@
       if (target !== null) conds.scrollTo({ left: Math.max(0, target), behavior: centerSel === 'smooth' ? 'smooth' : 'auto' });
     });
 
-    var list = buildPlans();
+    var list = applyFilters(buildPlans());
     if (sortMode === 0) list.sort(function (a, b) { return a.now - b.now; });
     if (sortMode === 1) list.sort(function (a, b) { return b.rating - a.rating; });
     if (sortMode === 2) list.sort(function (a, b) { return boughtNum(b) - boughtNum(a); });
-    document.getElementById('plCount').textContent = (26 + list.length) + ' 项结果';
+    // 有筛选时按实际结果数，否则用仿真总数
+    var anyFilter = fActiveCount() > 0;
+    document.getElementById('plCount').textContent = (anyFilter ? list.length : 26 + list.length) + ' 项结果';
+    renderFilterPills();
     document.getElementById('plSort').childNodes[0].textContent = SORT_NAMES[sortMode];
 
     var box = document.getElementById('plList');
@@ -2722,6 +2810,219 @@
   document.getElementById('plSort').addEventListener('click', function () {
     renderSortList();
     openSheet(document.getElementById('bsSort'));
+  });
+
+  // ---------- 列表页筛选（总筛选 970-50754 / 单类目 984-14319 / 日期 970-49610） ----------
+  // date: null|'今天'|'明天'|{label,m,d}；其余为多选数组；priceMax 价格上限
+  var fState = { date: null, service: [], cardType: [], activate: [], carrier: [], priceMax: 12000 };
+  // 类目定义（carrier 选项随目的地取 CARRIERS）
+  function carrierOpts() {
+    var dest = document.getElementById('destName').textContent.split(' ')[0];
+    return (CARRIERS[dest] || CARRIERS['default']).slice();
+  }
+  function filterCats() {
+    return [
+      { key: 'date', label: '使用日期', opts: ['今天', '明天'], date: true, single: true },
+      { key: 'service', label: '服务保障', opts: ['免费取消', '立即确定', '即日可用'] },
+      { key: 'cardType', label: '卡片类型', opts: ['原生卡', '国际漫游卡', '虚商卡'] },
+      { key: 'activate', label: '启用方式', opts: ['扫码激活', 'APP激活'] },
+      { key: 'carrier', label: '电信商', opts: carrierOpts() }
+    ];
+  }
+  function fActiveCount() {
+    var n = fState.date ? 1 : 0;
+    ['service', 'cardType', 'activate', 'carrier'].forEach(function (k) { n += fState[k].length; });
+    if (fState.priceMax < 12000) n += 1;
+    return n;
+  }
+  function dateLabel() {
+    if (!fState.date) return null;
+    return typeof fState.date === 'string' ? fState.date : fState.date.label;
+  }
+  // 实际筛选：service→perks、carrier→card.carrier 可硬过滤；其余仅作视觉选择（不清空列表）
+  function applyFilters(list) {
+    return list.filter(function (p) {
+      if (fState.carrier.length && fState.carrier.indexOf(p.carrier) < 0) return false;
+      if (fState.service.length) {
+        var perkTexts = p.perks.map(function (pk) { return pk[1]; });
+        var ok = fState.service.every(function (s) {
+          if (s === '免费取消') return perkTexts.some(function (t) { return t.indexOf('免费取消') >= 0 || t.indexOf('可免费取消') >= 0; });
+          if (s === '立即确定') return perkTexts.indexOf('立即确认') >= 0;
+          if (s === '即日可用') return perkTexts.indexOf('即日可用') >= 0;
+          return true;
+        });
+        if (!ok) return false;
+      }
+      if (fState.priceMax < 12000 && p.now > fState.priceMax) return false;
+      return true;
+    });
+  }
+  // 外层筛选行 pill 渲染（反映各类目选中态与数量/日期）
+  function renderFilterPills() {
+    var box = document.getElementById('plFilterScroll');
+    if (!box) return;
+    box.innerHTML = '';
+    document.getElementById('plFilterBtn').classList.toggle('sel', fActiveCount() > 0);
+    filterCats().forEach(function (cat) {
+      var sel, txt;
+      if (cat.key === 'date') { sel = !!fState.date; txt = sel ? dateLabel() : cat.label; }
+      else { var arr = fState[cat.key]; sel = arr.length > 0; txt = sel ? (arr.length === 1 ? arr[0] : cat.label + '·' + arr.length) : cat.label; }
+      var b = el('<button class="fpill' + (sel ? ' sel' : '') + '">' + '<span class="lb"></span>' +
+        '<span class="ic ic-16 chev-sm">' + ICONS.arrowDownSm + '</span></button>');
+      b.querySelector('.lb').textContent = txt;
+      b.addEventListener('click', function () { openCatSheet(cat.key); });
+      box.appendChild(b);
+    });
+  }
+  // 单类目 sheet（984-14319）
+  var curCat = null;
+  function renderCatOpts() {
+    var cat = filterCats().filter(function (c) { return c.key === curCat; })[0];
+    document.getElementById('catTitle').textContent = cat.label;
+    var box = document.getElementById('catOpts');
+    box.innerHTML = '';
+    cat.opts.forEach(function (o) {
+      var on = cat.single ? fState.date === o : fState[cat.key].indexOf(o) >= 0;
+      var b = el('<button class="fopt' + (on ? ' sel' : '') + '"></button>');
+      b.textContent = o;
+      b.addEventListener('click', function () {
+        if (cat.single) { fState.date = (fState.date === o) ? null : o; }
+        else { var arr = fState[cat.key], i = arr.indexOf(o); if (i >= 0) arr.splice(i, 1); else arr.push(o); }
+        renderCatOpts(); renderPlans();
+      });
+      box.appendChild(b);
+    });
+    if (cat.date) {  // 日期类目附「选择日期 ›」→ 打开日历
+      var picked = fState.date && typeof fState.date === 'object';
+      var b = el('<button class="fopt' + (picked ? ' sel' : '') + '"><span class="lb"></span><span class="ic ic-16 chev-sm">' + ICONS.arrowDownSm + '</span></button>');
+      b.querySelector('.lb').textContent = picked ? fState.date.label : '选择日期';
+      b.querySelector('.chev-sm img') && (b.querySelector('.chev-sm').style.transform = 'rotate(-90deg)');
+      b.addEventListener('click', function () { openDateSheet(); });
+      box.appendChild(b);
+    }
+  }
+  function openCatSheet(key) {
+    curCat = key; renderCatOpts();
+    openSheet(document.getElementById('catSheet'));
+  }
+
+  // 总筛选 sheet（970-50754）
+  function renderFilterSheet() {
+    var body = document.getElementById('fsBody');
+    body.innerHTML = '';
+    filterCats().forEach(function (cat) {
+      var sec = el('<div class="fs-sec"><div class="fs-h"></div><div class="fs-opts"></div></div>');
+      sec.querySelector('.fs-h').textContent = cat.label;
+      var opts = sec.querySelector('.fs-opts');
+      cat.opts.forEach(function (o) {
+        var on = cat.single ? fState.date === o : fState[cat.key].indexOf(o) >= 0;
+        var b = el('<button class="fopt' + (on ? ' sel' : '') + '"></button>');
+        b.textContent = o;
+        b.addEventListener('click', function () {
+          if (cat.single) fState.date = (fState.date === o) ? null : o;
+          else { var arr = fState[cat.key], i = arr.indexOf(o); if (i >= 0) arr.splice(i, 1); else arr.push(o); }
+          renderFilterSheet();
+        });
+        opts.appendChild(b);
+      });
+      if (cat.date) {
+        var picked = fState.date && typeof fState.date === 'object';
+        var b = el('<button class="fopt' + (picked ? ' sel' : '') + '"><span class="lb"></span><span class="ic ic-16 chev-sm" style="transform:rotate(-90deg)">' + ICONS.arrowDownSm + '</span></button>');
+        b.querySelector('.lb').textContent = picked ? fState.date.label : '选择日期';
+        b.addEventListener('click', function () { openDateSheet(); });
+        opts.appendChild(b);
+      }
+      body.appendChild(sec);
+    });
+    // 价格区间
+    var ps = el('<div class="fs-sec"><div class="fs-h">价格区间 (NT$)</div><div class="fs-price-val"></div>' +
+      '<div class="fs-range"><div class="track"></div><div class="fill"></div>' +
+      '<input type="range" min="0" max="12000" step="500"></div></div>');
+    var input = ps.querySelector('input'), fill = ps.querySelector('.fill'), val = ps.querySelector('.fs-price-val');
+    input.value = fState.priceMax;
+    function upd() {
+      var pct = fState.priceMax / 12000 * 100;
+      fill.style.left = '0%'; fill.style.right = (100 - pct) + '%';
+      val.textContent = 'NT$0 – NT$' + (fState.priceMax >= 12000 ? '12,000+' : fState.priceMax.toLocaleString());
+    }
+    input.addEventListener('input', function () { fState.priceMax = +input.value; upd(); });
+    upd();
+    body.appendChild(ps);
+  }
+  document.getElementById('plFilterBtn').addEventListener('click', function () {
+    renderFilterSheet();
+    openSheet(document.getElementById('filterSheet'));
+  });
+  document.getElementById('fsClear').addEventListener('click', function () {
+    fState = { date: null, service: [], cardType: [], activate: [], carrier: [], priceMax: 12000 };
+    renderFilterSheet(); renderPlans();
+  });
+  document.getElementById('fsApply').addEventListener('click', function () {
+    withLoading(this, function () { closeSheets(); renderPlans(); window.scrollTo(0, 0); });
+  });
+
+  // 使用日期日历（970-49610）
+  var calPick = null;  // 临时选中 {y,m,d,label}
+  function buildCalendar() {
+    var body = document.getElementById('calBody');
+    body.innerHTML = '';
+    // 从本月起连续 4 个月（首月含已过日期，置灰划线；今天 cyan）
+    var base = { y: 2025, m: 5, today: 7 };  // 固定基准（原型；Date.now 在本环境不可用）
+    var W = ['日', '一', '二', '三', '四', '五', '六'];
+    for (var k = 0; k < 4; k++) {
+      var mm = base.m + k, yy = base.y + Math.floor((mm - 1) / 12); mm = ((mm - 1) % 12) + 1;
+      var mon = el('<div><div class="cal-mon"></div><div class="cal-grid"></div></div>');
+      mon.querySelector('.cal-mon').textContent = yy + '年 ' + mm + '月';
+      var grid = mon.querySelector('.cal-grid');
+      var first = new Date(yy, mm - 1, 1).getDay();
+      var days = new Date(yy, mm, 0).getDate();
+      for (var i = 0; i < first; i++) grid.appendChild(el('<div class="cal-cell pad"></div>'));
+      for (var d = 1; d <= days; d++) {
+        var past = (k === 0 && d < base.today);
+        var isToday = (k === 0 && d === base.today);
+        var cls = 'cal-cell' + (past ? ' past' : ' pick') + (isToday ? ' today' : '');
+        var cell = el('<div class="' + cls + '"><span>' + d + '</span></div>');
+        if (!past) (function (yy, mm, d, cell) {
+          cell.addEventListener('click', function () {
+            calPick = { y: yy, m: mm, d: d, label: mm + '月' + d + '日' };
+            body.querySelectorAll('.cal-cell.sel').forEach(function (c) { c.classList.remove('sel'); });
+            cell.classList.add('sel');
+            document.getElementById('calLbl').textContent = '使用日期：' + calPick.label;
+            document.getElementById('calApply').disabled = false;
+          });
+        })(yy, mm, d, cell);
+        // 回显已选
+        if (fState.date && typeof fState.date === 'object' && fState.date.y === yy && fState.date.m === mm && fState.date.d === d) {
+          cell.classList.add('sel'); calPick = fState.date;
+          document.getElementById('calLbl').textContent = '使用日期：' + fState.date.label;
+          document.getElementById('calApply').disabled = false;
+        }
+        grid.appendChild(cell);
+      }
+      body.appendChild(mon);
+    }
+  }
+  function openDateSheet() {
+    calPick = (fState.date && typeof fState.date === 'object') ? fState.date : null;
+    document.getElementById('calApply').disabled = !calPick;
+    document.getElementById('calLbl').textContent = calPick ? '使用日期：' + calPick.label : '请选择使用日期';
+    buildCalendar();
+    openSheet(document.getElementById('dateSheet'));
+    var cb = document.getElementById('calBody');
+    requestAnimationFrame(function () {  // 定位到今天所在月
+      var t = cb.querySelector('.cal-cell.today');
+      if (t) cb.scrollTop = t.offsetParent ? t.offsetParent.offsetTop - 8 : 0;
+    });
+  }
+  document.getElementById('calApply').addEventListener('click', function () {
+    if (!calPick) return;
+    fState.date = calPick;
+    document.getElementById('dateSheet').classList.remove('open');  // 关日历，回到来源 sheet
+    var back = document.querySelector('#filterSheet.open') ? 'filter' : (document.querySelector('#catSheet.open') ? 'cat' : null);
+    if (back === 'filter') renderFilterSheet();
+    else if (back === 'cat') renderCatOpts();
+    else { closeSheets(); }
+    renderPlans();
   });
 
   // ---------- 套餐详情 Full-screen Modal（Figma 871-78047） ----------
