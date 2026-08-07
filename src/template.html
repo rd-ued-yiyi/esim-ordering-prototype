@@ -1806,6 +1806,8 @@
     });
     document.querySelector('.app').classList.toggle('no-hero', name === 'plans');
     window.scrollTo(0, 0);
+    // 重新进入目的地页（如从列表返回）时把选中流量档滚回可视区，避免选中项落在屏幕外
+    if (name === 'destination') revealOpt(document.getElementById('dataOptsScroll'), false);
   }
 
   // ---------- 目的地页状态 ----------
@@ -1895,7 +1897,26 @@
     if (!selEl || !scrollEl.clientWidth) return;
     if (scrollEl._spyGuard) scrollEl._spyGuard(600);
     var sr = scrollEl.getBoundingClientRect(), cr = selEl.getBoundingClientRect();
-    scrollEl.scrollTo({ left: Math.max(0, scrollEl.scrollLeft + (cr.left + cr.width / 2) - (sr.left + sr.width / 2)), behavior: 'smooth' });
+    var max = Math.max(0, scrollEl.scrollWidth - scrollEl.clientWidth);
+    var t = scrollEl.scrollLeft + (cr.left + cr.width / 2) - (sr.left + sr.width / 2);
+    scrollEl.scrollTo({ left: Math.max(0, Math.min(max, t)), behavior: 'smooth' });
+  }
+  // 重建流量带后统一定位：等 layout 提交（rAF）再把「选中档位」滚入可视区并居中，
+  // 越界钳制到 [0, maxScroll]。取代旧的「恢复 stale scrollLeft」写法——那会在档位数量
+  // 变化（切天数、换目的地）后把带子留在越界位置 → 右侧空白 / 看不到选中项。
+  function revealOpt(scrollEl, smooth) {
+    if (!scrollEl) return;
+    if (scrollEl._spyGuard) scrollEl._spyGuard(smooth ? 700 : 500);
+    var run = function () {
+      var selEl = scrollEl.querySelector('.opt.sel');
+      if (!selEl || !scrollEl.clientWidth) return;
+      var sr = scrollEl.getBoundingClientRect(), cr = selEl.getBoundingClientRect();
+      var max = Math.max(0, scrollEl.scrollWidth - scrollEl.clientWidth);
+      var t = scrollEl.scrollLeft + (cr.left + cr.width / 2) - (sr.left + sr.width / 2);
+      scrollEl.scrollTo({ left: Math.max(0, Math.min(max, t)), behavior: smooth ? 'smooth' : 'auto' });
+    };
+    run();                       // 同步定位：DOM 已重建，getBoundingClientRect 强制回流，度量准确
+    requestAnimationFrame(run);   // 兜底：容器刚显示 / 开场动画未定型时再补正一次
   }
   function groupStart(scrollEl, tab) {
     var g = scrollEl.querySelector('.opts-grid[data-g="' + tab + '"]');
@@ -1937,7 +1958,6 @@
       state.plan = filteredOpts(state.tab, d)[0].t;
     }
     var scrollEl = document.getElementById('dataOptsScroll');
-    var keep = scrollEl.scrollLeft;
     buildMergedRow(document.getElementById('dataOpts'), d, state.tab, state.plan, function (tab, plan) {
       state.tab = tab;
       state.plan = plan;
@@ -1951,8 +1971,8 @@
       centerOpt(scrollEl, selEl);  // 点击选中项自动居中
       updateCta();
     });
-    scrollEl.scrollLeft = keep;
     setTabsActive(document.getElementById('dataTabs'), document.getElementById('dataNote'), state.tab);
+    revealOpt(scrollEl, false);  // 重建后把选中档位滚入可视区（切天数/换目的地都杜绝空白）
   }
 
   function updateCta() {
@@ -1971,20 +1991,7 @@
     var dv = document.getElementById('daysValue');
     dv.textContent = state.days + ' 天';
     dv.classList.toggle('has-value', state.daysTouched);  // 未主动选时浅灰，主动选后深色
-    renderOpts();  // 天数变化联动流量档：起价重算、档位过滤、推荐 badge 调整
-    // 与修改条件 modal 同规则：切天数后把选中档位平滑居中带回可视区（spy 加保护窗不抢 tab）
-    var os = document.getElementById('dataOptsScroll');
-    if (os._spyGuard) os._spyGuard(700);
-    requestAnimationFrame(function () {
-      var sel = document.querySelector('#dataOpts .opt.sel');
-      if (!sel) return;
-      var sr = os.getBoundingClientRect(), cr = sel.getBoundingClientRect();
-      if (!sr.width) return;
-      os.scrollTo({
-        left: Math.max(0, os.scrollLeft + (cr.left + cr.width / 2) - (sr.left + sr.width / 2)),
-        behavior: 'smooth'
-      });
-    });
+    renderOpts();  // 天数变化联动流量档：起价重算、档位过滤、推荐 badge 调整；内部 revealOpt 已把选中档位滚回可视区
     updateCta();
   }
   document.querySelectorAll('#dayChips .chip').forEach(function (el) {
@@ -3592,17 +3599,7 @@
       clearTimeout(condLinkTimer);
       condLinkTimer = setTimeout(function () {
         // 原档位仍存在则保持选中；被过滤掉才回退到同计费组第一档（renderCondOpts 内部逻辑）
-        renderCondOpts();
-        var sEl = document.getElementById('condOptsScroll');
-        if (sEl._spyGuard) sEl._spyGuard(700);  // 重定位期间 spy 不抢 tab
-        var selOpt = document.querySelector('#condOpts .opt.sel');
-        if (selOpt) {
-          var sr = sEl.getBoundingClientRect(), cr = selOpt.getBoundingClientRect();
-          if (sr.width) sEl.scrollTo({
-            left: Math.max(0, sEl.scrollLeft + (cr.left + cr.width / 2) - (sr.left + sr.width / 2)),
-            behavior: 'smooth'
-          });
-        }
+        renderCondOpts();  // 内部 revealOpt 已把选中档位滚回可视区（钳制越界，杜绝空白）
         updateCondSum();
       }, 200);
     }
@@ -3621,7 +3618,6 @@
       editState.plan = filteredOpts(editState.tab, d)[0].t;
     }
     var scrollEl = document.getElementById('condOptsScroll');
-    var keep = scrollEl.scrollLeft;
     buildMergedRow(document.getElementById('condOpts'), d, editState.tab, editState.plan, function (tab, plan) {
       editState.tab = tab;
       editState.plan = plan;
@@ -3635,8 +3631,8 @@
       centerOpt(scrollEl, selEl);  // 点击选中项自动居中
       updateCondSum();
     });
-    scrollEl.scrollLeft = keep;
     setTabsActive(document.getElementById('condTabs'), document.getElementById('condNote'), editState.tab);
+    revealOpt(scrollEl, false);  // 重建后把选中档位滚入可视区（切天数不再空白）
   }
   bindSpy(document.getElementById('condOptsScroll'),
           document.getElementById('condTabs'),
@@ -3667,8 +3663,8 @@
       condWheel.scrollTop = idx * DAY_H;
       updateCondWheel();
       var sEl = document.getElementById('condOptsScroll');
-      sEl.scrollLeft = groupStart(sEl, editState.tab);  // 定位到当前计费方式组
-      setTimeout(function () { sEl.scrollLeft = groupStart(sEl, editState.tab); }, 350);  // 开场动画结束后兜底
+      revealOpt(sEl, false);  // 定位到当前选中档位并居中
+      setTimeout(function () { revealOpt(sEl, false); }, 350);  // 开场动画结束后兜底重定位
     });
   }
   function closeCondModal() {
