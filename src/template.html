@@ -3038,13 +3038,15 @@
       rating.querySelector('.rcount').textContent = '(' + p.reviews + ')';
       rating.querySelector('.bt').textContent = p.bought;
       var price = card.querySelector('.pkg-price');
+      // 1 天时每日≈价格与总价相同，冗余 → 不显示
+      var showPer = (+state.days !== 1);
       price.innerHTML = promoTag(p) +
         '<span class="pkg-now"></span>' + (p.was ? '<span class="pkg-was"></span>' : '') +
-        '<div class="pkg-per"></div>';
+        (showPer ? '<div class="pkg-per"></div>' : '');
       price.querySelector('.pkg-now').innerHTML = '<span class="cur">NT$</span><span class="num"></span>';
       price.querySelector('.pkg-now .num').textContent = p.now.toLocaleString();
       if (p.was) price.querySelector('.pkg-was').textContent = 'NT$ ' + p.was.toLocaleString();
-      price.querySelector('.pkg-per').textContent = '≈NT$' + p.perDay + '/天';
+      if (showPer) price.querySelector('.pkg-per').textContent = '≈NT$' + p.perDay + '/天';
       // 整卡点击进入详情（默认状态）；点评分整块（星星+分数+评语+评论数）→ 详情并锚定评论区；
       // 「已购」销量在同一行但语义不同，走默认详情；订购按钮不进详情
       card.addEventListener('click', function (e) {
@@ -3561,12 +3563,12 @@
     document.querySelectorAll('#detShots .det-shot img').forEach(function (im, idx) { im.src = pool[idx % pool.length]; });
     // 底部价格
     var price = document.getElementById('detPrice');
+    // 详情 footer 始终不显示每日≈价格
     price.innerHTML = promoTag(p) +
       '<span class="pkg-now"><span class="cur">NT$</span><span class="num"></span></span>' +
-      (p.was ? '<span class="pkg-was"></span>' : '') + '<div class="pkg-per"></div>';
+      (p.was ? '<span class="pkg-was"></span>' : '');
     price.querySelector('.num').textContent = p.now.toLocaleString();
     if (p.was) price.querySelector('.pkg-was').textContent = 'NT$ ' + p.was.toLocaleString();
-    price.querySelector('.pkg-per').textContent = '≈NT$' + p.perDay + '/天';
     document.getElementById('detCta').onclick = function () {
       withLoading(this, function () { toast('订购流程（开发中）：' + p.title); });
     };
