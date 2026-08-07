@@ -845,10 +845,51 @@
   .det-coupon .tkt .dash svg { width: 100%; height: auto; display: block; }
   .det-coupon .tkt i { position: relative; font-style: normal;
     font-size: 12px; line-height: 16px; color: #E65F50; white-space: nowrap; }
+  .det-coupon { border: 0; text-align: left; cursor: pointer; width: 100%; }
   .det-coupon .claim { margin-left: auto; display: inline-flex; align-items: center; gap: 4px;
     font-size: 14px; line-height: 20px; font-weight: 600; color: #E65F50; }
   .det-coupon .claim .car { display: inline-flex; }
   .det-coupon .claim .car img { width: 9.3px; height: 5.3px; transform: rotate(90deg); }
+  /* 折扣券 sheet 卡片 */
+  .cpn-list { padding: 4px 24px 24px; display: flex; flex-direction: column; gap: 12px; }
+  .cpn-card { border: 1px solid var(--kk-border-lighter); border-radius: var(--r-md); padding: 16px; }
+  .cpn-top { display: flex; align-items: flex-start; gap: 12px; }
+  .cpn-amt { flex: 1 1 0; min-width: 0; font-size: 24px; line-height: 30px; font-weight: 600; color: var(--kk-text-darker); }
+  .cpn-claim { flex: 0 0 auto; background: var(--kk-primary-button); color: #fff; border: 0; border-radius: var(--r-md);
+    padding: 8px 20px; font-size: 14px; line-height: 20px; font-weight: 600; cursor: pointer; }
+  .cpn-claim:disabled { background: var(--kk-surface-light); color: var(--kk-text-light); }
+  .cpn-cond { margin-top: 8px; font-size: 14px; line-height: 20px; color: var(--kk-text-darker); }
+  .cpn-desc { margin-top: 4px; font-size: 12px; line-height: 16px; color: var(--kk-text-dark); }
+  .cpn-exp { margin-top: 4px; font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
+  /* 评论页 */
+  .rv-summary { flex: 0 0 auto; display: flex; align-items: center; gap: 8px; padding: 16px 20px 12px; background: #fff; }
+  .rv-summary .badge9 { background: var(--kk-primary-medium); color: #fff; font-size: 24px; line-height: 30px; font-weight: 600;
+    padding: 4px 8px; border-radius: 16px 12px 12px 4px; }
+  .rv-summary .gcol { display: flex; flex-direction: column; }
+  .rv-summary .gt { font-size: 18px; line-height: 26px; font-weight: 600; color: var(--kk-text-darker); }
+  .rv-summary .gc { font-size: 12px; line-height: 16px; color: var(--kk-text-dark); }
+  .rv-filters { flex: 0 0 auto; background: #fff; border-bottom: 1px solid var(--kk-border-lighter); }
+  .rv-sorts { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding: 0 20px 12px; }
+  .rv-sorts::-webkit-scrollbar { display: none; }
+  .rv-sort { flex: 0 0 auto; border: 1px solid var(--kk-border-light); background: #fff; border-radius: 999px;
+    padding: 6px 16px; font-size: 14px; line-height: 20px; color: var(--kk-text-darker); cursor: pointer; }
+  .rv-sort.sel { background: var(--kk-primary-lighter); border-color: var(--kk-primary-medium); color: #13A3B6; }
+  .rv-body { flex: 1 1 0; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain;
+    background: var(--kk-surface-light); }
+  .rv-item { background: #fff; padding: 20px; border-bottom: 1px solid var(--kk-border-lighter); }
+  .rv-head { display: flex; align-items: center; gap: 12px; }
+  .rv-ava { width: 40px; height: 40px; border-radius: 50%; flex: 0 0 auto; background: linear-gradient(135deg,#8FD3E8,#C4E4EA); overflow: hidden; }
+  .rv-ava img { width: 100%; height: 100%; object-fit: cover; }
+  .rv-who { flex: 1 1 0; min-width: 0; }
+  .rv-name { display: block; font-size: 14px; line-height: 20px; font-weight: 500; color: var(--kk-text-darker); }
+  .rv-role { display: block; font-size: 12px; line-height: 16px; color: var(--kk-text-dark); }
+  .rv-dates { flex: 0 0 auto; text-align: right; font-size: 12px; line-height: 16px; color: var(--kk-text-dark); }
+  .rv-stars { display: flex; gap: 2px; margin-top: 12px; }
+  .rv-stars .ic { width: 16px; height: 16px; }
+  .rv-title { margin-top: 8px; font-size: 14px; line-height: 20px; font-weight: 600; color: var(--kk-text-darker); }
+  .rv-text { margin-top: 4px; font-size: 14px; line-height: 20px; color: var(--kk-text-darker); }
+  .rv-help { margin-top: 12px; display: flex; justify-content: flex-end; align-items: center; gap: 4px;
+    font-size: 12px; line-height: 16px; color: var(--kk-text-dark); }
   /* 底部栏用分割线分层（非阴影） */
   .det-foot { flex: 0 0 auto; background: #fff; border-top: 1px solid var(--kk-border-lighter);
     padding: 12px 24px calc(12px + env(safe-area-inset-bottom, 0px)); }
@@ -1628,14 +1669,14 @@
       <div class="det-pid">产品编号： 123456</div>
     </div>
 
-    <div class="det-coupon">
+    <button class="det-coupon" id="detCoupon">
       <span class="cp-pic">{{IC_couponPicto}}</span>
       <span class="tks">
         <span class="tkt tkt1">{{IC_ticket1}}<span class="dash">{{IC_ticket1dash}}</span><i>95 折</i></span>
         <span class="tkt tkt2">{{IC_ticket2}}<span class="dash">{{IC_ticket2dash}}</span><i>TWD 100</i></span>
       </span>
-      <button class="claim" id="detClaim">领取<span class="car">{{IC_arrowSmRight}}</span></button>
-    </div>
+      <span class="claim">领取<span class="car">{{IC_arrowSmRight}}</span></span>
+    </button>
     <div class="det-foot">
       <div class="pkg-buy">
         <div class="pkg-price" id="detPrice"></div>
@@ -1689,6 +1730,37 @@
     </div>
     <div class="cal-week"><span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span></div>
     <div class="cal-body" id="calBody" style="padding-bottom:calc(16px + env(safe-area-inset-bottom, 0px));"></div>
+  </div>
+
+  <!-- 折扣券 bottom sheet（参考 KKday 商品页；领取成功后置灰，全部领取后横幅消失） -->
+  <div class="bsheet" id="couponSheet">
+    <div class="bs-handle"></div>
+    <div class="bs-bar">
+      <button class="bs-close" data-bs-close aria-label="关闭"><span class="ic ic-24">{{IC_cross}}</span></button>
+      <span class="bs-title">折扣券</span>
+      <span class="bs-spacer"></span>
+    </div>
+    <div class="bs-body"><div class="cpn-list" id="cpnList"></div></div>
+  </div>
+
+  <!-- 评论 Full-screen 页（更多评价 → 进入） -->
+  <div class="dest-modal" id="reviewPage" aria-hidden="true">
+    <div class="det-head">
+      <div class="dm-bar">
+        <button class="dm-close" id="rvBack" aria-label="返回"><span class="ic ic-24">{{IC_back}}</span></button>
+        <span class="dm-title">评价</span>
+        <span class="dm-spacer"></span>
+      </div>
+    </div>
+    <div class="rv-summary">
+      <span class="badge9" id="rvScore">4.6</span>
+      <span class="gcol"><span class="gt" id="rvGrade">非常好</span><span class="gc" id="rvCount">依据 234 则评论</span></span>
+    </div>
+    <div class="rv-filters">
+      <div class="rv-sorts" id="rvSorts"></div>
+      <div class="det-kws" id="rvKws" style="padding:0 20px 16px;"></div>
+    </div>
+    <div class="rv-body" id="rvBody"></div>
   </div>
 
   <div class="toast" id="toast"></div>
@@ -2019,7 +2091,9 @@
     checkSm: '{{IC_checkSm}}',            // 规格总览「✓当前」badge 的对勾
     arrowDownSm: '{{IC_arrowDown}}',      // 筛选 pill 下拉箭头
     arrowDownCyan: '{{IC_arrowDownCyan}}',// 筛选 pill 选中态 cyan 箭头
-    send: '{{IC_send}}'                   // 24小时内回复确认（非有利，深色）
+    send: '{{IC_send}}',                  // 24小时内回复确认（非有利，深色）
+    smile: '{{IC_smile}}', neutral: '{{IC_neutral}}',  // 评论关键词表情
+    starGrey: '{{IC_starGrey}}', thumb: '{{IC_thumb}}' // 评论页：灰星 / 有帮助
   };
   // 详情大号政策/费用图标：内联 svg（20px 清晰）
   var ICONS_BIG = {
@@ -3392,9 +3466,106 @@
     document.getElementById('detIntro').classList.toggle('open');
     this.firstChild.textContent = this.classList.contains('open') ? '收起 ' : '展开更多 ';
   });
-  document.getElementById('detClaim').addEventListener('click', function () { toast('优惠券已领取（原型演示）'); });
+  // ---------- 折扣券（横幅→bottom sheet；领取成功；全部领取后横幅消失） ----------
+  var COUPONS = [
+    { amt: '95 折', cond: '订购金额须满 NT$0，至多抵 NT$120', desc: '【夏季全站活动】不限门槛 95 折', exp: '2026-08-31', got: false },
+    { amt: 'NT$100', cond: '订购金额须满 NT$2,000', desc: '【夏季全站活动】满 2000 折 100', exp: '2026-08-31', got: false },
+    { amt: 'NT$300', cond: '订购金额须满 NT$5,000', desc: '【新客首购】满 5000 折 300', exp: '2026-09-30', got: false }
+  ];
+  function renderCoupons() {
+    var box = document.getElementById('cpnList');
+    box.innerHTML = '';
+    COUPONS.forEach(function (c, i) {
+      var card = el('<div class="cpn-card"><div class="cpn-top"><span class="cpn-amt"></span>' +
+        '<button class="cpn-claim"></button></div>' +
+        '<div class="cpn-cond"></div><div class="cpn-desc"></div><div class="cpn-exp"></div></div>');
+      card.querySelector('.cpn-amt').textContent = c.amt;
+      card.querySelector('.cpn-cond').textContent = c.cond;
+      card.querySelector('.cpn-desc').textContent = c.desc;
+      card.querySelector('.cpn-exp').textContent = '有效期限：' + c.exp;
+      var btn = card.querySelector('.cpn-claim');
+      btn.textContent = c.got ? '已领取' : '领取';
+      btn.disabled = c.got;
+      btn.addEventListener('click', function () {
+        if (c.got) return;
+        c.got = true; btn.textContent = '已领取'; btn.disabled = true;
+        toast('领取成功');
+        // 全部领取 → 关闭 sheet 并隐藏横幅
+        if (COUPONS.every(function (x) { return x.got; })) {
+          document.getElementById('detCoupon').style.display = 'none';
+          setTimeout(closeSheets, 400);
+        }
+      });
+      box.appendChild(card);
+    });
+  }
+  document.getElementById('detCoupon').addEventListener('click', function () {
+    renderCoupons();
+    openSheet(document.getElementById('couponSheet'));
+  });
+
+  // ---------- 评论页（更多评价 → 进入） ----------
+  var RV_SORTS = ['KKday 精选', '最高', '最低', '最近', '图片优先'];
+  var RV_KWS = [['smile', '便利性'], ['smile', '价格'], ['smile', '易用性'], ['smile', '客服'], ['neutral', '网路'], ['neutral', '速度']];
+  var REVIEWS = [
+    { name: 'CHENG HSING', role: '家人', dep: '2025/02/13', at: '2025/02/26', stars: 4, title: '简单安装·好用', text: '安装简易，使用方便，本次使用国家日韩收讯品质良好，整体 CP 值高，成为出国网路需求首选！' },
+    { name: 'YUJU', role: '家人', dep: '2025/05/05', at: '2025/05/06', stars: 5, title: '日韩通用网卡玩双国没烦恼', text: '刚好要去日韩双国旅游八天，一张卡通用双国很方便，不需要中途换卡，卡片寄送快速，客服处理速度快态度良好。' },
+    { name: '曼蒂', role: '单人旅游', dep: '2025/04/01', at: '2025/04/02', stars: 5, title: '免插卡超方便', text: '不用插卡片非常方便，买完凭证马上就寄来了，落地扫码就能上网。' },
+    { name: '建龙', role: '商务旅客', dep: '2025/03/20', at: '2025/03/26', stars: 5, title: '客服态度赞', text: '服务态度非常好！发生意外线上处理积极！网速稳定，开会视讯都没问题，棒棒！' },
+    { name: '小圆', role: '朋友出游', dep: '2025/06/10', at: '2025/06/12', stars: 4, title: '整体不错', text: '大部分地区讯号都很好，市区飙速无压力；少数郊区会降速，但可接受，性价比高。' },
+    { name: 'Kevin', role: '单人旅游', dep: '2025/01/15', at: '2025/01/18', stars: 5, title: '回购好几次了', text: '每次出国都买这张，稳定、好装、价格实惠，热点分享给同行也够用。' },
+    { name: '芝麻', role: '亲子', dep: '2025/07/02', at: '2025/07/04', stars: 4, title: '亲子出游首选', text: '一家四口共用热点很方便，导航看影片都顺，客服回覆也快。' },
+    { name: 'Ray', role: '商务旅客', dep: '2025/05/22', at: '2025/05/24', stars: 5, title: '落地即用', text: '飞机落地开机就自动连上，完全不用设定，对商务出差太友善了。' }
+  ];
+  function renderReviewPage() {
+    document.getElementById('rvScore').textContent = reviewP.rating.toFixed(1);
+    document.getElementById('rvGrade').textContent = reviewP.rating >= 4.6 ? '非常好' : reviewP.rating >= 4.0 ? '很好' : '一般';
+    document.getElementById('rvCount').textContent = '依据 ' + reviewP.reviews.toLocaleString() + ' 则评论';
+    var sortsBox = document.getElementById('rvSorts'); sortsBox.innerHTML = '';
+    RV_SORTS.forEach(function (s, i) {
+      var b = el('<button class="rv-sort' + (i === 0 ? ' sel' : '') + '"></button>'); b.textContent = s;
+      b.addEventListener('click', function () {
+        sortsBox.querySelectorAll('.rv-sort').forEach(function (x) { x.classList.remove('sel'); });
+        b.classList.add('sel'); toast('已按「' + s + '」排序');
+      });
+      sortsBox.appendChild(b);
+    });
+    var kws = document.getElementById('rvKws'); kws.innerHTML = '';
+    RV_KWS.forEach(function (k) {
+      var e = el('<span class="det-kw"><span class="ic ic-16">' + ICONS[k[0] === 'smile' ? 'smile' : 'neutral'] + '</span></span>');
+      e.appendChild(document.createTextNode(k[1]));
+      kws.appendChild(e);
+    });
+    var body = document.getElementById('rvBody'); body.innerHTML = '';
+    REVIEWS.forEach(function (r) {
+      var stars = '';
+      for (var i = 0; i < 5; i++) stars += '<span class="ic ic-16">' + (i < r.stars ? ICONS.star : ICONS.starGrey) + '</span>';
+      var it = el('<div class="rv-item"><div class="rv-head"><span class="rv-ava"></span>' +
+        '<span class="rv-who"><span class="rv-name"></span><span class="rv-role"></span></span>' +
+        '<span class="rv-dates"></span></div>' +
+        '<div class="rv-stars">' + stars + '</div>' +
+        '<div class="rv-title"></div><div class="rv-text"></div>' +
+        '<div class="rv-help"><span class="ic ic-16">' + ICONS.thumb + '</span>有帮助吗?</div></div>');
+      it.querySelector('.rv-name').textContent = r.name;
+      it.querySelector('.rv-role').textContent = r.role;
+      it.querySelector('.rv-dates').innerHTML = '出发日 ' + r.dep + '<br>评论于 ' + r.at;
+      it.querySelector('.rv-title').textContent = r.title;
+      it.querySelector('.rv-text').textContent = r.text;
+      body.appendChild(it);
+    });
+    body.scrollTop = 0;
+  }
+  var reviewP = { rating: 4.6, reviews: 234 };
   document.getElementById('detMoreReviews').addEventListener('click', function () {
-    withLoading(this, function () { toast('完整评论列表（开发中）'); });
+    withLoading(this, function () {
+      renderReviewPage();
+      var m = document.getElementById('reviewPage');
+      m.classList.add('open'); m.setAttribute('aria-hidden', 'false');
+    });
+  });
+  document.getElementById('rvBack').addEventListener('click', function () {
+    var m = document.getElementById('reviewPage');
+    m.classList.remove('open'); m.setAttribute('aria-hidden', 'true');
   });
 
   // ---------- 修改搜寻条件 modal（Figma 871-80184） ----------

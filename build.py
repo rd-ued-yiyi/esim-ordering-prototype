@@ -100,6 +100,8 @@ subs = {
     "{{IC_fire}}":         svg("fire"),
     "{{IC_checkCircle}}":  svg("checkCircle"),
     "{{IC_star}}":         svg("star"),
+    "{{IC_starGrey}}":     svg("star", recolor=("#26BEC9", "#D5D6DB")),
+    "{{IC_thumb}}":        inline_svg_to_img('<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4.5 7 7.2 1.6c.6 0 1.2.5 1.2 1.2V5.5h3.4c.8 0 1.4.7 1.2 1.5l-1 4.2c-.15.6-.7 1-1.3 1H4.5V7Z" stroke="#727272" stroke-width="1.2" stroke-linejoin="round"/><rect x="1.6" y="7" width="2.9" height="5.2" rx=".6" stroke="#727272" stroke-width="1.2"/></svg>'),
     "{{IC_locationArrow}}":svg("locationArrow"),
     "{{IC_arrowDown}}":    svg("arrowDown"),
     "{{IC_question}}":     svg("question"),
