@@ -3388,7 +3388,8 @@
     document.getElementById('detProvider').style.marginTop = p.warns.length ? '4px' : '24px';
     // 政策行：沿用卡面 perks 语义（详情版文案更完整）+ 覆盖范围行（Figma 913-43597 带下划线）
     var pol = document.getElementById('detPolicies'); pol.innerHTML = '';
-    p.perks.forEach(function (pk) {
+    // 政策顺序与卡片一致：确认速度 → 可用日期 → 取消政策（取消政策放最后，适用范围仍在其后）
+    [p.perks[0], p.perks[2], p.perks[1]].forEach(function (pk) {
       var label = pk[1] === '立即确认' ? '立即确认并发送凭证' : pk[1] === '即日可用' ? '现在订购，立即使用' : pk[1];
       var e = el('<span class="perk' + (pk[2] ? ' dark' : '') + '"><span class="ic">' + ICONS_BIG[PERK_ICONS[pk[0]]] + '</span><span class="pt"></span></span>');
       e.querySelector('.pt').textContent = label;
