@@ -784,6 +784,7 @@
   .det-list li::before { content: ''; position: absolute; left: 2px; top: 8px;
     width: 5px; height: 5px; border-radius: 50%; background: var(--kk-text-darker); }
   .det-body-md { font-size: 14px; line-height: 20px; color: var(--kk-text-darker); margin: 0; }
+  .det-award { margin: 20px 0 0; text-align: center; font-size: 14px; line-height: 20px; font-weight: 600; color: #13A3B6; }
   .det-note { display: flex; gap: 8px; margin-top: 16px; font-size: 12px; line-height: 16px; color: var(--kk-text-dark); }
   .det-note .nt { flex: 1 1 0; }
   .det-note-ind { margin: 8px 0 0 24px; font-size: 12px; line-height: 18px; color: var(--kk-text-dark); }
@@ -1690,12 +1691,22 @@
 
       <section class="det-sec" data-sec="imgs">
         <h2 class="det-h5">图文说明</h2>
-        <p class="det-body-md">支援iOS 一键安装：更新至iOS App 最新版本和iOS 17.4 以上，可以在KKday App 一键安装eSIM，市场唯一电信公司直营的日本eSIM，由KDDI电信提供本地网路服务</p>
-        <p class="det-body-md" style="margin-top:24px;">购买前请先确认手机可用eSIM，订购后无法取消订单退款。</p>
+        <!-- 商品说明·图文介绍（取自 KKday 商品 243815） -->
+        <ul class="det-list">
+          <li>市场唯一电信公司直营的日本 eSIM，由 KDDI 电信提供本地网络服务</li>
+          <li>支持 ChatGPT，无限流量不限速的 5G / 4G 高速行动网络</li>
+          <li>支持 iOS 一键安装：更新至 iOS App 最新版本与 iOS 17.4 以上，即可在 KKday App 一键安装 eSIM</li>
+          <li>依据购买天数，可额外享有 3GB~30GB 的热点分享流量</li>
+        </ul>
+        <p class="det-award">连续两年荣获 Opensignal 网络可靠性全球大奖，KDDI 给你最稳的连线体验</p>
+        <h3 class="det-sub">方案描述</h3>
+        <p class="det-body-md">此 eSIM 由日本 KDDI（au）直接提供原生网络服务，非漫游上网。请保持「数据漫游」关闭，以免影响网络体验。</p>
+        <h3 class="det-sub">安装说明</h3>
+        <p class="det-body-md">购买前请先确认手机可用 eSIM，订购后无法取消订单退款。</p>
         <div class="det-fig"><img alt="开启相机扫描 eSIM" src="{{IMG_GUIDE1}}"></div>
-        <p class="det-body-md" style="margin-top:24px;">启用eSIM前请先更新iOS至最新版本，并连线稳定WiFi，旧版iOS和网路不稳定是eSIM启用失败的常见原因。</p>
+        <p class="det-body-md" style="margin-top:24px;">启用 eSIM 前请先更新 iOS 至最新版本，并连线稳定 WiFi，旧版 iOS 和网络不稳定是 eSIM 启用失败的常见原因。</p>
         <div class="det-fig"><img alt="启用 eSIM 前先更新 iOS 并连线稳定 WiFi" src="{{IMG_GUIDE2}}"></div>
-        <p class="det-body-md" style="margin-top:24px;">开启相机扫描eSIM，点击「行动方案」。</p>
+        <p class="det-body-md" style="margin-top:24px;">开启相机扫描 eSIM，点击「行动方案」。</p>
         <div class="det-fig"><img alt="点击行动方案" src="{{IMG_GUIDE3}}"></div>
       </section>
 
