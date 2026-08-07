@@ -559,7 +559,7 @@
   .pl-meta { display: flex; align-items: center; margin: 8px 0 16px; }  /* Figma 833-39796：提示行→计数 8，计数→卡片 16 */
   .pl-meta .cnt { flex: 1 1 0; font-size: 14px; line-height: 20px; color: var(--kk-text-dark); }
   .pl-meta .sort { display: inline-flex; align-items: center; gap: 2px; font-size: 14px; line-height: 20px; color: var(--kk-text-dark); }
-  .pl-meta .sort .sort-ic img { width: 16px; height: 16px; }  /* swapVertical 裸矢量仅 9.6px，撑满 16 框（Figma 795-35558）*/
+  /* 排序 icon：Figma ic_swapVertical_line 为 11px 字形居中于 16 框（795-35558），按 intrinsic 渲染即可 */
 
   .pkg-card { background: #fff; border-radius: var(--r-lg); padding: 16px; margin-bottom: 16px; }
   .pkg-head { display: flex; align-items: flex-start; gap: 4px; width: 100%; text-align: left; }
