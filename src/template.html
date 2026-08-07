@@ -1687,6 +1687,8 @@
   }
   function bindSpy(scrollEl, tabsEl, noteEl) {
     var guardUntil = 0;
+    // 暴露保护窗设置：程序性滚动（如天数联动重定位）期间不让 spy 抢 tab
+    scrollEl._spyGuard = function (ms) { guardUntil = Date.now() + ms; };
     scrollEl.addEventListener('scroll', function () {
       if (Date.now() < guardUntil) return;  // 锚点平滑滚动期间不抢 tab
       var x = scrollEl.scrollLeft + scrollEl.clientWidth * 0.3;
@@ -2784,6 +2786,7 @@
 
   // ---------- 修改搜寻条件 modal（Figma 871-80184） ----------
   var editState = { days: null, tab: 'daily', plan: null };
+  var condLinkTimer;  // 天数切换联动的防抖计时器
   var condWheel = document.getElementById('condDaysList');
   DAYS_ALL.forEach(function (d) {
     var b = document.createElement('div');
@@ -2800,16 +2803,24 @@
     });
     if (nd !== editState.days) {
       editState.days = nd;
-      // 天数切换 → 原档位仍存在则保持选中；被过滤掉才回退到同计费组第一档
-      // （renderCondOpts 内部逻辑：plan 失效时落到当前 tab 过滤后的第一档，tab 不变）
-      renderCondOpts();
-      // 滚动带把选中档位带到可视区中央（保留选择时它可能在组深处）
-      var sEl = document.getElementById('condOptsScroll');
-      var selOpt = document.querySelector('#condOpts .opt.sel');
-      if (selOpt) {
-        var sr = sEl.getBoundingClientRect(), cr = selOpt.getBoundingClientRect();
-        if (sr.width) sEl.scrollLeft += (cr.left + cr.width / 2) - (sr.left + sr.width / 2);
-      }
+      // 滚轮惯性滑动会连续划过多个天数：防抖 200ms，停稳后只联动一次，
+      // 避免流量带反复重建左右弹跳、spy 与代码抢 tab 造成选中态闪烁
+      clearTimeout(condLinkTimer);
+      condLinkTimer = setTimeout(function () {
+        // 原档位仍存在则保持选中；被过滤掉才回退到同计费组第一档（renderCondOpts 内部逻辑）
+        renderCondOpts();
+        var sEl = document.getElementById('condOptsScroll');
+        if (sEl._spyGuard) sEl._spyGuard(700);  // 重定位期间 spy 不抢 tab
+        var selOpt = document.querySelector('#condOpts .opt.sel');
+        if (selOpt) {
+          var sr = sEl.getBoundingClientRect(), cr = selOpt.getBoundingClientRect();
+          if (sr.width) sEl.scrollTo({
+            left: Math.max(0, sEl.scrollLeft + (cr.left + cr.width / 2) - (sr.left + sr.width / 2)),
+            behavior: 'smooth'
+          });
+        }
+        updateCondSum();
+      }, 200);
     }
     updateCondSum();
   }
