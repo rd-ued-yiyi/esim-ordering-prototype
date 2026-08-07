@@ -162,7 +162,7 @@
     background: #fff; cursor: pointer;
   }
   .guide-tab .lbl { color: var(--kk-text-darker); }
-  .guide-tab .ic svg { width: 24px; height: 24px; display: block; }
+  .guide-tab .ic svg { width: 20px; height: 20px; display: block; }  /* 维持原图标视觉尺寸（~20px），非撑满 24 */
 
   /* ---------- faq card ---------- */
   .faq-head { display: flex; align-items: center; gap: 20px; }
@@ -2986,7 +2986,7 @@
     });
     if (cat.date) {
       var picked = fDraft.date && typeof fDraft.date === 'object';
-      var b = el('<button class="fopt rect' + (picked ? ' sel' : '') + '"><span class="lb"></span><span class="ic ic-16 chev-sm" style="transform:rotate(-90deg)">' + ICONS.arrowDownSm + '</span></button>');
+      var b = el('<button class="fopt rect' + (picked ? ' sel' : '') + '"><span class="lb"></span><span class="ic ic-16 chev-sm" style="transform:rotate(-90deg)">' + (picked ? ICONS.arrowDownCyan : ICONS.arrowDownSm) + '</span></button>');
       b.querySelector('.lb').textContent = picked ? fDraft.date.label : '选择日期';
       b.addEventListener('click', function () { dateReturn = 'cat'; openDateSheet(); });
       box.appendChild(b);
@@ -3024,7 +3024,7 @@
       });
       if (cat.date) {
         var picked = fDraft.date && typeof fDraft.date === 'object';
-        var b = el('<button class="fopt rect' + (picked ? ' sel' : '') + '"><span class="lb"></span><span class="ic ic-16 chev-sm" style="transform:rotate(-90deg)">' + ICONS.arrowDownSm + '</span></button>');
+        var b = el('<button class="fopt rect' + (picked ? ' sel' : '') + '"><span class="lb"></span><span class="ic ic-16 chev-sm" style="transform:rotate(-90deg)">' + (picked ? ICONS.arrowDownCyan : ICONS.arrowDownSm) + '</span></button>');
         b.querySelector('.lb').textContent = picked ? fDraft.date.label : '选择日期';
         b.addEventListener('click', function () { dateReturn = 'filter'; openDateSheet(); });
         opts.appendChild(b);
