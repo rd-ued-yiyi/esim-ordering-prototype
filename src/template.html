@@ -632,21 +632,26 @@
     min-height: 40px; padding: 8px 16px; border-radius: 999px;
     border: 1px solid var(--kk-border-light); background: #fff;
     font-size: 14px; line-height: 20px; color: var(--kk-text-darker); white-space: nowrap; cursor: pointer; }
-  .fopt.sel { background: var(--kk-primary-lighter); border-color: var(--kk-primary-medium); color: #13A3B6; font-weight: 600; }
+  .fopt.sel { background: var(--kk-primary-lighter); border-color: var(--kk-primary-medium); color: #13A3B6; }  /* 选中态不加粗 */
+  .fopt.rect { border-radius: var(--r-md); }  /* 日期 chips 非全圆角（Figma） */
   .fopt .chev-sm img { width: 9.4px; height: 5.2px; }
-  /* 价格区间滑块 */
+  /* 价格区间双滑块 */
   .fs-price-val { font-size: 14px; line-height: 20px; color: var(--kk-text-medium); margin: 0 0 16px; }
   .fs-range { position: relative; height: 24px; }
-  .fs-range .track { position: absolute; left: 0; right: 0; top: 11px; height: 2px; background: var(--kk-border-light); border-radius: 2px; }
+  .fs-range .track { position: absolute; left: 0; right: 0; top: 11px; height: 2px; background: var(--kk-border-lighter); border-radius: 2px; }
   .fs-range .fill { position: absolute; top: 11px; height: 2px; background: var(--kk-primary-medium); border-radius: 2px; }
-  .fs-range input[type=range] { position: absolute; left: -2px; right: -2px; width: calc(100% + 4px); top: 0; margin: 0;
+  .fs-range input[type=range] { position: absolute; left: 0; width: 100%; top: 0; margin: 0;
     -webkit-appearance: none; appearance: none; background: none; pointer-events: none; height: 24px; }
   .fs-range input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; pointer-events: auto;
+    width: 24px; height: 24px; border-radius: 50%; background: #fff; border: 1px solid var(--kk-border-light);
+    box-shadow: 0 1px 4px rgba(38,50,56,.2); cursor: pointer; }
+  .fs-range input[type=range]::-moz-range-thumb { pointer-events: auto;
     width: 24px; height: 24px; border-radius: 50%; background: #fff; border: 1px solid var(--kk-border-light);
     box-shadow: 0 1px 4px rgba(38,50,56,.2); cursor: pointer; }
   .fs-foot { flex: 0 0 auto; padding: 12px 24px calc(12px + env(safe-area-inset-bottom, 0px));
     box-shadow: 0 -2px 8px rgba(38,50,56,.06); }
   .fs-foot .cta { background: var(--kk-primary-button); color: #fff; }
+  .fs-foot .cta:disabled { background: rgba(26,182,193,.4); color: rgba(255,255,255,.6); }  /* 0 结果禁用（Figma 1004-42393） */
   /* 日期日历 */
   .cal-week { display: grid; grid-template-columns: repeat(7, 1fr); flex: 0 0 auto;
     padding: 4px 12px 8px; border-bottom: 1px solid var(--kk-border-lighter); background: #fff; }
@@ -1663,7 +1668,8 @@
       <span class="bs-title" id="catTitle"></span>
       <span class="bs-spacer"></span>
     </div>
-    <div class="bs-body"><div class="fs-body" style="padding-bottom:24px;"><div class="fs-opts" id="catOpts"></div></div></div>
+    <div class="bs-body"><div class="fs-body" style="padding:16px 24px 24px;"><div class="fs-opts" id="catOpts"></div></div></div>
+    <div class="fs-foot"><button class="cta" id="catApply">确定</button></div>
   </div>
 
   <!-- 使用日期日历 sheet（Figma 970-49610） -->
@@ -2818,101 +2824,159 @@
     openSheet(document.getElementById('bsSort'));
   });
 
-  // ---------- 列表页筛选（总筛选 970-50754 / 单类目 984-14319 / 日期 970-49610） ----------
-  // date: null|'今天'|'明天'|{label,m,d}；其余为多选数组；priceMax 价格上限
-  var fState = { date: null, service: [], cardType: [], activate: [], carrier: [], priceMax: 12000 };
-  // 类目定义（carrier 选项随目的地取 CARRIERS）
+  // ---------- 列表页筛选（总筛选 970-50754 / 单类目 984-14319 / 日期 970-49610 / 按钮态 1004-4239x） ----------
+  // fState=已应用；fDraft=sheet 内暂存草稿。date:null|'今天'|'明天'|{y,m,d,label}；quick 为快筛布尔
+  var fState = { date: null, service: [], cardType: [], activate: [], carrier: [], priceMin: 0, priceMax: 12000, quick: {} };
+  var fDraft = null;
+  function fClone(s) { return JSON.parse(JSON.stringify(s)); }
   function carrierOpts() {
     var dest = document.getElementById('destName').textContent.split(' ')[0];
     return (CARRIERS[dest] || CARRIERS['default']).slice();
   }
+  // 全筛选分区（总筛选 sheet 用）
   function filterCats() {
     return [
-      { key: 'date', label: '使用日期', opts: ['今天', '明天'], date: true, single: true },
+      { key: 'date', label: '使用日期', opts: ['今天', '明天'], date: true, single: true, rect: true },
       { key: 'service', label: '服务保障', opts: ['免费取消', '立即确定', '即日可用'] },
       { key: 'cardType', label: '卡片类型', opts: ['原生卡', '国际漫游卡', '虚商卡'] },
       { key: 'activate', label: '启用方式', opts: ['扫码激活', 'APP激活'] },
       { key: 'carrier', label: '电信商', opts: carrierOpts() }
     ];
   }
+  function catByKey(k) { return filterCats().filter(function (c) { return c.key === k; })[0]; }
+  // 外层筛选行两类：expand=开 sheet（带确定 footer）；date=直接开日历；quick=直接切换（无 sheet）
+  function outerRow() {
+    return [
+      { type: 'date' },
+      { type: 'expand', cat: 'cardType' },
+      { type: 'expand', cat: 'activate' },
+      { type: 'expand', cat: 'carrier' },
+      { type: 'quick', key: '支持热点' },
+      { type: 'quick', key: '免费取消' },
+      { type: 'quick', key: '立即确认' }
+    ];
+  }
   function fActiveCount() {
     var n = fState.date ? 1 : 0;
     ['service', 'cardType', 'activate', 'carrier'].forEach(function (k) { n += fState[k].length; });
-    if (fState.priceMax < 12000) n += 1;
+    if (fState.priceMin > 0 || fState.priceMax < 12000) n += 1;
+    Object.keys(fState.quick).forEach(function (k) { if (fState.quick[k]) n += 1; });
     return n;
   }
-  function dateLabel() {
-    if (!fState.date) return null;
-    return typeof fState.date === 'string' ? fState.date : fState.date.label;
-  }
-  // 实际筛选：service→perks、carrier→card.carrier 可硬过滤；其余仅作视觉选择（不清空列表）
-  function applyFilters(list) {
+  function dateLabel(st) { st = st || fState; return !st.date ? null : (typeof st.date === 'string' ? st.date : st.date.label); }
+  // 卡片派生类型（用于 cardType 过滤）
+  function cardTypeOf(p) { return /原生|本地电信/.test(p.title) ? '原生卡' : (/漫游/.test(p.title) ? '国际漫游卡' : '虚商卡'); }
+  // 实际筛选（st 缺省用已应用 fState）
+  function applyFilters(list, st) {
+    st = st || fState;
     return list.filter(function (p) {
-      if (fState.carrier.length && fState.carrier.indexOf(p.carrier) < 0) return false;
-      if (fState.service.length) {
-        var perkTexts = p.perks.map(function (pk) { return pk[1]; });
-        var ok = fState.service.every(function (s) {
-          if (s === '免费取消') return perkTexts.some(function (t) { return t.indexOf('免费取消') >= 0 || t.indexOf('可免费取消') >= 0; });
-          if (s === '立即确定') return perkTexts.indexOf('立即确认') >= 0;
-          if (s === '即日可用') return perkTexts.indexOf('即日可用') >= 0;
+      if (st.carrier.length && st.carrier.indexOf(p.carrier) < 0) return false;
+      if (st.service.length) {
+        var pt = p.perks.map(function (pk) { return pk[1]; });
+        var ok = st.service.every(function (s) {
+          if (s === '免费取消') return pt.some(function (t) { return t.indexOf('免费取消') >= 0; });
+          if (s === '立即确定') return pt.indexOf('立即确认') >= 0;
+          if (s === '即日可用') return pt.indexOf('即日可用') >= 0;
           return true;
         });
         if (!ok) return false;
       }
-      if (fState.priceMax < 12000 && p.now > fState.priceMax) return false;
+      if (st.cardType.length && st.cardType.indexOf(cardTypeOf(p)) < 0) return false;
+      if (st.activate.length) {
+        var canScan = p.tags.indexOf('扫码启用') >= 0;
+        if (!st.activate.some(function (a) { return a === 'APP激活' ? true : canScan; })) return false;
+      }
+      if (p.now < st.priceMin || (st.priceMax < 12000 && p.now > st.priceMax)) return false;
+      var q = st.quick || {};
+      if (q['支持热点'] && p.tags[0].indexOf('热点') < 0) return false;
+      if (q['免费取消'] && !p.perks.some(function (x) { return x[1].indexOf('免费取消') >= 0; })) return false;
+      if (q['立即确认'] && p.perks[0][1] !== '立即确认') return false;
       return true;
     });
   }
-  // 外层筛选行 pill 渲染（反映各类目选中态与数量/日期）
+  function fCount(st) { return applyFilters(buildPlans(), st).length; }
+  // 确定按钮：加载 → 结果数（Figma 1004-4239x：确定 (N) / 确定(0) 禁用 / spinner）
+  function setApplyBtn(btn, st) {
+    btn.classList.add('is-loading');
+    clearTimeout(btn._t);
+    btn._t = setTimeout(function () {
+      var n = fCount(st);
+      btn.classList.remove('is-loading');
+      btn.textContent = n > 0 ? '确定 (' + n + ')' : '确定(0)';
+      btn.disabled = n === 0;
+    }, 320);
+  }
+
+  // 外层筛选行渲染
   function renderFilterPills() {
     var box = document.getElementById('plFilterScroll');
     if (!box) return;
     box.innerHTML = '';
     document.getElementById('plFilterBtn').classList.toggle('sel', fActiveCount() > 0);
-    filterCats().forEach(function (cat) {
-      var sel, txt;
-      if (cat.key === 'date') { sel = !!fState.date; txt = sel ? dateLabel() : cat.label; }
-      else { var arr = fState[cat.key]; sel = arr.length > 0; txt = sel ? (arr.length === 1 ? arr[0] : cat.label + '·' + arr.length) : cat.label; }
-      var b = el('<button class="fpill' + (sel ? ' sel' : '') + '">' + '<span class="lb"></span>' +
-        '<span class="ic ic-16 chev-sm">' + ICONS.arrowDownSm + '</span></button>');
-      b.querySelector('.lb').textContent = txt;
-      b.addEventListener('click', function () { openCatSheet(cat.key); });
+    outerRow().forEach(function (it) {
+      var b, sel, txt;
+      if (it.type === 'quick') {
+        sel = !!fState.quick[it.key];
+        b = el('<button class="fpill' + (sel ? ' sel' : '') + '"></button>');
+        b.textContent = it.key;
+        b.addEventListener('click', function () {
+          fState.quick[it.key] = !fState.quick[it.key];
+          renderPlans();
+        });
+      } else if (it.type === 'date') {
+        sel = !!fState.date; txt = sel ? dateLabel() : '使用日期';
+        b = el('<button class="fpill' + (sel ? ' sel' : '') + '"><span class="lb"></span><span class="ic ic-16 chev-sm">' + ICONS.arrowDownSm + '</span></button>');
+        b.querySelector('.lb').textContent = txt;
+        b.addEventListener('click', function () { fDraft = fClone(fState); dateReturn = 'outer'; openDateSheet(); });
+      } else {
+        var cat = catByKey(it.cat), arr = fState[it.cat];
+        sel = arr.length > 0; txt = sel ? (arr.length === 1 ? arr[0] : cat.label + '·' + arr.length) : cat.label;
+        b = el('<button class="fpill' + (sel ? ' sel' : '') + '"><span class="lb"></span><span class="ic ic-16 chev-sm">' + ICONS.arrowDownSm + '</span></button>');
+        b.querySelector('.lb').textContent = txt;
+        b.addEventListener('click', function () { openCatSheet(it.cat); });
+      }
       box.appendChild(b);
     });
   }
-  // 单类目 sheet（984-14319）
+
+  // 单类目 sheet（展开式，带确定 footer）
   var curCat = null;
   function renderCatOpts() {
-    var cat = filterCats().filter(function (c) { return c.key === curCat; })[0];
+    var cat = catByKey(curCat);
     document.getElementById('catTitle').textContent = cat.label;
     var box = document.getElementById('catOpts');
     box.innerHTML = '';
     cat.opts.forEach(function (o) {
-      var on = cat.single ? fState.date === o : fState[cat.key].indexOf(o) >= 0;
-      var b = el('<button class="fopt' + (on ? ' sel' : '') + '"></button>');
+      var on = cat.single ? fDraft.date === o : fDraft[cat.key].indexOf(o) >= 0;
+      var b = el('<button class="fopt' + (cat.rect ? ' rect' : '') + (on ? ' sel' : '') + '"></button>');
       b.textContent = o;
       b.addEventListener('click', function () {
-        if (cat.single) { fState.date = (fState.date === o) ? null : o; }
-        else { var arr = fState[cat.key], i = arr.indexOf(o); if (i >= 0) arr.splice(i, 1); else arr.push(o); }
-        renderCatOpts(); renderPlans();
+        if (cat.single) fDraft.date = (fDraft.date === o) ? null : o;
+        else { var arr = fDraft[cat.key], i = arr.indexOf(o); if (i >= 0) arr.splice(i, 1); else arr.push(o); }
+        renderCatOpts(); setApplyBtn(document.getElementById('catApply'), fDraft);
       });
       box.appendChild(b);
     });
-    if (cat.date) {  // 日期类目附「选择日期 ›」→ 打开日历
-      var picked = fState.date && typeof fState.date === 'object';
-      var b = el('<button class="fopt' + (picked ? ' sel' : '') + '"><span class="lb"></span><span class="ic ic-16 chev-sm">' + ICONS.arrowDownSm + '</span></button>');
-      b.querySelector('.lb').textContent = picked ? fState.date.label : '选择日期';
-      b.querySelector('.chev-sm img') && (b.querySelector('.chev-sm').style.transform = 'rotate(-90deg)');
-      b.addEventListener('click', function () { openDateSheet(); });
+    if (cat.date) {
+      var picked = fDraft.date && typeof fDraft.date === 'object';
+      var b = el('<button class="fopt rect' + (picked ? ' sel' : '') + '"><span class="lb"></span><span class="ic ic-16 chev-sm" style="transform:rotate(-90deg)">' + ICONS.arrowDownSm + '</span></button>');
+      b.querySelector('.lb').textContent = picked ? fDraft.date.label : '选择日期';
+      b.addEventListener('click', function () { dateReturn = 'cat'; openDateSheet(); });
       box.appendChild(b);
     }
   }
   function openCatSheet(key) {
-    curCat = key; renderCatOpts();
+    curCat = key; fDraft = fClone(fState);
+    renderCatOpts(); setApplyBtn(document.getElementById('catApply'), fDraft);
     openSheet(document.getElementById('catSheet'));
   }
+  document.getElementById('catApply').addEventListener('click', function () {
+    if (this.disabled) return;
+    fState = fClone(fDraft);
+    closeSheets(); renderPlans(); window.scrollTo(0, 0);
+  });
 
-  // 总筛选 sheet（970-50754）
+  // 总筛选 sheet
   function renderFilterSheet() {
     var body = document.getElementById('fsBody');
     body.innerHTML = '';
@@ -2921,60 +2985,67 @@
       sec.querySelector('.fs-h').textContent = cat.label;
       var opts = sec.querySelector('.fs-opts');
       cat.opts.forEach(function (o) {
-        var on = cat.single ? fState.date === o : fState[cat.key].indexOf(o) >= 0;
-        var b = el('<button class="fopt' + (on ? ' sel' : '') + '"></button>');
+        var on = cat.single ? fDraft.date === o : fDraft[cat.key].indexOf(o) >= 0;
+        var b = el('<button class="fopt' + (cat.rect ? ' rect' : '') + (on ? ' sel' : '') + '"></button>');
         b.textContent = o;
         b.addEventListener('click', function () {
-          if (cat.single) fState.date = (fState.date === o) ? null : o;
-          else { var arr = fState[cat.key], i = arr.indexOf(o); if (i >= 0) arr.splice(i, 1); else arr.push(o); }
-          renderFilterSheet();
+          if (cat.single) fDraft.date = (fDraft.date === o) ? null : o;
+          else { var arr = fDraft[cat.key], i = arr.indexOf(o); if (i >= 0) arr.splice(i, 1); else arr.push(o); }
+          renderFilterSheet(); setApplyBtn(document.getElementById('fsApply'), fDraft);
         });
         opts.appendChild(b);
       });
       if (cat.date) {
-        var picked = fState.date && typeof fState.date === 'object';
-        var b = el('<button class="fopt' + (picked ? ' sel' : '') + '"><span class="lb"></span><span class="ic ic-16 chev-sm" style="transform:rotate(-90deg)">' + ICONS.arrowDownSm + '</span></button>');
-        b.querySelector('.lb').textContent = picked ? fState.date.label : '选择日期';
-        b.addEventListener('click', function () { openDateSheet(); });
+        var picked = fDraft.date && typeof fDraft.date === 'object';
+        var b = el('<button class="fopt rect' + (picked ? ' sel' : '') + '"><span class="lb"></span><span class="ic ic-16 chev-sm" style="transform:rotate(-90deg)">' + ICONS.arrowDownSm + '</span></button>');
+        b.querySelector('.lb').textContent = picked ? fDraft.date.label : '选择日期';
+        b.addEventListener('click', function () { dateReturn = 'filter'; openDateSheet(); });
         opts.appendChild(b);
       }
       body.appendChild(sec);
     });
-    // 价格区间
+    // 价格区间双滑块
     var ps = el('<div class="fs-sec"><div class="fs-h">价格区间 (NT$)</div><div class="fs-price-val"></div>' +
       '<div class="fs-range"><div class="track"></div><div class="fill"></div>' +
-      '<input type="range" min="0" max="12000" step="500"></div></div>');
-    var input = ps.querySelector('input'), fill = ps.querySelector('.fill'), val = ps.querySelector('.fs-price-val');
-    input.value = fState.priceMax;
+      '<input type="range" class="rmin" min="0" max="12000" step="500"><input type="range" class="rmax" min="0" max="12000" step="500"></div></div>');
+    var rmin = ps.querySelector('.rmin'), rmax = ps.querySelector('.rmax'), fill = ps.querySelector('.fill'), val = ps.querySelector('.fs-price-val');
+    rmin.value = fDraft.priceMin; rmax.value = fDraft.priceMax;
     function upd() {
-      var pct = fState.priceMax / 12000 * 100;
-      fill.style.left = '0%'; fill.style.right = (100 - pct) + '%';
-      val.textContent = 'NT$0 – NT$' + (fState.priceMax >= 12000 ? '12,000+' : fState.priceMax.toLocaleString());
+      var lo = fDraft.priceMin, hi = fDraft.priceMax;
+      fill.style.left = (lo / 12000 * 100) + '%';
+      fill.style.right = (100 - hi / 12000 * 100) + '%';
+      val.textContent = 'NT$' + lo.toLocaleString() + ' – NT$' + (hi >= 12000 ? '12,000+' : hi.toLocaleString());
     }
-    input.addEventListener('input', function () { fState.priceMax = +input.value; upd(); });
+    rmin.addEventListener('input', function () {
+      fDraft.priceMin = Math.min(+rmin.value, fDraft.priceMax - 500); rmin.value = fDraft.priceMin; upd(); setApplyBtn(document.getElementById('fsApply'), fDraft);
+    });
+    rmax.addEventListener('input', function () {
+      fDraft.priceMax = Math.max(+rmax.value, fDraft.priceMin + 500); rmax.value = fDraft.priceMax; upd(); setApplyBtn(document.getElementById('fsApply'), fDraft);
+    });
     upd();
     body.appendChild(ps);
   }
   document.getElementById('plFilterBtn').addEventListener('click', function () {
-    renderFilterSheet();
+    fDraft = fClone(fState);
+    renderFilterSheet(); setApplyBtn(document.getElementById('fsApply'), fDraft);
     openSheet(document.getElementById('filterSheet'));
   });
   document.getElementById('fsClear').addEventListener('click', function () {
-    fState = { date: null, service: [], cardType: [], activate: [], carrier: [], priceMax: 12000 };
-    renderFilterSheet(); renderPlans();
+    fDraft = { date: null, service: [], cardType: [], activate: [], carrier: [], priceMin: 0, priceMax: 12000, quick: {} };
+    renderFilterSheet(); setApplyBtn(document.getElementById('fsApply'), fDraft);
   });
   document.getElementById('fsApply').addEventListener('click', function () {
-    withLoading(this, function () { closeSheets(); renderPlans(); window.scrollTo(0, 0); });
+    if (this.disabled) return;
+    fState = fClone(fDraft);
+    closeSheets(); renderPlans(); window.scrollTo(0, 0);
   });
 
-  // 使用日期日历（970-49610）
-  var calPick = null;  // 临时选中 {y,m,d,label}
+  // 使用日期日历（970-49610）；dateReturn 记录来源以便回填草稿并返回
+  var calPick = null, dateReturn = null;
   function buildCalendar() {
     var body = document.getElementById('calBody');
     body.innerHTML = '';
-    // 从本月起连续 4 个月（首月含已过日期，置灰划线；今天 cyan）
-    var base = { y: 2025, m: 5, today: 7 };  // 固定基准（原型；Date.now 在本环境不可用）
-    var W = ['日', '一', '二', '三', '四', '五', '六'];
+    var base = { y: 2025, m: 5, today: 7 };  // 固定基准（原型）
     for (var k = 0; k < 4; k++) {
       var mm = base.m + k, yy = base.y + Math.floor((mm - 1) / 12); mm = ((mm - 1) % 12) + 1;
       var mon = el('<div><div class="cal-mon"></div><div class="cal-grid"></div></div>');
@@ -2997,10 +3068,10 @@
             document.getElementById('calApply').disabled = false;
           });
         })(yy, mm, d, cell);
-        // 回显已选
-        if (fState.date && typeof fState.date === 'object' && fState.date.y === yy && fState.date.m === mm && fState.date.d === d) {
-          cell.classList.add('sel'); calPick = fState.date;
-          document.getElementById('calLbl').textContent = '使用日期：' + fState.date.label;
+        var cur = (dateReturn === 'outer' ? fState.date : (fDraft && fDraft.date));
+        if (cur && typeof cur === 'object' && cur.y === yy && cur.m === mm && cur.d === d) {
+          cell.classList.add('sel'); calPick = cur;
+          document.getElementById('calLbl').textContent = '使用日期：' + cur.label;
           document.getElementById('calApply').disabled = false;
         }
         grid.appendChild(cell);
@@ -3009,26 +3080,24 @@
     }
   }
   function openDateSheet() {
-    calPick = (fState.date && typeof fState.date === 'object') ? fState.date : null;
+    var cur = (dateReturn === 'outer' ? fState.date : (fDraft && fDraft.date));
+    calPick = (cur && typeof cur === 'object') ? cur : null;
     document.getElementById('calApply').disabled = !calPick;
     document.getElementById('calLbl').textContent = calPick ? '使用日期：' + calPick.label : '请选择使用日期';
     buildCalendar();
     openSheet(document.getElementById('dateSheet'));
     var cb = document.getElementById('calBody');
-    requestAnimationFrame(function () {  // 定位到今天所在月
+    requestAnimationFrame(function () {
       var t = cb.querySelector('.cal-cell.today');
       if (t) cb.scrollTop = t.offsetParent ? t.offsetParent.offsetTop - 8 : 0;
     });
   }
   document.getElementById('calApply').addEventListener('click', function () {
     if (!calPick) return;
-    fState.date = calPick;
-    document.getElementById('dateSheet').classList.remove('open');  // 关日历，回到来源 sheet
-    var back = document.querySelector('#filterSheet.open') ? 'filter' : (document.querySelector('#catSheet.open') ? 'cat' : null);
-    if (back === 'filter') renderFilterSheet();
-    else if (back === 'cat') renderCatOpts();
-    else { closeSheets(); }
-    renderPlans();
+    document.getElementById('dateSheet').classList.remove('open');
+    if (dateReturn === 'filter') { fDraft.date = calPick; renderFilterSheet(); setApplyBtn(document.getElementById('fsApply'), fDraft); }
+    else if (dateReturn === 'cat') { fDraft.date = calPick; renderCatOpts(); setApplyBtn(document.getElementById('catApply'), fDraft); }
+    else { fState.date = calPick; closeSheets(); renderPlans(); window.scrollTo(0, 0); }
   });
 
   // ---------- 套餐详情 Full-screen Modal（Figma 871-78047） ----------
