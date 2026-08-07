@@ -666,6 +666,11 @@
   .det-policies .perk .ic { width: 20px; height: 20px; }
   .det-policies .perk.dark { color: var(--kk-text-darker); }
   .det-policies .perk.link .pt { text-decoration: underline; text-underline-offset: 2px; }
+  .det-policies button.perk { background: none; border: 0; padding: 0; text-align: left; cursor: pointer; }
+  /* 适用范围行（多国/区域）：整行满宽，国家串超出尾部省略，数量常驻可见 */
+  .det-policies .perk.cover { display: flex; width: 100%; }
+  .det-policies .perk.cover .pt { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .det-policies .perk.cover .cnt { flex: 0 0 auto; text-decoration: underline; text-underline-offset: 2px; }
   .det-intro {
     margin: 24px 0 0; font-size: 14px; line-height: 20px; color: var(--kk-text-darker);
     display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
@@ -2450,11 +2455,11 @@
   // 包含地区 sheet：确定 = 选定该区域（直达目的地页）
   var regionSheetR = null;
   // 详情页「适用范围」信息态：同一个 sheet，标题换「包含地区」、隐藏底部确定按钮（Figma 936-48811）
-  function openScopeSheet(name, list) {
+  function openScopeSheet(heading, list) {
     regionSheetR = null;
     document.querySelector('#bsRegion .bs-title').textContent = '包含地区';
     document.getElementById('bsRegion').classList.add('info');
-    document.getElementById('bsRegionName').textContent = name + ' 包含的地区';
+    document.getElementById('bsRegionName').textContent = heading;
     var ul = document.getElementById('bsRegionList');
     ul.innerHTML = '';
     list.forEach(function (n) {
@@ -2824,27 +2829,31 @@
       e.querySelector('.pt').textContent = label;
       pol.appendChild(e);
     });
-    // 适用范围＝商品自身的覆盖范围（不跟搜索条件走）：取包含所搜目的地的区域包（否则所在大洲），
-    // 文案格式按 Figma「支持日本、韩国、泰国、越南、等12个国家」，点击展开包含地区 bottom sheet（936-48811）
-    var seed = multi ? dest.split(' ')[0] : dest;
-    var scope = GEO.regions.concat(GEO.hotRegions).filter(function (r) {
-      return r.name === seed || r.list.indexOf(seed) >= 0;
-    })[0];
-    var scopeName, scopeList, scopeCount;
-    if (scope) { scopeName = scope.name; scopeList = scope.list; scopeCount = scope.count; }
-    else {
-      var cont = GEO.continents.filter(function (c) { return c.countries.indexOf(seed) >= 0; })[0];
-      scopeName = cont ? cont.name : seed;
-      scopeList = cont ? cont.countries : [seed];
-      scopeCount = scopeList.length;
+    // 适用范围＝跟随用户所选目的地（Figma 913-43597）：
+    //   单一目的地 → 纯文字，无下划线、不可点击
+    //   区域 → 区域名 + 国家数量，下划线可点，展开包含地区
+    //   多国 → 列出所选国家（超出尾部省略）+ 数量，下划线可点，展开所选清单
+    var region = GEO.regions.concat(GEO.hotRegions).filter(function (r) { return r.name === dest; })[0];
+    if (multi) {
+      var mlist = dest.split(' ').filter(Boolean);
+      var cov = el('<button class="perk dark link cover"><span class="ic ic-16">' + ICONS.earthLine +
+        '</span><span class="pt"></span><span class="cnt"></span></button>');
+      cov.querySelector('.pt').textContent = mlist.join('、');
+      cov.querySelector('.cnt').textContent = '共' + mlist.length + '个';
+      cov.addEventListener('click', function () { openScopeSheet('已选 ' + mlist.length + ' 个国家/地区', mlist); });
+      pol.appendChild(cov);
+    } else if (region) {
+      var cov = el('<button class="perk dark link cover"><span class="ic ic-16">' + ICONS.earthLine +
+        '</span><span class="pt"></span></button>');
+      cov.querySelector('.pt').textContent = region.name + '·' + region.count + '个国家/地区';
+      cov.addEventListener('click', function () { openScopeSheet(region.name + ' 包含的地区', region.list); });
+      pol.appendChild(cov);
+    } else {
+      // 单一目的地：纯文字（无下划线、不可点击）
+      var cov = el('<span class="perk dark"><span class="ic ic-16">' + ICONS.earthLine + '</span><span class="pt"></span></span>');
+      cov.querySelector('.pt').textContent = '支持 ' + dest;
+      pol.appendChild(cov);
     }
-    var covText = scopeList.length > 4
-      ? '支持' + scopeList.slice(0, 4).join('、') + '、等' + scopeCount + '个国家'
-      : '支持' + scopeList.join('、');
-    var cov = el('<button class="perk dark link"><span class="ic ic-16">' + ICONS.earthLine + '</span><span class="pt"></span></button>');
-    cov.querySelector('.pt').textContent = covText;
-    cov.addEventListener('click', function () { openScopeSheet(scopeName, scopeList); });
-    pol.appendChild(cov);
     // 展开更多重置
     document.getElementById('detIntro').classList.remove('open');
     var more = document.getElementById('detMore');
