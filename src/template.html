@@ -739,18 +739,26 @@
   .det-pid { padding: 8px 0 16px; text-align: center; font-size: 12px; line-height: 16px; color: var(--kk-text-medium);
     background: #fff; margin-top: 8px; }
   /* 优惠横幅 + 底部 CTA */
-  .det-coupon { flex: 0 0 auto; display: flex; align-items: center; gap: 8px;
-    background: #FDEFED; padding: 8px 16px; }
-  .det-coupon .tk { display: inline-flex; align-items: center; border: 1px solid #F0544C; border-radius: 6px;
-    padding: 2px 12px; font-size: 14px; line-height: 20px; font-weight: 600; color: #F0544C; background: #fff; position: relative; }
-  /* 票券缺口：用横幅底色圆点盖在边框上，模拟两侧半圆凹口 */
-  .det-coupon .tk::before, .det-coupon .tk::after {
-    content: ''; position: absolute; top: 50%; transform: translateY(-50%);
-    width: 8px; height: 8px; border-radius: 50%; background: #FDEFED;
-  }
-  .det-coupon .tk::before { left: -4px; }
-  .det-coupon .tk::after { right: -4px; }
-  .det-coupon .claim { margin-left: auto; font-size: 14px; line-height: 20px; font-weight: 600; color: #F0544C; }
+  /* 优惠横幅（Figma 936-48931）：critical-lighter 底 + 32px coupon picto + 真实票券描边资产 + 领取> */
+  .det-coupon { flex: 0 0 auto; display: flex; align-items: center; gap: 12px;
+    background: #FFF2F2; padding: 6px 8px; }
+  .det-coupon .cp-pic { width: 32px; height: 32px; flex: 0 0 auto;
+    display: inline-flex; align-items: center; justify-content: center; }
+  .det-coupon .tks { display: inline-flex; align-items: center; gap: 8px; }
+  .det-coupon .tkt { position: relative; height: 24px; flex: 0 0 auto;
+    display: inline-flex; align-items: center; justify-content: center; }
+  .det-coupon .tkt1 { width: 55px; }
+  .det-coupon .tkt2 { width: 75px; }
+  .det-coupon .tkt > img { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .det-coupon .tkt .dash { position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%);
+    display: flex; pointer-events: none; }
+  .det-coupon .tkt .dash img { width: 100%; height: auto; }
+  .det-coupon .tkt i { position: relative; font-style: normal;
+    font-size: 12px; line-height: 16px; color: #E65F50; white-space: nowrap; }
+  .det-coupon .claim { margin-left: auto; display: inline-flex; align-items: center; gap: 4px;
+    font-size: 14px; line-height: 20px; font-weight: 600; color: #E65F50; }
+  .det-coupon .claim .car { display: inline-flex; }
+  .det-coupon .claim .car img { width: 9.3px; height: 5.3px; transform: rotate(90deg); }
   /* Figma 871-78248：底部栏用软投影分层（置底浮块，非置顶 header） */
   .det-foot { flex: 0 0 auto; background: #fff; box-shadow: 0 -2px 8px rgba(38, 50, 56, .06);
     padding: 12px 24px calc(12px + env(safe-area-inset-bottom, 0px)); }
@@ -803,6 +811,7 @@
   .bs-bar .bs-spacer { width: 24px; }
   .bs-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
   .bs-foot { flex: 0 0 auto; padding: 16px 24px calc(16px + env(safe-area-inset-bottom, 0px)); }
+  #bsRegion.info .bs-foot { display: none; }  /* 详情页适用范围＝信息态，无确定按钮 */
   .bs-foot .cta { background: var(--kk-primary-button); color: #fff; }
 
   /* 包含地区 sheet */
@@ -1527,9 +1536,12 @@
     </div>
 
     <div class="det-coupon">
-      <span class="ic ic-24">{{IC_ticket}}</span>
-      <span class="tk">95 折</span><span class="tk">TWD 100</span>
-      <button class="claim" id="detClaim">领取 ›</button>
+      <span class="cp-pic">{{IC_couponPicto}}</span>
+      <span class="tks">
+        <span class="tkt tkt1">{{IC_ticket1}}<span class="dash">{{IC_ticket1dash}}</span><i>95 折</i></span>
+        <span class="tkt tkt2">{{IC_ticket2}}<span class="dash">{{IC_ticket2dash}}</span><i>TWD 100</i></span>
+      </span>
+      <button class="claim" id="detClaim">领取<span class="car">{{IC_arrowSmRight}}</span></button>
     </div>
     <div class="det-foot">
       <div class="pkg-buy">
@@ -2315,8 +2327,26 @@
 
   // 包含地区 sheet：确定 = 选定该区域（直达目的地页）
   var regionSheetR = null;
+  // 详情页「适用范围」信息态：同一个 sheet，标题换「包含地区」、隐藏底部确定按钮（Figma 936-48811）
+  function openScopeSheet(name, list) {
+    regionSheetR = null;
+    document.querySelector('#bsRegion .bs-title').textContent = '包含地区';
+    document.getElementById('bsRegion').classList.add('info');
+    document.getElementById('bsRegionName').textContent = name + ' 包含的地区';
+    var ul = document.getElementById('bsRegionList');
+    ul.innerHTML = '';
+    list.forEach(function (n) {
+      var li = document.createElement('li');
+      li.textContent = n;
+      ul.appendChild(li);
+    });
+    document.querySelector('#bsRegion .bs-body').scrollTop = 0;
+    openSheet(document.getElementById('bsRegion'));
+  }
   function openRegionSheet(r) {
     regionSheetR = r;
+    document.querySelector('#bsRegion .bs-title').textContent = '包含国家/地区';
+    document.getElementById('bsRegion').classList.remove('info');
     document.getElementById('bsRegionName').textContent = r.name + ' 包含的国家/地区';
     var ul = document.getElementById('bsRegionList');
     ul.innerHTML = '';
@@ -2670,14 +2700,26 @@
       e.querySelector('.pt').textContent = label;
       pol.appendChild(e);
     });
-    var covText;
-    if (multi) covText = '支持所选 ' + document.getElementById('destNum').textContent.replace(/[()]/g, '') + ' 个国家/地区';
+    // 适用范围＝商品自身的覆盖范围（不跟搜索条件走）：取包含所搜目的地的区域包（否则所在大洲），
+    // 文案格式按 Figma「支持日本、韩国、泰国、越南、等12个国家」，点击展开包含地区 bottom sheet（936-48811）
+    var seed = multi ? dest.split(' ')[0] : dest;
+    var scope = GEO.regions.concat(GEO.hotRegions).filter(function (r) {
+      return r.name === seed || r.list.indexOf(seed) >= 0;
+    })[0];
+    var scopeName, scopeList, scopeCount;
+    if (scope) { scopeName = scope.name; scopeList = scope.list; scopeCount = scope.count; }
     else {
-      var region = GEO.regions.concat(GEO.hotRegions).filter(function (r) { return r.name === dest; })[0];
-      covText = region ? '支持 ' + dest + ' ' + region.count + ' 个国家/地区' : '支持 ' + dest + ' 全境网络';
+      var cont = GEO.continents.filter(function (c) { return c.countries.indexOf(seed) >= 0; })[0];
+      scopeName = cont ? cont.name : seed;
+      scopeList = cont ? cont.countries : [seed];
+      scopeCount = scopeList.length;
     }
-    var cov = el('<span class="perk dark link"><span class="ic ic-16">' + ICONS.earthLine + '</span><span class="pt"></span></span>');
+    var covText = scopeList.length > 4
+      ? '支持' + scopeList.slice(0, 4).join('、') + '、等' + scopeCount + '个国家'
+      : '支持' + scopeList.join('、');
+    var cov = el('<button class="perk dark link"><span class="ic ic-16">' + ICONS.earthLine + '</span><span class="pt"></span></button>');
     cov.querySelector('.pt').textContent = covText;
+    cov.addEventListener('click', function () { openScopeSheet(scopeName, scopeList); });
     pol.appendChild(cov);
     // 展开更多重置
     document.getElementById('detIntro').classList.remove('open');
