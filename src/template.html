@@ -1745,12 +1745,15 @@
   var PLANS = {
     daily:     { note: '每日重置，用完降速',
                  opts: [ { t: '500MB/天', per: 15 }, { t: '1GB/天', per: 26 }, { t: '2GB/天', per: 42 },
-                         { t: '3GB/天', per: 55 }, { t: '4GB/天', per: 66 }, { t: '5GB/天', per: 78 } ] },
+                         { t: '3GB/天', per: 55 }, { t: '4GB/天', per: 66 }, { t: '5GB/天', per: 78 },
+                         { t: '6GB/天', per: 90 }, { t: '7GB/天', per: 102 }, { t: '8GB/天', per: 112 },
+                         { t: '10GB/天', per: 130 } ] },
     total:     { note: '总流量用完即停，可随时加购',
-                 opts: [ { t: '共1GB', price: 149, gb: 1 }, { t: '共3GB', price: 289, gb: 3 },
-                         { t: '共5GB', price: 399, gb: 5 }, { t: '共10GB', price: 619, gb: 10 },
-                         { t: '共20GB', price: 999, gb: 20 }, { t: '共30GB', price: 1290, gb: 30 },
-                         { t: '共50GB', price: 1790, gb: 50 }, { t: '共100GB', price: 2990, gb: 100 } ] },
+                 opts: [ { t: '共1GB', price: 149, gb: 1 }, { t: '共2GB', price: 219, gb: 2 },
+                         { t: '共3GB', price: 289, gb: 3 }, { t: '共5GB', price: 399, gb: 5 },
+                         { t: '共10GB', price: 619, gb: 10 }, { t: '共20GB', price: 999, gb: 20 },
+                         { t: '共30GB', price: 1290, gb: 30 }, { t: '共50GB', price: 1790, gb: 50 },
+                         { t: '共80GB', price: 2490, gb: 80 }, { t: '共100GB', price: 2990, gb: 100 } ] },
     unlimited: { note: '不限流量，达公平使用量后降至标示网速',
                  opts: [ { t: '降速后 128 Kbps', per: 45 }, { t: '降速后 256 Kbps', per: 52 },
                          { t: '降速后 384 Kbps', per: 58 }, { t: '降速后 512 Kbps', per: 65 },
@@ -1815,6 +1818,13 @@
       rowEl.appendChild(grid);
     });
   }
+  // 点击流量档后把选中项平滑滚到可视区中央（边界自动夹取；spy 加保护窗不抢 tab）
+  function centerOpt(scrollEl, selEl) {
+    if (!selEl || !scrollEl.clientWidth) return;
+    if (scrollEl._spyGuard) scrollEl._spyGuard(600);
+    var sr = scrollEl.getBoundingClientRect(), cr = selEl.getBoundingClientRect();
+    scrollEl.scrollTo({ left: Math.max(0, scrollEl.scrollLeft + (cr.left + cr.width / 2) - (sr.left + sr.width / 2)), behavior: 'smooth' });
+  }
   function groupStart(scrollEl, tab) {
     var g = scrollEl.querySelector('.opts-grid[data-g="' + tab + '"]');
     if (!g) return 0;
@@ -1859,11 +1869,14 @@
     buildMergedRow(document.getElementById('dataOpts'), d, state.tab, state.plan, function (tab, plan) {
       state.tab = tab;
       state.plan = plan;
+      var selEl = null;
       document.querySelectorAll('#dataOpts .opt').forEach(function (b) {
-        b.classList.toggle('sel', b.closest('.opts-grid').getAttribute('data-g') === tab &&
-          b.querySelector('.t').textContent === plan);
+        var on = b.closest('.opts-grid').getAttribute('data-g') === tab && b.querySelector('.t').textContent === plan;
+        b.classList.toggle('sel', on);
+        if (on) selEl = b;
       });
       setTabsActive(document.getElementById('dataTabs'), document.getElementById('dataNote'), tab);
+      centerOpt(scrollEl, selEl);  // 点击选中项自动居中
       updateCta();
     });
     scrollEl.scrollLeft = keep;
@@ -2381,6 +2394,8 @@
       os.scrollLeft = 0;      // 滚动带回到每日流量组起点
       setTabsActive(document.getElementById('dataTabs'), document.getElementById('dataNote'), 'daily');
       go('destination');
+      // iOS 修复：横滚容器内容被替换时若停留在旧滚动位置会留白，切屏后强制回到起点并触发重排
+      requestAnimationFrame(function () { os.scrollLeft = 0; });
     }
     flyToBar(name);
   }
@@ -3439,11 +3454,14 @@
     buildMergedRow(document.getElementById('condOpts'), d, editState.tab, editState.plan, function (tab, plan) {
       editState.tab = tab;
       editState.plan = plan;
+      var selEl = null;
       document.querySelectorAll('#condOpts .opt').forEach(function (b) {
-        b.classList.toggle('sel', b.closest('.opts-grid').getAttribute('data-g') === tab &&
-          b.querySelector('.t').textContent === plan);
+        var on = b.closest('.opts-grid').getAttribute('data-g') === tab && b.querySelector('.t').textContent === plan;
+        b.classList.toggle('sel', on);
+        if (on) selEl = b;
       });
       setTabsActive(document.getElementById('condTabs'), document.getElementById('condNote'), tab);
+      centerOpt(scrollEl, selEl);  // 点击选中项自动居中
       updateCondSum();
     });
     scrollEl.scrollLeft = keep;
