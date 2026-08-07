@@ -57,7 +57,12 @@ DET_SEND = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewB
 DET_CHECK ='<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 6.2 5 8.6l4.5-5" stroke="#13A3B6" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>'
 DET_TICKET ='<svg xmlns="http://www.w3.org/2000/svg" width="22" height="20" viewBox="0 0 22 20" fill="none"><g transform="rotate(-12 11 10)"><path d="M2 5a1.5 1.5 0 0 1 1.5-1.5h15A1.5 1.5 0 0 1 20 5v3a2 2 0 0 0 0 4v3a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 2 15v-3a2 2 0 0 0 0-4V5Z" fill="#F0544C"/><path d="M11 5v10" stroke="#fff" stroke-width="1.2" stroke-dasharray="2 2"/></g><circle cx="19" cy="3" r="1.2" fill="#F5A623"/><circle cx="3.5" cy="16.5" r="1" fill="#26BEC9"/></svg>'
 
-SB_SIGNAL = '<svg xmlns="http://www.w3.org/2000/svg" width="17" height="11" viewBox="0 0 17 11" fill="none"><rect x="0" y="7" width="3" height="4" rx="1" fill="#fff"/><rect x="4.5" y="5" width="3" height="6" rx="1" fill="#fff"/><rect x="9" y="2.5" width="3" height="8.5" rx="1" fill="#fff"/><rect x="13.5" y="0" width="3" height="11" rx="1" fill="#fff"/></svg>'
+# 安装指南 tab 图标（iOS=Apple / Android=机器人 / 分享=share），深色内联矢量
+GUIDE_APPLE = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"><path d="M17.05 12.65c-.03-2.5 2.04-3.7 2.13-3.76-1.16-1.7-2.97-1.93-3.61-1.96-1.54-.15-3 .9-3.78.9-.77 0-1.97-.88-3.24-.86-1.67.03-3.21.97-4.07 2.46-1.73 3-.44 7.45 1.24 9.9.82 1.2 1.8 2.54 3.08 2.5 1.24-.05 1.7-.8 3.2-.8 1.49 0 1.9.8 3.2.77 1.32-.02 2.16-1.22 2.97-2.43.94-1.4 1.32-2.75 1.34-2.82-.03-.01-2.57-.99-2.6-3.9Z" fill="#212121"/><path d="M14.86 5.2c.68-.83 1.14-1.98 1.02-3.13-.98.04-2.17.65-2.88 1.48-.63.73-1.19 1.9-1.04 3.02 1.1.08 2.22-.55 2.9-1.37Z" fill="#212121"/></svg>'
+GUIDE_ANDROID = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"><path d="M6 11a6 6 0 0 1 12 0v.5H6V11Z" fill="#212121"/><path d="M6 12.5h12V17a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 6 17v-4.5Z" fill="#212121"/><path d="m7.6 4.6 1.4 2.1M16.4 4.6l-1.4 2.1" stroke="#212121" stroke-width="1.3" stroke-linecap="round"/><circle cx="9.5" cy="9" r=".9" fill="#fff"/><circle cx="14.5" cy="9" r=".9" fill="#fff"/><rect x="8.6" y="18" width="1.8" height="3.4" rx=".9" fill="#212121"/><rect x="13.6" y="18" width="1.8" height="3.4" rx=".9" fill="#212121"/><rect x="3" y="12" width="1.8" height="5" rx=".9" fill="#212121"/><rect x="19.2" y="12" width="1.8" height="5" rx=".9" fill="#212121"/></svg>'
+GUIDE_SHARE = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"><circle cx="6" cy="12" r="2.6" stroke="#212121" stroke-width="1.6"/><circle cx="17.5" cy="5.5" r="2.6" stroke="#212121" stroke-width="1.6"/><circle cx="17.5" cy="18.5" r="2.6" stroke="#212121" stroke-width="1.6"/><path d="m8.3 10.8 6.9-3.9M8.3 13.2l6.9 3.9" stroke="#212121" stroke-width="1.6" stroke-linecap="round"/></svg>'
+
+SB_SIGNAL ='<svg xmlns="http://www.w3.org/2000/svg" width="17" height="11" viewBox="0 0 17 11" fill="none"><rect x="0" y="7" width="3" height="4" rx="1" fill="#fff"/><rect x="4.5" y="5" width="3" height="6" rx="1" fill="#fff"/><rect x="9" y="2.5" width="3" height="8.5" rx="1" fill="#fff"/><rect x="13.5" y="0" width="3" height="11" rx="1" fill="#fff"/></svg>'
 SB_WIFI = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M8 11.2 1 4.4a10 10 0 0 1 14 0L8 11.2Z" fill="#fff" opacity=".35"/><path d="M8 11.2 4 7.3a5.6 5.6 0 0 1 8 0L8 11.2Z" fill="#fff"/></svg>'
 SB_BATTERY = '<svg xmlns="http://www.w3.org/2000/svg" width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3" stroke="#fff" opacity=".4"/><rect x="2" y="2" width="18" height="8" rx="1.5" fill="#fff"/><path d="M23 4v4a2 2 0 0 0 0-4Z" fill="#fff" opacity=".5"/></svg>'
 
@@ -123,6 +128,9 @@ subs = {
     "{{IC_swapVertical}}": svg("swapVertical"),
     "{{IC_pencil}}":       svg("pencil"),
     "{{IC_filter}}":       svg("filter"),
+    "{{IC_apple}}":        strip_wh(GUIDE_APPLE),
+    "{{IC_android}}":      strip_wh(GUIDE_ANDROID),
+    "{{IC_share}}":        strip_wh(GUIDE_SHARE),
     "{{IC_file}}":         inline_svg_to_img(DET_FILE),
     "{{IC_spark}}":        inline_svg_to_img(DET_SPARK),
     "{{IC_smile}}":        inline_svg_to_img(DET_SMILE),
