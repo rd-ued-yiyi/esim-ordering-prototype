@@ -2957,8 +2957,9 @@
       var tags = card.querySelector('.pkg-tags');
       p.tags.forEach(function (t) { var e = el('<span class="pkg-tag"></span>'); e.textContent = t; tags.appendChild(e); });
       var perks = card.querySelector('.pkg-perks');
-      p.perks.forEach(function (pk, idx) {
-        if (idx === 0 && pk[2]) return;  // 确认速度非有利（24小时内回复确认）只在详情显示，不上卡片
+      // 卡片政策顺序：确认速度 → 可用日期 → 取消政策（取消政策放最后）
+      [p.perks[0], p.perks[2], p.perks[1]].forEach(function (pk) {
+        if (pk === p.perks[0] && pk[2]) return;  // 确认速度非有利（24小时内回复确认）只在详情显示，不上卡片
         var e = el('<span class="perk' + (pk[2] ? ' dark' : '') + '"><span class="ic ic-16">' + ICONS[PERK_ICONS[pk[0]]] + '</span><span class="pt"></span></span>');
         e.querySelector('.pt').textContent = pk[1];
         perks.appendChild(e);
@@ -3144,7 +3145,7 @@
       var b, sel, txt;
       if (it.type === 'quick') {
         sel = !!fState.quick[it.key];
-        b = el('<button class="fpill' + (sel ? ' sel' : '') + '"></button>');
+        b = el('<button class="fpill fquick' + (sel ? ' sel' : '') + '"></button>');
         b.textContent = it.key;
         b.addEventListener('click', function () {
           fState.quick[it.key] = !fState.quick[it.key];
