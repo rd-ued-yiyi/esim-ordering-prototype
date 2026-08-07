@@ -96,6 +96,45 @@
   .app.no-hero .hero-svg { display: none !important; }
   .app.no-hero { padding-top: 0; overflow-x: visible; }
 
+  /* 小球环绕地球旋转（CSS 动画，替代不可靠的 SMIL；移动端稳定）。
+     轨迹路点复用设计稿椭圆轨道；opacity 在绕到球背面时淡出做遮挡感。 */
+  #hero-dot { transform-box: view-box; will-change: transform, opacity;
+    animation: heroDotOrbit 6s linear infinite, heroDotFade 6s linear infinite; }
+  @keyframes heroDotOrbit {
+    0% { transform: translate(-0.607px, -0.061px); }
+    4% { transform: translate(-2.25px, -6.56px); }
+    8% { transform: translate(-0.296px, -12.3px); }
+    12% { transform: translate(5.11px, -16.8px); }
+    16% { transform: translate(13.6px, -19.8px); }
+    20% { transform: translate(24.6px, -21.1px); }
+    24% { transform: translate(37.3px, -20.7px); }
+    28% { transform: translate(51px, -18.4px); }
+    32% { transform: translate(64.6px, -14.6px); }
+    36% { transform: translate(77.2px, -9.45px); }
+    40% { transform: translate(83.7px, -5.76px); }
+    44% { transform: translate(88px, -3.29px); }
+    48% { transform: translate(96.3px, 3.44px); }
+    52% { transform: translate(101px, 10.3px); }
+    56% { transform: translate(103px, 16.8px); }
+    60% { transform: translate(101px, 22.5px); }
+    64% { transform: translate(95.7px, 27px); }
+    68% { transform: translate(87.2px, 30px); }
+    72% { transform: translate(76.2px, 31.4px); }
+    76% { transform: translate(63.4px, 30.9px); }
+    80% { transform: translate(49.8px, 28.7px); }
+    84% { transform: translate(36.2px, 24.9px); }
+    88% { transform: translate(23.5px, 19.7px); }
+    92% { transform: translate(12.7px, 13.5px); }
+    96% { transform: translate(4.5px, 6.79px); }
+    100% { transform: translate(-0.607px, -0.061px); }
+  }
+  @keyframes heroDotFade {
+    0%, 17% { opacity: 1; }
+    21%, 43% { opacity: 0; }
+    47%, 100% { opacity: 1; }
+  }
+  @media (prefers-reduced-motion: reduce) { #hero-dot { animation: none; } }
+
   /* ---------- header ---------- */
   .mheader {
     position: relative; z-index: 2;
