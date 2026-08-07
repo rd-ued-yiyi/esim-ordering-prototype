@@ -1788,11 +1788,7 @@
       <span class="bs-spacer"></span>
     </div>
     <div class="cal-week"><span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span></div>
-    <div class="cal-body" id="calBody"></div>
-    <div class="cal-foot">
-      <span class="lbl" id="calLbl">请选择使用日期</span>
-      <button class="cta" id="calApply" disabled>确定</button>
-    </div>
+    <div class="cal-body" id="calBody" style="padding-bottom:calc(16px + env(safe-area-inset-bottom, 0px));"></div>
   </div>
 
   <div class="toast" id="toast"></div>
@@ -2982,7 +2978,6 @@
       { type: 'date' },
       { type: 'expand', cat: 'cardType' },
       { type: 'expand', cat: 'activate' },
-      { type: 'expand', cat: 'carrier' },
       { type: 'quick', key: '支持热点' },
       { type: 'quick', key: '免费取消' },
       { type: 'quick', key: '立即确认' }
@@ -3191,31 +3186,19 @@
         var isToday = (k === 0 && d === base.today);
         var cls = 'cal-cell' + (past ? ' past' : ' pick') + (isToday ? ' today' : '');
         var cell = el('<div class="' + cls + '"><span>' + d + '</span></div>');
-        if (!past) (function (yy, mm, d, cell) {
-          cell.addEventListener('click', function () {
-            calPick = { y: yy, m: mm, d: d, label: mm + '月' + d + '日' };
-            body.querySelectorAll('.cal-cell.sel').forEach(function (c) { c.classList.remove('sel'); });
-            cell.classList.add('sel');
-            document.getElementById('calLbl').textContent = '使用日期：' + calPick.label;
-            document.getElementById('calApply').disabled = false;
+        if (!past) (function (yy, mm, d) {
+          cell.addEventListener('click', function () {  // 点选即确定（无 footer 确认）
+            commitDate({ y: yy, m: mm, d: d, label: mm + '月' + d + '日' });
           });
-        })(yy, mm, d, cell);
+        })(yy, mm, d);
         var cur = (dateReturn === 'outer' ? fState.date : (fDraft && fDraft.date));
-        if (cur && typeof cur === 'object' && cur.y === yy && cur.m === mm && cur.d === d) {
-          cell.classList.add('sel'); calPick = cur;
-          document.getElementById('calLbl').textContent = '使用日期：' + cur.label;
-          document.getElementById('calApply').disabled = false;
-        }
+        if (cur && typeof cur === 'object' && cur.y === yy && cur.m === mm && cur.d === d) cell.classList.add('sel');
         grid.appendChild(cell);
       }
       body.appendChild(mon);
     }
   }
   function openDateSheet() {
-    var cur = (dateReturn === 'outer' ? fState.date : (fDraft && fDraft.date));
-    calPick = (cur && typeof cur === 'object') ? cur : null;
-    document.getElementById('calApply').disabled = !calPick;
-    document.getElementById('calLbl').textContent = calPick ? '使用日期：' + calPick.label : '请选择使用日期';
     buildCalendar();
     openSheet(document.getElementById('dateSheet'));
     var cb = document.getElementById('calBody');
@@ -3224,13 +3207,13 @@
       if (t) cb.scrollTop = t.offsetParent ? t.offsetParent.offsetTop - 8 : 0;
     });
   }
-  document.getElementById('calApply').addEventListener('click', function () {
-    if (!calPick) return;
+  // 点选日期即确定：写回来源草稿/状态并关闭日历、返回来源
+  function commitDate(pick) {
     document.getElementById('dateSheet').classList.remove('open');
-    if (dateReturn === 'filter') { fDraft.date = calPick; renderFilterSheet(); setApplyBtn(document.getElementById('fsApply'), fDraft); }
-    else if (dateReturn === 'cat') { fDraft.date = calPick; renderCatOpts(); setApplyBtn(document.getElementById('catApply'), fDraft); }
-    else { fState.date = calPick; closeSheets(); renderPlans(); window.scrollTo(0, 0); }
-  });
+    if (dateReturn === 'filter') { fDraft.date = pick; renderFilterSheet(); setApplyBtn(document.getElementById('fsApply'), fDraft); }
+    else if (dateReturn === 'cat') { fDraft.date = pick; renderCatOpts(); setApplyBtn(document.getElementById('catApply'), fDraft); }
+    else { fState.date = pick; closeSheets(); renderPlans(); window.scrollTo(0, 0); }
+  }
 
   // ---------- 套餐详情 Full-screen Modal（Figma 871-78047） ----------
   var detEl = document.getElementById('detailModal');
