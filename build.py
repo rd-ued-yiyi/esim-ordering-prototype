@@ -22,14 +22,23 @@ def svg(name, folder="icons", recolor=None):
     b64 = base64.b64encode(txt.strip().encode("utf-8")).decode()
     return f'<img alt="" src="data:image/svg+xml;base64,{b64}"{wh}>'
 
-def raw_svg(name, folder="icons"):
+def strip_wh(markup):
+    """去掉内联 SVG 的固定 width/height（保留 viewBox），尺寸交给 CSS，避免 iOS <img> 栅格化模糊。
+    折叠为单行：内联 SVG 会被注入 JS 单引号字符串（ICONS_BIG），换行会导致语法错误。"""
+    m = markup.replace(' preserveAspectRatio="none"', "").replace(' overflow="visible"', "")
+    m = re.sub(r'(<svg\b[^>]*?)\s+width="[\d.]+"\s+height="[\d.]+"', r'\1', m, count=1)
+    return re.sub(r'\s+', ' ', m).strip()
+
+def raw_svg(name, folder="icons", recolor=None):
     """返回原始内联 <svg>（去掉固定 width/height，保留 viewBox），由 CSS 控制尺寸。
     内联矢量在 iOS Safari 下按显示分辨率栅格化，不会像 <img> data-URI 那样先按 intrinsic
     小尺寸栅格化再放大而糊。GitHub Pages 无 sanitizer，内联 SVG 可用（hero 亦为内联）。"""
     txt = (ROOT / "assets" / folder / f"{name}.svg").read_text(encoding="utf-8")
+    if recolor:
+        txt = txt.replace(f'fill="{recolor[0]}"', f'fill="{recolor[1]}"')
     txt = txt.replace(' preserveAspectRatio="none"', "").replace(' overflow="visible"', "")
     txt = re.sub(r'(<svg\b[^>]*?)\s+width="[\d.]+"\s+height="[\d.]+"', r'\1', txt, count=1)
-    return txt.strip()
+    return re.sub(r'\s+', ' ', txt).strip()  # 单行：可安全注入 JS 字符串
 
 def inline_svg_to_img(markup):
     """把一段内联 SVG 字符串转成 data-URI <img>（用于状态栏手绘图标）。"""
@@ -121,10 +130,23 @@ subs = {
     "{{IC_checkSm}}":      inline_svg_to_img(DET_CHECK),
     "{{IC_send}}":         inline_svg_to_img(DET_SEND),
     "{{IC_couponPicto}}":  raw_svg("coupon-picto", "detail"),  # 内联矢量，避免 iOS 下 <img> 栅格化模糊
-    "{{IC_ticket1}}":      svg("ticket1", "detail"),
-    "{{IC_ticket1dash}}":  svg("ticket1-dash", "detail"),
-    "{{IC_ticket2}}":      svg("ticket2", "detail"),
-    "{{IC_ticket2dash}}":  svg("ticket2-dash", "detail"),
+    # 优惠横幅票券：内联矢量（切角/虚线在 iOS 下不再糊）
+    "{{IC_ticket1}}":      raw_svg("ticket1", "detail"),
+    "{{IC_ticket1dash}}":  raw_svg("ticket1-dash", "detail"),
+    "{{IC_ticket2}}":      raw_svg("ticket2", "detail"),
+    "{{IC_ticket2dash}}":  raw_svg("ticket2-dash", "detail"),
+    # 详情大号政策/费用图标：内联矢量，CSS 定 20px，清晰不缩小
+    "{{IP_flash}}":        raw_svg("flash"),
+    "{{IP_send}}":         strip_wh(DET_SEND),
+    "{{IP_reload}}":       raw_svg("currencyReload"),
+    "{{IP_reloadDark}}":   raw_svg("currencyReloadDark"),
+    "{{IP_checkLine}}":    raw_svg("checkCircleLine"),
+    "{{IP_calendar}}":     raw_svg("calendar"),
+    "{{IP_crossLine}}":    raw_svg("crossCircleLine"),
+    "{{IP_earth}}":        raw_svg("earthLine"),
+    # 筛选 pill 选中态 cyan 图标变体
+    "{{IC_arrowDownCyan}}": svg("arrowDown", recolor=("#212121", "#13A3B6")),
+    "{{IC_filterCyan}}":   svg("filter", recolor=("#212121", "#13A3B6")),
     "{{IC_arrowSmRight}}": svg("arrow-sm", "detail"),
     "{{SHOTS_JSON}}":      "[" + ",".join('"' + svg_datauri(s) + '"' for s in SHOTS) + "]",
     "{{IMG_GUIDE1}}":      png_datauri("detail/guide1.png"),

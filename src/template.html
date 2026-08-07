@@ -541,6 +541,9 @@
     padding: 0 8px 0 12px; font-size: 14px; line-height: 20px; color: var(--kk-text-darker);
     white-space: nowrap;
   }
+  .fpill .ic-on { display: none; }          /* 选中态图标切换（筛选按钮） */
+  .fpill.sel .ic-on { display: inline-flex; }
+  .fpill.sel .ic-off { display: none; }
   .fpill.fquick { padding: 0 12px; }        /* 无箭头快速筛选：左右等距（Figma px-12） */
   .fpill.ficon { padding: 0 12px 0 8px; }   /* 筛选（icon 在左）：pl-8 pr-12（Figma 795-35699） */
   /* 下拉箭头按 Figma ic_arrowDown_line 16 框内矢量实际占位（≈9.4×5.2），
@@ -713,6 +716,8 @@
     font-size: 14px; line-height: 20px; color: #13A3B6; }
   .det-policies .perk { display: inline-flex; align-items: center; gap: 6px; }
   .det-policies .perk .ic { width: 20px; height: 20px; }
+  /* 详情大号政策/费用图标：内联 svg 填满 20px（清晰不缩小） */
+  .det-policies .perk .ic svg, .det-inc .ic svg { width: 20px; height: 20px; display: block; }
   .det-policies .perk.dark { color: var(--kk-text-darker); }
   .det-policies .perk.link .pt { text-decoration: underline; text-underline-offset: 2px; }
   .det-policies button.perk { background: none; border: 0; padding: 0; text-align: left; cursor: pointer; }
@@ -832,18 +837,18 @@
     display: inline-flex; align-items: center; justify-content: center; }
   .det-coupon .tkt1 { width: 55px; }
   .det-coupon .tkt2 { width: 75px; }
-  .det-coupon .tkt > img { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .det-coupon .tkt > svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
   .det-coupon .tkt .dash { position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%);
     display: flex; pointer-events: none; }
-  .det-coupon .tkt .dash img { width: 100%; height: auto; }
+  .det-coupon .tkt .dash svg { width: 100%; height: auto; display: block; }
   .det-coupon .tkt i { position: relative; font-style: normal;
     font-size: 12px; line-height: 16px; color: #E65F50; white-space: nowrap; }
   .det-coupon .claim { margin-left: auto; display: inline-flex; align-items: center; gap: 4px;
     font-size: 14px; line-height: 20px; font-weight: 600; color: #E65F50; }
   .det-coupon .claim .car { display: inline-flex; }
   .det-coupon .claim .car img { width: 9.3px; height: 5.3px; transform: rotate(90deg); }
-  /* Figma 871-78248：底部栏用软投影分层（置底浮块，非置顶 header） */
-  .det-foot { flex: 0 0 auto; background: #fff; box-shadow: 0 -2px 8px rgba(38, 50, 56, .06);
+  /* 底部栏用分割线分层（非阴影） */
+  .det-foot { flex: 0 0 auto; background: #fff; border-top: 1px solid var(--kk-border-lighter);
     padding: 12px 24px calc(12px + env(safe-area-inset-bottom, 0px)); }
 
   /* ================= 滚动置顶 header ================= */
@@ -1265,7 +1270,7 @@
         <div class="pl-conds"><div class="pl-cond-fixed" id="plCondFixed"></div><div class="pl-cond-scroll" id="plCondScroll"></div></div>
         <div class="pl-filters">
           <div class="pl-filter-fixed">
-            <button class="fpill ficon" id="plFilterBtn"><span class="ic ic-16">{{IC_filter}}</span>筛选</button>
+            <button class="fpill ficon" id="plFilterBtn"><span class="ic ic-16 ic-off">{{IC_filter}}</span><span class="ic ic-16 ic-on">{{IC_filterCyan}}</span>筛选</button>
           </div>
           <div class="pl-filter-scroll" id="plFilterScroll"></div>
         </div>
@@ -1581,10 +1586,10 @@
           <li>为维护网络连线品质及公平使用原则，世界各国的电信公司有时会针对短时间内使用极大网络流量的顾客进行流量管制，故可能导致无法上网或降低网速，为确保可正常使用，请尽量避免长时间观看影片或更新软件等需大量消耗流量的工具。</li>
         </ul>
         <h3 class="det-sub">费用包含</h3>
-        <div class="det-inc"><span class="ic ic-16">{{IC_checkCircleLine}}</span>eSIM费用</div>
-        <div class="det-inc"><span class="ic ic-16">{{IC_checkCircleLine}}</span>eSIM其他费用</div>
+        <div class="det-inc"><span class="ic">{{IP_checkLine}}</span>eSIM费用</div>
+        <div class="det-inc"><span class="ic">{{IP_checkLine}}</span>eSIM其他费用</div>
         <h3 class="det-sub">费用不包含</h3>
-        <div class="det-inc"><span class="ic ic-16">{{IC_crossCircleLine}}</span>以上未提及的费用</div>
+        <div class="det-inc"><span class="ic">{{IP_crossLine}}</span>以上未提及的费用</div>
         <h3 class="det-sub">延长、逾期计费</h3>
         <ul class="det-list">
           <li id="dtExtend"></li>
@@ -2002,7 +2007,13 @@
     earthLine: '{{IC_earthLine}}',       // 搜索结果·区域行（线框地球，非实心 globe）
     checkSm: '{{IC_checkSm}}',            // 规格总览「✓当前」badge 的对勾
     arrowDownSm: '{{IC_arrowDown}}',      // 筛选 pill 下拉箭头
+    arrowDownCyan: '{{IC_arrowDownCyan}}',// 筛选 pill 选中态 cyan 箭头
     send: '{{IC_send}}'                   // 24小时内回复确认（非有利，深色）
+  };
+  // 详情大号政策/费用图标：内联 svg（20px 清晰）
+  var ICONS_BIG = {
+    flash: '{{IP_flash}}', send: '{{IP_send}}', reload: '{{IP_reload}}', reloadDark: '{{IP_reloadDark}}',
+    checkLine: '{{IP_checkLine}}', calendar: '{{IP_calendar}}', crossLine: '{{IP_crossLine}}', earthLine: '{{IP_earth}}'
   };
   function el(html) {
     var t = document.createElement('template');
@@ -2589,7 +2600,24 @@
     '韩国': ['SKT', 'KT', 'LG U+'],
     '泰国': ['AIS', 'dtac', 'TrueMove'],
     '新加坡': ['Singtel', 'StarHub', 'M1'],
-    'default': ['当地电信']
+    '中国': ['中国移动', '中国联通', '中国电信'],
+    '马来西亚': ['Maxis', 'Celcom', 'Digi'],
+    '越南': ['Viettel', 'Vinaphone', 'Mobifone'],
+    '印度尼西亚': ['Telkomsel', 'Indosat', 'XL Axiata'],
+    '菲律宾': ['Globe', 'Smart', 'DITO'],
+    '香港': ['CSL', '3HK', 'SmarTone'],
+    '台湾': ['中华电信', '台湾大哥大', '远传电信'],
+    '迪拜': ['Etisalat', 'du'],
+    '阿联酋': ['Etisalat', 'du'],
+    '美国': ['AT&T', 'T-Mobile', 'Verizon'],
+    '英国': ['EE', 'Vodafone', 'O2'],
+    '法国': ['Orange', 'SFR', 'Bouygues'],
+    '意大利': ['TIM', 'Vodafone', 'WindTre'],
+    '德国': ['Telekom', 'Vodafone', 'O2'],
+    '西班牙': ['Movistar', 'Orange', 'Vodafone'],
+    '澳大利亚': ['Telstra', 'Optus', 'Vodafone'],
+    '土耳其': ['Turkcell', 'Vodafone', 'Türk Telekom'],
+    'default': ['Ubigi', 'Truphone', '3HK']  // 未收录目的地：真实全球漫游运营商（不用「当地电信」）
   };
   var sortMode = 0;  // 0 价格低到高 1 高评分优先 2 高销量优先（Figma 902-41325）
   var SORT_NAMES = ['价格低到高', '高评分优先', '高销量优先'];
@@ -2760,7 +2788,8 @@
       var tags = card.querySelector('.pkg-tags');
       p.tags.forEach(function (t) { var e = el('<span class="pkg-tag"></span>'); e.textContent = t; tags.appendChild(e); });
       var perks = card.querySelector('.pkg-perks');
-      p.perks.forEach(function (pk) {
+      p.perks.forEach(function (pk, idx) {
+        if (idx === 0 && pk[2]) return;  // 确认速度非有利（24小时内回复确认）只在详情显示，不上卡片
         var e = el('<span class="perk' + (pk[2] ? ' dark' : '') + '"><span class="ic ic-16">' + ICONS[PERK_ICONS[pk[0]]] + '</span><span class="pt"></span></span>');
         e.querySelector('.pt').textContent = pk[1];
         perks.appendChild(e);
@@ -2925,13 +2954,13 @@
         });
       } else if (it.type === 'date') {
         sel = !!fState.date; txt = sel ? dateLabel() : '使用日期';
-        b = el('<button class="fpill' + (sel ? ' sel' : '') + '"><span class="lb"></span><span class="ic ic-16 chev-sm">' + ICONS.arrowDownSm + '</span></button>');
+        b = el('<button class="fpill' + (sel ? ' sel' : '') + '"><span class="lb"></span><span class="ic ic-16 chev-sm">' + (sel ? ICONS.arrowDownCyan : ICONS.arrowDownSm) + '</span></button>');
         b.querySelector('.lb').textContent = txt;
         b.addEventListener('click', function () { fDraft = fClone(fState); dateReturn = 'outer'; openDateSheet(); });
       } else {
         var cat = catByKey(it.cat), arr = fState[it.cat];
         sel = arr.length > 0; txt = sel ? (arr.length === 1 ? arr[0] : cat.label + '·' + arr.length) : cat.label;
-        b = el('<button class="fpill' + (sel ? ' sel' : '') + '"><span class="lb"></span><span class="ic ic-16 chev-sm">' + ICONS.arrowDownSm + '</span></button>');
+        b = el('<button class="fpill' + (sel ? ' sel' : '') + '"><span class="lb"></span><span class="ic ic-16 chev-sm">' + (sel ? ICONS.arrowDownCyan : ICONS.arrowDownSm) + '</span></button>');
         b.querySelector('.lb').textContent = txt;
         b.addEventListener('click', function () { openCatSheet(it.cat); });
       }
@@ -3130,7 +3159,7 @@
     var pol = document.getElementById('detPolicies'); pol.innerHTML = '';
     p.perks.forEach(function (pk) {
       var label = pk[1] === '立即确认' ? '立即确认并发送凭证' : pk[1] === '即日可用' ? '现在订购，立即使用' : pk[1];
-      var e = el('<span class="perk' + (pk[2] ? ' dark' : '') + '"><span class="ic ic-16">' + ICONS[PERK_ICONS[pk[0]]] + '</span><span class="pt"></span></span>');
+      var e = el('<span class="perk' + (pk[2] ? ' dark' : '') + '"><span class="ic">' + ICONS_BIG[PERK_ICONS[pk[0]]] + '</span><span class="pt"></span></span>');
       e.querySelector('.pt').textContent = label;
       pol.appendChild(e);
     });
@@ -3141,21 +3170,21 @@
     var region = GEO.regions.concat(GEO.hotRegions).filter(function (r) { return r.name === dest; })[0];
     if (multi) {
       var mlist = dest.split(' ').filter(Boolean);
-      var cov = el('<button class="perk dark link cover"><span class="ic ic-16">' + ICONS.earthLine +
+      var cov = el('<button class="perk dark link cover"><span class="ic">' + ICONS_BIG.earthLine +
         '</span><span class="pt"></span><span class="cnt"></span></button>');
       cov.querySelector('.pt').textContent = mlist.join('、');
       cov.querySelector('.cnt').textContent = '共' + mlist.length + '个';
       cov.addEventListener('click', function () { openScopeSheet('已选 ' + mlist.length + ' 个国家/地区', mlist); });
       pol.appendChild(cov);
     } else if (region) {
-      var cov = el('<button class="perk dark link cover"><span class="ic ic-16">' + ICONS.earthLine +
+      var cov = el('<button class="perk dark link cover"><span class="ic">' + ICONS_BIG.earthLine +
         '</span><span class="pt"></span></button>');
       cov.querySelector('.pt').textContent = region.name + '·' + region.count + '个国家/地区';
       cov.addEventListener('click', function () { openScopeSheet(region.name + ' 包含的地区', region.list); });
       pol.appendChild(cov);
     } else {
       // 单一目的地：纯文字（无下划线、不可点击）
-      var cov = el('<span class="perk dark"><span class="ic ic-16">' + ICONS.earthLine + '</span><span class="pt"></span></span>');
+      var cov = el('<span class="perk dark"><span class="ic">' + ICONS_BIG.earthLine + '</span><span class="pt"></span></span>');
       cov.querySelector('.pt').textContent = dest;  // 单一国家直接显示国名，不加「支持」
       pol.appendChild(cov);
     }
@@ -3198,7 +3227,10 @@
     var more = document.getElementById('detMore');
     more.classList.remove('open');
     more.firstChild.textContent = '展开更多 ';
-    document.getElementById('detProvider').textContent = '服务由 ' + p.vendor + '（' + p.carrier + '）提供';
+    document.getElementById('detProvider').innerHTML = '';
+    document.getElementById('detProvider').append('服务由 ');
+    var vb = document.createElement('b'); vb.style.fontWeight = '600'; vb.textContent = p.vendor;
+    document.getElementById('detProvider').append(vb, '（' + p.carrier + '）提供');
     // 基本信息（Figma 902-41074，动态格随卡/条件变化）
     var isNative = p.title.indexOf('原生') >= 0 || p.title.indexOf('本地电信') >= 0;
     var combo = p.tags[0];
