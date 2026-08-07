@@ -587,8 +587,11 @@
   .pkg-hr { border: 0; border-top: 1px solid var(--kk-border-lighter); margin: 12px 0 16px; }  /* Figma 863-74100 调整后：评分→线 12，线→价格 16 */
   .pkg-buy { display: flex; align-items: center; gap: 8px; }
   .pkg-price { flex: 1 1 0; min-width: 0; }
-  .pkg-off { display: inline-block; background: var(--kk-text-critical); color: #fff;
+  /* 价格上方促销标签，两种择一（Figma 863-74100 / 863-74187）：
+     实底 %OFF（solid）与 淡底「特别优惠」（subtle） */
+  .pkg-off { display: inline-block; background: #EF7A70; color: #fff;
     font-size: 12px; line-height: 16px; padding: 2px 4px; border-radius: var(--r-sm); margin-bottom: 4px; }
+  .pkg-off--special { background: #FFF2F2; color: #E65F50; }
   .pkg-now { font-size: 16px; line-height: 16px; font-weight: 700; color: var(--kk-text-darker); }
   .pkg-now .cur { font-weight: 500; }
   .pkg-was { font-size: 14px; line-height: 14px; color: var(--kk-text-medium); text-decoration: line-through; margin-left: 8px; }
@@ -2790,7 +2793,8 @@
       var v = vendors[i % vendors.length];
       var carrier = cs[i % cs.length];
       var now = Math.round(base * (0.85 + (i * 37 % 46) / 100));
-      var off = (i % 3 === 0);
+      var off = (i % 3 === 0);       // 明确折扣 → 价格上方显示「N%OFF」实底标签
+      var special = (i % 3 === 1);   // 一般促销 → 价格上方显示「特别优惠」淡底标签
       var perkSet = i % 4;
       out.push({
         title: PKG_TITLES[i % PKG_TITLES.length],
@@ -2820,7 +2824,8 @@
         bought: i % 3 === 0 ? '10k+ 已购' : (12 + i * 7) + ' 已购',
         hot: i % 3 === 0,
         now: now,
-        was: off ? Math.round(now / 0.8) : null,
+        was: off ? Math.round(now / 0.8) : special ? Math.round(now / 0.87) : null,
+        promo: off ? 'pct' : special ? 'special' : null,  // 价格标签类型（择一）
         perDay: Math.round(now / d),
         // 该商品支持的计费方式子集（规格总览用；每商品略有差异，体现"支持这么多规格"）
         billings: BILLING_SETS[i % BILLING_SETS.length],
@@ -2947,7 +2952,7 @@
       rating.querySelector('.rcount').textContent = '(' + p.reviews + ')';
       rating.querySelector('.bt').textContent = p.bought;
       var price = card.querySelector('.pkg-price');
-      price.innerHTML = (p.was ? '<span class="pkg-off">-20%</span><br>' : '') +
+      price.innerHTML = promoTag(p) +
         '<span class="pkg-now"></span>' + (p.was ? '<span class="pkg-was"></span>' : '') +
         '<div class="pkg-per"></div>';
       price.querySelector('.pkg-now').innerHTML = '<span class="cur">NT$</span><span class="num"></span>';
@@ -3265,6 +3270,15 @@
   }
   // 取消政策四态（Figma 1029-74421）：免费 / 不可 / 免费或不可(条件) / 收费(手续费表)
   var CXL_SUPPLIER = '由于站内商品来自全球各地，订单取消时间将依该供应商所在时区判定。供应商需 2–5 个工作天进行取消流程，依照您购买的商品取消政策收取手续费，并于取消流程完成后 14 个工作天内退款。';
+  // 价格上方促销标签，两种择一（Figma 863-74100 / 863-74187）：
+  // pct → 实底「N%OFF」；special → 淡底「特别优惠」；无促销则不显示
+  function promoTag(p) {
+    if (p.promo === 'pct' && p.was) {
+      return '<span class="pkg-off">' + Math.round((1 - p.now / p.was) * 100) + '%OFF</span><br>';
+    }
+    if (p.promo === 'special') return '<span class="pkg-off pkg-off--special">特别优惠</span><br>';
+    return '';
+  }
   // 除「免费取消 / 不可取消」外，其余均套用「取消日期 | 手续费」表格样式（Figma 1029-74628）
   function cxlTable(rows) {
     return '<div class="cxl-table"><div class="r head"><div class="c">取消日期</div><div class="c">手续费</div></div>' +
@@ -3415,7 +3429,7 @@
     document.querySelectorAll('#detShots .det-shot img').forEach(function (im, idx) { im.src = pool[idx % pool.length]; });
     // 底部价格
     var price = document.getElementById('detPrice');
-    price.innerHTML = (p.was ? '<span class="pkg-off">-20%</span><br>' : '') +
+    price.innerHTML = promoTag(p) +
       '<span class="pkg-now"><span class="cur">NT$</span><span class="num"></span></span>' +
       (p.was ? '<span class="pkg-was"></span>' : '') + '<div class="pkg-per"></div>';
     price.querySelector('.num').textContent = p.now.toLocaleString();
