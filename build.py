@@ -35,7 +35,8 @@ DET_FILE = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="14" viewB
 DET_SPARK = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 0l1.2 3.8L14 5l-3.8 1.2L9 10 7.8 6.2 4 5l3.8-1.2L9 0Z" fill="#2EC4F2"/><path d="M3 8l.8 2.2L6 11l-2.2.8L3 14l-.8-2.2L0 11l2.2-.8L3 8Z" fill="#10D5E3"/></svg>'
 DET_SMILE = '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5.75" stroke="#212121" stroke-width="1.5"/><circle cx="4.6" cy="5.2" r=".9" fill="#212121"/><circle cx="8.4" cy="5.2" r=".9" fill="#212121"/><path d="M4.2 8.2a3 3 0 0 0 4.6 0" stroke="#212121" stroke-width="1.3" stroke-linecap="round"/></svg>'
 DET_NEUTRAL = '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5.75" stroke="#212121" stroke-width="1.5"/><circle cx="4.6" cy="5.2" r=".9" fill="#212121"/><circle cx="8.4" cy="5.2" r=".9" fill="#212121"/><path d="M4.3 8.8h4.4" stroke="#212121" stroke-width="1.3" stroke-linecap="round"/></svg>'
-DET_TICKET = '<svg xmlns="http://www.w3.org/2000/svg" width="22" height="20" viewBox="0 0 22 20" fill="none"><g transform="rotate(-12 11 10)"><path d="M2 5a1.5 1.5 0 0 1 1.5-1.5h15A1.5 1.5 0 0 1 20 5v3a2 2 0 0 0 0 4v3a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 2 15v-3a2 2 0 0 0 0-4V5Z" fill="#F0544C"/><path d="M11 5v10" stroke="#fff" stroke-width="1.2" stroke-dasharray="2 2"/></g><circle cx="19" cy="3" r="1.2" fill="#F5A623"/><circle cx="3.5" cy="16.5" r="1" fill="#26BEC9"/></svg>'
+DET_CHECK = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 6.2 5 8.6l4.5-5" stroke="#13A3B6" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+DET_TICKET ='<svg xmlns="http://www.w3.org/2000/svg" width="22" height="20" viewBox="0 0 22 20" fill="none"><g transform="rotate(-12 11 10)"><path d="M2 5a1.5 1.5 0 0 1 1.5-1.5h15A1.5 1.5 0 0 1 20 5v3a2 2 0 0 0 0 4v3a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 2 15v-3a2 2 0 0 0 0-4V5Z" fill="#F0544C"/><path d="M11 5v10" stroke="#fff" stroke-width="1.2" stroke-dasharray="2 2"/></g><circle cx="19" cy="3" r="1.2" fill="#F5A623"/><circle cx="3.5" cy="16.5" r="1" fill="#26BEC9"/></svg>'
 
 SB_SIGNAL = '<svg xmlns="http://www.w3.org/2000/svg" width="17" height="11" viewBox="0 0 17 11" fill="none"><rect x="0" y="7" width="3" height="4" rx="1" fill="#fff"/><rect x="4.5" y="5" width="3" height="6" rx="1" fill="#fff"/><rect x="9" y="2.5" width="3" height="8.5" rx="1" fill="#fff"/><rect x="13.5" y="0" width="3" height="11" rx="1" fill="#fff"/></svg>'
 SB_WIFI = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M8 11.2 1 4.4a10 10 0 0 1 14 0L8 11.2Z" fill="#fff" opacity=".35"/><path d="M8 11.2 4 7.3a5.6 5.6 0 0 1 8 0L8 11.2Z" fill="#fff"/></svg>'
@@ -107,6 +108,7 @@ subs = {
     "{{IC_spark}}":        inline_svg_to_img(DET_SPARK),
     "{{IC_smile}}":        inline_svg_to_img(DET_SMILE),
     "{{IC_neutral}}":      inline_svg_to_img(DET_NEUTRAL),
+    "{{IC_checkSm}}":      inline_svg_to_img(DET_CHECK),
     "{{IC_couponPicto}}":  svg("coupon-picto", "detail"),
     "{{IC_ticket1}}":      svg("ticket1", "detail"),
     "{{IC_ticket1dash}}":  svg("ticket1-dash", "detail"),

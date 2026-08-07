@@ -686,6 +686,14 @@
   .det-table .td-k { flex: 0 0 120px; padding: 16px; font-size: 14px; line-height: 20px; color: var(--kk-text-dark); box-sizing: border-box; }
   .det-table .td-v { flex: 1 1 0; min-width: 0; padding: 16px 16px 16px 16px; font-size: 14px; line-height: 20px; color: var(--kk-text-darker); }
   .det-table .td-v .v-inner { font-size: 14px; line-height: 20px; }
+  /* 规格总览：当前选择高亮（Figma 998-42155）——首行 cyan 粗体值 + 「✓当前」pill，下方列其余档位 */
+  .det-table .spec-cur { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+  .det-table .cur-val { font-size: 14px; line-height: 20px; font-weight: 600; color: #13A3B6; }
+  .det-table .cur-badge { display: inline-flex; align-items: center; gap: 2px; flex: 0 0 auto;
+    background: var(--kk-primary-lighter); color: #13A3B6;
+    font-size: 12px; line-height: 16px; padding: 2px 8px 2px 5px; border-radius: 6px; }
+  .det-table .cur-badge .ic { width: 12px; height: 12px; }
+  .det-table .spec-rest { font-size: 14px; line-height: 20px; color: var(--kk-text-darker); }
   /* 规格值超 3 行的「展开/收起」：深色下划线内联链接（Figma 998-42227） */
   .det-table .clamp-toggle { border: 0; background: none; padding: 0; cursor: pointer;
     font-size: 14px; line-height: 20px; color: var(--kk-text-darker);
@@ -1899,7 +1907,8 @@
     checkLine: '{{IC_checkCircleLine}}', calendar: '{{IC_calendar}}', crossLine: '{{IC_crossCircleLine}}',
     pencil: '{{IC_pencil}}', star: '{{IC_star}}', fire2: '{{IC_fire}}', chevDark: '{{IC_arrowRightDark}}',
     locSearch: '{{IC_locationSearch}}',  // 搜索结果·国家行（Figma 848-41868：深色 location_line 20px）
-    earthLine: '{{IC_earthLine}}'        // 搜索结果·区域行（线框地球，非实心 globe）
+    earthLine: '{{IC_earthLine}}',       // 搜索结果·区域行（线框地球，非实心 globe）
+    checkSm: '{{IC_checkSm}}'             // 规格总览「✓当前」badge 的对勾
   };
   function el(html) {
     var t = document.createElement('template');
@@ -2775,15 +2784,31 @@
       cov.querySelector('.pt').textContent = '支持 ' + dest;
       pol.appendChild(cov);
     }
-    // 规格总览：本商品支持的所有档位（只读）。地区 = 跟随所选目的地的完整列表
+    // 规格总览：本商品支持的所有档位（只读），并把用户当前选择标为「✓当前」（Figma 998-42155）
     var areaList = multi ? dest.split(' ').filter(Boolean) : (region ? region.list : [dest]);
-    var specDays = ['1', '2', '3', '5', '7', '10', '15', '20', '30', '60', '90']
-      .filter(function (n) { return +n <= (p.maxDays || 30); }).map(function (n) { return n + '天'; });
-    document.getElementById('dtSpecDays').textContent = specDays.join('、');
-    document.getElementById('dtSpecBilling').textContent = p.billings.map(tabFull).join('、');
-    document.getElementById('dtSpecData').textContent =
-      p.billings.map(function (b) { return PLANS[b].opts.map(function (o) { return o.t; }).join('、'); }).join('、');
-    document.getElementById('dtSpecArea').textContent = areaList.join('、');
+    // 用卡天数：代表档 ≤ 商品上限，并确保含当前所选天数，数值升序
+    var dayNums = ['1', '2', '3', '5', '7', '10', '15', '20', '30', '60', '90']
+      .filter(function (n) { return +n <= (p.maxDays || 30); });
+    if (dayNums.indexOf(state.days) < 0) dayNums.push(state.days);
+    dayNums.sort(function (a, b) { return +a - +b; });
+    var dayOpts = dayNums.map(function (n) { return n + '天'; });
+    // 计费方式：商品支持集，确保含当前所选 tab，固定顺序 daily/total/unlimited
+    var billSet = p.billings.slice();
+    if (billSet.indexOf(state.tab) < 0) billSet.push(state.tab);
+    var billOpts = ['daily', 'total', 'unlimited'].filter(function (b) { return billSet.indexOf(b) >= 0; });
+    var billLabels = billOpts.map(tabFull);
+    // 流量额度：上述计费方式下全部档位
+    var dataOpts = billOpts.reduce(function (acc, b) {
+      return acc.concat(PLANS[b].opts.map(function (o) { return o.t; }));
+    }, []);
+    specCell(document.getElementById('dtSpecDays'), state.days + '天', dayOpts);
+    specCell(document.getElementById('dtSpecBilling'), tabFull(state.tab), billLabels);
+    specCell(document.getElementById('dtSpecData'), state.plan, dataOpts);
+    // 支持地区：无当前高亮，纯列表（超 3 行可展开）
+    var area = document.getElementById('dtSpecArea');
+    area.innerHTML = '';
+    var av = el('<div class="v-inner"></div>'); av.textContent = areaList.join('、');
+    area.appendChild(av);
     // 展开更多重置
     document.getElementById('detIntro').classList.remove('open');
     var more = document.getElementById('detMore');
@@ -2833,16 +2858,30 @@
       withLoading(this, function () { toast('订购流程（开发中）：' + p.title); });
     };
   }
-  // 规格值超过 3 行 → 夹取到 3 行并在行尾内联「展开」，点击展开全部并显示「收起」（Figma 998-42155）
-  function clampCell(td) {
+  // 规格总览一行：当前选择置顶（cyan 粗体 + ✓当前 pill），其余档位列在下方（Figma 998-42155）
+  function specCell(td, current, allOpts) {
     if (!td) return;
-    var full = td.textContent;           // fillDetail 每次已重置为完整文本
-    var LINE = 20, MAXH = LINE * 3 + 2;   // 3 行
     td.innerHTML = '';
-    var inner = document.createElement('div');
-    inner.className = 'v-inner'; inner.textContent = full;
+    var inner = el('<div class="v-inner"></div>');
+    var cur = el('<div class="spec-cur"><span class="cur-val"></span>' +
+      '<span class="cur-badge"><span class="ic ic-16">' + ICONS.checkSm + '</span>当前</span></div>');
+    cur.querySelector('.cur-val').textContent = current;
+    inner.appendChild(cur);
+    var rest = allOpts.filter(function (o) { return o !== current; });
+    if (rest.length) {
+      var restEl = el('<div class="spec-rest"></div>');
+      restEl.textContent = rest.join('、');
+      inner.appendChild(restEl);
+    }
     td.appendChild(inner);
-    if (inner.scrollHeight <= MAXH) return;  // 3 行以内不显示展开
+  }
+  // 文本块超过 maxLines 行 → 夹取并在行尾内联「展开/收起」（二分求最大可容纳字数）
+  function clampEl(elm, maxLines) {
+    if (!elm) return;
+    var full = elm.textContent;
+    var MAXH = 20 * maxLines + 2;
+    elm.textContent = full;
+    if (elm.scrollHeight <= MAXH) return;
     var expanded = false;
     function mkBtn(t) {
       var b = document.createElement('button');
@@ -2851,20 +2890,20 @@
       return b;
     }
     function draw() {
-      inner.innerHTML = '';
+      elm.innerHTML = '';
       if (expanded) {
-        inner.appendChild(document.createTextNode(full + ' '));
-        inner.appendChild(mkBtn('收起'));
+        elm.appendChild(document.createTextNode(full + ' '));
+        elm.appendChild(mkBtn('收起'));
       } else {
         var lo = 0, hi = full.length;
         while (lo < hi) {
           var mid = Math.ceil((lo + hi) / 2);
-          inner.textContent = full.slice(0, mid) + '… 展开';
-          if (inner.scrollHeight <= MAXH) lo = mid; else hi = mid - 1;
+          elm.textContent = full.slice(0, mid) + '… 展开';
+          if (elm.scrollHeight <= MAXH) lo = mid; else hi = mid - 1;
         }
-        inner.innerHTML = '';
-        inner.appendChild(document.createTextNode(full.slice(0, lo).replace(/[、\s]+$/, '') + '… '));
-        inner.appendChild(mkBtn('展开'));
+        elm.innerHTML = '';
+        elm.appendChild(document.createTextNode(full.slice(0, lo).replace(/[、\s]+$/, '') + '… '));
+        elm.appendChild(mkBtn('展开'));
       }
     }
     draw();
@@ -2874,11 +2913,13 @@
     detEl.classList.add('open');
     detEl.setAttribute('aria-hidden', 'false');
     lockBody();
-    // rAF 等 modal 可见后：先对超 3 行的规格值做展开/收起夹取（会改变高度），再算锚点 offsetTop
+    // rAF 等 modal 可见后：先对超行的规格值做展开/收起夹取（会改变高度），再算锚点 offsetTop
     requestAnimationFrame(function () {
-      ['dtSpecData', 'dtSpecArea', 'dtSpecDays', 'dtSpecBilling'].forEach(function (id) {
-        clampCell(document.getElementById(id));
+      // 天数/计费/流量的「其余档位」超 2 行可展开（首行为当前选择）
+      ['dtSpecDays', 'dtSpecBilling', 'dtSpecData'].forEach(function (id) {
+        clampEl(document.querySelector('#' + id + ' .spec-rest'), 2);
       });
+      clampEl(document.querySelector('#dtSpecArea .v-inner'), 3);  // 支持地区无当前行，整块 3 行
       var top = 0;
       if (anchor) { var sec = detBody.querySelector('.det-sec[data-sec="' + anchor + '"]'); if (sec) top = sec.offsetTop; }
       detBody.scrollTop = top;
