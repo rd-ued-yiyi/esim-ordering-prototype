@@ -175,8 +175,7 @@ subs = {
     "{{IMG_GUIDE1}}":      png_datauri("detail/guide1.png"),
     "{{IMG_GUIDE2}}":      png_datauri("detail/guide2.png"),
     "{{IMG_GUIDE3}}":      png_datauri("detail/guide3.png"),
-    # KKday 商品 243815 商品说明·图文介绍原图（内联，自包含）
-    "{{IMG_KK_BANNER}}":   img_datauri("intro/kddi-banner.webp"),
+    # KKday 商品 243815 商品说明图文原图（内联，自包含）
     "{{IMG_KK_STEP1}}":    img_datauri("intro/step1.webp"),
     "{{IMG_KK_STEP2}}":    img_datauri("intro/step2.webp"),
     "{{IMG_KK_STEP3}}":    img_datauri("intro/step3.webp"),
