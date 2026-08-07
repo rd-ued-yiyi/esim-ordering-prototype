@@ -566,12 +566,15 @@
   .pkg-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
   .pkg-tag { background: var(--kk-surface-light); border-radius: var(--r-sm); padding: 2px 4px;
     font-size: 12px; line-height: 16px; color: var(--kk-text-darker); }
-  .pkg-perks { display: flex; flex-wrap: wrap; gap: 6px 8px; margin-top: 12px;  /* Figma 863-74100 调整后：标签→政策 12 */
+  .pkg-perks { display: flex; flex-wrap: wrap; gap: 4px 8px; margin-top: 12px;  /* 掉行行距 4px（Figma 970-49432）；标签→政策 12 */
     font-size: 14px; line-height: 20px; color: #13A3B6; }
   .pkg-perks .perk { display: inline-flex; align-items: center; gap: 4px; }
   .pkg-perks .perk.dark { color: var(--kk-text-darker); }
   .pkg-warns { display: flex; align-items: center; gap: 8px; margin-top: 6px;
     font-size: 12px; line-height: 16px; color: #E78F37; }
+  /* 卡片提醒标签恒为单行：子项不收缩、不换行、溢出隐藏；超一行时 JS 只留第 1 个 */
+  .pkg-card .pkg-warns { overflow: hidden; }
+  .pkg-card .pkg-warns > span { flex: 0 0 auto; white-space: nowrap; }
   .pkg-warns .wdiv { width: 1px; height: 12px; background: var(--kk-border-lighter); }
   .pkg-vendor { margin-top: 12px; font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }  /* Figma 调整后：警示→供应商 12 */
   .pkg-rating { display: flex; align-items: center; gap: 4px; margin-top: 2px; }
@@ -2960,11 +2963,9 @@
         perks.appendChild(e);
       });
       var warns = card.querySelector('.pkg-warns');
+      warns._all = p.warns;                 // 供掉行折叠时回溯全量
       if (!p.warns.length) warns.style.display = 'none';
-      p.warns.forEach(function (w, i) {
-        if (i) warns.appendChild(el('<span class="wdiv"></span>'));
-        var e = el('<span></span>'); e.textContent = w; warns.appendChild(e);
-      });
+      fillWarns(warns, p.warns);
       card.querySelector('.pkg-vendor').textContent = p.vendor;
       var rating = card.querySelector('.pkg-rating');
       // 评分描述：4.6-5.0 非常好 / 4.0-4.5 很好；3.5-3.9 的「好」刻意不显示（中性评价加正向标签反而放大平庸感）
@@ -2995,6 +2996,25 @@
         withLoading(this, function () { toast('订购流程（开发中）：' + p.title); });
       });
       box.appendChild(card);
+    });
+    fitWarns(box);  // 掉行折叠需已在 DOM 且可见时量测，rAF 内执行（进页时 go 之后才可见）
+  }
+  // 提醒标签填充与「超一行只留第 1 个」折叠
+  function fillWarns(w, arr) {
+    w.innerHTML = '';
+    arr.forEach(function (x, i) {
+      if (i) w.appendChild(el('<span class="wdiv"></span>'));
+      var e = el('<span></span>'); e.textContent = x; w.appendChild(e);
+    });
+  }
+  function fitWarns(box) {
+    requestAnimationFrame(function () {
+      box.querySelectorAll('.pkg-warns').forEach(function (w) {
+        var all = w._all;
+        if (!all || all.length < 2 || !w.clientWidth) return;
+        if (w.childNodes.length === 1 && w.textContent === all[0]) return;  // 已折叠
+        if (w.scrollWidth > w.clientWidth + 1) fillWarns(w, [all[0]]);      // 溢出一行 → 只留第 1 个
+      });
     });
   }
   // 排序 bottom sheet（Figma 902-41325）：点选即应用
