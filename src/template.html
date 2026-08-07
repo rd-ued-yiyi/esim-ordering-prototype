@@ -2867,7 +2867,7 @@
       { key: 'date', label: '使用日期', opts: ['今天', '明天'], date: true, single: true, rect: true },
       { key: 'service', label: '服务保障', opts: ['免费取消', '立即确定', '即日可用'] },
       { key: 'cardType', label: '卡片类型', opts: ['原生卡', '国际漫游卡', '虚商卡'] },
-      { key: 'activate', label: '启用方式', opts: ['扫码激活', 'APP激活'] },
+      { key: 'activate', label: '启用方式', opts: ['扫码激活', '一键激活'] },
       { key: 'carrier', label: '电信商', opts: carrierOpts() }
     ];
   }
@@ -2910,8 +2910,8 @@
       }
       if (st.cardType.length && st.cardType.indexOf(cardTypeOf(p)) < 0) return false;
       if (st.activate.length) {
-        var canScan = p.tags.indexOf('一键安装') >= 0;
-        if (!st.activate.some(function (a) { return a === 'APP激活' ? true : canScan; })) return false;
+        var oneClick = p.tags.indexOf('一键安装') >= 0;  // 有「一键安装」标签＝支持一键激活
+        if (!st.activate.some(function (a) { return a === '一键激活' ? oneClick : true; })) return false;
       }
       if (p.now < st.priceMin || (st.priceMax < 12000 && p.now > st.priceMax)) return false;
       var q = st.quick || {};
