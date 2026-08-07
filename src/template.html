@@ -1995,7 +1995,8 @@
     locSearch: '{{IC_locationSearch}}',  // 搜索结果·国家行（Figma 848-41868：深色 location_line 20px）
     earthLine: '{{IC_earthLine}}',       // 搜索结果·区域行（线框地球，非实心 globe）
     checkSm: '{{IC_checkSm}}',            // 规格总览「✓当前」badge 的对勾
-    arrowDownSm: '{{IC_arrowDown}}'       // 筛选 pill 下拉箭头
+    arrowDownSm: '{{IC_arrowDown}}',      // 筛选 pill 下拉箭头
+    send: '{{IC_send}}'                   // 24小时内回复确认（非有利，深色）
   };
   function el(html) {
     var t = document.createElement('template');
@@ -2633,10 +2634,16 @@
           t.splice(1, 0, c);  // 电信商网络标签插在组合标签后
           return t;
         })(carrier),
-        perks: perkSet === 0 ? [['flash', '立即确认'], ['reload', '免费取消'], ['checkLine', '即日可用']]
-             : perkSet === 1 ? [['reload', '免费取消'], ['calendarD', '最早可使用日: ' + fmtDate(2)]]
-             : perkSet === 2 ? [['reloadD', '2天前可免费取消'], ['calendarD', '最早可使用日: ' + fmtDate(2)]]
-             : [['crossD', '不可取消'], ['calendarD', '最早可使用日: ' + fmtDate(3)]],
+        // 政策三维度恒存在（Figma 848-41680）：确认速度/取消政策/可用日期；每项 [icon, text, dark]
+        // 有利项 cyan（dark=false），不利项深灰（dark=true）
+        perks: [
+          (i % 3 !== 2) ? ['flash', '立即确认', false] : ['send', '24小时内回复确认', true],
+          (i % 4 === 0) ? ['reload', '免费取消', false]
+            : (i % 4 === 3) ? ['crossD', '不可取消', true]
+            : ['reloadD', '2天前可免费取消', true],
+          (i % 2 === 0) ? ['checkLine', '即日可用', false]
+            : ['calendarD', '最早可使用日: ' + fmtDate(2), true]
+        ],
         warns: i % 4 === 0 ? ['需实名认证', '需提供航班'] : i % 4 === 3 ? ['需实名认证'] : [],
         vendor: v,
         rating: [4.6, 4.8, 3.0, 4.2, 4.5][i % 5],
@@ -2654,7 +2661,7 @@
     return out;
   }
 
-  var PERK_ICONS = { flash: 'flash', reload: 'reload', checkLine: 'checkLine',
+  var PERK_ICONS = { flash: 'flash', reload: 'reload', checkLine: 'checkLine', send: 'send',
                      reloadD: 'reloadDark', calendarD: 'calendar', crossD: 'crossLine' };
 
   function renderPlans(centerSel) {
@@ -2748,8 +2755,7 @@
       p.tags.forEach(function (t) { var e = el('<span class="pkg-tag"></span>'); e.textContent = t; tags.appendChild(e); });
       var perks = card.querySelector('.pkg-perks');
       p.perks.forEach(function (pk) {
-        var dark = pk[0] === 'reloadD' || pk[0] === 'calendarD' || pk[0] === 'crossD';
-        var e = el('<span class="perk' + (dark ? ' dark' : '') + '"><span class="ic ic-16">' + ICONS[PERK_ICONS[pk[0]]] + '</span><span class="pt"></span></span>');
+        var e = el('<span class="perk' + (pk[2] ? ' dark' : '') + '"><span class="ic ic-16">' + ICONS[PERK_ICONS[pk[0]]] + '</span><span class="pt"></span></span>');
         e.querySelector('.pt').textContent = pk[1];
         perks.appendChild(e);
       });
@@ -3055,8 +3061,7 @@
     var pol = document.getElementById('detPolicies'); pol.innerHTML = '';
     p.perks.forEach(function (pk) {
       var label = pk[1] === '立即确认' ? '立即确认并发送凭证' : pk[1] === '即日可用' ? '现在订购，立即使用' : pk[1];
-      var dark = pk[0] === 'reloadD' || pk[0] === 'calendarD' || pk[0] === 'crossD';
-      var e = el('<span class="perk' + (dark ? ' dark' : '') + '"><span class="ic ic-16">' + ICONS[PERK_ICONS[pk[0]]] + '</span><span class="pt"></span></span>');
+      var e = el('<span class="perk' + (pk[2] ? ' dark' : '') + '"><span class="ic ic-16">' + ICONS[PERK_ICONS[pk[0]]] + '</span><span class="pt"></span></span>');
       e.querySelector('.pt').textContent = label;
       pol.appendChild(e);
     });
@@ -3082,7 +3087,7 @@
     } else {
       // 单一目的地：纯文字（无下划线、不可点击）
       var cov = el('<span class="perk dark"><span class="ic ic-16">' + ICONS.earthLine + '</span><span class="pt"></span></span>');
-      cov.querySelector('.pt').textContent = '支持 ' + dest;
+      cov.querySelector('.pt').textContent = dest;  // 单一国家直接显示国名，不加「支持」
       pol.appendChild(cov);
     }
     // 规格总览：本商品支持的所有档位（只读），并把用户当前选择标为「✓当前」（Figma 998-42155）
@@ -3233,6 +3238,7 @@
       var top = 0;
       if (anchor) { var sec = detBody.querySelector('.det-sec[data-sec="' + anchor + '"]'); if (sec) top = sec.offsetTop; }
       detBody.scrollTop = top;
+      detActiveTab = null;  // 每次开详情强制重算并居中当前 tab
       detSpy();
     });
   }
@@ -3243,6 +3249,14 @@
   }
   // tab=锚点 + 垂直 scroll spy（与流量滚动带同套路）
   var detGuard = 0;
+  // 选中 tab 平滑居中到 tab 条可视区中央（边界自动夹取）
+  function centerTab(t) {
+    var tabs = document.getElementById('detTabs');
+    if (!t || !tabs.clientWidth) return;
+    var tr = t.getBoundingClientRect(), br = tabs.getBoundingClientRect();
+    tabs.scrollTo({ left: Math.max(0, tabs.scrollLeft + (tr.left + tr.width / 2) - (br.left + br.width / 2)), behavior: 'smooth' });
+  }
+  var detActiveTab = null;
   function detSpy() {
     if (Date.now() < detGuard) return;
     var st = detBody.scrollTop + 9;
@@ -3250,17 +3264,13 @@
     detBody.querySelectorAll('.det-sec').forEach(function (s) {
       if (s.offsetTop <= st) act = s.getAttribute('data-sec');
     });
-    var tabs = document.getElementById('detTabs');
-    tabs.querySelectorAll('.det-tab').forEach(function (t) {
-      var sel = t.getAttribute('data-sec') === act;
-      t.classList.toggle('sel', sel);
-      if (sel) {
-        var tr = t.getBoundingClientRect(), br = tabs.getBoundingClientRect();
-        if (!br.width) return;
-        if (tr.left < br.left + 12) tabs.scrollLeft += tr.left - br.left - 12;
-        else if (tr.right > br.right - 12) tabs.scrollLeft += tr.right - br.right + 12;
-      }
+    document.querySelectorAll('.det-tab').forEach(function (t) {
+      t.classList.toggle('sel', t.getAttribute('data-sec') === act);
     });
+    if (act !== detActiveTab) {  // 仅在选中项变化时居中，避免滚动中反复触发动画
+      detActiveTab = act;
+      centerTab(document.querySelector('.det-tab.sel'));
+    }
   }
   detBody.addEventListener('scroll', detSpy, { passive: true });
   document.querySelectorAll('.det-tab').forEach(function (t) {
@@ -3269,6 +3279,8 @@
       if (!sec) return;
       detGuard = Date.now() + 700;
       document.querySelectorAll('.det-tab').forEach(function (x) { x.classList.toggle('sel', x === t); });
+      detActiveTab = t.getAttribute('data-sec');
+      centerTab(t);  // 点击后把该 tab 居中
       detBody.scrollTo({ top: sec.offsetTop, behavior: 'smooth' });
     });
   });
