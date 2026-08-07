@@ -144,6 +144,7 @@ subs = {
     "{{IP_calendar}}":     raw_svg("calendar"),
     "{{IP_crossLine}}":    raw_svg("crossCircleLine"),
     "{{IP_earth}}":        raw_svg("earthLine"),
+    "{{IP_location}}":     raw_svg("locationLine", recolor=("#26BEC9", "#212121")),  # 目的地行改用地点 pin（深色）
     # 筛选 pill 选中态 cyan 图标变体
     "{{IC_arrowDownCyan}}": svg("arrowDown", recolor=("#212121", "#13A3B6")),
     "{{IC_filterCyan}}":   svg("filter", recolor=("#212121", "#13A3B6")),

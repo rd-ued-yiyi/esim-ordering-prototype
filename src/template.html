@@ -716,8 +716,8 @@
     font-size: 14px; line-height: 20px; color: #13A3B6; }
   .det-policies .perk { display: inline-flex; align-items: center; gap: 6px; }
   .det-policies .perk .ic { width: 20px; height: 20px; }
-  /* 详情大号政策/费用图标：内联 svg 填满 20px（清晰不缩小） */
-  .det-policies .perk .ic svg, .det-inc .ic svg { width: 20px; height: 20px; display: block; }
+  /* 详情大号政策/费用图标：20px 框内 16px 字形（对齐 Figma 902-41283，字形留内距不撑满） */
+  .det-policies .perk .ic svg, .det-inc .ic svg { width: 16px; height: 16px; display: block; }
   .det-policies .perk.dark { color: var(--kk-text-darker); }
   .det-policies .perk.link .pt { text-decoration: underline; text-underline-offset: 2px; }
   .det-policies button.perk { background: none; border: 0; padding: 0; text-align: left; cursor: pointer; }
@@ -735,7 +735,8 @@
   .det-more .chev { transition: transform .2s; }
   .det-more .chev img { width: 9.4px; height: 5.2px; }  /* arrowDown 裸矢量按 16 框占位 */
   .det-more.open .chev { transform: rotate(180deg); }
-  .det-provider { margin-top: 24px; font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
+  .det-provider { margin-top: 8px; font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
+  .det-sec .pkg-warns { margin-top: 24px; }  /* 提醒标签移到服务商信息上方，与上文留距 */
   .det-h2 { font-size: 18px; line-height: 26px; font-weight: 600; color: var(--kk-text-darker); margin: 0 0 20px; }
   .det-h5 { font-size: 22px; line-height: 28px; font-weight: 600; color: var(--kk-text-darker); margin: 0 0 24px; }
   .det-sub { font-size: 16px; line-height: 24px; font-weight: 600; color: var(--kk-text-darker); margin: 24px 0 8px; }
@@ -1453,10 +1454,10 @@
         <h2 class="det-title" id="detTitle"></h2>
         <div class="pkg-tags" id="detTags"></div>
         <hr class="pkg-hr">
-        <div class="pkg-warns" id="detWarns"></div>
         <div class="det-policies" id="detPolicies"></div>
         <p class="det-intro" id="detIntro">依据购买天数，可额外享有 3GB~30GB 的热点分享流量。由连续两年荣获 Opensignal 网路可靠性全球大奖的电信网络提供连线，讯号覆盖率高，市区、离岛与山区都能稳定上网；搭配 KKday App 可随时查询剩余流量，客服 24 小时在线协助安装与连线问题。</p>
         <button class="det-more" id="detMore">展开更多 <span class="ic ic-16 chev">{{IC_arrowDown}}</span></button>
+        <div class="pkg-warns" id="detWarns"></div>
         <div class="det-provider" id="detProvider"></div>
         <hr class="pkg-hr">
         <h3 class="det-h2">基本信息</h3>
@@ -2013,7 +2014,8 @@
   // 详情大号政策/费用图标：内联 svg（20px 清晰）
   var ICONS_BIG = {
     flash: '{{IP_flash}}', send: '{{IP_send}}', reload: '{{IP_reload}}', reloadDark: '{{IP_reloadDark}}',
-    checkLine: '{{IP_checkLine}}', calendar: '{{IP_calendar}}', crossLine: '{{IP_crossLine}}', earthLine: '{{IP_earth}}'
+    checkLine: '{{IP_checkLine}}', calendar: '{{IP_calendar}}', crossLine: '{{IP_crossLine}}',
+    earthLine: '{{IP_earth}}', location: '{{IP_location}}'
   };
   function el(html) {
     var t = document.createElement('template');
@@ -3170,21 +3172,21 @@
     var region = GEO.regions.concat(GEO.hotRegions).filter(function (r) { return r.name === dest; })[0];
     if (multi) {
       var mlist = dest.split(' ').filter(Boolean);
-      var cov = el('<button class="perk dark link cover"><span class="ic">' + ICONS_BIG.earthLine +
+      var cov = el('<button class="perk dark link cover"><span class="ic">' + ICONS_BIG.location +
         '</span><span class="pt"></span><span class="cnt"></span></button>');
       cov.querySelector('.pt').textContent = mlist.join('、');
       cov.querySelector('.cnt').textContent = '共' + mlist.length + '个';
       cov.addEventListener('click', function () { openScopeSheet('已选 ' + mlist.length + ' 个国家/地区', mlist); });
       pol.appendChild(cov);
     } else if (region) {
-      var cov = el('<button class="perk dark link cover"><span class="ic">' + ICONS_BIG.earthLine +
+      var cov = el('<button class="perk dark link cover"><span class="ic">' + ICONS_BIG.location +
         '</span><span class="pt"></span></button>');
       cov.querySelector('.pt').textContent = region.name + '·' + region.count + '个国家/地区';
       cov.addEventListener('click', function () { openScopeSheet(region.name + ' 包含的地区', region.list); });
       pol.appendChild(cov);
     } else {
       // 单一目的地：纯文字（无下划线、不可点击）
-      var cov = el('<span class="perk dark"><span class="ic">' + ICONS_BIG.earthLine + '</span><span class="pt"></span></span>');
+      var cov = el('<span class="perk dark"><span class="ic">' + ICONS_BIG.location + '</span><span class="pt"></span></span>');
       cov.querySelector('.pt').textContent = dest;  // 单一国家直接显示国名，不加「支持」
       pol.appendChild(cov);
     }
