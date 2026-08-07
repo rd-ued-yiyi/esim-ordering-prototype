@@ -1863,11 +1863,12 @@
                          { t: '共30GB', price: 1290, gb: 30 }, { t: '共50GB', price: 1790, gb: 50 },
                          { t: '共80GB', price: 2490, gb: 80 }, { t: '共100GB', price: 2990, gb: 100 } ] },
     unlimited: { note: '不限流量，达公平使用量后降至标示网速',
-                 opts: [ { t: '降速后 128 Kbps', per: 45 }, { t: '降速后 256 Kbps', per: 52 },
+                 opts: [ { t: '不降速', per: 168 },
+                         { t: '降速后 128 Kbps', per: 45 }, { t: '降速后 256 Kbps', per: 52 },
                          { t: '降速后 384 Kbps', per: 58 }, { t: '降速后 512 Kbps', per: 65 },
                          { t: '降速后 1 Mbps', per: 78 }, { t: '降速后 3 Mbps', per: 95 },
                          { t: '降速后 5 Mbps', per: 110 }, { t: '降速后 10 Mbps', per: 128 },
-                         { t: '降速后 20 Mbps', per: 145 }, { t: '不降速', per: 168 } ] }
+                         { t: '降速后 20 Mbps', per: 145 } ] }
   };
   function daysDiscount(d) { return d >= 30 ? 0.85 : d >= 15 ? 0.9 : d >= 7 ? 0.95 : 1; }
   function priceLabelFor(o, d) {
@@ -2679,7 +2680,7 @@
   });
 
   // 用卡天数滚轮 picker：高亮条固定中间，滚动选项，中心项即选中
-  var DAYS_ALL = ['1','2','3','4','5','6','7','8','9','10','15','20','30','40','50','60','90','120','180','365'];
+  var DAYS_ALL = ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','20','25','30','40','50','60','75','90','120','150','180','240','300','365'];
   var DAY_H = 36;
   var pickerVal = null;
   var wheel = document.getElementById('bsDaysList');
