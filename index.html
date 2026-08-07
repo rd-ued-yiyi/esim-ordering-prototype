@@ -568,6 +568,7 @@
   .pl-meta { display: flex; align-items: center; margin: 8px 0 16px; }  /* Figma 833-39796：提示行→计数 8，计数→卡片 16 */
   .pl-meta .cnt { flex: 1 1 0; font-size: 14px; line-height: 20px; color: var(--kk-text-dark); }
   .pl-meta .sort { display: inline-flex; align-items: center; gap: 2px; font-size: 14px; line-height: 20px; color: var(--kk-text-dark); }
+  .pl-meta .sort .sort-ic img { width: 16px; height: 16px; }  /* swapVertical 裸矢量仅 9.6px，撑满 16 框（Figma 795-35558）*/
 
   .pkg-card { background: #fff; border-radius: var(--r-lg); padding: 16px; margin-bottom: 16px; }
   .pkg-head { display: flex; align-items: flex-start; gap: 4px; width: 100%; text-align: left; }
@@ -1456,7 +1457,7 @@
         <div class="pl-note"><span class="ic ic-16"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE5LjUiIGhlaWdodD0iMTkuNSIgdmlld0JveD0iMCAwIDE5LjUgMTkuNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZD0iTTkuNzUgMEM3LjgyMTY0IDAgNS45MzY1NyAwLjU3MTgyOCA0LjMzMzE5IDEuNjQzMTdDMi43Mjk4MiAyLjcxNDUyIDEuNDgwMTMgNC4yMzcyNiAwLjc0MjE3OSA2LjAxODg0QzAuMDA0MjI0NDkgNy44MDA0MiAtMC4xODg4NTggOS43NjA4MiAwLjE4NzM0OCAxMS42NTIxQzAuNTYzNTU0IDEzLjU0MzQgMS40OTIxNSAxNS4yODA3IDIuODU1NzEgMTYuNjQ0M0M0LjIxOTI4IDE4LjAwNzkgNS45NTY1NiAxOC45MzY1IDcuODQ3ODcgMTkuMzEyN0M5LjczOTE5IDE5LjY4ODkgMTEuNjk5NiAxOS40OTU4IDEzLjQ4MTIgMTguNzU3OEMxNS4yNjI3IDE4LjAxOTkgMTYuNzg1NSAxNi43NzAyIDE3Ljg1NjggMTUuMTY2OEMxOC45MjgyIDEzLjU2MzQgMTkuNSAxMS42Nzg0IDE5LjUgOS43NUMxOS40OTcgNy4xNjUwNiAxOC40Njg4IDQuNjg2ODQgMTYuNjQxIDIuODU5MDFDMTQuODEzMiAxLjAzMTE4IDEyLjMzNDkgMC4wMDI5ODc2MyA5Ljc1IDBWMFpNMTQuMzkzNiA4LjA0MjcyTDguODkzMDcgMTMuMjkyN0M4Ljc1MzIyIDEzLjQyNTggOC41Njc1NiAxMy41IDguMzc0NTIgMTMuNUM4LjE4MTQ3IDEzLjUgNy45OTU4MiAxMy40MjU4IDcuODU1OTYgMTMuMjkyN0w1LjEwNjQ1IDEwLjY2NzdDNC45NjI4IDEwLjUzMDEgNC44Nzk2NSAxMC4zNDExIDQuODc1MjQgMTAuMTQyM0M0Ljg3MDg0IDkuOTQzNDEgNC45NDU1NSA5Ljc1MDkyIDUuMDgyOTcgOS42MDcxQzUuMjIwMzggOS40NjMyOCA1LjQwOTI3IDkuMzc5ODkgNS42MDgxMyA5LjM3NTIzQzUuODA2OTkgOS4zNzA1OCA1Ljk5OTU2IDkuNDQ1MDQgNi4xNDM1NiA5LjU4MjI4TDguMzc0NTIgMTEuNzEyOUwxMy4zNTY0IDYuOTU3MjhDMTMuNTAwNCA2LjgyMDA0IDEzLjY5MyA2Ljc0NTU4IDEzLjg5MTkgNi43NTAyM0MxNC4wOTA3IDYuNzU0ODkgMTQuMjc5NiA2LjgzODI4IDE0LjQxNyA2Ljk4MjFDMTQuNTU0NSA3LjEyNTkyIDE0LjYyOTIgNy4zMTg0MSAxNC42MjQ4IDcuNTE3MjdDMTQuNjIwNCA3LjcxNjE0IDE0LjUzNzIgNy45MDUxMyAxNC4zOTM2IDguMDQyNzJWOC4wNDI3MloiIGZpbGw9IiMyNkJFQzkiLz4KPC9zdmc+" width="19.50" height="19.50"></span>此设备支援使用 eSIM</div>
         <div class="pl-meta">
           <span class="cnt" id="plCount">34 项结果</span>
-          <button class="sort" id="plSort">排序<span class="ic ic-14"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjkuNjI1IiBoZWlnaHQ9IjkuNjI1IiB2aWV3Qm94PSIwIDAgOS42MjUgOS42MjUiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJWZWN0b3IiPgo8cGF0aCBkPSJNMi42MjUgMC40Mzc1QzIuNjI1IDAuMTk1ODc1IDIuNDI5MTIgMCAyLjE4NzUgMEMxLjk0NTg4IDAgMS43NSAwLjE5NTg3NSAxLjc1IDAuNDM3NVY4LjEzMTI4TDAuNzQ2ODU5IDcuMTI4MTRDMC41NzYwMDUgNi45NTcyOSAwLjI5ODk5NSA2Ljk1NzI5IDAuMTI4MTQxIDcuMTI4MTRDLTAuMDQyNzEzNiA3LjI5OSAtMC4wNDI3MTM2IDcuNTc2MDEgMC4xMjgxNDEgNy43NDY4NkwxLjg3ODE0IDkuNDk2ODZDMS45MjAwOSA5LjUzODgxIDEuOTY4NDMgOS41NzA0NSAyLjAyMDAzIDkuNTkxOEMyLjA2NTA1IDkuNjEwNDcgMi4xMTM4NiA5LjYyMTg0IDIuMTY0OTkgOS42MjQ0M0MyLjE3MjQ0IDkuNjI0ODEgMi4xNzk5NSA5LjYyNSAyLjE4NzUgOS42MjVDMi4yOTk0NyA5LjYyNSAyLjQxMTQzIDkuNTgyMjkgMi40OTY4NiA5LjQ5Njg2TDQuMjQ2ODYgNy43NDY4NkM0LjQxNzcxIDcuNTc2MDEgNC40MTc3MSA3LjI5OSA0LjI0Njg2IDcuMTI4MTRDNC4wNzYgNi45NTcyOSAzLjc5OSA2Ljk1NzI5IDMuNjI4MTQgNy4xMjgxNEwyLjYyNSA4LjEzMTI4VjAuNDM3NVoiIGZpbGw9IiM3MjcyNzIiLz4KPHBhdGggZD0iTTcuNjAwMDMgMC4wMzExODk1QzcuNjUzNDggMC4wNTI1NDI1IDcuNzAzNTggMC4wODQ4NTk2IDcuNzQ2ODYgMC4xMjgxNDFMOS40OTY4NiAxLjg3ODE0QzkuNjY3NzEgMi4wNDkgOS42Njc3MSAyLjMyNiA5LjQ5Njg2IDIuNDk2ODZDOS4zMjYgMi42Njc3MSA5LjA0OSAyLjY2NzcxIDguODc4MTQgMi40OTY4Nkw3Ljg3NSAxLjQ5MzcyVjkuMTg3NTFDNy44NzUgOS40MjkxMyA3LjY3OTEyIDkuNjI1MDEgNy40Mzc1IDkuNjI1MDFDNy4xOTU4OCA5LjYyNTAxIDcgOS40MjkxMyA3IDkuMTg3NTFWMS40OTM3Mkw1Ljk5Njg2IDIuNDk2ODZDNS44MjYgMi42Njc3MSA1LjU0ODk5IDIuNjY3NzEgNS4zNzgxNCAyLjQ5Njg2QzUuMjA3MjkgMi4zMjYgNS4yMDcyOSAyLjA0OSA1LjM3ODE0IDEuODc4MTRMNy4xMjgxNCAwLjEyODE0MUM3LjE3MTQyIDAuMDg0ODU5NiA3LjIyMTUyIDAuMDUyNTQyNSA3LjI3NDk3IDAuMDMxMTg5NUM3LjMyMDA1IDAuMDEzMTQwOSA3LjM2ODgzIDAuMDAyMzc2ODggNy40MTk4NiAwLjAwMDM1MzQ5N0M3LjQ4MDk0IC0wLjAwMjA5NTggNy41NDI0NCAwLjAwODE4Mjg1IDcuNjAwMDMgMC4wMzExODk1WiIgZmlsbD0iIzcyNzI3MiIvPgo8L2c+Cjwvc3ZnPg==" width="9.62" height="9.62"></span></button>
+          <button class="sort" id="plSort">排序<span class="ic ic-16 sort-ic"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjkuNjI1IiBoZWlnaHQ9IjkuNjI1IiB2aWV3Qm94PSIwIDAgOS42MjUgOS42MjUiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJWZWN0b3IiPgo8cGF0aCBkPSJNMi42MjUgMC40Mzc1QzIuNjI1IDAuMTk1ODc1IDIuNDI5MTIgMCAyLjE4NzUgMEMxLjk0NTg4IDAgMS43NSAwLjE5NTg3NSAxLjc1IDAuNDM3NVY4LjEzMTI4TDAuNzQ2ODU5IDcuMTI4MTRDMC41NzYwMDUgNi45NTcyOSAwLjI5ODk5NSA2Ljk1NzI5IDAuMTI4MTQxIDcuMTI4MTRDLTAuMDQyNzEzNiA3LjI5OSAtMC4wNDI3MTM2IDcuNTc2MDEgMC4xMjgxNDEgNy43NDY4NkwxLjg3ODE0IDkuNDk2ODZDMS45MjAwOSA5LjUzODgxIDEuOTY4NDMgOS41NzA0NSAyLjAyMDAzIDkuNTkxOEMyLjA2NTA1IDkuNjEwNDcgMi4xMTM4NiA5LjYyMTg0IDIuMTY0OTkgOS42MjQ0M0MyLjE3MjQ0IDkuNjI0ODEgMi4xNzk5NSA5LjYyNSAyLjE4NzUgOS42MjVDMi4yOTk0NyA5LjYyNSAyLjQxMTQzIDkuNTgyMjkgMi40OTY4NiA5LjQ5Njg2TDQuMjQ2ODYgNy43NDY4NkM0LjQxNzcxIDcuNTc2MDEgNC40MTc3MSA3LjI5OSA0LjI0Njg2IDcuMTI4MTRDNC4wNzYgNi45NTcyOSAzLjc5OSA2Ljk1NzI5IDMuNjI4MTQgNy4xMjgxNEwyLjYyNSA4LjEzMTI4VjAuNDM3NVoiIGZpbGw9IiM3MjcyNzIiLz4KPHBhdGggZD0iTTcuNjAwMDMgMC4wMzExODk1QzcuNjUzNDggMC4wNTI1NDI1IDcuNzAzNTggMC4wODQ4NTk2IDcuNzQ2ODYgMC4xMjgxNDFMOS40OTY4NiAxLjg3ODE0QzkuNjY3NzEgMi4wNDkgOS42Njc3MSAyLjMyNiA5LjQ5Njg2IDIuNDk2ODZDOS4zMjYgMi42Njc3MSA5LjA0OSAyLjY2NzcxIDguODc4MTQgMi40OTY4Nkw3Ljg3NSAxLjQ5MzcyVjkuMTg3NTFDNy44NzUgOS40MjkxMyA3LjY3OTEyIDkuNjI1MDEgNy40Mzc1IDkuNjI1MDFDNy4xOTU4OCA5LjYyNTAxIDcgOS40MjkxMyA3IDkuMTg3NTFWMS40OTM3Mkw1Ljk5Njg2IDIuNDk2ODZDNS44MjYgMi42Njc3MSA1LjU0ODk5IDIuNjY3NzEgNS4zNzgxNCAyLjQ5Njg2QzUuMjA3MjkgMi4zMjYgNS4yMDcyOSAyLjA0OSA1LjM3ODE0IDEuODc4MTRMNy4xMjgxNCAwLjEyODE0MUM3LjE3MTQyIDAuMDg0ODU5NiA3LjIyMTUyIDAuMDUyNTQyNSA3LjI3NDk3IDAuMDMxMTg5NUM3LjMyMDA1IDAuMDEzMTQwOSA3LjM2ODgzIDAuMDAyMzc2ODggNy40MTk4NiAwLjAwMDM1MzQ5N0M3LjQ4MDk0IC0wLjAwMjA5NTggNy41NDI0NCAwLjAwODE4Mjg1IDcuNjAwMDMgMC4wMzExODk1WiIgZmlsbD0iIzcyNzI3MiIvPgo8L2c+Cjwvc3ZnPg==" width="9.62" height="9.62"></span></button>
         </div>
         <div id="plList"></div>
       </div>
@@ -3141,7 +3142,7 @@
 
   // ---------- 列表页筛选（总筛选 970-50754 / 单类目 984-14319 / 日期 970-49610 / 按钮态 1004-4239x） ----------
   // fState=已应用；fDraft=sheet 内暂存草稿。date:null|'今天'|'明天'|{y,m,d,label}；quick 为快筛布尔
-  var fState = { date: null, service: [], cardType: [], activate: [], carrier: [], priceMin: 0, priceMax: 12000, quick: {} };
+  var fState = { date: null, service: [], cardType: [], speed: [], activate: [], carrier: [], priceMin: 0, priceMax: 12000, quick: {} };
   var fDraft = null;
   function fClone(s) { return JSON.parse(JSON.stringify(s)); }
   function carrierOpts() {
@@ -3154,6 +3155,7 @@
       { key: 'date', label: '使用日期', opts: ['今天', '明天'], date: true, single: true, rect: true },
       { key: 'service', label: '服务保障', opts: ['免费取消', '立即确定', '即日可用'] },
       { key: 'cardType', label: '卡片类型', opts: ['原生卡', '国际漫游卡', '虚商卡'] },
+      { key: 'speed', label: '网速', opts: ['5G', '4G', '5G/4G'] },
       { key: 'activate', label: '启用方式', opts: ['扫码激活', '一键激活'] },
       { key: 'carrier', label: '电信商', opts: carrierOpts() }
     ];
@@ -3165,6 +3167,7 @@
       { type: 'date' },
       { type: 'expand', cat: 'cardType' },
       { type: 'expand', cat: 'activate' },
+      { type: 'quick', key: '5G' },
       { type: 'quick', key: '支持热点' },
       { type: 'quick', key: '免费取消' },
       { type: 'quick', key: '立即确认' }
@@ -3172,7 +3175,7 @@
   }
   function fActiveCount() {
     var n = fState.date ? 1 : 0;
-    ['service', 'cardType', 'activate', 'carrier'].forEach(function (k) { n += fState[k].length; });
+    ['service', 'cardType', 'speed', 'activate', 'carrier'].forEach(function (k) { n += fState[k].length; });
     if (fState.priceMin > 0 || fState.priceMax < 12000) n += 1;
     Object.keys(fState.quick).forEach(function (k) { if (fState.quick[k]) n += 1; });
     return n;
@@ -3180,6 +3183,14 @@
   function dateLabel(st) { st = st || fState; return !st.date ? null : (typeof st.date === 'string' ? st.date : st.date.label); }
   // 卡片派生类型（用于 cardType 过滤）
   function cardTypeOf(p) { return /原生|本地电信/.test(p.title) ? '原生卡' : (/漫游/.test(p.title) ? '国际漫游卡' : '虚商卡'); }
+  // 方案支持的网速集合（标题含 5G/4G；两者皆含则加「5G/4G」双模）
+  function planSpeeds(p) {
+    var s = [], t = p.title;
+    if (t.indexOf('5G') >= 0) s.push('5G');
+    if (t.indexOf('4G') >= 0) s.push('4G');
+    if (s.length === 2) s.push('5G/4G');
+    return s;
+  }
   // 实际筛选（st 缺省用已应用 fState）
   function applyFilters(list, st) {
     st = st || fState;
@@ -3196,12 +3207,14 @@
         if (!ok) return false;
       }
       if (st.cardType.length && st.cardType.indexOf(cardTypeOf(p)) < 0) return false;
+      if (st.speed.length && !st.speed.some(function (s) { return planSpeeds(p).indexOf(s) >= 0; })) return false;
       if (st.activate.length) {
         var oneClick = p.tags.indexOf('一键安装') >= 0;  // 有「一键安装」标签＝支持一键激活
         if (!st.activate.some(function (a) { return a === '一键激活' ? oneClick : true; })) return false;
       }
       if (p.now < st.priceMin || (st.priceMax < 12000 && p.now > st.priceMax)) return false;
       var q = st.quick || {};
+      if (q['5G'] && p.title.indexOf('5G') < 0) return false;
       if (q['支持热点'] && p.tags[0].indexOf('热点') < 0) return false;
       if (q['免费取消'] && !p.perks.some(function (x) { return x[1].indexOf('免费取消') >= 0; })) return false;
       if (q['立即确认'] && p.perks[0][1] !== '立即确认') return false;

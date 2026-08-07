@@ -559,6 +559,7 @@
   .pl-meta { display: flex; align-items: center; margin: 8px 0 16px; }  /* Figma 833-39796：提示行→计数 8，计数→卡片 16 */
   .pl-meta .cnt { flex: 1 1 0; font-size: 14px; line-height: 20px; color: var(--kk-text-dark); }
   .pl-meta .sort { display: inline-flex; align-items: center; gap: 2px; font-size: 14px; line-height: 20px; color: var(--kk-text-dark); }
+  .pl-meta .sort .sort-ic img { width: 16px; height: 16px; }  /* swapVertical 裸矢量仅 9.6px，撑满 16 框（Figma 795-35558）*/
 
   .pkg-card { background: #fff; border-radius: var(--r-lg); padding: 16px; margin-bottom: 16px; }
   .pkg-head { display: flex; align-items: flex-start; gap: 4px; width: 100%; text-align: left; }
@@ -1355,7 +1356,7 @@
         <div class="pl-note"><span class="ic ic-16">{{IC_checkCircle}}</span>此设备支援使用 eSIM</div>
         <div class="pl-meta">
           <span class="cnt" id="plCount">34 项结果</span>
-          <button class="sort" id="plSort">排序<span class="ic ic-14">{{IC_swapVertical}}</span></button>
+          <button class="sort" id="plSort">排序<span class="ic ic-16 sort-ic">{{IC_swapVertical}}</span></button>
         </div>
         <div id="plList"></div>
       </div>
@@ -3040,7 +3041,7 @@
 
   // ---------- 列表页筛选（总筛选 970-50754 / 单类目 984-14319 / 日期 970-49610 / 按钮态 1004-4239x） ----------
   // fState=已应用；fDraft=sheet 内暂存草稿。date:null|'今天'|'明天'|{y,m,d,label}；quick 为快筛布尔
-  var fState = { date: null, service: [], cardType: [], activate: [], carrier: [], priceMin: 0, priceMax: 12000, quick: {} };
+  var fState = { date: null, service: [], cardType: [], speed: [], activate: [], carrier: [], priceMin: 0, priceMax: 12000, quick: {} };
   var fDraft = null;
   function fClone(s) { return JSON.parse(JSON.stringify(s)); }
   function carrierOpts() {
@@ -3053,6 +3054,7 @@
       { key: 'date', label: '使用日期', opts: ['今天', '明天'], date: true, single: true, rect: true },
       { key: 'service', label: '服务保障', opts: ['免费取消', '立即确定', '即日可用'] },
       { key: 'cardType', label: '卡片类型', opts: ['原生卡', '国际漫游卡', '虚商卡'] },
+      { key: 'speed', label: '网速', opts: ['5G', '4G', '5G/4G'] },
       { key: 'activate', label: '启用方式', opts: ['扫码激活', '一键激活'] },
       { key: 'carrier', label: '电信商', opts: carrierOpts() }
     ];
@@ -3064,6 +3066,7 @@
       { type: 'date' },
       { type: 'expand', cat: 'cardType' },
       { type: 'expand', cat: 'activate' },
+      { type: 'quick', key: '5G' },
       { type: 'quick', key: '支持热点' },
       { type: 'quick', key: '免费取消' },
       { type: 'quick', key: '立即确认' }
@@ -3071,7 +3074,7 @@
   }
   function fActiveCount() {
     var n = fState.date ? 1 : 0;
-    ['service', 'cardType', 'activate', 'carrier'].forEach(function (k) { n += fState[k].length; });
+    ['service', 'cardType', 'speed', 'activate', 'carrier'].forEach(function (k) { n += fState[k].length; });
     if (fState.priceMin > 0 || fState.priceMax < 12000) n += 1;
     Object.keys(fState.quick).forEach(function (k) { if (fState.quick[k]) n += 1; });
     return n;
@@ -3079,6 +3082,14 @@
   function dateLabel(st) { st = st || fState; return !st.date ? null : (typeof st.date === 'string' ? st.date : st.date.label); }
   // 卡片派生类型（用于 cardType 过滤）
   function cardTypeOf(p) { return /原生|本地电信/.test(p.title) ? '原生卡' : (/漫游/.test(p.title) ? '国际漫游卡' : '虚商卡'); }
+  // 方案支持的网速集合（标题含 5G/4G；两者皆含则加「5G/4G」双模）
+  function planSpeeds(p) {
+    var s = [], t = p.title;
+    if (t.indexOf('5G') >= 0) s.push('5G');
+    if (t.indexOf('4G') >= 0) s.push('4G');
+    if (s.length === 2) s.push('5G/4G');
+    return s;
+  }
   // 实际筛选（st 缺省用已应用 fState）
   function applyFilters(list, st) {
     st = st || fState;
@@ -3095,12 +3106,14 @@
         if (!ok) return false;
       }
       if (st.cardType.length && st.cardType.indexOf(cardTypeOf(p)) < 0) return false;
+      if (st.speed.length && !st.speed.some(function (s) { return planSpeeds(p).indexOf(s) >= 0; })) return false;
       if (st.activate.length) {
         var oneClick = p.tags.indexOf('一键安装') >= 0;  // 有「一键安装」标签＝支持一键激活
         if (!st.activate.some(function (a) { return a === '一键激活' ? oneClick : true; })) return false;
       }
       if (p.now < st.priceMin || (st.priceMax < 12000 && p.now > st.priceMax)) return false;
       var q = st.quick || {};
+      if (q['5G'] && p.title.indexOf('5G') < 0) return false;
       if (q['支持热点'] && p.tags[0].indexOf('热点') < 0) return false;
       if (q['免费取消'] && !p.perks.some(function (x) { return x[1].indexOf('免费取消') >= 0; })) return false;
       if (q['立即确认'] && p.perks[0][1] !== '立即确认') return false;
