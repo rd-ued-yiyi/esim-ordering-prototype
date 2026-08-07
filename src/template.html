@@ -865,16 +865,14 @@
   /* 评论页 */
   .rv-scroll { flex: 1 1 0; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain;
     background: var(--kk-surface-light); }
-  .rv-summary { display: flex; align-items: center; gap: 8px; padding: 16px 20px 12px; background: #fff; }
-  #rvKws { background: #fff; }  /* 与评分块连成同一白色区块 */
+  /* 评分 + 排序 + 关键词 同属一块白色筛选头，随内容一起滚动（对齐真实 KKday 评论页） */
+  .rv-filterhead { background: #fff; }
+  .rv-summary { display: flex; align-items: center; gap: 8px; padding: 16px 20px 12px; }
   .rv-summary .badge9 { background: var(--kk-primary-medium); color: #fff; font-size: 24px; line-height: 30px; font-weight: 600;
     padding: 4px 8px; border-radius: 16px 12px 12px 4px; }
   .rv-summary .gcol { display: flex; flex-direction: column; }
   .rv-summary .gt { font-size: 18px; line-height: 26px; font-weight: 600; color: var(--kk-text-darker); }
   .rv-summary .gc { font-size: 12px; line-height: 16px; color: var(--kk-text-dark); }
-  /* 排序 bar：随内容滚动，触顶后吸附在标题栏下方 */
-  .rv-sortbar { position: sticky; top: 0; z-index: 2; background: #fff;
-    padding-top: 4px; border-bottom: 1px solid var(--kk-border-lighter); }
   .rv-sorts { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding: 0 20px 12px; }
   .rv-sorts::-webkit-scrollbar { display: none; }
   .rv-sort { flex: 0 0 auto; border: 1px solid var(--kk-border-light); background: #fff; border-radius: 999px;
@@ -1758,12 +1756,14 @@
       </div>
     </div>
     <div class="rv-scroll" id="rvScroll">
-      <div class="rv-summary">
-        <span class="badge9" id="rvScore">4.6</span>
-        <span class="gcol"><span class="gt" id="rvGrade">非常好</span><span class="gc" id="rvCount">依据 234 则评论</span></span>
+      <div class="rv-filterhead">
+        <div class="rv-summary">
+          <span class="badge9" id="rvScore">4.6</span>
+          <span class="gcol"><span class="gt" id="rvGrade">非常好</span><span class="gc" id="rvCount">依据 234 则评论</span></span>
+        </div>
+        <div class="rv-sorts" id="rvSorts"></div>
+        <div class="det-kws" id="rvKws" style="padding:0 20px 16px;"></div>
       </div>
-      <div class="det-kws" id="rvKws" style="padding:0 20px 16px;"></div>
-      <div class="rv-sortbar"><div class="rv-sorts" id="rvSorts"></div></div>
       <div class="rv-body" id="rvBody"></div>
     </div>
   </div>
@@ -3520,8 +3520,8 @@
   });
 
   // ---------- 评论页（更多评价 → 进入） ----------
-  var RV_SORTS = ['KKday 精选', '最高', '最低', '最近', '图片优先'];
-  var RV_KWS = [['smile', '便利性'], ['smile', '价格'], ['smile', '易用性'], ['smile', '客服'], ['neutral', '网路'], ['neutral', '速度']];
+  var RV_SORTS = ['KKday 精选', '最高', '最低', '最近', '图片优先', '最有帮助'];
+  var RV_KWS = [['smile', '便利性'], ['smile', '价格'], ['smile', '易用性'], ['smile', '服务'], ['neutral', '网路'], ['neutral', '速度']];
   var REVIEWS = [
     { name: 'CHENG HSING', role: '家人', dep: '2025/02/13', at: '2025/02/26', stars: 4, title: '简单安装·好用', text: '安装简易，使用方便，本次使用国家日韩收讯品质良好，整体 CP 值高，成为出国网路需求首选！' },
     { name: 'YUJU', role: '家人', dep: '2025/05/05', at: '2025/05/06', stars: 5, title: '日韩通用网卡玩双国没烦恼', text: '刚好要去日韩双国旅游八天，一张卡通用双国很方便，不需要中途换卡，卡片寄送快速，客服处理速度快态度良好。' },
@@ -3532,16 +3532,14 @@
     { name: '芝麻', role: '亲子', dep: '2025/07/02', at: '2025/07/04', stars: 4, title: '亲子出游首选', text: '一家四口共用热点很方便，导航看影片都顺，客服回覆也快。' },
     { name: 'Ray', role: '商务旅客', dep: '2025/05/22', at: '2025/05/24', stars: 5, title: '落地即用', text: '飞机落地开机就自动连上，完全不用设定，对商务出差太友善了。' }
   ];
-  // 评论用户头像：配色首字母头像（自包含、按用户稳定分配一种配色，视觉上有随机感）
-  var AVA_COLORS = [['#FCE1E4','#DA6C82'],['#DBE8FB','#4E82E3'],['#E1F1E3','#3F9C63'],['#FBEFD3','#CE8E24'],
-    ['#EBE1FB','#7D57C9'],['#D5F0F2','#128FA0'],['#FCE6D2','#D9722F'],['#E3E9F1','#516384'],['#F5E1EF','#B45BA0']];
+  // 评论用户头像（对齐真实 KKday 评论页）：多数用户用风景实拍头像（复用旅客实拍缩图池），
+  // 约 1/3 用户无上传→默认灰色人像占位。按 index 稳定分配，视觉随机、自包含无外链。
+  var AVA_PERSON = '<svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><rect width="40" height="40" fill="#EDEEF0"/><circle cx="20" cy="15.5" r="6" fill="#C4C6CC"/><path d="M8 33.5c0-6.7 5.4-9.7 12-9.7s12 3 12 9.7z" fill="#C4C6CC"/></svg>';
   function rvAvatar(name, i) {
-    var c = AVA_COLORS[i % AVA_COLORS.length];
-    var ch = (name || '?').trim().charAt(0).toUpperCase();
-    return '<svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">' +
-      '<rect width="40" height="40" fill="' + c[0] + '"/>' +
-      '<text x="20" y="21" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif" font-size="17" font-weight="600" fill="' +
-      c[1] + '" text-anchor="middle" dominant-baseline="central">' + ch + '</text></svg>';
+    if (i % 3 === 1) return AVA_PERSON;  // 约 1/3 默认人像
+    var pool = (typeof SHOT_IMGS !== 'undefined' && SHOT_IMGS.length) ? SHOT_IMGS : null;
+    if (!pool) return AVA_PERSON;
+    return '<img src="' + pool[i % pool.length] + '" alt="">';
   }
   function renderReviewPage() {
     document.getElementById('rvScore').textContent = reviewP.rating.toFixed(1);
@@ -3626,6 +3624,18 @@
     updateCondSum();
   }
   condWheel.addEventListener('scroll', updateCondWheel, { passive: true });
+  // 滚轮惯性 + scroll-snap 结束后再兜底居中一次：iOS 在触摸滚动/吸附settling 期间会忽略对
+  // 另一元素（流量带）的程序性 scrollTo，导致重建后停在 scrollLeft=0（选中项被挤到边缘/右侧空白）。
+  // 监听滚轮「停稳」（最后一次 scroll 事件 300ms 后，此时惯性与 snap 均已结束），再 revealOpt 一次。
+  var condWheelSettle;
+  condWheel.addEventListener('scroll', function () {
+    clearTimeout(condWheelSettle);
+    condWheelSettle = setTimeout(function () {
+      if (document.getElementById('condModal').classList.contains('open')) {
+        revealOpt(document.getElementById('condOptsScroll'), false);
+      }
+    }, 300);
+  }, { passive: true });
 
   function tabFull(tab) { return tab === 'daily' ? '每日流量' : tab === 'total' ? '总流量' : '无限流量'; }
   function updateCondSum() {
