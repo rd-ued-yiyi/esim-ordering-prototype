@@ -62,6 +62,8 @@ GUIDE_APPLE = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill=
 GUIDE_ANDROID = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"><path d="M6 11a6 6 0 0 1 12 0v.5H6V11Z" fill="#26BEC9"/><path d="M6 12.5h12V17a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 6 17v-4.5Z" fill="#26BEC9"/><path d="m7.6 4.6 1.4 2.1M16.4 4.6l-1.4 2.1" stroke="#26BEC9" stroke-width="1.3" stroke-linecap="round"/><circle cx="9.5" cy="9" r=".9" fill="#fff"/><circle cx="14.5" cy="9" r=".9" fill="#fff"/><rect x="8.6" y="18" width="1.8" height="3.4" rx=".9" fill="#26BEC9"/><rect x="13.6" y="18" width="1.8" height="3.4" rx=".9" fill="#26BEC9"/><rect x="3" y="12" width="1.8" height="5" rx=".9" fill="#26BEC9"/><rect x="19.2" y="12" width="1.8" height="5" rx=".9" fill="#26BEC9"/></svg>'
 # 分享：面性（实心圆点 + 实心连线），与 Apple/Android 面性风格一致
 GUIDE_SHARE = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"><path d="M8 12 16 7.5M8 12l8 4.5" stroke="#26BEC9" stroke-width="2" stroke-linecap="round"/><circle cx="6" cy="12" r="3.1" fill="#26BEC9"/><circle cx="17.5" cy="5.5" r="3.1" fill="#26BEC9"/><circle cx="17.5" cy="18.5" r="3.1" fill="#26BEC9"/></svg>'
+# 「其他」＝更多其他设备/方式，用三点（•••）表示
+GUIDE_OTHER = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"><circle cx="5" cy="12" r="2.6" fill="#26BEC9"/><circle cx="12" cy="12" r="2.6" fill="#26BEC9"/><circle cx="19" cy="12" r="2.6" fill="#26BEC9"/></svg>'
 
 SB_SIGNAL ='<svg xmlns="http://www.w3.org/2000/svg" width="17" height="11" viewBox="0 0 17 11" fill="none"><rect x="0" y="7" width="3" height="4" rx="1" fill="#fff"/><rect x="4.5" y="5" width="3" height="6" rx="1" fill="#fff"/><rect x="9" y="2.5" width="3" height="8.5" rx="1" fill="#fff"/><rect x="13.5" y="0" width="3" height="11" rx="1" fill="#fff"/></svg>'
 SB_WIFI = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M8 11.2 1 4.4a10 10 0 0 1 14 0L8 11.2Z" fill="#fff" opacity=".35"/><path d="M8 11.2 4 7.3a5.6 5.6 0 0 1 8 0L8 11.2Z" fill="#fff"/></svg>'
@@ -134,6 +136,7 @@ subs = {
     "{{IC_apple}}":        strip_wh(GUIDE_APPLE),
     "{{IC_android}}":      strip_wh(GUIDE_ANDROID),
     "{{IC_share}}":        strip_wh(GUIDE_SHARE),
+    "{{IC_other}}":        strip_wh(GUIDE_OTHER),
     "{{IC_file}}":         inline_svg_to_img(DET_FILE),
     "{{IC_spark}}":        inline_svg_to_img(DET_SPARK),
     "{{IC_smile}}":        inline_svg_to_img(DET_SMILE),
