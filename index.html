@@ -791,8 +791,6 @@
   .det-note-ind { margin: 8px 0 0 24px; font-size: 12px; line-height: 18px; color: var(--kk-text-dark); }
   /* 取消政策四态（Figma 1029-74421） */
   .cxl-wrap { display: flex; flex-direction: column; gap: 16px; }
-  .cxl-list { margin: 0; padding-left: 21px; display: flex; flex-direction: column; gap: 8px; }
-  .cxl-list li { font-size: 14px; line-height: 20px; color: var(--kk-text-darker); list-style: disc; }
   .cxl-table { border: 1px solid var(--kk-border-lighter); border-radius: 8px; overflow: hidden; }
   .cxl-table .r { display: flex; }
   .cxl-table .c { flex: 1 1 0; min-width: 0; padding: 16px; font-size: 14px; line-height: 20px;
@@ -3368,22 +3366,24 @@
   }
   // 取消政策四态（Figma 1029-74421）：免费 / 不可 / 免费或不可(条件) / 收费(手续费表)
   var CXL_SUPPLIER = '由于站内商品来自全球各地，订单取消时间将依该供应商所在时区判定。供应商需 2–5 个工作天进行取消流程，依照您购买的商品取消政策收取手续费，并于取消流程完成后 14 个工作天内退款。';
+  // 除「免费取消 / 不可取消」外，其余均套用「取消日期 | 手续费」表格样式（Figma 1029-74628）
+  function cxlTable(rows) {
+    return '<div class="cxl-table"><div class="r head"><div class="c">取消日期</div><div class="c">手续费</div></div>' +
+      rows.map(function (r) { return '<div class="r"><div class="c">' + r[0] + '</div><div class="c">' + r[1] + '</div></div>'; }).join('') +
+      '</div>';
+  }
   function renderCancelPolicy(type) {
     var body;
     if (type === 'free') {
       body = '<p class="det-body-md">免费取消</p>';
-    } else if (type === 'cond') {
-      body = '<ul class="cxl-list"><li>所选日期 3 天（含）前取消，未使用可免费取消</li>' +
-        '<li>所选日期 0～2 天（含）前取消，不可取消、更改订单，亦不得请求退款</li></ul>';
-    } else if (type === 'fee') {
-      var rows = [['所选日期 7 天（含）前', '0%'], ['所选日期 3～6 天（含）前', '50%'], ['所选日期 0～2 天（含）前', '100%']];
-      body = '<div class="cxl-table"><div class="r head"><div class="c">取消日期</div><div class="c">手续费</div></div>' +
-        rows.map(function (r) { return '<div class="r"><div class="c">' + r[0] + '</div><div class="c">' + r[1] + '</div></div>'; }).join('') +
-        '</div>';
+    } else if (type === 'cond') {  // 免费或不可：3天前免费(0%) / 0~2天不可(100%)
+      body = cxlTable([['所选日期 3 天（含）前', '0%'], ['所选日期 0～2 天（含）前', '100%']]);
+    } else if (type === 'fee') {   // 收费取消：阶梯手续费
+      body = cxlTable([['所选日期 7 天（含）前', '0%'], ['所选日期 3～6 天（含）前', '50%'], ['所选日期 0～2 天（含）前', '100%']]);
     } else {
       body = '<p class="det-body-md">商品一经订购完成后，即不可取消、更改订单，亦不得请求退款</p>';
     }
-    // 条件/收费态：首行提示改为「试算」说明；免费/不可态首行为「注意」
+    // 表格态（条件/收费）首行提示为「试算」说明；免费/不可态首行为「注意」
     var note1 = (type === 'cond' || type === 'fee') ? '上述资讯以目前日期试算，实际请依订购资讯为主。' : '注意';
     return '<div class="cxl-wrap">' + body +
       '<div class="cxl-note"><span class="ic ic-16">' + ICONS.info + '</span>' +
