@@ -2000,8 +2000,11 @@
     });
     document.querySelector('.app').classList.toggle('no-hero', name === 'plans');
     window.scrollTo(0, 0);
-    // 重新进入目的地页（如从列表返回）时把选中流量档滚回可视区，避免选中项落在屏幕外
-    if (name === 'destination') revealOpt(document.getElementById('dataOptsScroll'), false);
+    // 重新进入目的地页（如从列表返回）时把选中流量档、选中天数 chip 滚回可视区，避免选中项落在屏幕外
+    if (name === 'destination') {
+      revealOpt(document.getElementById('dataOptsScroll'), false);
+      revealOpt(document.getElementById('dayChips'), false, '.chip.sel');
+    }
   }
 
   // ---------- 目的地页状态 ----------
@@ -2104,14 +2107,15 @@
   // 单次 scrollTo（哪怕加 rAF）会失败，选中项停在重建后的 scrollLeft=0（被挤到边缘）。
   // 用 token 让新调用作废旧循环；每 70ms 校验 scrollLeft 是否到位，没到就再试，最多约 1s，
   // 惯性一停就会成功落位并自动停止。瞬时定位（smooth=false）时才做重试校验。
-  function revealOpt(scrollEl, smooth) {
+  function revealOpt(scrollEl, smooth, sel) {
     if (!scrollEl) return;
+    sel = sel || '.opt.sel';
     if (scrollEl._spyGuard) scrollEl._spyGuard(smooth ? 700 : 900);
     var token = scrollEl._revealToken = (scrollEl._revealToken || 0) + 1;
     var tries = 0;
     function run() {
       if (scrollEl._revealToken !== token) return;  // 被更新的调用取代
-      var selEl = scrollEl.querySelector('.opt.sel');
+      var selEl = scrollEl.querySelector(sel);
       if (!selEl || !scrollEl.clientWidth) { if (++tries < 15) setTimeout(run, 70); return; }
       var sr = scrollEl.getBoundingClientRect(), cr = selEl.getBoundingClientRect();
       var max = Math.max(0, scrollEl.scrollWidth - scrollEl.clientWidth);
