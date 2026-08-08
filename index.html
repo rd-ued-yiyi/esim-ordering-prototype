@@ -1368,20 +1368,7 @@
                   <span class="placeholder" id="daysValue">请选择</span>
                   <span class="ic ic-24"><span class="rot90 ic"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE0IiBoZWlnaHQ9IjgiIHZpZXdCb3g9IjAgMCAxNCA4IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cGF0aCBpZD0iVmVjdG9yIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTYuMjkyODkgMC4yOTI4OTNDNi42ODM0MiAtMC4wOTc2MzExIDcuMzE2NTggLTAuMDk3NjMxMSA3LjcwNzExIDAuMjkyODkzTDEzLjcwNzEgNi4yOTI4OUMxNC4wOTc2IDYuNjgzNDIgMTQuMDk3NiA3LjMxNjU4IDEzLjcwNzEgNy43MDcxMUMxMy4zMTY2IDguMDk3NjMgMTIuNjgzNCA4LjA5NzYzIDEyLjI5MjkgNy43MDcxMUw3IDIuNDE0MjFMMS43MDcxMSA3LjcwNzExQzEuMzE2NTggOC4wOTc2MyAwLjY4MzQxOCA4LjA5NzYzIDAuMjkyODkzIDcuNzA3MTFDLTAuMDk3NjMxMSA3LjMxNjU4IC0wLjA5NzYzMTEgNi42ODM0MiAwLjI5Mjg5MyA2LjI5Mjg5TDYuMjkyODkgMC4yOTI4OTNaIiBmaWxsPSIjMjEyMTIxIi8+Cjwvc3ZnPg==" width="14.00" height="8.00"></span></span>
                 </button>
-                <div class="chips-row" id="dayChips">
-                  <button class="chip" data-days="1"><span class="chip-label t-body-md">1 天</span></button>
-                  <button class="chip" data-days="2"><span class="chip-label t-body-md">2 天</span></button>
-                  <button class="chip" data-days="4"><span class="chip-label t-body-md">4 天</span></button>
-                  <button class="chip" data-days="5"><span class="chip-label t-body-md">5 天</span></button>
-                  <button class="chip" data-days="6"><span class="chip-label t-body-md">6 天</span></button>
-                  <button class="chip" data-days="7"><span class="chip-label t-body-md">7 天</span></button>
-                  <button class="chip" data-days="8"><span class="chip-label t-body-md">8 天</span></button>
-                  <button class="chip" data-days="9"><span class="chip-label t-body-md">9 天</span></button>
-                  <button class="chip" data-days="10"><span class="chip-label t-body-md">10 天</span></button>
-                  <button class="chip" data-days="15"><span class="chip-label t-body-md">15 天</span></button>
-                  <button class="chip" data-days="20"><span class="chip-label t-body-md">20 天</span></button>
-                  <button class="chip" data-days="30"><span class="chip-label t-body-md">30 天</span></button>
-                </div>
+                <div class="chips-row" id="dayChips"><!-- 由 JS 从 DAYS_ALL 前 30 项(1–30天)生成，与滚轮同源 --></div>
               </div>
 
               <!-- 流量 -->
@@ -2193,6 +2180,26 @@
     cta.disabled = false;
   }
 
+  // 天数序列（唯一真源，chips / bottom sheet 滚轮 / 修改条件滚轮 共用）：
+  // 1–30 逐个递增，30 以上每 5 递增，封顶 365 天。
+  var DAYS_ALL = (function () {
+    var a = [];
+    for (var i = 1; i <= 30; i++) a.push(String(i));
+    for (var i = 35; i <= 365; i += 5) a.push(String(i));
+    return a;
+  })();
+  // 目的地页天数 chips：只显示序列前 30 项（1–30 天），其余在滚轮里选
+  (function () {
+    var row = document.getElementById('dayChips');
+    DAYS_ALL.slice(0, 30).forEach(function (d) {
+      var b = document.createElement('button');
+      b.className = 'chip';
+      b.setAttribute('data-days', d);
+      b.innerHTML = '<span class="chip-label t-body-md">' + d + ' 天</span>';
+      row.appendChild(b);
+    });
+  })();
+
   // 天数选择（chips 与 bottom sheet picker 共用）
   function setDays(v, touched) {
     state.days = v || '1';
@@ -2836,8 +2843,7 @@
     });
   });
 
-  // 用卡天数滚轮 picker：高亮条固定中间，滚动选项，中心项即选中
-  var DAYS_ALL = ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','20','25','30','40','50','60','75','90','120','150','180','240','300','365'];
+  // 用卡天数滚轮 picker：高亮条固定中间，滚动选项，中心项即选中（DAYS_ALL 见上方唯一真源）
   var DAY_H = 36;
   var pickerVal = null;
   var wheel = document.getElementById('bsDaysList');
