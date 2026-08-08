@@ -2080,12 +2080,15 @@
   }
 
   // 天数序列（唯一真源，chips / bottom sheet 滚轮 / 修改条件滚轮 共用）：
-  // 1–30 逐个递增，30 以上每 5 递增，封顶 365 天。
+  // 1–30 逐个；(30,60] 每 5；(60,100] 每 10；(100,365] 每 30；封顶 365 天。
   var DAYS_ALL = (function () {
-    var a = [];
-    for (var i = 1; i <= 30; i++) a.push(String(i));
-    for (var i = 35; i <= 365; i += 5) a.push(String(i));
-    return a;
+    var a = [], d;
+    for (d = 1; d <= 30; d++) a.push(d);
+    for (d = 35; d <= 60; d += 5) a.push(d);
+    for (d = 70; d <= 100; d += 10) a.push(d);
+    for (d = 130; d <= 365; d += 30) a.push(d);
+    if (a[a.length - 1] !== 365) a.push(365);  // 每30 落不到 365，补上封顶值
+    return a.map(String);
   })();
   // 目的地页天数 chips：只显示序列前 30 项（1–30 天），其余在滚轮里选
   (function () {
