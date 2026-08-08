@@ -2597,17 +2597,10 @@
       renderPlans();          // 留在列表页，按新目的地刷新
       go('plans');
     } else {
-      // 目的地页切换目的地：搜索条件回到默认状态（1 天浅灰 + 每日流量第一档）
-      state.tab = 'daily';
-      state.plan = null;
-      state.daysTouched = false;
-      setDays('1', false);    // 内部 renderOpts 会把 plan 落回第一档
-      var os = document.getElementById('dataOptsScroll');
-      os.scrollLeft = 0;      // 滚动带回到每日流量组起点
-      setTabsActive(document.getElementById('dataTabs'), document.getElementById('dataNote'), 'daily');
-      go('destination');
-      // iOS 修复：横滚容器内容被替换时若停留在旧滚动位置会留白，切屏后强制回到起点并触发重排
-      requestAnimationFrame(function () { os.scrollLeft = 0; });
+      // 目的地页切换目的地：保留已选的天数/流量条件（不重置成默认），
+      // 按新目的地重算价格，并把选中天数 chip、选中流量档滚回可视区
+      renderOpts();          // 重算档位价格，保持当前选中档；内部 revealOpt 定位流量档
+      go('destination');     // go 内部 revealOpt：选中天数 chip 也滚回可视区
     }
     flyToBar(name);
   }
