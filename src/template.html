@@ -3125,7 +3125,9 @@
 
   // ---------- 列表页筛选（总筛选 970-50754 / 单类目 984-14319 / 日期 970-49610 / 按钮态 1004-4239x） ----------
   // fState=已应用；fDraft=sheet 内暂存草稿。date:null|'今天'|'明天'|{y,m,d,label}；quick 为快筛布尔
-  var fState = { date: null, service: [], cardType: [], speed: [], activate: [], carrier: [], priceMin: 0, priceMax: 12000, quick: {} };
+  // 空筛选工厂：初始化与「清除」共用同一份，避免字段漏写（如 speed）导致 renderFilterSheet 报错
+  function emptyFilter() { return { date: null, service: [], cardType: [], speed: [], activate: [], carrier: [], priceMin: 0, priceMax: 12000, quick: {} }; }
+  var fState = emptyFilter();
   var fDraft = null;
   function fClone(s) { return JSON.parse(JSON.stringify(s)); }
   function carrierOpts() {
@@ -3347,7 +3349,7 @@
     openSheet(document.getElementById('filterSheet'));
   });
   document.getElementById('fsClear').addEventListener('click', function () {
-    fDraft = { date: null, service: [], cardType: [], activate: [], carrier: [], priceMin: 0, priceMax: 12000, quick: {} };
+    fDraft = emptyFilter();
     renderFilterSheet(); setApplyBtn(document.getElementById('fsApply'), fDraft);
   });
   document.getElementById('fsApply').addEventListener('click', function () {
