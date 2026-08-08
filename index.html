@@ -2808,10 +2808,12 @@
     lockBody();
   }
   function closeSheets() {
-    var wasOpen = document.querySelector('.bsheet.open');
+    // 一次关掉所有 sheet，但要按「当前打开的 sheet 数量」解锁对应次数——
+    // 总筛选/单类目内再打开日历会叠两层锁(计数2)，只解一次会让 body 卡在 fixed 点不动。
+    var openCount = document.querySelectorAll('.bsheet.open').length;
     bsMask.classList.remove('open');
     document.querySelectorAll('.bsheet').forEach(function (s) { s.classList.remove('open'); });
-    if (wasOpen) unlockBody();  // 计数式锁：modal 若还开着会保持锁定
+    for (var i = 0; i < openCount; i++) unlockBody();  // 计数式锁：modal 若还开着会保持锁定
   }
   bsMask.addEventListener('click', closeSheets);
   document.querySelectorAll('[data-bs-close]').forEach(function (b) {
