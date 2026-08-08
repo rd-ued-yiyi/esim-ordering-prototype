@@ -2746,10 +2746,13 @@
   var DAY_H = 36;
   var pickerVal = null;
   var wheel = document.getElementById('bsDaysList');
-  DAYS_ALL.forEach(function (d) {
+  DAYS_ALL.forEach(function (d, i) {
     var b = document.createElement('div');
     b.className = 'bs-day';
     b.textContent = d + ' 天';
+    b.addEventListener('click', function () {  // 点击上/下方的选项 → 平滑滚到中间选中位
+      wheel.scrollTo({ top: i * DAY_H, behavior: 'smooth' });
+    });
     wheel.appendChild(b);
   });
   function updateWheel() {
@@ -3809,10 +3812,13 @@
   var editState = { days: null, tab: 'daily', plan: null };
   var condLinkTimer;  // 天数切换联动的防抖计时器
   var condWheel = document.getElementById('condDaysList');
-  DAYS_ALL.forEach(function (d) {
+  DAYS_ALL.forEach(function (d, i) {
     var b = document.createElement('div');
     b.className = 'bs-day';
     b.textContent = d + ' 天';
+    b.addEventListener('click', function () {  // 点击上/下方的选项 → 平滑滚到中间选中位
+      condWheel.scrollTo({ top: i * DAY_H, behavior: 'smooth' });
+    });
     condWheel.appendChild(b);
   });
   function updateCondWheel() {
