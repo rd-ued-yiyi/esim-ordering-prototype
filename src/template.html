@@ -2090,10 +2090,22 @@
     if (a[a.length - 1] !== 365) a.push(365);  // 每30 落不到 365，补上封顶值
     return a.map(String);
   })();
-  // 目的地页天数 chips：只显示序列前 30 项（1–30 天），其余在滚轮里选
+  // 目的地页天数 chips：1–15 连续 + 21、30，再从 30 天以上均匀跳选补满 30 个
+  //（完整序列仍在滚轮里选）。跳选用固定均匀间隔，保证每次一致、便于测试。
+  var CHIP_DAYS = (function () {
+    var list = [];
+    for (var i = 1; i <= 15; i++) list.push(String(i));
+    list.push('21', '30');
+    var tail = DAYS_ALL.filter(function (d) { return +d > 30; });  // [35,40,…,365]
+    var need = 30 - list.length;
+    for (var k = 0; k < need; k++) {
+      list.push(tail[Math.round(k * (tail.length - 1) / (need - 1))]);
+    }
+    return list;
+  })();
   (function () {
     var row = document.getElementById('dayChips');
-    DAYS_ALL.slice(0, 30).forEach(function (d) {
+    CHIP_DAYS.forEach(function (d) {
       var b = document.createElement('button');
       b.className = 'chip';
       b.setAttribute('data-days', d);
