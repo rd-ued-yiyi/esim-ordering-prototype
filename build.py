@@ -100,6 +100,17 @@ SHOTS = [
 
 subs = {
     "{{HERO_SVG}}":        (ROOT / "assets" / "hero" / "hero-scene.svg").read_text(encoding="utf-8"),
+    # 付款页品牌/图标（结帐选择器的支付方式标识，内联矢量）
+    "{{PAY_applepay}}":    raw_svg("applepay", folder="pay"),
+    "{{PAY_creditcard}}":  raw_svg("creditcard", folder="pay"),
+    "{{PAY_payme}}":       raw_svg("payme", folder="pay"),
+    "{{PAY_alipayhk}}":    raw_svg("alipayhk", folder="pay"),
+    "{{PAY_alipay}}":      raw_svg("alipay", folder="pay"),
+    "{{PAY_hsbc}}":        raw_svg("hsbc", folder="pay"),
+    "{{IC_coupon}}":       raw_svg("coupon", folder="pay"),
+    "{{IC_pointsCard}}":   raw_svg("pointsCard", folder="pay"),
+    "{{IC_pointsColor}}":  raw_svg("pointsColor", folder="pay"),
+    "{{IC_question2}}":    raw_svg("question", folder="pay"),
     "{{IC_back}}":         svg("back"),
     "{{IC_location}}":     svg("location"),
     "{{IC_arrowRight}}":   svg("arrowRight"),
