@@ -1100,83 +1100,95 @@
   }
   .toast.show { opacity: 1; transform: translate(-50%, 0); }
 
-  /* ================= 订单填写 / 订购确认 ================= */
-  .ord-head { flex: 0 0 auto; background: #fff; border-bottom: 1px solid var(--kk-border-lighter); }
-  .ord-body { flex: 1 1 auto; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; background: #F1F4F8; padding: 16px 16px 8px; }
-  .ord-card { background: #fff; border-radius: 12px; padding: 16px; margin-bottom: 12px; }
-  .ord-card:last-child { margin-bottom: 0; }
-  /* 商品摘要卡 */
-  .ord-ptitle { font-size: 16px; line-height: 22px; font-weight: 600; color: var(--kk-text-darker); }
-  .ord-pline { display: flex; align-items: center; gap: 6px; margin-top: 8px; color: var(--kk-text-dark); font-size: 13px; line-height: 18px; }
-  .ord-pline .ic { flex: 0 0 auto; }
+  /* ================= 订单填写 / 订购确认（严格对齐 Figma 1074-82361 / 1004-42539） ================= */
+  .ord-head { flex: 0 0 auto; background: #fff; }
+  .ord-body { flex: 1 1 auto; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; background: #F1F4F8; padding: 0 0 8px; }
+  /* 顶部整块白底：商品卡 + 使用日期 + 购买数量（Figma 订购商品信息+日期数量，全宽白、px16 pb24 gap24） */
+  .ord-wsec { background: #fff; padding: 16px 16px 24px; display: flex; flex-direction: column; gap: 24px; }
+  /* 其余独立圆角卡（w-351 居中＝左右各 12px，卡间 gap16） */
+  .ord-cards { display: flex; flex-direction: column; gap: 16px; padding: 16px 12px 0; }
+  .ord-card { background: #fff; border-radius: 12px; padding: 16px; }
+  /* 商品信息 card：2px #E6E9ED 描边 + 内部分隔线（Figma 1074-84572） */
+  .ord-prod { border: 2px solid #E6E9ED; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+  .ord-ptitle { font-size: 18px; line-height: 26px; font-weight: 600; color: #212121; }
+  .ord-pspecs { display: flex; flex-direction: column; gap: 8px; }
+  .ord-pline { display: flex; align-items: center; gap: 8px; color: #212121; font-size: 14px; line-height: 20px; }
+  .ord-pline .ic { flex: 0 0 auto; width: 20px; height: 20px; }
   .ord-pline .u { text-decoration: underline; }
-  .ord-price { font-size: 20px; font-weight: 700; color: var(--kk-text-darker); margin-top: 12px; }
-  .ord-cancel { color: #13A3B6; font-size: 13px; margin-top: 4px; display: inline-flex; align-items: center; gap: 4px; }
-  .ord-cancel .ic { width: 14px; height: 14px; }
-  /* 区块标题 + 编辑 */
-  .ord-sec-h { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-  .ord-sec-h .t { font-size: 16px; font-weight: 600; color: var(--kk-text-darker); }
+  .ord-hr { height: 1px; background: var(--kk-border-lighter); width: 100%; }
+  .ord-price-block { display: flex; flex-direction: column; gap: 4px; align-items: flex-start; }
+  .ord-price { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 16px; line-height: 16px; color: #212121; }
+  .ord-price .cur { font-weight: 500; }
+  .ord-price .num { font-weight: 700; }
+  .ord-cancel { color: #13A3B6; font-size: 14px; line-height: 20px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; }
+  .ord-cancel .ic { width: 16px; height: 16px; }
+  /* 区块标题（H6 semibold 18）+ 编辑 */
+  .ord-sec-h { display: flex; align-items: center; justify-content: space-between; }
+  .ord-card .ord-sec-h + * { margin-top: 16px; }
+  .ord-sec-h .t { font-size: 18px; line-height: 26px; font-weight: 600; color: #212121; }
   .ord-sec-h .t .cnt { color: #13A3B6; }
-  .ord-sec-h .t .hint { color: var(--kk-text-medium); font-size: 12px; font-weight: 400; margin-left: 6px; }
-  .ord-edit { display: inline-flex; align-items: center; gap: 4px; color: var(--kk-text-dark); font-size: 13px; }
-  .ord-edit.empty { color: var(--kk-text-light); }
-  .ord-edit .ic { width: 18px; height: 18px; }
-  /* 使用日期 chips（复用 chips-row） */
-  .ord-date-chips { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
+  .ord-sec-h .t .hint { color: var(--kk-text-medium); font-size: 12px; font-weight: 400; margin-left: 8px; }
+  .ord-edit { display: inline-flex; align-items: center; gap: 4px; color: #727272; font-size: 14px; }
+  .ord-edit.empty { color: var(--kk-text-medium); }
+  .ord-edit .ic { width: 20px; height: 20px; }
+  /* 使用日期 chips（白底 + #D5D6DB 描边，Figma date chip） */
+  .ord-date-wrap { display: flex; align-items: stretch; }
+  .ord-date-chips { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; flex: 1 1 0; min-width: 0; }
   .ord-date-chips::-webkit-scrollbar { display: none; }
-  .ord-dchip { flex: 0 0 auto; min-width: 64px; padding: 8px 6px; border-radius: 8px; background: #F1F4F8; border: 1px solid transparent; text-align: center; }
-  .ord-dchip .d { font-size: 15px; font-weight: 600; color: var(--kk-text-darker); }
-  .ord-dchip .w { font-size: 11px; color: var(--kk-text-medium); margin-top: 2px; }
-  .ord-dchip.sel { background: var(--kk-primary-lighter); border-color: var(--kk-primary-medium); }
+  .ord-dchip { flex: 0 0 auto; padding: 8px 12px; border-radius: 8px; background: #fff; border: 1px solid #D5D6DB; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+  .ord-dchip .d { font-size: 14px; line-height: 20px; font-weight: 600; color: #212121; }
+  .ord-dchip .w { font-size: 12px; line-height: 16px; color: #727272; }
+  .ord-dchip.sel { border-color: #26BEC9; }
   .ord-dchip.sel .d { color: #13A3B6; }
-  .ord-dchip.more { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; color: var(--kk-text-dark); }
-  .ord-dchip.more .ic { width: 18px; height: 18px; }
-  .ord-dchip.more .w { color: var(--kk-text-dark); }
-  /* 数量步进器 */
-  .qty-row { display: flex; align-items: center; justify-content: space-between; }
-  .qty-row .t { font-size: 16px; font-weight: 600; color: var(--kk-text-darker); }
-  .qty-ctl { display: flex; align-items: center; gap: 20px; }
-  .qty-btn { width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid var(--kk-primary-medium); position: relative; background: #fff; flex: 0 0 auto; }
-  .qty-btn::before { content: ''; position: absolute; left: 50%; top: 50%; width: 12px; height: 2px; background: #13A3B6; transform: translate(-50%, -50%); border-radius: 1px; }
-  .qty-btn.qplus::after { content: ''; position: absolute; left: 50%; top: 50%; width: 2px; height: 12px; background: #13A3B6; transform: translate(-50%, -50%); border-radius: 1px; }
-  .qty-btn:disabled { border-color: var(--kk-border-light); }
-  .qty-btn:disabled::before, .qty-btn:disabled::after { background: var(--kk-border-light); }
-  .qty-n { min-width: 20px; text-align: center; font-size: 16px; color: var(--kk-text-darker); }
-  /* 已填资料网格（航班/设备） */
+  .ord-dmore { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 8px 12px; background: #fff; box-shadow: 0 1px 2px rgba(38,50,56,.12); }
+  .ord-dmore .ic { width: 16px; height: 16px; }
+  .ord-dmore .w { font-size: 12px; line-height: 16px; color: #212121; }
+  /* 数量步进器（Figma stepper：32 圆，minus 边 #ADE6EB / plus 边 #26BEC9，gap4） */
+  .qty-row { display: flex; align-items: center; }
+  .qty-row .t { flex: 1 1 auto; font-size: 18px; line-height: 26px; font-weight: 600; color: #212121; }
+  .qty-ctl { display: flex; align-items: center; gap: 4px; }
+  .qty-btn { width: 32px; height: 32px; border-radius: 20px; border: 1px solid #26BEC9; position: relative; background: #fff; flex: 0 0 auto; }
+  .qty-btn::before { content: ''; position: absolute; left: 50%; top: 50%; width: 11px; height: 1.8px; background: #26BEC9; transform: translate(-50%, -50%); border-radius: 1px; }
+  .qty-btn.qplus::after { content: ''; position: absolute; left: 50%; top: 50%; width: 1.8px; height: 11px; background: #26BEC9; transform: translate(-50%, -50%); border-radius: 1px; }
+  .qty-btn.qminus:disabled { border-color: #ADE6EB; }
+  .qty-btn.qminus:disabled::before { background: #ADE6EB; }
+  .qty-n { width: 40px; text-align: center; font-size: 16px; line-height: 24px; color: #212121; }
+  /* 已填资料网格（航班/设备）：k=12 #9C9DA0 / v=14 #212121 */
   .ord-kv { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; }
-  .ord-kv .k { font-size: 12px; color: var(--kk-text-medium); }
-  .ord-kv .v { font-size: 14px; color: var(--kk-text-darker); margin-top: 2px; }
-  /* 订购人资料 / 联系人明细行 */
-  .ord-info-line { display: flex; align-items: center; gap: 10px; margin-top: 12px; color: var(--kk-text-darker); font-size: 14px; }
-  .ord-info-line:first-of-type { margin-top: 0; }
-  .ord-info-line .ic { width: 18px; height: 18px; flex: 0 0 auto; color: var(--kk-text-dark); }
+  .ord-kv .k { font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
+  .ord-kv .v { font-size: 14px; line-height: 20px; color: #212121; margin-top: 2px; }
+  /* 订购人资料明细行：icon16 + 14/20 #212121，行距 gap4 */
+  .ord-info { display: flex; flex-direction: column; gap: 4px; }
+  .ord-info-line { display: flex; align-items: center; gap: 8px; color: #212121; font-size: 14px; line-height: 20px; }
+  .ord-info-line .ic { width: 16px; height: 16px; flex: 0 0 auto; }
   /* 联系人 chips */
-  .ct-chips { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; margin-bottom: 12px; }
+  .ct-chips { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
   .ct-chips::-webkit-scrollbar { display: none; }
-  .ct-chip { flex: 0 0 auto; padding: 6px 14px; border-radius: 999px; background: #F1F4F8; border: 1px solid transparent; font-size: 14px; color: var(--kk-text-darker); }
+  .ct-chip { flex: 0 0 auto; padding: 6px 14px; border-radius: 999px; background: #F1F4F8; border: 1px solid transparent; font-size: 14px; line-height: 20px; color: #212121; }
   .ct-chip.sel { background: var(--kk-primary-lighter); border-color: var(--kk-primary-medium); color: #13A3B6; }
   .ct-chip.add { display: inline-flex; align-items: center; }
-  .ct-card { border: 1px solid var(--kk-border-lighter); border-radius: 8px; padding: 12px; }
+  .ct-card { border: 1px solid var(--kk-border-lighter); border-radius: 8px; padding: 12px; margin-top: 12px; }
   .ct-card-h { display: flex; align-items: center; gap: 8px; }
-  .ct-card-h .nm { font-weight: 600; color: var(--kk-text-darker); font-size: 14px; flex: 1 1 auto; }
-  .ct-card-h .ic { width: 18px; height: 18px; }
+  .ct-card-h .nm { font-weight: 600; color: #212121; font-size: 14px; flex: 1 1 auto; }
+  .ct-card-h .ic { width: 20px; height: 20px; }
   .ct-card-h .x { color: var(--kk-text-medium); }
   .ct-card-kv { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 16px; margin-top: 10px; }
-  .ct-card-kv .k { font-size: 12px; color: var(--kk-text-medium); }
-  .ct-card-kv .v { font-size: 13px; color: var(--kk-text-darker); }
-  /* 备注行 */
-  .ord-row-link { display: flex; align-items: center; justify-content: space-between; }
-  .ord-row-link .t { font-size: 16px; font-weight: 600; color: var(--kk-text-darker); }
-  .ord-row-link .r { display: inline-flex; align-items: center; gap: 6px; color: var(--kk-text-light); font-size: 14px; max-width: 60%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .ord-row-link .r.filled { color: var(--kk-text-dark); }
-  .ord-row-link .r .ic { width: 18px; height: 18px; flex: 0 0 auto; }
+  .ct-card-kv .k { font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
+  .ct-card-kv .v { font-size: 13px; line-height: 18px; color: #212121; }
+  /* 备注行（备注＝Body-lg Regular 16，非 semibold） */
+  .ord-row-link { display: flex; align-items: center; gap: 8px; width: 100%; }
+  .ord-row-link .t { flex: 1 1 0; font-size: 16px; line-height: 24px; font-weight: 400; color: #212121; }
+  .ord-row-link .r { flex: 1 1 0; min-width: 0; display: inline-flex; align-items: center; justify-content: flex-end; gap: 6px; color: #9C9DA0; font-size: 14px; line-height: 20px; text-align: right; }
+  .ord-row-link .r .lbl { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ord-row-link .r.filled { color: #727272; }
+  .ord-row-link .r .ic { width: 20px; height: 20px; flex: 0 0 auto; }
   /* 底部栏 */
   .ord-foot { flex: 0 0 auto; background: #fff; border-top: 1px solid var(--kk-border-lighter); display: flex; align-items: center; gap: 12px; padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px)); }
-  .ord-price-toggle { display: flex; align-items: baseline; gap: 2px; flex: 0 0 auto; }
-  .ord-price-toggle .cur { font-size: 14px; font-weight: 700; color: var(--kk-text-darker); }
-  .ord-price-toggle .amt { font-size: 20px; font-weight: 700; color: var(--kk-text-darker); }
-  .ord-price-toggle .caret { width: 14px; height: 14px; transform: rotate(180deg); }
-  .ord-foot .cta { flex: 1 1 auto; background: var(--kk-primary-button); color: #fff; }
+  .ord-foot { box-shadow: 0 -4px 12px rgba(38,50,56,.12); }
+  .ord-price-toggle { display: flex; align-items: center; gap: 2px; flex: 1 1 auto; }
+  .ord-price-toggle .cur, .ord-price-toggle .amt { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 20px; line-height: 20px; font-weight: 700; color: #212121; }
+  .ord-price-toggle .caret { width: 20px; height: 20px; transform: rotate(180deg); }
+  .ord-foot .cta { flex: 0 0 120px; width: 120px; background: var(--kk-primary-button); color: #fff; }
   .ord-coupon { margin: 0; border-radius: 0; }
   /* 付款页 */
   .pay-note { display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 13px; color: #13A3B6; padding: 8px 16px 0; background: #fff; flex: 0 0 auto; }
@@ -4303,53 +4315,57 @@
   function sameDate(a, b) { return a && b && a.y === b.y && a.m === b.m && a.d === b.d; }
 
   function renderOrder() {
-    var p = orderP, st = orderState, req = orderReq(p), h = '';
-    // 商品摘要卡
-    h += '<div class="ord-card ord-prod">' +
+    var p = orderP, st = orderState, req = orderReq(p);
+    // ── 顶部整块白底：商品卡 + [使用日期] + 购买数量 ──
+    var w = '<div class="ord-prod">' +
       '<div class="ord-ptitle">' + p.title + '</div>' +
-      '<div class="ord-pline"><span class="ic ic-16">' + ICONS.file + '</span>' + ordProdSpec(p) + '</div>' +
-      '<div class="ord-pline"><span class="ic ic-16">' + ICONS.locGrey + '</span><span class="u">' + ordDestLine() + '</span></div>' +
-      '<div class="ord-price">NT$' + p.now.toLocaleString() + '</div>' +
-      '<button class="ord-cancel" id="ordCancelInfo">2025/12/16 前可免费取消 <span class="ic">' + ICONS.info + '</span></button>' +
-      '</div>';
-    // 使用日期
+      '<div class="ord-pspecs">' +
+        '<div class="ord-pline"><span class="ic">' + ICONS.file + '</span>' + ordProdSpec(p) + '</div>' +
+        '<div class="ord-pline"><span class="ic">' + ICONS.locGrey + '</span><span class="u">' + ordDestLine() + '</span></div>' +
+      '</div>' +
+      '<div class="ord-hr"></div>' +
+      '<div class="ord-price-block">' +
+        '<div class="ord-price"><span class="cur">NT$</span><span class="num">' + p.now.toLocaleString() + '</span></div>' +
+        '<button class="ord-cancel" id="ordCancelInfo">2025/12/16 前可免费取消 <span class="ic">' + ICONS.info + '</span></button>' +
+      '</div></div>';
     if (req.date) {
-      h += '<div class="ord-card"><div class="ord-sec-h"><div class="t">使用日期</div></div><div class="ord-date-chips" id="ordDateChips"></div></div>';
+      w += '<div class="ord-date-sec"><div class="ord-sec-h"><div class="t">使用日期</div></div>' +
+        '<div class="ord-date-wrap" style="margin-top:16px"><div class="ord-date-chips" id="ordDateChips"></div>' +
+        '<button class="ord-dmore" id="ordDateMore"><span class="ic">' + ICONS.calendar + '</span><span class="w">更多</span></button></div></div>' +
+        '<div class="ord-hr"></div>';
     }
-    // 购买数量
-    h += '<div class="ord-card"><div class="qty-row"><div class="t">购买数量</div><div class="qty-ctl">' +
+    w += '<div class="qty-row"><div class="t">购买数量</div><div class="qty-ctl">' +
       '<button class="qty-btn qminus" id="qtyMinus"' + (st.qty <= 1 ? ' disabled' : '') + '></button>' +
       '<span class="qty-n" id="qtyN">' + st.qty + '</span>' +
-      '<button class="qty-btn qplus" id="qtyPlus"></button></div></div></div>';
-    // 航班信息
+      '<button class="qty-btn qplus" id="qtyPlus"></button></div></div>';
+
+    // ── 独立圆角卡区：[航班][设备][联系人] 订购人 备注 ──
+    var c = '';
     if (req.flight) {
-      h += '<div class="ord-card"><div class="ord-sec-h"><div class="t">航班信息</div>' +
+      c += '<div class="ord-card"><div class="ord-sec-h"><div class="t">航班信息</div>' +
         '<button class="ord-edit' + (st.flight ? '' : ' empty') + '" id="ordFlightEdit">' + (st.flight ? '' : '请填写') + '<span class="ic">' + ICONS.pencil + '</span></button></div>' +
         (st.flight ? flightKvHtml(st.flight) : '') + '</div>';
     }
-    // 设备信息
     if (req.device) {
-      h += '<div class="ord-card"><div class="ord-sec-h"><div class="t">设备信息</div>' +
+      c += '<div class="ord-card"><div class="ord-sec-h"><div class="t">设备信息</div>' +
         '<button class="ord-edit' + (st.device ? '' : ' empty') + '" id="ordDeviceEdit">' + (st.device ? '' : '请填写') + '<span class="ic">' + ICONS.pencil + '</span></button></div>' +
         (st.device ? '<div class="ord-kv"><div><div class="k">手机型号</div><div class="v">' + st.device.model + '</div></div><div><div class="k">EID / IMEI</div><div class="v">' + st.device.imid + '</div></div></div>' : '') + '</div>';
     }
-    // 联系人
     if (req.contacts) {
-      h += '<div class="ord-card"><div class="ord-sec-h"><div class="t">选择 <span class="cnt">1</span> 位联系人<span class="hint">已选择</span></div></div>' +
+      c += '<div class="ord-card"><div class="ord-sec-h"><div class="t">选择 <span class="cnt">1</span> 位联系人<span class="hint">已选择</span></div></div>' +
         '<div class="ct-chips" id="ctChips"></div><div id="ctCards"></div></div>';
     }
-    // 订购人资料
     var o = st.orderer;
-    h += '<div class="ord-card"><div class="ord-sec-h"><div class="t">订购人资料</div><button class="ord-edit" id="ordOrdererEdit"><span class="ic">' + ICONS.pencil + '</span></button></div>' +
-      '<div class="ord-info-line"><span class="ic">' + ICONS.user + '</span>' + o.last + o.first + '</div>' +
-      '<div class="ord-info-line"><span class="ic">' + ICONS.globe2 + '</span>' + o.nation + '</div>' +
-      '<div class="ord-info-line"><span class="ic">' + ICONS.mail + '</span>' + o.email + '</div>' +
-      '<div class="ord-info-line"><span class="ic">' + ICONS.phone + '</span>' + o.cc + ' ' + o.phone + '</div>' +
-      '</div>';
-    // 备注
-    h += '<div class="ord-card"><button class="ord-row-link" id="ordRemarkRow"><div class="t">备注</div><div class="r' + (st.remark ? ' filled' : '') + '">' + (st.remark || '无备注') + '<span class="ic">' + ICONS.chevGrey + '</span></div></button></div>';
+    c += '<div class="ord-card"><div class="ord-sec-h"><div class="t">订购人资料</div><button class="ord-edit" id="ordOrdererEdit"><span class="ic">' + ICONS.pencil + '</span></button></div>' +
+      '<div class="ord-info">' +
+        '<div class="ord-info-line"><span class="ic">' + ICONS.user + '</span>' + o.last + o.first + '</div>' +
+        '<div class="ord-info-line"><span class="ic">' + ICONS.globe2 + '</span>' + o.nation + '</div>' +
+        '<div class="ord-info-line"><span class="ic">' + ICONS.mail + '</span>' + o.email + '</div>' +
+        '<div class="ord-info-line"><span class="ic">' + ICONS.phone + '</span>' + o.cc + ' ' + o.phone + '</div>' +
+      '</div></div>';
+    c += '<div class="ord-card"><button class="ord-row-link" id="ordRemarkRow"><div class="t">备注</div><div class="r' + (st.remark ? ' filled' : '') + '"><span class="lbl">' + (st.remark || '无备注') + '</span><span class="ic">' + ICONS.chevGrey + '</span></div></button></div>';
 
-    document.getElementById('ordBody').innerHTML = h;
+    document.getElementById('ordBody').innerHTML = '<div class="ord-wsec">' + w + '</div><div class="ord-cards">' + c + '</div>';
     document.getElementById('ordFootAmt').textContent = ordTotal().toLocaleString();
 
     // 绑定
@@ -4362,6 +4378,7 @@
     if (byId('ordFlightEdit')) byId('ordFlightEdit').onclick = openFlight;
     if (byId('ordDeviceEdit')) byId('ordDeviceEdit').onclick = openDevice;
     if (byId('ordRemarkRow')) byId('ordRemarkRow').onclick = openRemark;
+    if (byId('ordDateMore')) byId('ordDateMore').onclick = function () { dateReturn = 'orderUse'; openDateSheet(); };
     if (req.date) renderOrdDateChips();
     if (req.contacts) renderContacts();
   }
@@ -4384,9 +4401,6 @@
       c.onclick = function () { orderState.useDate = d; renderOrder(); };
       box.appendChild(c);
     });
-    var more = el('<button class="ord-dchip more"><span class="ic">' + ICONS.calendar + '</span><div class="w">更多</div></button>');
-    more.onclick = function () { dateReturn = 'orderUse'; openDateSheet(); };
-    box.appendChild(more);
   }
   function renderContacts() {
     var chips = document.getElementById('ctChips'), cards = document.getElementById('ctCards');
@@ -4558,14 +4572,16 @@
   }
   function renderPay() {
     var p = orderP, st = orderState, ps = payState, h = '';
-    // 商品摘要
-    h += '<div class="ord-card ord-prod">' +
-      '<div class="ord-ptitle">' + p.title + '</div>' +
-      '<div class="ord-pline"><span class="ic ic-16">' + ICONS.file + '</span>' + ordProdSpec(p) + '</div>' +
-      '<div class="ord-pline"><span class="ic ic-16">' + ICONS.locGrey + '</span>' + ordDestLine() + '</div>' +
-      (st.useDate ? '<div class="ord-pline"><span class="ic ic-16">' + ICONS.calendar + '</span>' + st.useDate.y + '-' + ('0' + st.useDate.m).slice(-2) + '-' + ('0' + st.useDate.d).slice(-2) + '</div>' : '') +
-      '<div class="ord-pline"><span class="ic ic-16">' + ICONS.file + '</span>eSIM X' + st.qty + '</div>' +
-      '<button class="ord-cancel" id="payCancelInfo">2025/12/16 前可免费取消 <span class="ic">' + ICONS.info + '</span></button>' +
+    // 商品摘要（普通圆角卡）
+    h += '<div class="ord-card">' +
+      '<div class="ord-ptitle" style="margin-bottom:12px">' + p.title + '</div>' +
+      '<div class="ord-pspecs">' +
+        '<div class="ord-pline"><span class="ic">' + ICONS.file + '</span>' + ordProdSpec(p) + '</div>' +
+        '<div class="ord-pline"><span class="ic">' + ICONS.locGrey + '</span>' + ordDestLine() + '</div>' +
+        (st.useDate ? '<div class="ord-pline"><span class="ic">' + ICONS.calendar + '</span>' + st.useDate.y + '-' + ('0' + st.useDate.m).slice(-2) + '-' + ('0' + st.useDate.d).slice(-2) + '</div>' : '') +
+        '<div class="ord-pline"><span class="ic">' + ICONS.file + '</span>eSIM X' + st.qty + '</div>' +
+      '</div>' +
+      '<button class="ord-cancel" id="payCancelInfo" style="margin-top:12px">2025/12/16 前可免费取消 <span class="ic">' + ICONS.info + '</span></button>' +
       '</div>';
     // 折扣与点数
     h += '<div class="ord-card"><div class="ord-sec-h"><div class="t">折扣与点数</div></div>' +
@@ -4587,7 +4603,7 @@
     h += '<div class="ord-card"><div class="ord-sec-h"><div class="t">确认</div></div>' +
       '<div class="pay-check' + (ps.agree ? ' on' : '') + '" id="payAgree"><span class="box"></span><span class="txt">我已阅读并同意 <a>利用规约</a>、<a>隐私政策</a>、<a>个人信息处理同意书</a>（必须）</span></div>' +
       '</div>';
-    document.getElementById('payBody').innerHTML = h;
+    document.getElementById('payBody').innerHTML = '<div class="ord-cards">' + h + '</div>';
     document.getElementById('payFootAmt').textContent = ordTotal().toLocaleString();
     var byId = function (id) { return document.getElementById(id); };
     byId('payCancelInfo').onclick = function () { openSheet(byId('cancelSheet')); };
