@@ -158,6 +158,7 @@ subs = {
     "{{IC_share}}":        strip_wh(GUIDE_SHARE),
     "{{IC_other}}":        strip_wh(GUIDE_OTHER),
     "{{IC_file}}":         inline_svg_to_img(DET_FILE),
+    "{{IC_fileDark}}":     inline_svg_to_img(DET_FILE.replace('#13A3B6', '#212121')),  # 订单页套餐规格行（深色 #212121）
     "{{IC_spark}}":        inline_svg_to_img(DET_SPARK),
     "{{IC_smile}}":        inline_svg_to_img(DET_SMILE),
     "{{IC_neutral}}":      inline_svg_to_img(DET_NEUTRAL),
