@@ -1167,17 +1167,14 @@
   .ord-info { display: flex; flex-direction: column; gap: 4px; }
   .ord-info-line { display: flex; align-items: center; gap: 8px; color: #212121; font-size: 14px; line-height: 20px; }
   .ord-info-line .ic { width: 16px; height: 16px; flex: 0 0 auto; }
-  /* 联系人 chips（横向滚动 + 右侧展开按钮固定，左沿阴影） */
-  .ct-row { display: flex; align-items: stretch; }
-  .ct-chips { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; flex: 1 1 0; min-width: 0; padding: 2px 0; }
-  .ct-chips.expanded { flex-wrap: wrap; overflow-x: visible; }  /* 展开：换行显示全部联系人 */
-  .ct-chips::-webkit-scrollbar { display: none; }
+  /* 联系人 chips（flex-wrap；末尾展开/收合 chip 内联，非横向滚动） */
+  .ct-chips { display: flex; flex-wrap: wrap; gap: 8px; padding: 2px 0; }
   .ct-chip { flex: 0 0 auto; max-width: 120px; padding: 6px 8px; border-radius: 8px; background: #fff; border: 1px solid #D5D6DB; font-size: 14px; line-height: 20px; font-weight: 600; color: #212121; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .ct-chip.sel { background: #F0FAFB; border-color: #26BEC9; color: #26BEC9; }
   .ct-chip.add { display: inline-flex; align-items: center; gap: 4px; border-color: #727272; padding: 6px 12px 6px 8px; color: #212121; }
   .ct-chip.add .ic { width: 16px; height: 16px; }
-  .ct-expand { flex: 0 0 auto; display: flex; align-items: center; justify-content: center; padding: 0 12px; background: #fff; box-shadow: -6px 0 8px -4px rgba(38,50,56,.12); }
-  .ct-expand .ic { width: 16px; height: 16px; }
+  .ct-chip.arrow { display: inline-flex; align-items: center; justify-content: center; padding: 6px 8px; }
+  .ct-chip.arrow .ic { width: 20px; height: 20px; }
   /* 已选联系人卡：头部 #F7FAFC + 名字/编辑/删除，主体 kv */
   .ct-card { border-radius: 8px; overflow: hidden; margin-top: 12px; }
   .ct-card-h { display: flex; align-items: center; background: #F7FAFC; border: 1px solid var(--kk-border-lighter); border-bottom: 0; border-radius: 8px 8px 0 0; }
@@ -4447,7 +4444,7 @@
     if (req.contacts) {
       var hasCt = st.contacts.length > 0;
       c += '<div class="ord-card"><div class="ord-sec-h"><div class="t">选择 <span class="cnt">1</span> 位联系人' + (hasCt ? '<span class="hint">已选择</span>' : '') + '</div></div>' +
-        '<div class="ct-row"><div class="ct-chips' + (st.ctExpanded ? ' expanded' : '') + '" id="ctChips"></div><button class="ct-expand" id="ctExpand"><span class="ic ic-16' + (st.ctExpanded ? ' rot180' : '') + '">' + ICONS.arrowDownSm + '</span></button></div><div id="ctCards"></div></div>';
+        '<div class="ct-chips" id="ctChips"></div><div id="ctCards"></div></div>';
     }
     var o = st.orderer;
     c += '<div class="ord-card"><div class="ord-sec-h"><div class="t">订购人资料</div><button class="ord-edit" id="ordOrdererEdit"><span class="ic">' + ICONS.editLine + '</span></button></div>' +
@@ -4474,7 +4471,6 @@
     if (byId('ordDeviceEdit')) byId('ordDeviceEdit').onclick = openDevice;
     if (byId('ordRemarkRow')) byId('ordRemarkRow').onclick = openRemark;
     if (byId('ordDateMore')) byId('ordDateMore').onclick = function () { dateReturn = 'orderUse'; openDateSheet(); };
-    if (byId('ctExpand')) byId('ctExpand').onclick = function () { st.ctExpanded = !st.ctExpanded; renderOrder(); };
     if (req.date) renderOrdDateChips();
     if (req.contacts) renderContacts();
   }
@@ -4514,7 +4510,16 @@
     var chips = document.getElementById('ctChips'), cards = document.getElementById('ctCards');
     if (!chips) return;
     chips.innerHTML = ''; cards.innerHTML = '';
-    ORD_CONTACTS.forEach(function (c, i) {
+    var expanded = orderState.ctExpanded;
+    // 收合＝只显示 1 行（前 4 个，含已选）；展开＝全部换行 + 新增旅客
+    var idxs = ORD_CONTACTS.map(function (_, i) { return i; });
+    if (!expanded) {
+      var first = idxs.slice(0, 4);
+      orderState.contacts.forEach(function (i) { if (first.indexOf(i) < 0) first.unshift(i); });
+      idxs = first.slice(0, 4);
+    }
+    idxs.forEach(function (i) {
+      var c = ORD_CONTACTS[i];
       var chip = el('<button class="ct-chip">' + c.last + c.first + '</button>');
       if (orderState.contacts.indexOf(i) >= 0) chip.classList.add('sel');
       chip.onclick = function () {  // 只能选一位：点击即单选（再点取消）
@@ -4523,9 +4528,15 @@
       };
       chips.appendChild(chip);
     });
-    var add = el('<button class="ct-chip add"><span class="ic">' + ICONS.plus + '</span>新增旅客</button>');
-    add.onclick = function () { editContactIdx = null; openContact(); };
-    chips.appendChild(add);
+    if (expanded) {  // 新增旅客 chip 只在展开态出现
+      var add = el('<button class="ct-chip add"><span class="ic">' + ICONS.plus + '</span>新增旅客</button>');
+      add.onclick = function () { editContactIdx = null; openContact(); };
+      chips.appendChild(add);
+    }
+    // 展开/收合 chip（末尾，箭头 ▾/▲）
+    var arrow = el('<button class="ct-chip arrow"><span class="ic ic-20' + (expanded ? ' rot180' : '') + '">' + ICONS.arrowDownSm + '</span></button>');
+    arrow.onclick = function () { orderState.ctExpanded = !orderState.ctExpanded; renderOrder(); };
+    chips.appendChild(arrow);
     orderState.contacts.forEach(function (i) {
       var c = ORD_CONTACTS[i];
       var card = el('<div class="ct-card">' +
