@@ -1148,9 +1148,8 @@
   .ord-dchip { flex: 0 0 auto; padding: 8px 12px; border-radius: 8px; background: #fff; border: 1px solid #D5D6DB; display: flex; flex-direction: column; align-items: center; gap: 2px; }
   .ord-dchip .d { font-size: 14px; line-height: 20px; font-weight: 600; color: #212121; }
   .ord-dchip .w { font-size: 12px; line-height: 16px; color: #727272; }
-  .ord-dchip.sel { border-color: #26BEC9; }
-  .ord-dchip.sel .d { color: #13A3B6; }
-  .ord-dmore { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 8px 12px; background: #fff; box-shadow: 0 1px 2px rgba(38,50,56,.12); }
+  .ord-dchip.sel { border-color: #26BEC9; background: #F0FAFB; }
+  .ord-dmore { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 8px 12px; background: #fff; box-shadow: -6px 0 8px -4px rgba(38,50,56,.12); }
   .ord-dmore .ic { width: 16px; height: 16px; }
   .ord-dmore .w { font-size: 12px; line-height: 16px; color: #212121; }
   /* 数量步进器（Figma stepper：32 圆，minus 边 #ADE6EB / plus 边 #26BEC9，gap4） */
@@ -1160,8 +1159,8 @@
   .qty-btn { width: 32px; height: 32px; border-radius: 20px; border: 1px solid #26BEC9; position: relative; background: #fff; flex: 0 0 auto; }
   .qty-btn::before { content: ''; position: absolute; left: 50%; top: 50%; width: 11px; height: 1.8px; background: #26BEC9; transform: translate(-50%, -50%); border-radius: 1px; }
   .qty-btn.qplus::after { content: ''; position: absolute; left: 50%; top: 50%; width: 1.8px; height: 11px; background: #26BEC9; transform: translate(-50%, -50%); border-radius: 1px; }
-  .qty-btn.qminus:disabled { border-color: #ADE6EB; }
-  .qty-btn.qminus:disabled::before { background: #ADE6EB; }
+  .qty-btn:disabled { border-color: #ADE6EB; }
+  .qty-btn:disabled::before, .qty-btn:disabled::after { background: #ADE6EB; }
   .qty-n { width: 40px; text-align: center; font-size: 16px; line-height: 24px; color: #212121; }
   /* 已填资料网格（航班/设备）：k=12 #9C9DA0 / v=14 #212121 */
   .ord-kv { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; }
@@ -1171,30 +1170,44 @@
   .ord-info { display: flex; flex-direction: column; gap: 4px; }
   .ord-info-line { display: flex; align-items: center; gap: 8px; color: #212121; font-size: 14px; line-height: 20px; }
   .ord-info-line .ic { width: 16px; height: 16px; flex: 0 0 auto; }
-  /* 联系人 chips */
-  .ct-chips { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
+  /* 联系人 chips（横向滚动 + 右侧展开按钮固定，左沿阴影） */
+  .ct-row { display: flex; align-items: stretch; }
+  .ct-chips { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; flex: 1 1 0; min-width: 0; padding: 2px 0; }
   .ct-chips::-webkit-scrollbar { display: none; }
-  .ct-chip { flex: 0 0 auto; padding: 6px 14px; border-radius: 999px; background: #F1F4F8; border: 1px solid transparent; font-size: 14px; line-height: 20px; color: #212121; }
-  .ct-chip.sel { background: var(--kk-primary-lighter); border-color: var(--kk-primary-medium); color: #13A3B6; }
-  .ct-chip.add { display: inline-flex; align-items: center; }
-  .ct-card { border: 1px solid var(--kk-border-lighter); border-radius: 8px; padding: 12px; margin-top: 12px; }
-  .ct-card-h { display: flex; align-items: center; gap: 8px; }
-  .ct-card-h .nm { font-weight: 600; color: #212121; font-size: 14px; flex: 1 1 auto; }
+  .ct-chip { flex: 0 0 auto; max-width: 120px; padding: 6px 8px; border-radius: 8px; background: #fff; border: 1px solid #D5D6DB; font-size: 14px; line-height: 20px; font-weight: 600; color: #212121; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ct-chip.sel { background: #F0FAFB; border-color: #26BEC9; color: #26BEC9; }
+  .ct-chip.add { display: inline-flex; align-items: center; gap: 4px; border-color: #727272; padding: 6px 12px 6px 8px; color: #212121; }
+  .ct-chip.add .ic { width: 16px; height: 16px; }
+  .ct-expand { flex: 0 0 auto; display: flex; align-items: center; justify-content: center; padding: 0 12px; background: #fff; box-shadow: -6px 0 8px -4px rgba(38,50,56,.12); }
+  .ct-expand .ic { width: 16px; height: 16px; }
+  /* 已选联系人卡：头部 #F7FAFC + 名字/编辑/删除，主体 kv */
+  .ct-card { border-radius: 8px; overflow: hidden; margin-top: 12px; }
+  .ct-card-h { display: flex; align-items: center; background: #F7FAFC; border: 1px solid var(--kk-border-lighter); border-bottom: 0; border-radius: 8px 8px 0 0; }
+  .ct-card-h .nm { flex: 1 1 auto; min-width: 0; padding: 12px; display: flex; align-items: center; gap: 8px; font-weight: 600; color: #212121; font-size: 14px; line-height: 20px; }
+  .ct-card-h .nm .sep { width: 1px; height: 14px; background: var(--kk-border-light); }
+  .ct-card-h .act { display: flex; align-items: center; }
+  .ct-card-h .act button { padding: 12px; }
   .ct-card-h .ic { width: 20px; height: 20px; }
   .ct-card-h .x { color: var(--kk-text-medium); }
-  .ct-card-kv { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 16px; margin-top: 10px; }
+  .ct-card-body { background: #fff; border: 1px solid var(--kk-border-lighter); border-radius: 0 0 8px 8px; padding: 12px; }
+  .ct-card-kv { display: grid; grid-template-columns: 1fr 1fr; gap: 2px 12px; }
   .ct-card-kv .k { font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
-  .ct-card-kv .v { font-size: 13px; line-height: 18px; color: #212121; }
+  .ct-card-kv .v { font-size: 14px; line-height: 20px; font-weight: 600; color: #212121; }
   /* 备注行（备注＝Body-lg Regular 16，非 semibold） */
   .ord-row-link { display: flex; align-items: center; gap: 8px; width: 100%; }
   .ord-row-link .t { flex: 1 1 0; font-size: 16px; line-height: 24px; font-weight: 400; color: #212121; }
   .ord-row-link .r { flex: 1 1 0; min-width: 0; display: inline-flex; align-items: center; justify-content: flex-end; gap: 6px; color: #9C9DA0; font-size: 14px; line-height: 20px; text-align: right; }
   .ord-row-link .r .lbl { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .ord-row-link .r.filled { color: #727272; }
+  .ord-row-link .r.filled { color: #212121; }
   .ord-row-link .r .ic { width: 20px; height: 20px; flex: 0 0 auto; }
   /* 底部栏 */
-  .ord-foot { flex: 0 0 auto; background: #fff; border-top: 1px solid var(--kk-border-lighter); display: flex; align-items: center; gap: 12px; padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px)); }
-  .ord-foot { box-shadow: 0 -4px 12px rgba(38,50,56,.12); }
+  .ord-foot { flex: 0 0 auto; background: #fff; border-top: 1px solid var(--kk-border-lighter); display: flex; align-items: center; gap: 12px; padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px)); position: relative; }
+  /* 费用明细：在 footer 上方原地展开的面板 */
+  .ord-price-panel { position: absolute; left: 0; right: 0; bottom: 100%; background: #fff; border-top: 1px solid var(--kk-border-lighter); box-shadow: 0 -8px 16px -8px rgba(38,50,56,.12); padding: 12px 16px; display: none; }
+  .ord-price-panel.open { display: block; }
+  .ord-price-panel .price-line { display: flex; align-items: center; justify-content: space-between; font-size: 14px; line-height: 20px; color: #212121; padding: 4px 0; }
+  .ord-price-panel .price-line .k { color: #727272; }
+  .ord-price-toggle.open .caret { transform: rotate(0); }
   .ord-price-toggle { display: flex; align-items: center; gap: 2px; flex: 1 1 auto; }
   .ord-price-toggle .cur, .ord-price-toggle .amt { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 20px; line-height: 20px; font-weight: 700; color: #212121; }
   .ord-price-toggle .caret { width: 20px; height: 20px; transform: rotate(180deg); }
@@ -2155,6 +2168,7 @@
       <span class="claim">领取<span class="car"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjkuMzMzMzMiIGhlaWdodD0iNS4zMzMzMyIgdmlld0JveD0iMCAwIDkuMzMzMzMgNS4zMzMzMyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciAoU3Ryb2tlKSIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik00LjE5NTI2IDAuMTk1MjYyQzQuNDU1NjEgLTAuMDY1MDg3NCA0Ljg3NzcyIC0wLjA2NTA4NzQgNS4xMzgwNyAwLjE5NTI2Mkw5LjEzODA3IDQuMTk1MjZDOS4zOTg0MiA0LjQ1NTYxIDkuMzk4NDIgNC44Nzc3MiA5LjEzODA3IDUuMTM4MDdDOC44Nzc3MiA1LjM5ODQyIDguNDU1NjEgNS4zOTg0MiA4LjE5NTI2IDUuMTM4MDdMNC42NjY2NyAxLjYwOTQ4TDEuMTM4MDcgNS4xMzgwN0MwLjg3NzcyMiA1LjM5ODQyIDAuNDU1NjEyIDUuMzk4NDIgMC4xOTUyNjIgNS4xMzgwN0MtMC4wNjUwODc0IDQuODc3NzIgLTAuMDY1MDg3NCA0LjQ1NTYxIDAuMTk1MjYyIDQuMTk1MjZMNC4xOTUyNiAwLjE5NTI2MloiIGZpbGw9IiNFNjVGNTAiLz4KPC9zdmc+" width="9.33" height="5.33"></span></span>
     </button>
     <div class="ord-foot">
+      <div class="ord-price-panel" id="ordPricePanel"></div>
       <button class="ord-price-toggle" id="ordPriceToggle"><span class="cur">NT$</span><span class="amt" id="ordFootAmt">0</span><span class="ic ic-16 caret"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE0LjE2NjciIGhlaWdodD0iNy45MTY2NyIgdmlld0JveD0iMCAwIDE0LjE2NjcgNy45MTY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0wLjI0NDA3OCAwLjI0NDA3OEMwLjU2OTUxNSAtMC4wODEzNTkyIDEuMDk3MTUgLTAuMDgxMzU5MiAxLjQyMjU5IDAuMjQ0MDc4TDcuMDgzMzMgNS45MDQ4MkwxMi43NDQxIDAuMjQ0MDc4QzEzLjA2OTUgLTAuMDgxMzU5MiAxMy41OTcyIC0wLjA4MTM1OTIgMTMuOTIyNiAwLjI0NDA3OEMxNC4yNDggMC41Njk1MTUgMTQuMjQ4IDEuMDk3MTUgMTMuOTIyNiAxLjQyMjU5TDcuNjcyNTkgNy42NzI1OUM3LjM0NzE1IDcuOTk4MDMgNi44MTk1MSA3Ljk5ODAzIDYuNDk0MDggNy42NzI1OUwwLjI0NDA3OCAxLjQyMjU5Qy0wLjA4MTM1OTIgMS4wOTcxNSAtMC4wODEzNTkyIDAuNTY5NTE1IDAuMjQ0MDc4IDAuMjQ0MDc4WiIgZmlsbD0iIzIxMjEyMSIvPgo8L3N2Zz4=" width="14.17" height="7.92"></span></button>
       <button class="cta ord-next" id="ordNext">下一步</button>
     </div>
@@ -2172,6 +2186,7 @@
     <div class="ord-body" id="payBody"></div>
     <div class="pay-foot-note"><span class="ic"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE5LjUiIGhlaWdodD0iMTkuNSIgdmlld0JveD0iMCAwIDE5LjUgMTkuNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZD0iTTkuNzUgMEM3LjgyMTY0IDAgNS45MzY1NyAwLjU3MTgyOCA0LjMzMzE5IDEuNjQzMTdDMi43Mjk4MiAyLjcxNDUyIDEuNDgwMTMgNC4yMzcyNiAwLjc0MjE3OSA2LjAxODg0QzAuMDA0MjI0NDkgNy44MDA0MiAtMC4xODg4NTggOS43NjA4MiAwLjE4NzM0OCAxMS42NTIxQzAuNTYzNTU0IDEzLjU0MzQgMS40OTIxNSAxNS4yODA3IDIuODU1NzEgMTYuNjQ0M0M0LjIxOTI4IDE4LjAwNzkgNS45NTY1NiAxOC45MzY1IDcuODQ3ODcgMTkuMzEyN0M5LjczOTE5IDE5LjY4ODkgMTEuNjk5NiAxOS40OTU4IDEzLjQ4MTIgMTguNzU3OEMxNS4yNjI3IDE4LjAxOTkgMTYuNzg1NSAxNi43NzAyIDE3Ljg1NjggMTUuMTY2OEMxOC45MjgyIDEzLjU2MzQgMTkuNSAxMS42Nzg0IDE5LjUgOS43NUMxOS40OTcgNy4xNjUwNiAxOC40Njg4IDQuNjg2ODQgMTYuNjQxIDIuODU5MDFDMTQuODEzMiAxLjAzMTE4IDEyLjMzNDkgMC4wMDI5ODc2MyA5Ljc1IDBWMFpNMTQuMzkzNiA4LjA0MjcyTDguODkzMDcgMTMuMjkyN0M4Ljc1MzIyIDEzLjQyNTggOC41Njc1NiAxMy41IDguMzc0NTIgMTMuNUM4LjE4MTQ3IDEzLjUgNy45OTU4MiAxMy40MjU4IDcuODU1OTYgMTMuMjkyN0w1LjEwNjQ1IDEwLjY2NzdDNC45NjI4IDEwLjUzMDEgNC44Nzk2NSAxMC4zNDExIDQuODc1MjQgMTAuMTQyM0M0Ljg3MDg0IDkuOTQzNDEgNC45NDU1NSA5Ljc1MDkyIDUuMDgyOTcgOS42MDcxQzUuMjIwMzggOS40NjMyOCA1LjQwOTI3IDkuMzc5ODkgNS42MDgxMyA5LjM3NTIzQzUuODA2OTkgOS4zNzA1OCA1Ljk5OTU2IDkuNDQ1MDQgNi4xNDM1NiA5LjU4MjI4TDguMzc0NTIgMTEuNzEyOUwxMy4zNTY0IDYuOTU3MjhDMTMuNTAwNCA2LjgyMDA0IDEzLjY5MyA2Ljc0NTU4IDEzLjg5MTkgNi43NTAyM0MxNC4wOTA3IDYuNzU0ODkgMTQuMjc5NiA2LjgzODI4IDE0LjQxNyA2Ljk4MjFDMTQuNTU0NSA3LjEyNTkyIDE0LjYyOTIgNy4zMTg0MSAxNC42MjQ4IDcuNTE3MjdDMTQuNjIwNCA3LjcxNjE0IDE0LjUzNzIgNy45MDUxMyAxNC4zOTM2IDguMDQyNzJWOC4wNDI3MloiIGZpbGw9IiMyNkJFQzkiLz4KPC9zdmc+" width="19.50" height="19.50"></span>别担心，下订后还可免费取消</div>
     <div class="ord-foot">
+      <div class="ord-price-panel" id="payPricePanel"></div>
       <div class="ord-foot-col">
         <button class="ord-price-toggle" id="payPriceToggle"><span class="cur">NT$</span><span class="amt" id="payFootAmt">0</span><span class="ic ic-16 caret"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE0LjE2NjciIGhlaWdodD0iNy45MTY2NyIgdmlld0JveD0iMCAwIDE0LjE2NjcgNy45MTY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0wLjI0NDA3OCAwLjI0NDA3OEMwLjU2OTUxNSAtMC4wODEzNTkyIDEuMDk3MTUgLTAuMDgxMzU5MiAxLjQyMjU5IDAuMjQ0MDc4TDcuMDgzMzMgNS45MDQ4MkwxMi43NDQxIDAuMjQ0MDc4QzEzLjA2OTUgLTAuMDgxMzU5MiAxMy41OTcyIC0wLjA4MTM1OTIgMTMuOTIyNiAwLjI0NDA3OEMxNC4yNDggMC41Njk1MTUgMTQuMjQ4IDEuMDk3MTUgMTMuOTIyNiAxLjQyMjU5TDcuNjcyNTkgNy42NzI1OUM3LjM0NzE1IDcuOTk4MDMgNi44MTk1MSA3Ljk5ODAzIDYuNDk0MDggNy42NzI1OUwwLjI0NDA3OCAxLjQyMjU5Qy0wLjA4MTM1OTIgMS4wOTcxNSAtMC4wODEzNTkyIDAuNTY5NTE1IDAuMjQ0MDc4IDAuMjQ0MDc4WiIgZmlsbD0iIzIxMjEyMSIvPgo8L3N2Zz4=" width="14.17" height="7.92"></span></button>
         <div class="pay-foot-pts"><span class="ic"><svg style="display: block;" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"> <g id="Vector"> <path fill-rule="evenodd" clip-rule="evenodd" d="M7.99997 0C12.4153 0 16 3.58467 16 8.00003C16 12.4153 12.4153 16 7.99997 16C3.58467 16 0 12.4153 0 8.00003C0 3.58467 3.58467 0 7.99997 0Z" fill="#FFB400"/> <path fill-rule="evenodd" clip-rule="evenodd" d="M8.00575 1.74151C7.89295 1.74151 7.80149 1.65013 7.80149 1.53742C7.80149 1.42471 7.89295 1.33333 8.00575 1.33333C8.24108 1.33333 8.47495 1.34554 8.70674 1.36978C8.81893 1.38152 8.90036 1.48189 8.88863 1.594C8.8769 1.70609 8.77642 1.78745 8.66424 1.77573C8.44653 1.75297 8.22687 1.74151 8.00575 1.74151ZM9.44668 1.90816C9.3369 1.8823 9.26885 1.7724 9.29476 1.66268C9.32064 1.55298 9.43063 1.48502 9.54042 1.51088C9.76896 1.56473 9.99404 1.63056 10.2148 1.70805C10.3213 1.74538 10.3773 1.86187 10.3399 1.96821C10.3025 2.07458 10.1859 2.13051 10.0795 2.09315C9.87229 2.02044 9.66111 1.95868 9.44668 1.90816ZM10.8099 2.40307C10.7091 2.35249 10.6684 2.22985 10.7191 2.12911C10.7697 2.02838 10.8924 1.98773 10.9932 2.03828C11.2026 2.14331 11.4063 2.25932 11.6034 2.38572C11.6983 2.44662 11.7259 2.57288 11.6649 2.66772C11.604 2.76257 11.4776 2.79011 11.3827 2.72923C11.1977 2.61054 11.0065 2.50164 10.8099 2.40307ZM12.0318 3.20687C11.9455 3.13436 11.9343 3.00563 12.0068 2.91935C12.0794 2.83306 12.2083 2.82188 12.2946 2.8944C12.4739 3.04494 12.6453 3.20482 12.8079 3.37326C12.8862 3.45437 12.8839 3.58358 12.8027 3.66181C12.7215 3.74007 12.5922 3.73774 12.5139 3.65664C12.3611 3.49841 12.2002 3.34829 12.0318 3.20687ZM13.0207 4.25126C12.953 4.16108 12.9713 4.03315 13.0615 3.96555C13.1518 3.89793 13.2798 3.91622 13.3475 4.00641C13.488 4.19368 13.6186 4.38821 13.7387 4.58917C13.7966 4.68595 13.765 4.81123 13.6681 4.86901C13.5712 4.92679 13.4458 4.89518 13.388 4.79843C13.2752 4.60976 13.1526 4.42712 13.0207 4.25126ZM13.7543 5.5118C13.7094 5.40841 13.7569 5.28819 13.8603 5.2433C13.9638 5.19841 14.0841 5.24581 14.1291 5.34919C14.2223 5.56377 14.3042 5.78328 14.3744 6.00694C14.4081 6.1145 14.3482 6.229 14.2405 6.26271C14.1329 6.29639 14.0183 6.23654 13.9845 6.12898C13.9187 5.91912 13.8419 5.71315 13.7543 5.5118ZM14.1757 6.91466C14.1562 6.80363 14.2305 6.69786 14.3417 6.67843C14.4528 6.65897 14.5586 6.73322 14.5781 6.84422C14.6184 7.074 14.6466 7.30642 14.6626 7.54086C14.6703 7.65331 14.5853 7.75069 14.4727 7.75834C14.3602 7.76603 14.2627 7.68108 14.255 7.56862C14.24 7.34849 14.2135 7.1303 14.1757 6.91466ZM14.2585 8.37738C14.2652 8.26486 14.3619 8.17906 14.4745 8.18578C14.5871 8.19246 14.673 8.28913 14.6663 8.40164C14.6523 8.63617 14.6261 8.86876 14.5879 9.09876C14.5694 9.20997 14.4642 9.28513 14.3529 9.26664C14.2416 9.24817 14.1664 9.14306 14.1849 9.03188C14.2208 8.81596 14.2454 8.59759 14.2585 8.37738ZM14.0043 9.80718C14.0368 9.69928 14.1508 9.63817 14.2588 9.67069C14.3668 9.70323 14.4279 9.81708 14.3954 9.92501C14.3276 10.1495 14.2481 10.3699 14.1571 10.5855C14.1133 10.6894 13.9935 10.7381 13.8895 10.6943C13.7856 10.6505 13.7368 10.5308 13.7807 10.427C13.866 10.2247 13.9407 10.0178 14.0043 9.80718ZM13.4266 11.1364C13.4832 11.0389 13.6082 11.0058 13.7058 11.0624C13.8033 11.119 13.8365 11.2439 13.7798 11.3413C13.6622 11.5437 13.534 11.7397 13.3957 11.9287C13.3292 12.0197 13.2014 12.0395 13.1103 11.973C13.0192 11.9065 12.9994 11.7788 13.066 11.6878C13.1958 11.5104 13.3161 11.3263 13.4266 11.1364ZM12.5471 12.3089C12.6248 12.2272 12.7541 12.2239 12.8359 12.3015C12.9176 12.3791 12.921 12.5083 12.8433 12.59C12.6819 12.7597 12.5118 12.9209 12.3336 13.0728C12.2478 13.146 12.1189 13.1358 12.0457 13.05C11.9724 12.9643 11.9826 12.8355 12.0685 12.7623C12.2358 12.6196 12.3956 12.4683 12.5471 12.3089ZM11.4467 13.2294C11.5409 13.1673 11.6676 13.1933 11.7297 13.2874C11.7918 13.3815 11.7657 13.5081 11.6715 13.5702C11.476 13.699 11.2737 13.8175 11.0656 13.925C10.9654 13.9769 10.8422 13.9377 10.7904 13.8376C10.7385 13.7375 10.7777 13.6143 10.8779 13.5625C11.0732 13.4615 11.2631 13.3503 11.4467 13.2294ZM10.1414 13.885C10.2474 13.8465 10.3646 13.9012 10.4031 14.0071C10.4416 14.1131 10.3868 14.2302 10.2808 14.2686C10.0608 14.3484 9.83653 14.4166 9.60866 14.4729C9.49913 14.4999 9.38843 14.4331 9.36138 14.3237C9.33433 14.2143 9.40119 14.1036 9.51069 14.0766C9.72452 14.0238 9.93496 13.9599 10.1414 13.885ZM8.71224 14.2193C8.82433 14.2067 8.92541 14.2873 8.93803 14.3993C8.95064 14.5113 8.86998 14.6123 8.75785 14.6249C8.52614 14.6509 8.2923 14.6649 8.05695 14.6667C7.94414 14.6675 7.852 14.5769 7.85115 14.4641C7.85029 14.3514 7.94106 14.2594 8.05387 14.2585C8.27499 14.2568 8.49462 14.2437 8.71224 14.2193ZM7.25141 14.2137C7.36342 14.2272 7.44331 14.3288 7.42984 14.4407C7.41638 14.5526 7.31467 14.6324 7.20266 14.619C6.96922 14.5909 6.73825 14.5507 6.51044 14.4984C6.40048 14.4733 6.33178 14.3638 6.357 14.2539C6.38223 14.1441 6.49179 14.0754 6.60175 14.1006C6.81552 14.1496 7.03231 14.1874 7.25141 14.2137ZM5.83422 13.8718C5.94002 13.9109 5.99404 14.0283 5.95489 14.1341C5.91574 14.2397 5.79823 14.2937 5.69243 14.2546C5.47251 14.1733 5.2572 14.0804 5.04736 13.9764C4.94628 13.9263 4.905 13.8039 4.95514 13.7029C5.00525 13.6019 5.12779 13.5607 5.22887 13.6107C5.42581 13.7083 5.62785 13.7955 5.83422 13.8718ZM4.54323 13.2151C4.63713 13.2775 4.66264 13.4042 4.60017 13.498C4.53767 13.5919 4.41089 13.6174 4.31696 13.5549C4.12189 13.4253 3.93375 13.2855 3.75329 13.1361C3.66642 13.0642 3.65435 12.9356 3.7263 12.8488C3.79827 12.762 3.92703 12.7499 4.0139 12.8218C4.18336 12.962 4.36003 13.0933 4.54323 13.2151ZM3.42221 12.264C3.49911 12.3465 3.49453 12.4756 3.41199 12.5525C3.32945 12.6293 3.20021 12.6247 3.12331 12.5422C2.96363 12.371 2.81302 12.1915 2.67213 12.0045C2.60428 11.9145 2.62234 11.7865 2.71245 11.7188C2.80259 11.6509 2.93063 11.669 2.99848 11.759C3.1308 11.9346 3.27225 12.1032 3.42221 12.264ZM2.57228 11.1144C2.62854 11.2121 2.59489 11.3368 2.49709 11.393C2.39931 11.4493 2.27443 11.4156 2.2182 11.3179C2.10135 11.115 1.99526 10.9061 1.90045 10.6919C1.85481 10.5888 1.90144 10.4683 2.00463 10.4227C2.10778 10.3771 2.22842 10.4237 2.27403 10.5268C2.36304 10.7278 2.46261 10.9239 2.57228 11.1144ZM1.99648 9.77085C2.02837 9.87895 1.96653 9.99243 1.85834 10.0243C1.75011 10.0562 1.63654 9.9944 1.60465 9.88629C1.53851 9.66215 1.48418 9.43431 1.44198 9.20342C1.42171 9.09256 1.49523 8.98625 1.60621 8.966C1.7172 8.94577 1.82357 9.01922 1.84384 9.13011C1.88345 9.34675 1.93441 9.56056 1.99648 9.77085ZM1.75006 8.32307C1.75581 8.43564 1.66911 8.53154 1.55644 8.53725C1.44381 8.543 1.3478 8.45638 1.34207 8.34384C1.33635 8.23164 1.33345 8.11907 1.33333 8.00601C1.33333 7.87928 1.33658 7.758 1.34313 7.63647C1.34919 7.52393 1.44543 7.43759 1.55807 7.44368C1.67073 7.44974 1.75712 7.54589 1.75105 7.65843C1.7449 7.77263 1.74186 7.88656 1.74186 8.00582C1.74194 8.11193 1.7447 8.2177 1.75006 8.32307ZM1.84342 6.87253C1.82317 6.98342 1.71683 7.05693 1.60584 7.03673C1.49486 7.0165 1.42128 6.91025 1.4415 6.79936C1.48364 6.56842 1.53788 6.34049 1.60393 6.11629C1.6358 6.00819 1.74937 5.94634 1.85757 5.97817C1.96579 6.01001 2.02769 6.12346 1.99583 6.23159C1.93382 6.44196 1.88294 6.65584 1.84342 6.87253ZM2.27372 5.47422C2.22808 5.57728 2.10747 5.62391 2.00429 5.57834C1.90113 5.53273 1.85446 5.41223 1.90008 5.30913C1.99486 5.09497 2.10089 4.88608 2.21766 4.68319C2.27392 4.5855 2.39877 4.55184 2.49657 4.60803C2.59435 4.66424 2.62803 4.78899 2.5718 4.8867C2.46218 5.07714 2.36267 5.2732 2.27372 5.47422ZM3.00757 4.22918C2.93949 4.31908 2.81139 4.3368 2.72142 4.26881C2.63148 4.20079 2.61371 4.0728 2.68179 3.98291C2.82312 3.79626 2.9742 3.61706 3.13433 3.44618C3.21143 3.36388 3.34067 3.35961 3.42304 3.43665C3.50538 3.51368 3.50965 3.64281 3.43257 3.72511C3.28218 3.88561 3.14031 4.05389 3.00757 4.22918ZM4.01498 3.17754C3.92808 3.24943 3.79933 3.23731 3.72738 3.15051C3.65543 3.06369 3.66753 2.93505 3.75443 2.86316C3.93486 2.71389 4.123 2.57416 4.31804 2.44457C4.41197 2.38216 4.53876 2.40768 4.60122 2.50153C4.66366 2.59538 4.63815 2.72206 4.54422 2.78447C4.36109 2.90615 4.18442 3.03735 4.01498 3.17754ZM5.22497 2.3914C5.12392 2.44156 5.00135 2.40039 4.95115 2.29946C4.90095 2.1985 4.94215 2.07603 5.0432 2.02587C5.25293 1.92175 5.46815 1.82873 5.68802 1.74725C5.79376 1.70805 5.91132 1.76193 5.95056 1.86762C5.98979 1.9733 5.93584 2.09074 5.83006 2.12994C5.62378 2.20641 5.4218 2.29369 5.22497 2.3914ZM6.60329 1.89922C6.49333 1.9244 6.38377 1.85573 6.35857 1.74586C6.3334 1.63599 6.4021 1.52655 6.51206 1.50138C6.73981 1.44923 6.97072 1.40906 7.20409 1.38107C7.3161 1.36764 7.4178 1.4475 7.43124 1.55938C7.44468 1.6713 7.36478 1.77291 7.25277 1.78634C7.03373 1.8126 6.81703 1.85032 6.60329 1.89922Z" fill="white"/> <path d="M10.4877 10.4857C9.85589 10.6258 9.16311 10.429 8.78472 9.86861C8.61328 9.6147 8.5209 9.30902 8.5209 8.99958C8.5209 8.83866 8.57116 8.6054 8.66321 8.4644C8.89579 8.10823 9.18913 7.78738 9.18913 7.78738L10.4785 6.37389H9.08759L7.08621 8.51486V4.40755H6.08537V11.5607H7.08621V10.0703L7.55052 9.58543C7.76297 10.724 8.82155 11.5613 9.98417 11.5613C10.1571 11.5613 10.3254 11.5417 10.4877 11.5053V10.4857Z" fill="white"/> </g> </svg></span><span class="n">30</span></div>
@@ -2684,6 +2699,7 @@
     file: '<img alt="" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMy43NSIgaGVpZ2h0PSIxNi4yNSIgdmlld0JveD0iMCAwIDEzLjc1IDE2LjI1IiBmaWxsPSJub25lIj48cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTguNzUgMS45NTM1NWUtMDdDOC44MzIwNyAtNi40MzM2N2UtMDUgOC45MTM0MSAwLjAxNTg1OTMgOC45ODkyNiAwLjA0NzIwMDdDOS4wNjUxMyAwLjA3ODU2ODIgOS4xMzM4MSAwLjEyNTA4NCA5LjE5MTg5IDAuMTgzMTA2TDEzLjU2NjkgNC41NTgxMUMxMy42MjQ5IDQuNjE2MTkgMTMuNjcxNCA0LjY4NDg3IDEzLjcwMjggNC43NjA3NEMxMy43MzQxIDQuODM2NTkgMTMuNzUwMSA0LjkxNzkzIDEzLjc1IDVWMTVDMTMuNzUgMTUuMzMxNSAxMy42MTgyIDE1LjY0OTQgMTMuMzgzOCAxNS44ODM4QzEzLjE0OTQgMTYuMTE4MiAxMi44MzE1IDE2LjI1IDEyLjUgMTYuMjVIMS4yNUMwLjkxODQ3OSAxNi4yNSAwLjYwMDYzMSAxNi4xMTgyIDAuMzY2MjExIDE1Ljg4MzhDMC4xMzE3OSAxNS42NDk0IDAgMTUuMzMxNSAwIDE1VjEuMjVDOS4yMDgwOGUtMDggMC45MTg0OCAwLjEzMTc5MSAwLjYwMDYzMSAwLjM2NjIxMSAwLjM2NjIxMUMwLjYwMDYzMSAwLjEzMTc5MSAwLjkxODQ3OSAxLjk1MzU1ZS0wNyAxLjI1IDEuOTUzNTVlLTA3SDguNzVaTTEwLjEyOTQgNy42ODMxMUM5Ljg4NTMyIDcuNDM5MDMgOS40ODk2OCA3LjQzOTAzIDkuMjQ1NjEgNy42ODMxMUw1LjkzNzUgMTAuOTkxMkw0LjUwNDM5IDkuNTU4MTFDNC4yNjAzMiA5LjMxNDAzIDMuODY0NjggOS4zMTQwMyAzLjYyMDYxIDkuNTU4MTFDMy4zNzY1MyA5LjgwMjE4IDMuMzc2NTMgMTAuMTk3OCAzLjYyMDYxIDEwLjQ0MTlMNS40OTU2MSAxMi4zMTY5QzUuNzM5NjkgMTIuNTYwOSA2LjEzNTMzIDEyLjU2MSA2LjM3OTM5IDEyLjMxNjlMMTAuMTI5NCA4LjU2Njg5QzEwLjM3MzUgOC4zMjI4MyAxMC4zNzM0IDcuOTI3MTkgMTAuMTI5NCA3LjY4MzExWk04Ljc1IDVIMTIuMTg3NUw4Ljc1IDEuNTYyNVY1WiIgZmlsbD0iIzEzQTNCNiIvPjwvc3ZnPg==" width="13.75" height="16.25">', locGrey: '<img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjExIiBoZWlnaHQ9IjE0IiB2aWV3Qm94PSIwIDAgMTEgMTQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJWZWN0b3IiPgo8cGF0aCBkPSJNNS41IDguMDAwMDJDNS4wMDU1NSA4LjAwMDAyIDQuNTIyMiA3Ljg1MzM3IDQuMTExMDggNy41Nzg2N0MzLjY5OTk1IDcuMzAzOTcgMy4zNzk1MiA2LjkxMzU0IDMuMTkwMyA2LjQ1NjcyQzMuMDAxMDggNS45OTk5MSAyLjk1MTU4IDUuNDk3MjYgMy4wNDgwNCA1LjAxMjNDMy4xNDQ1IDQuNTI3MzUgMy4zODI2IDQuMDgxODcgMy43MzIyMyAzLjczMjIzQzQuMDgxODYgMy4zODI2IDQuNTI3MzMgMy4xNDQ0OSA1LjAxMjI4IDMuMDQ4MDNDNS40OTcyMyAyLjk1MTU3IDUuOTk5ODkgMy4wMDExIDYuNDU2NzEgMy4xOTAzMkM2LjkxMzUzIDMuMzc5NTQgNy4zMDM5NyAzLjY5OTk4IDcuNTc4NjggNC4xMTExQzcuODUzMzggNC41MjIyMiA4IDUuMDA1NTYgOCA1LjUwMDAyQzcuOTk4MjQgNi4xNjI1MiA3LjczNDI4IDYuNzk3MzkgNy4yNjU4MiA3LjI2NTg1QzYuNzk3MzYgNy43MzQzMSA2LjE2MjUgNy45OTgyNiA1LjUgOC4wMDAwMlpNNS41IDQuMDAwMDJDNS4yMDMzMyA0LjAwMDAyIDQuOTEzMzIgNC4wODggNC42NjY2NSA0LjI1MjgyQzQuNDE5OTggNC40MTc2NSA0LjIyNzcxIDQuNjUxOTEgNC4xMTQxOCA0LjkyNkM0LjAwMDY1IDUuMjAwMDkgMy45NzA5NCA1LjUwMTY5IDQuMDI4ODIgNS43OTI2NkM0LjA4NjcgNi4wODM2MyA0LjIyOTU3IDYuMzUwOTEgNC40MzkzNSA2LjU2MDY5QzQuNjQ5MTIgNi43NzA0NiA0LjkxNjQgNi45MTMzMyA1LjIwNzM3IDYuOTcxMjFDNS40OTgzNCA3LjAyOTA5IDUuNzk5OTQgNi45OTkzNyA2LjA3NDAzIDYuODg1ODRDNi4zNDgxMiA2Ljc3MjMxIDYuNTgyMzggNi41ODAwMiA2Ljc0NzIxIDYuMzMzMzVDNi45MTIwMyA2LjA4NjY4IDcgNS43OTY2OSA3IDUuNTAwMDJDNyA1LjEwMjE5IDYuODQxOTcgNC43MjA2NSA2LjU2MDY2IDQuNDM5MzVDNi4yNzkzNiA0LjE1ODA0IDUuODk3ODMgNC4wMDAwMiA1LjUgNC4wMDAwMloiIGZpbGw9IiM5QzlEQTAiLz4KPHBhdGggZD0iTTUuNSAxNEM1LjM5NzE5IDEzLjk5ODcgNS4yOTcyMSAxMy45NjYxIDUuMjEzMzQgMTMuOTA2N0M1LjAwMDAxIDEzLjc2IDAgMTAuMiAwIDUuNUMwIDQuMDQxMzEgMC41Nzk0NjEgMi42NDIzNyAxLjYxMDkxIDEuNjEwOTJDMi42NDIzNiAwLjU3OTQ3MSA0LjA0MTMxIDAgNS41IDBDNi45NTg2OSAwIDguMzU3NjQgMC41Nzk0NzEgOS4zODkwOSAxLjYxMDkyQzEwLjQyMDUgMi42NDIzNyAxMSA0LjA0MTMxIDExIDUuNUMxMSAxMC4xNjY3IDYgMTMuNzYgNS43ODY2NiAxMy45MDY3QzUuNzAyNzkgMTMuOTY2MSA1LjYwMjgxIDEzLjk5ODcgNS41IDE0Wk01LjUgMUM0LjkwODA5IDEuMDAwODEgNC4zMjIyMyAxLjExOTA3IDMuNzc2MzcgMS4zNDc5NEMzLjIzMDUgMS41NzY4MiAyLjczNTQ4IDEuOTExNzUgMi4zMiAyLjMzMzMzQzEuNDcyNDEgMy4xNzc5NiAwLjk5MzEyOCA0LjMyMzQyIDAuOTg2NjY0IDUuNTE5OThDMC45ODY2NjQgOS4wOTk5OCA0LjQ1MzMzIDEyLjA4IDUuNDg2NjYgMTIuODkzM0M2LjUyIDEyLjA4IDkuOTg2NjYgOS4wOTMzMSA5Ljk4NjY2IDUuNTE5OThDOS45ODAyIDQuMzIzNDIgOS41MDA5MiAzLjE3Nzk2IDguNjUzMzMgMi4zMzMzM0M3LjgyMDYxIDEuNDg4MzMgNi42ODYzMyAxLjAwODcyIDUuNSAxWiIgZmlsbD0iIzlDOURBMCIvPgo8L2c+Cjwvc3ZnPg==" width="11.00" height="14.00">', plus: '<img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjEyIiBoZWlnaHQ9IjEyIiB2aWV3Qm94PSIwIDAgMTIgMTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGlkPSJWZWN0b3IiIGQ9Ik0xMS41IDUuNUg2LjVWMC41QzYuNSAwLjM2NzM5MiA2LjQ0NzMyIDAuMjQwMjE1IDYuMzUzNTUgMC4xNDY0NDdDNi4yNTk3OSAwLjA1MjY3ODUgNi4xMzI2MSAwIDYgMEM1Ljg2NzM5IDAgNS43NDAyMiAwLjA1MjY3ODUgNS42NDY0NSAwLjE0NjQ0N0M1LjU1MjY4IDAuMjQwMjE1IDUuNSAwLjM2NzM5MiA1LjUgMC41VjUuNUgwLjVDMC4zNjczOTIgNS41IDAuMjQwMjE1IDUuNTUyNjggMC4xNDY0NDcgNS42NDY0NUMwLjA1MjY3ODUgNS43NDAyMiAwIDUuODY3MzkgMCA2QzAgNi4xMzI2MSAwLjA1MjY3ODUgNi4yNTk3OSAwLjE0NjQ0NyA2LjM1MzU1QzAuMjQwMjE1IDYuNDQ3MzIgMC4zNjczOTIgNi41IDAuNSA2LjVINS41VjExLjVDNS41IDExLjYzMjYgNS41NTI2OCAxMS43NTk4IDUuNjQ2NDUgMTEuODUzNkM1Ljc0MDIyIDExLjk0NzMgNS44NjczOSAxMiA2IDEyQzYuMTMyNjEgMTIgNi4yNTk3OSAxMS45NDczIDYuMzUzNTUgMTEuODUzNkM2LjQ0NzMyIDExLjc1OTggNi41IDExLjYzMjYgNi41IDExLjVWNi41SDExLjVDMTEuNjMyNiA2LjUgMTEuNzU5OCA2LjQ0NzMyIDExLjg1MzYgNi4zNTM1NUMxMS45NDczIDYuMjU5NzkgMTIgNi4xMzI2MSAxMiA2QzEyIDUuODY3MzkgMTEuOTQ3MyA1Ljc0MDIyIDExLjg1MzYgNS42NDY0NUMxMS43NTk4IDUuNTUyNjggMTEuNjMyNiA1LjUgMTEuNSA1LjVaIiBmaWxsPSIjMjEyMTIxIi8+Cjwvc3ZnPg==" width="12.00" height="12.00">', cross: '<img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjEzLjA2NzciIGhlaWdodD0iMTMuMDY3NyIgdmlld0JveD0iMCAwIDEzLjA2NzcgMTMuMDY3NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgaWQ9IlZlY3RvciI+CjxwYXRoIGQ9Ik0xMi44NDgxIDEuMjgwMzNDMTMuMTQxIDAuOTg3NDM3IDEzLjE0MSAwLjUxMjU2MyAxMi44NDgxIDAuMjE5NjdDMTIuNTU1MiAtMC4wNzMyMjMzIDEyLjA4MDMgLTAuMDczMjIzMyAxMS43ODc0IDAuMjE5NjdMNi41MzM4NyA1LjQ3MzIxTDEuMjgwMzMgMC4yMTk2N0MwLjk4NzQzNyAtMC4wNzMyMjMzIDAuNTEyNTYzIC0wLjA3MzIyMzMgMC4yMTk2NyAwLjIxOTY3Qy0wLjA3MzIyMzMgMC41MTI1NjMgLTAuMDczMjIzMyAwLjk4NzQzNyAwLjIxOTY3IDEuMjgwMzNMNS40NzMyMSA2LjUzMzg3TDAuMjE5NjcgMTEuNzg3NEMtMC4wNzMyMjMzIDEyLjA4MDMgLTAuMDczMjIzMyAxMi41NTUyIDAuMjE5NjcgMTIuODQ4MUMwLjUxMjU2MyAxMy4xNDEgMC45ODc0MzcgMTMuMTQxIDEuMjgwMzMgMTIuODQ4MUw2LjUzMzg3IDcuNTk0NTNMMTEuNzg3NCAxMi44NDgxQzEyLjA4MDMgMTMuMTQxIDEyLjU1NTIgMTMuMTQxIDEyLjg0ODEgMTIuODQ4MUMxMy4xNDEgMTIuNTU1MiAxMy4xNDEgMTIuMDgwMyAxMi44NDgxIDExLjc4NzRMNy41OTQ1MyA2LjUzMzg3TDEyLjg0ODEgMS4yODAzM1oiIGZpbGw9ImJsYWNrIi8+CjwvZz4KPC9zdmc+" width="13.07" height="13.07">',
     // 订单页行内小图标（描边 svg，直接内联，无需 build token；颜色对齐设计稿 #212121）
     fileDark: '<img alt="" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMy43NSIgaGVpZ2h0PSIxNi4yNSIgdmlld0JveD0iMCAwIDEzLjc1IDE2LjI1IiBmaWxsPSJub25lIj48cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTguNzUgMS45NTM1NWUtMDdDOC44MzIwNyAtNi40MzM2N2UtMDUgOC45MTM0MSAwLjAxNTg1OTMgOC45ODkyNiAwLjA0NzIwMDdDOS4wNjUxMyAwLjA3ODU2ODIgOS4xMzM4MSAwLjEyNTA4NCA5LjE5MTg5IDAuMTgzMTA2TDEzLjU2NjkgNC41NTgxMUMxMy42MjQ5IDQuNjE2MTkgMTMuNjcxNCA0LjY4NDg3IDEzLjcwMjggNC43NjA3NEMxMy43MzQxIDQuODM2NTkgMTMuNzUwMSA0LjkxNzkzIDEzLjc1IDVWMTVDMTMuNzUgMTUuMzMxNSAxMy42MTgyIDE1LjY0OTQgMTMuMzgzOCAxNS44ODM4QzEzLjE0OTQgMTYuMTE4MiAxMi44MzE1IDE2LjI1IDEyLjUgMTYuMjVIMS4yNUMwLjkxODQ3OSAxNi4yNSAwLjYwMDYzMSAxNi4xMTgyIDAuMzY2MjExIDE1Ljg4MzhDMC4xMzE3OSAxNS42NDk0IDAgMTUuMzMxNSAwIDE1VjEuMjVDOS4yMDgwOGUtMDggMC45MTg0OCAwLjEzMTc5MSAwLjYwMDYzMSAwLjM2NjIxMSAwLjM2NjIxMUMwLjYwMDYzMSAwLjEzMTc5MSAwLjkxODQ3OSAxLjk1MzU1ZS0wNyAxLjI1IDEuOTUzNTVlLTA3SDguNzVaTTEwLjEyOTQgNy42ODMxMUM5Ljg4NTMyIDcuNDM5MDMgOS40ODk2OCA3LjQzOTAzIDkuMjQ1NjEgNy42ODMxMUw1LjkzNzUgMTAuOTkxMkw0LjUwNDM5IDkuNTU4MTFDNC4yNjAzMiA5LjMxNDAzIDMuODY0NjggOS4zMTQwMyAzLjYyMDYxIDkuNTU4MTFDMy4zNzY1MyA5LjgwMjE4IDMuMzc2NTMgMTAuMTk3OCAzLjYyMDYxIDEwLjQ0MTlMNS40OTU2MSAxMi4zMTY5QzUuNzM5NjkgMTIuNTYwOSA2LjEzNTMzIDEyLjU2MSA2LjM3OTM5IDEyLjMxNjlMMTAuMTI5NCA4LjU2Njg5QzEwLjM3MzUgOC4zMjI4MyAxMC4zNzM0IDcuOTI3MTkgMTAuMTI5NCA3LjY4MzExWk04Ljc1IDVIMTIuMTg3NUw4Ljc1IDEuNTYyNVY1WiIgZmlsbD0iIzIxMjEyMSIvPjwvc3ZnPg==" width="13.75" height="16.25">', locDark: '<img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjExIiBoZWlnaHQ9IjE0IiB2aWV3Qm94PSIwIDAgMTEgMTQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJWZWN0b3IiPgo8cGF0aCBkPSJNNS41IDguMDAwMDJDNS4wMDU1NSA4LjAwMDAyIDQuNTIyMiA3Ljg1MzM3IDQuMTExMDggNy41Nzg2N0MzLjY5OTk1IDcuMzAzOTcgMy4zNzk1MiA2LjkxMzU0IDMuMTkwMyA2LjQ1NjcyQzMuMDAxMDggNS45OTk5MSAyLjk1MTU4IDUuNDk3MjYgMy4wNDgwNCA1LjAxMjNDMy4xNDQ1IDQuNTI3MzUgMy4zODI2IDQuMDgxODcgMy43MzIyMyAzLjczMjIzQzQuMDgxODYgMy4zODI2IDQuNTI3MzMgMy4xNDQ0OSA1LjAxMjI4IDMuMDQ4MDNDNS40OTcyMyAyLjk1MTU3IDUuOTk5ODkgMy4wMDExIDYuNDU2NzEgMy4xOTAzMkM2LjkxMzUzIDMuMzc5NTQgNy4zMDM5NyAzLjY5OTk4IDcuNTc4NjggNC4xMTExQzcuODUzMzggNC41MjIyMiA4IDUuMDA1NTYgOCA1LjUwMDAyQzcuOTk4MjQgNi4xNjI1MiA3LjczNDI4IDYuNzk3MzkgNy4yNjU4MiA3LjI2NTg1QzYuNzk3MzYgNy43MzQzMSA2LjE2MjUgNy45OTgyNiA1LjUgOC4wMDAwMlpNNS41IDQuMDAwMDJDNS4yMDMzMyA0LjAwMDAyIDQuOTEzMzIgNC4wODggNC42NjY2NSA0LjI1MjgyQzQuNDE5OTggNC40MTc2NSA0LjIyNzcxIDQuNjUxOTEgNC4xMTQxOCA0LjkyNkM0LjAwMDY1IDUuMjAwMDkgMy45NzA5NCA1LjUwMTY5IDQuMDI4ODIgNS43OTI2NkM0LjA4NjcgNi4wODM2MyA0LjIyOTU3IDYuMzUwOTEgNC40MzkzNSA2LjU2MDY5QzQuNjQ5MTIgNi43NzA0NiA0LjkxNjQgNi45MTMzMyA1LjIwNzM3IDYuOTcxMjFDNS40OTgzNCA3LjAyOTA5IDUuNzk5OTQgNi45OTkzNyA2LjA3NDAzIDYuODg1ODRDNi4zNDgxMiA2Ljc3MjMxIDYuNTgyMzggNi41ODAwMiA2Ljc0NzIxIDYuMzMzMzVDNi45MTIwMyA2LjA4NjY4IDcgNS43OTY2OSA3IDUuNTAwMDJDNyA1LjEwMjE5IDYuODQxOTcgNC43MjA2NSA2LjU2MDY2IDQuNDM5MzVDNi4yNzkzNiA0LjE1ODA0IDUuODk3ODMgNC4wMDAwMiA1LjUgNC4wMDAwMloiIGZpbGw9IiMyMTIxMjEiLz4KPHBhdGggZD0iTTUuNSAxNEM1LjM5NzE5IDEzLjk5ODcgNS4yOTcyMSAxMy45NjYxIDUuMjEzMzQgMTMuOTA2N0M1LjAwMDAxIDEzLjc2IDAgMTAuMiAwIDUuNUMwIDQuMDQxMzEgMC41Nzk0NjEgMi42NDIzNyAxLjYxMDkxIDEuNjEwOTJDMi42NDIzNiAwLjU3OTQ3MSA0LjA0MTMxIDAgNS41IDBDNi45NTg2OSAwIDguMzU3NjQgMC41Nzk0NzEgOS4zODkwOSAxLjYxMDkyQzEwLjQyMDUgMi42NDIzNyAxMSA0LjA0MTMxIDExIDUuNUMxMSAxMC4xNjY3IDYgMTMuNzYgNS43ODY2NiAxMy45MDY3QzUuNzAyNzkgMTMuOTY2MSA1LjYwMjgxIDEzLjk5ODcgNS41IDE0Wk01LjUgMUM0LjkwODA5IDEuMDAwODEgNC4zMjIyMyAxLjExOTA3IDMuNzc2MzcgMS4zNDc5NEMzLjIzMDUgMS41NzY4MiAyLjczNTQ4IDEuOTExNzUgMi4zMiAyLjMzMzMzQzEuNDcyNDEgMy4xNzc5NiAwLjk5MzEyOCA0LjMyMzQyIDAuOTg2NjY0IDUuNTE5OThDMC45ODY2NjQgOS4wOTk5OCA0LjQ1MzMzIDEyLjA4IDUuNDg2NjYgMTIuODkzM0M2LjUyIDEyLjA4IDkuOTg2NjYgOS4wOTMzMSA5Ljk4NjY2IDUuNTE5OThDOS45ODAyIDQuMzIzNDIgOS41MDA5MiAzLjE3Nzk2IDguNjUzMzMgMi4zMzMzM0M3LjgyMDYxIDEuNDg4MzMgNi42ODYzMyAxLjAwODcyIDUuNSAxWiIgZmlsbD0iIzIxMjEyMSIvPgo8L2c+Cjwvc3ZnPg==" width="11.00" height="14.00">',
+    fileCheckLine: '<svg style="display: block;" viewBox="0 0 13.75 16.25" fill="none" xmlns="http://www.w3.org/2000/svg"> <g id="Union"> <path d="M9.24561 7.68311C9.48968 7.43903 9.88532 7.43903 10.1294 7.68311C10.3734 7.92719 10.3735 8.32283 10.1294 8.56689L6.37939 12.3169C6.13533 12.561 5.73969 12.5609 5.49561 12.3169L3.62061 10.4419C3.37653 10.1978 3.37653 9.80218 3.62061 9.55811C3.86468 9.31403 4.26032 9.31403 4.50439 9.55811L5.9375 10.9912L9.24561 7.68311Z" fill="#212121"/> <path fill-rule="evenodd" clip-rule="evenodd" d="M8.75 0C8.79008 0 8.8292 0.00418303 8.86719 0.0113932C8.86959 0.0118529 8.87211 0.0117194 8.87451 0.012207C8.8865 0.0146302 8.89777 0.0196876 8.9095 0.0227865C8.93705 0.0300869 8.96465 0.037055 8.99089 0.0480143C9.01546 0.0582866 9.03801 0.0722459 9.06087 0.0854492C9.07297 0.0924205 9.08586 0.0980072 9.09749 0.105794C9.13142 0.128545 9.16311 0.154326 9.19189 0.183105L13.5669 4.55811C13.68 4.67121 13.75 4.82741 13.75 5V15C13.75 15.3315 13.6182 15.6494 13.3838 15.8838C13.1494 16.1182 12.8315 16.25 12.5 16.25H1.25C0.91848 16.25 0.600632 16.1182 0.366211 15.8838C0.131791 15.6494 0 15.3315 0 15V1.25C0 0.918479 0.131791 0.600631 0.366211 0.366211C0.600631 0.131791 0.918479 0 1.25 0H8.75ZM1.25 15H12.5V5.625H8.75C8.40482 5.625 8.125 5.34518 8.125 5V1.25H1.25V15ZM9.375 4.375H11.6162L9.375 2.13379V4.375Z" fill="#212121"/> </g> </svg>', editLine: '<svg style="display: block;" viewBox="0 0 15.625 15.625" fill="none" xmlns="http://www.w3.org/2000/svg"> <g id="Vector"> <path fill-rule="evenodd" clip-rule="evenodd" d="M12.0581 0.183058C12.3021 -0.0610194 12.6979 -0.0610194 12.9419 0.183058L15.4419 2.68306C15.686 2.92714 15.686 3.32286 15.4419 3.56694L7.94194 11.0669C7.82473 11.1842 7.66576 11.25 7.5 11.25H5C4.65482 11.25 4.375 10.9702 4.375 10.625V8.125C4.375 7.95924 4.44085 7.80027 4.55806 7.68306L12.0581 0.183058ZM14.1161 3.125L13.125 4.11612L11.5089 2.5L12.5 1.50888L14.1161 3.125ZM5.625 8.38388L10.625 3.38388L12.2411 5L7.24112 10H5.625V8.38388Z" fill="#212121"/> <path d="M1.25 0.625C0.918479 0.625 0.600537 0.756696 0.366117 0.991117C0.131696 1.22554 0 1.54348 0 1.875V14.375C0 14.7065 0.131696 15.0245 0.366117 15.2589C0.600538 15.4933 0.91848 15.625 1.25 15.625H13.75C14.0815 15.625 14.3995 15.4933 14.6339 15.2589C14.8683 15.0245 15 14.7065 15 14.375V7.5C15 7.15482 14.7202 6.875 14.375 6.875C14.0298 6.875 13.75 7.15482 13.75 7.5V14.375H1.25L1.25 1.875L8.125 1.875C8.47018 1.875 8.75 1.59518 8.75 1.25C8.75 0.904822 8.47018 0.625 8.125 0.625H1.25Z" fill="#212121"/> </g> </svg>', infoCyan: '<img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjEzIiBoZWlnaHQ9IjEzIiB2aWV3Qm94PSIwIDAgMTMgMTMiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJWZWN0b3IiPgo8cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTYuNSAxQzMuNDYyNDMgMSAxIDMuNDYyNDMgMSA2LjVDMSA5LjUzNzU3IDMuNDYyNDMgMTIgNi41IDEyQzkuNTM3NTcgMTIgMTIgOS41Mzc1NyAxMiA2LjVDMTIgMy40NjI0MyA5LjUzNzU3IDEgNi41IDFaTTAgNi41QzAgMi45MTAxNSAyLjkxMDE1IDAgNi41IDBDMTAuMDg5OSAwIDEzIDIuOTEwMTUgMTMgNi41QzEzIDEwLjA4OTkgMTAuMDg5OSAxMyA2LjUgMTNDMi45MTAxNSAxMyAwIDEwLjA4OTkgMCA2LjVaIiBmaWxsPSIjMTNBM0I2Ii8+CjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNNS41IDZDNS41IDUuNzIzODYgNS43MjM4NiA1LjUgNiA1LjVINi41QzYuNzc2MTQgNS41IDcgNS43MjM4NiA3IDZWOUM3LjI3NjE0IDkgNy41IDkuMjIzODYgNy41IDkuNUM3LjUgOS43NzYxNCA3LjI3NjE0IDEwIDcgMTBINi41QzYuMjIzODYgMTAgNiA5Ljc3NjE0IDYgOS41VjYuNUM1LjcyMzg2IDYuNSA1LjUgNi4yNzYxNCA1LjUgNloiIGZpbGw9IiMxM0EzQjYiLz4KPHBhdGggZD0iTTYuMzc1IDQuNUM2Ljc4OTIxIDQuNSA3LjEyNSA0LjE2NDIxIDcuMTI1IDMuNzVDNy4xMjUgMy4zMzU3OSA2Ljc4OTIxIDMgNi4zNzUgM0M1Ljk2MDc5IDMgNS42MjUgMy4zMzU3OSA1LjYyNSAzLjc1QzUuNjI1IDQuMTY0MjEgNS45NjA3OSA0LjUgNi4zNzUgNC41WiIgZmlsbD0iIzEzQTNCNiIvPgo8L2c+Cjwvc3ZnPg==" width="13.00" height="13.00">',
     user: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.5" stroke="#212121" stroke-width="1.6"/><path d="M5.5 19c0-3.6 2.9-5.5 6.5-5.5s6.5 1.9 6.5 5.5" stroke="#212121" stroke-width="1.6" stroke-linecap="round"/></svg>',
     globe2: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#212121" stroke-width="1.6"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.6 2.6 2.6 14.4 0 17M12 3.5c-2.6 2.6-2.6 14.4 0 17"/></svg>',
     mail: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#212121" stroke-width="1.6"><rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="M3.5 7l8.5 6 8.5-6"/></svg>',
@@ -4459,10 +4475,17 @@
     if (m.classList.contains('open')) { m.classList.remove('open'); m.setAttribute('aria-hidden', 'true'); unlockBody(); }
   }
   function ordDatePresets() {
-    // 外层使用日期：放 2 周（14 天），横向滚动；起点 2026-09-01（原型固定）
+    // 外层使用日期：放 2 周（14 天），横向滚动；起点 2026-09-01（原型固定）。
+    // 若用户在日历里选了不在推荐窗口内的日期，则以选中项为中心重建窗口（前 6 后 7）。
     var wk = ['日', '一', '二', '三', '四', '五', '六'], out = [];
+    var start = new Date(2026, 8, 1);
+    var ud = orderState && orderState.useDate;
+    if (ud) {
+      var u = new Date(ud.y, ud.m - 1, ud.d);
+      if (u < start || u > new Date(2026, 8, 14)) start = new Date(ud.y, ud.m - 1, ud.d - 6);
+    }
     for (var i = 0; i < 14; i++) {
-      var dt = new Date(2026, 8, 1 + i), m = dt.getMonth() + 1, d = dt.getDate();
+      var dt = new Date(start.getFullYear(), start.getMonth(), start.getDate() + i), m = dt.getMonth() + 1, d = dt.getDate();
       out.push({ y: dt.getFullYear(), m: m, d: d, label: m + '月' + d + '日',
         chip: ('0' + m).slice(-2) + '-' + ('0' + d).slice(-2), w: '周' + wk[dt.getDay()] });
     }
@@ -4476,13 +4499,13 @@
     var w = '<div class="ord-prod">' +
       '<div class="ord-ptitle">' + p.title + '</div>' +
       '<div class="ord-pspecs">' +
-        '<div class="ord-pline"><span class="ic">' + ICONS.fileDark + '</span>' + ordProdSpec(p) + '</div>' +
+        '<div class="ord-pline"><span class="ic">' + ICONS.fileCheckLine + '</span>' + ordProdSpec(p) + '</div>' +
         '<div class="ord-pline"><span class="ic">' + ICONS.locDark + '</span><span class="u">' + ordDestLine() + '</span></div>' +
       '</div>' +
       '<div class="ord-hr"></div>' +
       '<div class="ord-price-block">' +
         '<div class="ord-price"><span class="cur">NT$</span><span class="num">' + p.now.toLocaleString() + '</span></div>' +
-        '<button class="ord-cancel" id="ordCancelInfo">2025/12/16 前可免费取消 <span class="ic">' + ICONS.info + '</span></button>' +
+        '<button class="ord-cancel" id="ordCancelInfo">2025/12/16 前可免费取消 <span class="ic">' + ICONS.infoCyan + '</span></button>' +
       '</div></div>';
     if (req.date) {
       w += '<div class="ord-date-sec"><div class="ord-sec-h"><div class="t">使用日期</div></div>' +
@@ -4493,26 +4516,27 @@
     w += '<div class="qty-row"><div class="t">购买数量</div><div class="qty-ctl">' +
       '<button class="qty-btn qminus" id="qtyMinus"' + (st.qty <= 1 ? ' disabled' : '') + '></button>' +
       '<span class="qty-n" id="qtyN">' + st.qty + '</span>' +
-      '<button class="qty-btn qplus" id="qtyPlus"></button></div></div>';
+      '<button class="qty-btn qplus" id="qtyPlus"' + (st.qty >= 5 ? ' disabled' : '') + '></button></div></div>';
 
     // ── 独立圆角卡区：[航班][设备][联系人] 订购人 备注 ──
     var c = '';
     if (req.flight) {
       c += '<div class="ord-card"><div class="ord-sec-h"><div class="t">航班信息</div>' +
-        '<button class="ord-edit' + (st.flight ? '' : ' empty') + '" id="ordFlightEdit">' + (st.flight ? '' : '请填写') + '<span class="ic">' + ICONS.pencil + '</span></button></div>' +
+        '<button class="ord-edit' + (st.flight ? '' : ' empty') + '" id="ordFlightEdit">' + (st.flight ? '' : '请填写') + '<span class="ic">' + ICONS.editLine + '</span></button></div>' +
         (st.flight ? flightKvHtml(st.flight) : '') + '</div>';
     }
     if (req.device) {
       c += '<div class="ord-card"><div class="ord-sec-h"><div class="t">设备信息</div>' +
-        '<button class="ord-edit' + (st.device ? '' : ' empty') + '" id="ordDeviceEdit">' + (st.device ? '' : '请填写') + '<span class="ic">' + ICONS.pencil + '</span></button></div>' +
+        '<button class="ord-edit' + (st.device ? '' : ' empty') + '" id="ordDeviceEdit">' + (st.device ? '' : '请填写') + '<span class="ic">' + ICONS.editLine + '</span></button></div>' +
         (st.device ? '<div class="ord-kv"><div><div class="k">手机型号</div><div class="v">' + st.device.model + '</div></div><div><div class="k">EID / IMEI</div><div class="v">' + st.device.imid + '</div></div></div>' : '') + '</div>';
     }
     if (req.contacts) {
-      c += '<div class="ord-card"><div class="ord-sec-h"><div class="t">选择 <span class="cnt">1</span> 位联系人<span class="hint">已选择</span></div></div>' +
-        '<div class="ct-chips" id="ctChips"></div><div id="ctCards"></div></div>';
+      var hasCt = st.contacts.length > 0;
+      c += '<div class="ord-card"><div class="ord-sec-h"><div class="t">选择 <span class="cnt">1</span> 位联系人' + (hasCt ? '<span class="hint">已选择</span>' : '') + '</div></div>' +
+        '<div class="ct-row"><div class="ct-chips" id="ctChips"></div><button class="ct-expand" id="ctExpand"><span class="ic ic-16">' + ICONS.arrowDownSm + '</span></button></div><div id="ctCards"></div></div>';
     }
     var o = st.orderer;
-    c += '<div class="ord-card"><div class="ord-sec-h"><div class="t">订购人资料</div><button class="ord-edit" id="ordOrdererEdit"><span class="ic">' + ICONS.pencil + '</span></button></div>' +
+    c += '<div class="ord-card"><div class="ord-sec-h"><div class="t">订购人资料</div><button class="ord-edit" id="ordOrdererEdit"><span class="ic">' + ICONS.editLine + '</span></button></div>' +
       '<div class="ord-info">' +
         '<div class="ord-info-line"><span class="ic">' + ICONS.user + '</span>' + o.last + o.first + '</div>' +
         '<div class="ord-info-line"><span class="ic">' + ICONS.globe2 + '</span>' + o.nation + '</div>' +
@@ -4529,7 +4553,7 @@
     byId('ordCancelInfo').onclick = function () { openSheet(byId('cancelSheet')); };
     var mi = byId('qtyMinus'), pl = byId('qtyPlus');
     if (mi) mi.onclick = function () { if (st.qty > 1) { st.qty--; renderOrder(); } };
-    if (pl) pl.onclick = function () { st.qty++; renderOrder(); };
+    if (pl) pl.onclick = function () { if (st.qty < 5) { st.qty++; renderOrder(); } };  // 最多 5
     if (byId('ordOrdererEdit')) byId('ordOrdererEdit').onclick = openOrderer;
     if (byId('ordFlightEdit')) byId('ordFlightEdit').onclick = openFlight;
     if (byId('ordDeviceEdit')) byId('ordDeviceEdit').onclick = openDevice;
@@ -4551,11 +4575,17 @@
   function renderOrdDateChips() {
     var box = document.getElementById('ordDateChips'); if (!box) return;
     box.innerHTML = '';
+    var selEl = null;
     ordDatePresets().forEach(function (d) {
       var c = el('<button class="ord-dchip"><div class="d">' + d.chip + '</div><div class="w">' + d.w + '</div></button>');
-      if (sameDate(orderState.useDate, d)) c.classList.add('sel');
+      if (sameDate(orderState.useDate, d)) { c.classList.add('sel'); selEl = c; }
       c.onclick = function () { orderState.useDate = d; renderOrder(); };
       box.appendChild(c);
+    });
+    // 选中项始终滚入可视区（居中，边界钳制）
+    if (selEl) requestAnimationFrame(function () {
+      var target = selEl.offsetLeft - (box.clientWidth - selEl.offsetWidth) / 2;
+      box.scrollLeft = Math.max(0, Math.min(target, box.scrollWidth - box.clientWidth));
     });
   }
   function renderContacts() {
@@ -4565,24 +4595,25 @@
     ORD_CONTACTS.forEach(function (c, i) {
       var chip = el('<button class="ct-chip">' + c.last + c.first + '</button>');
       if (orderState.contacts.indexOf(i) >= 0) chip.classList.add('sel');
-      chip.onclick = function () {
-        var idx = orderState.contacts.indexOf(i);
-        if (idx >= 0) orderState.contacts.splice(idx, 1); else orderState.contacts.push(i);
+      chip.onclick = function () {  // 只能选一位：点击即单选（再点取消）
+        orderState.contacts = (orderState.contacts.length === 1 && orderState.contacts[0] === i) ? [] : [i];
         renderOrder();
       };
       chips.appendChild(chip);
     });
-    var add = el('<button class="ct-chip add"><span class="ic ic-16">' + ICONS.plus + '</span></button>');
+    var add = el('<button class="ct-chip add"><span class="ic">' + ICONS.plus + '</span>新增</button>');
     add.onclick = function () { editContactIdx = null; openContact(); };
     chips.appendChild(add);
     orderState.contacts.forEach(function (i) {
       var c = ORD_CONTACTS[i];
-      var card = el('<div class="ct-card"><div class="ct-card-h"><span class="nm">' + c.last + c.first + '</span>' +
-        '<button class="edit"><span class="ic">' + ICONS.pencil + '</span></button>' +
-        '<button class="x"><span class="ic ic-20">' + ICONS.cross + '</span></button></div>' +
-        '<div class="ct-card-kv"><div><div class="k">联系电话</div><div class="v">' + c.tel + '</div></div><div><div class="k">Email</div><div class="v">' + c.email + '</div></div></div></div>');
+      var enName = (c.enLast || 'YANG') + ', ' + (c.enFirst || 'MI');
+      var card = el('<div class="ct-card">' +
+        '<div class="ct-card-h"><div class="nm">' + enName + '<span class="sep"></span>' + c.last + c.first + '</div>' +
+        '<div class="act"><button class="edit"><span class="ic">' + ICONS.editLine + '</span></button>' +
+        '<button class="x"><span class="ic">' + ICONS.cross + '</span></button></div></div>' +
+        '<div class="ct-card-body"><div class="ct-card-kv"><div><div class="k">联系电话</div><div class="v">' + c.tel + '</div></div><div><div class="k">Email</div><div class="v">' + c.email + '</div></div></div></div></div>');
       card.querySelector('.edit').onclick = function () { editContactIdx = i; openContact(); };
-      card.querySelector('.x').onclick = function () { var idx = orderState.contacts.indexOf(i); if (idx >= 0) orderState.contacts.splice(idx, 1); renderOrder(); };
+      card.querySelector('.x').onclick = function () { orderState.contacts = []; renderOrder(); };
       cards.appendChild(card);
     });
   }
@@ -4694,7 +4725,13 @@
     document.getElementById('priceBody').innerHTML =
       '<div class="price-line"><span class="k">订单金额 X' + st.qty + '</span><span>NT$ ' + ordTotal().toLocaleString() + '</span></div>';
   }
-  document.getElementById('ordPriceToggle').addEventListener('click', function () { renderPriceSheet(); openSheet(document.getElementById('priceSheet')); });
+  function pricePanelHtml() { return '<div class="price-line"><span class="k">订单金额 X' + orderState.qty + '</span><span>NT$ ' + ordTotal().toLocaleString() + '</span></div>'; }
+  function togglePricePanel(panelId, toggleId) {
+    var panel = document.getElementById(panelId), tog = document.getElementById(toggleId);
+    var open = panel.classList.toggle('open'); tog.classList.toggle('open', open);
+    if (open) panel.innerHTML = pricePanelHtml();
+  }
+  document.getElementById('ordPriceToggle').addEventListener('click', function () { togglePricePanel('ordPricePanel', 'ordPriceToggle'); });
 
   // ---- coupon（复用折扣券 sheet）----
   document.getElementById('ordCoupon').addEventListener('click', function () { openSheet(document.getElementById('couponSheet')); });
@@ -4790,7 +4827,7 @@
     document.querySelectorAll('#payBody .pay-rcpt[data-r]').forEach(function (o) { o.onclick = function () { ps.receipt = o.getAttribute('data-r'); renderPay(); }; });
   }
   document.getElementById('payClose').addEventListener('click', closePay);
-  document.getElementById('payPriceToggle').addEventListener('click', function () { renderPriceSheet(); openSheet(document.getElementById('priceSheet')); });
+  document.getElementById('payPriceToggle').addEventListener('click', function () { togglePricePanel('payPricePanel', 'payPriceToggle'); });
   document.getElementById('payBtn').addEventListener('click', function () {
     if (!payState.agree) { toast('请先勾选同意条款'); return; }
     withLoading(this, function () { toast('付款成功（原型演示）'); });
