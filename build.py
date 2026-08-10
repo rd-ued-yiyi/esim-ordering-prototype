@@ -40,6 +40,14 @@ def raw_svg(name, folder="icons", recolor=None):
     txt = re.sub(r'(<svg\b[^>]*?)\s+width="[\d.]+"\s+height="[\d.]+"', r'\1', txt, count=1)
     return re.sub(r'\s+', ' ', txt).strip()  # 单行：可安全注入 JS 字符串
 
+def file_img(relpath, recolor=None):
+    """读取 svg 文件 → data-URI <img>（保留 intrinsic 宽高＝设计尺寸，去掉 preserveAspectRatio 防变形）。"""
+    txt = (ROOT / relpath).read_text(encoding="utf-8")
+    if recolor:
+        txt = txt.replace(f'fill="{recolor[0]}"', f'fill="{recolor[1]}"')
+    txt = txt.replace(' preserveAspectRatio="none"', "").replace(' overflow="visible"', "").replace(' style="display: block;"', "")
+    return inline_svg_to_img(txt)
+
 def inline_svg_to_img(markup):
     """把一段内联 SVG 字符串转成 data-URI <img>（用于状态栏手绘图标）。"""
     w = re.search(r'width="([\d.]+)"', markup)
@@ -107,10 +115,10 @@ subs = {
     "{{PAY_alipayhk}}":    raw_svg("alipayhk", folder="pay"),
     "{{PAY_alipay}}":      raw_svg("alipay", folder="pay"),
     "{{PAY_hsbc}}":        raw_svg("hsbc", folder="pay"),
-    "{{IC_coupon}}":       raw_svg("coupon", folder="pay"),
-    "{{IC_pointsCard}}":   raw_svg("pointsCard", folder="pay"),
-    "{{IC_pointsColor}}":  raw_svg("pointsColor", folder="pay"),
-    "{{IC_question2}}":    raw_svg("question", folder="pay"),
+    "{{IC_coupon}}":       file_img("assets/pay/coupon.svg"),
+    "{{IC_pointsCard}}":   file_img("assets/pay/pointsCard.svg"),
+    "{{IC_pointsColor}}":  file_img("assets/pay/pointsColor.svg"),
+    "{{IC_question2}}":    file_img("assets/pay/question.svg"),
     "{{IC_back}}":         svg("back"),
     "{{IC_location}}":     svg("location"),
     "{{IC_arrowRight}}":   svg("arrowRight"),
@@ -159,8 +167,8 @@ subs = {
     "{{IC_other}}":        strip_wh(GUIDE_OTHER),
     "{{IC_file}}":         inline_svg_to_img(DET_FILE),
     "{{IC_fileDark}}":     inline_svg_to_img(DET_FILE.replace('#13A3B6', '#212121')),  # 订单页套餐规格行（深色 #212121）
-    "{{IC_fileCheckLine}}": raw_svg("fileCheck", folder="ord"),  # 订单页套餐规格 线性 ic_fileCheck_line（#212121）
-    "{{IC_editLine}}":     raw_svg("edit", folder="ord"),         # 编辑按钮 ic_edit_line（#212121）
+    "{{IC_fileCheckLine}}": file_img("assets/ord/fileCheck.svg"),  # 订单页套餐规格 线性（intrinsic 13.75×16.25＝设计尺寸）
+    "{{IC_editLine}}":     file_img("assets/ord/edit.svg"),         # 编辑按钮 ic_edit_line（intrinsic 15.6×15.6）
     "{{IC_infoCyan}}":     svg("info", recolor=("#727272", "#13A3B6")),  # 免费取消行 info（cyan）
     "{{IC_spark}}":        inline_svg_to_img(DET_SPARK),
     "{{IC_smile}}":        inline_svg_to_img(DET_SMILE),

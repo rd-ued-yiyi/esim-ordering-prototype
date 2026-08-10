@@ -77,7 +77,7 @@
   .ic { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; }
   /* icon 图片不得超出 .ic 盒（资产 intrinsic 尺寸可能大于盒，如 19.5px 的 checkCircle 放进 16px 盒） */
   .ic img { max-width: 100%; max-height: 100%; object-fit: contain; }
-  .ic > svg { width: 100%; height: 100%; display: block; }  /* 内联 svg 图标填满由 CSS 定尺寸的 .ic 盒，避免固定 20px 溢出 */
+  .ic > svg { max-width: 100%; max-height: 100%; display: block; }  /* 内联 svg 图标不超出 .ic 盒（contain，按 intrinsic 显示，与设计尺寸一致；不强制撑满） */
   /* 拉伸填满盒（intrinsic 小于盒时放大，如 13px 的火苗放进 20px 盒） */
   .ic-stretch img { width: 100%; height: 100%; }
   .ic-14 { width: 14px; height: 14px; }
@@ -1216,8 +1216,10 @@
   .pay-pts-row .coin { width: 20px; height: 20px; flex: 0 0 auto; }
   .pay-pts-row .mid { flex: 1 1 auto; min-width: 0; }
   .pay-pts-row .l1 { display: flex; align-items: center; gap: 4px; font-size: 14px; line-height: 20px; color: #212121; }
-  .pay-pts-row .l1 .q { width: 16px; height: 16px; display: inline-flex; }
-  .pay-pts-row .coin > svg, .pay-pts-row .q > svg, .pay-coupon-row .chev > svg { width: 100%; height: 100%; display: block; }
+  .pay-pts-row .l1 .q { width: 16px; height: 16px; display: inline-flex; align-items: center; justify-content: center; }
+  .pay-pts-row .coin { display: inline-flex; align-items: center; justify-content: center; }
+  .pay-pts-row .coin img, .pay-pts-row .q img, .pay-coupon-row .ic img { max-width: 100%; max-height: 100%; object-fit: contain; }
+  .pay-coupon-row .chev > svg { max-width: 100%; max-height: 100%; }
   .pay-pts-row .l2 { font-size: 14px; line-height: 20px; color: #212121; margin-top: 4px; }
   .pay-pts-row .l2 b { color: #FFB400; font-weight: 400; }
   .pay-hr { height: 1px; background: var(--kk-border-lighter); width: 100%; }
