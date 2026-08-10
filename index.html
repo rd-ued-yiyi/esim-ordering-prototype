@@ -96,6 +96,7 @@
   .ic-32 { width: 32px; height: 32px; }
   .ic svg { display: block; }
   .rot90 { transform: rotate(90deg); }
+  .rot180 { transform: rotate(180deg); }
 
   /* ================= HERO ================= */
   .hero-svg {
@@ -1173,6 +1174,7 @@
   /* 联系人 chips（横向滚动 + 右侧展开按钮固定，左沿阴影） */
   .ct-row { display: flex; align-items: stretch; }
   .ct-chips { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; flex: 1 1 0; min-width: 0; padding: 2px 0; }
+  .ct-chips.expanded { flex-wrap: wrap; overflow-x: visible; }  /* 展开：换行显示全部联系人 */
   .ct-chips::-webkit-scrollbar { display: none; }
   .ct-chip { flex: 0 0 auto; max-width: 120px; padding: 6px 8px; border-radius: 8px; background: #fff; border: 1px solid #D5D6DB; font-size: 14px; line-height: 20px; font-weight: 600; color: #212121; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .ct-chip.sel { background: #F0FAFB; border-color: #26BEC9; color: #26BEC9; }
@@ -1193,6 +1195,9 @@
   .ct-card-kv { display: grid; grid-template-columns: 1fr 1fr; gap: 2px 12px; }
   .ct-card-kv .k { font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
   .ct-card-kv .v { font-size: 14px; line-height: 20px; font-weight: 600; color: #212121; }
+  .ct-card-app { margin-top: 12px; }
+  .ct-card-app .k { font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
+  .ct-card-app .v { font-size: 14px; line-height: 20px; font-weight: 600; color: #212121; margin-top: 2px; }
   /* 备注行（备注＝Body-lg Regular 16，非 semibold） */
   .ord-row-link { display: flex; align-items: center; gap: 8px; width: 100%; }
   .ord-row-link .t { flex: 1 1 0; font-size: 16px; line-height: 24px; font-weight: 400; color: #212121; }
@@ -4426,10 +4431,12 @@
   var orderP = null, flDate = null;
   // 预设联系人（联系人区演示用）
   var ORD_CONTACTS = [
-    { last: '徐', first: '佳莹', tel: '14930594039', email: 'lala@kkday.com' },
-    { last: '楊', first: '冪',   tel: '13900001111', email: 'mi@example.com' },
-    { last: '張', first: '學友', tel: '13900002222', email: 'jacky@example.com' },
-    { last: '蕭', first: '敬騰', tel: '13900003333', email: 'jam@example.com' }
+    { last: '楊', first: '冪',   tel: '14930594039', email: '12334455', app: 'Line 284949' },
+    { last: '徐', first: '佳莹', tel: '13900001111', email: 'lala@kkday.com', app: 'WhatsApp 0912345678' },
+    { last: '張', first: '學友', tel: '13900002222', email: 'jacky@example.com', app: 'WeChat jacky_c' },
+    { last: '蕭', first: '敬騰', tel: '13900003333', email: 'jam@example.com', app: 'Line jam_x' },
+    { last: '成', first: '龙',   tel: '13900004444', email: 'jackie@example.com', app: 'WeChat jc_dragon' },
+    { last: '越前', first: '龙马', tel: '13900005555', email: 'ryoma@example.com', app: 'Line echizen' }
   ];
   var orderState = null;
   function newOrderState() {
@@ -4438,7 +4445,8 @@
       useDate: null,
       flight: null,   // {type,airport,terminal,airline,no,date,time,visa}
       device: null,   // {model, imid}
-      contacts: [0],  // 选中的联系人索引
+      contacts: [0],  // 选中的联系人索引（单选）
+      ctExpanded: false,  // 联系人 chips 是否展开（换行显示全部）
       orderer: { last: '徐', first: '佳莹', nation: '台湾', email: 'Lala.hsu@kkday.com', cc: '+886', phone: '0912345678' },
       remark: ''
     };
@@ -4535,7 +4543,7 @@
     if (req.contacts) {
       var hasCt = st.contacts.length > 0;
       c += '<div class="ord-card"><div class="ord-sec-h"><div class="t">选择 <span class="cnt">1</span> 位联系人' + (hasCt ? '<span class="hint">已选择</span>' : '') + '</div></div>' +
-        '<div class="ct-row"><div class="ct-chips" id="ctChips"></div><button class="ct-expand" id="ctExpand"><span class="ic ic-16">' + ICONS.arrowDownSm + '</span></button></div><div id="ctCards"></div></div>';
+        '<div class="ct-row"><div class="ct-chips' + (st.ctExpanded ? ' expanded' : '') + '" id="ctChips"></div><button class="ct-expand" id="ctExpand"><span class="ic ic-16' + (st.ctExpanded ? ' rot180' : '') + '">' + ICONS.arrowDownSm + '</span></button></div><div id="ctCards"></div></div>';
     }
     var o = st.orderer;
     c += '<div class="ord-card"><div class="ord-sec-h"><div class="t">订购人资料</div><button class="ord-edit" id="ordOrdererEdit"><span class="ic">' + ICONS.editLine + '</span></button></div>' +
@@ -4561,6 +4569,7 @@
     if (byId('ordDeviceEdit')) byId('ordDeviceEdit').onclick = openDevice;
     if (byId('ordRemarkRow')) byId('ordRemarkRow').onclick = openRemark;
     if (byId('ordDateMore')) byId('ordDateMore').onclick = function () { dateReturn = 'orderUse'; openDateSheet(); };
+    if (byId('ctExpand')) byId('ctExpand').onclick = function () { st.ctExpanded = !st.ctExpanded; renderOrder(); };
     if (req.date) renderOrdDateChips();
     if (req.contacts) renderContacts();
   }
@@ -4608,12 +4617,14 @@
     chips.appendChild(add);
     orderState.contacts.forEach(function (i) {
       var c = ORD_CONTACTS[i];
-      var enName = (c.enLast || 'YANG') + ', ' + (c.enFirst || 'MI');
       var card = el('<div class="ct-card">' +
-        '<div class="ct-card-h"><div class="nm">' + enName + '<span class="sep"></span>' + c.last + c.first + '</div>' +
+        '<div class="ct-card-h"><div class="nm">' + c.last + c.first + '</div>' +
         '<div class="act"><button class="edit"><span class="ic">' + ICONS.editLine + '</span></button>' +
         '<button class="x"><span class="ic">' + ICONS.cross + '</span></button></div></div>' +
-        '<div class="ct-card-body"><div class="ct-card-kv"><div><div class="k">联系电话</div><div class="v">' + c.tel + '</div></div><div><div class="k">Email</div><div class="v">' + c.email + '</div></div></div></div></div>');
+        '<div class="ct-card-body">' +
+          '<div class="ct-card-kv"><div><div class="k">联系电话</div><div class="v">' + c.tel + '</div></div><div><div class="k">Email</div><div class="v">' + c.email + '</div></div></div>' +
+          '<div class="ct-card-app"><div class="k">APP 联络方式</div><div class="v">' + (c.app || '—') + '</div></div>' +
+        '</div></div>');
       card.querySelector('.edit').onclick = function () { editContactIdx = i; openContact(); };
       card.querySelector('.x').onclick = function () { orderState.contacts = []; renderOrder(); };
       cards.appendChild(card);
