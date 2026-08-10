@@ -1107,6 +1107,8 @@
   .ord-body { flex: 1 1 auto; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; background: #F1F4F8; padding: 0 0 8px; }
   /* 顶部整块白底：商品卡 + 使用日期 + 购买数量（Figma 订购商品信息+日期数量，全宽白、px16 pb24 gap24） */
   .ord-wsec { background: #fff; padding: 16px 16px 24px; display: flex; flex-direction: column; gap: 24px; }
+  /* 使用日期 + 购买数量 内层容器：额外左右 16px，两侧边距比商品卡更大（Figma 1074-82674 内层 px-16） */
+  .ord-dq { display: flex; flex-direction: column; gap: 24px; padding: 0 16px; }
   /* 付款页顶部商品摘要：整块白底、全宽、无圆角（非圆角卡） */
   .pay-summary { background: #fff; padding: 16px; }
   /* 可点击的规格行（地区）：按钮归一化 */
@@ -4418,16 +4420,19 @@
         '<div class="ord-price"><span class="cur">NT$</span><span class="num">' + p.now.toLocaleString() + '</span></div>' +
         '<button class="ord-cancel" id="ordCancelInfo">2025/12/16 前可免费取消 <span class="ic">' + ICONS.infoCyan + '</span></button>' +
       '</div></div>';
+    // 使用日期 + 购买数量 收进内层容器（额外 px-16，两侧边距比商品卡更大，Figma 1074-82674）
+    var dq = '';
     if (req.date) {
-      w += '<div class="ord-date-sec"><div class="ord-sec-h"><div class="t">使用日期</div></div>' +
+      dq += '<div class="ord-date-sec"><div class="ord-sec-h"><div class="t">使用日期</div></div>' +
         '<div class="ord-date-wrap" style="margin-top:16px"><div class="ord-date-chips" id="ordDateChips"></div>' +
         '<button class="ord-dmore" id="ordDateMore"><span class="ic">' + ICONS.calendar + '</span><span class="w">更多</span></button></div></div>' +
         '<div class="ord-hr"></div>';
     }
-    w += '<div class="qty-row"><div class="t">购买数量</div><div class="qty-ctl">' +
+    dq += '<div class="qty-row"><div class="t">购买数量</div><div class="qty-ctl">' +
       '<button class="qty-btn qminus" id="qtyMinus"' + (st.qty <= 1 ? ' disabled' : '') + '></button>' +
       '<span class="qty-n" id="qtyN">' + st.qty + '</span>' +
       '<button class="qty-btn qplus" id="qtyPlus"' + (st.qty >= 5 ? ' disabled' : '') + '></button></div></div>';
+    w += '<div class="ord-dq">' + dq + '</div>';
 
     // ── 独立圆角卡区：[航班][设备][联系人] 订购人 备注 ──
     var c = '';
