@@ -1107,6 +1107,10 @@
   .ord-body { flex: 1 1 auto; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; background: #F1F4F8; padding: 0 0 8px; }
   /* 顶部整块白底：商品卡 + 使用日期 + 购买数量（Figma 订购商品信息+日期数量，全宽白、px16 pb24 gap24） */
   .ord-wsec { background: #fff; padding: 16px 16px 24px; display: flex; flex-direction: column; gap: 24px; }
+  /* 付款页顶部商品摘要：整块白底、全宽、无圆角（非圆角卡） */
+  .pay-summary { background: #fff; padding: 16px; }
+  /* 可点击的规格行（地区）：按钮归一化 */
+  button.ord-pline { padding: 0; background: none; border: 0; text-align: left; width: auto; }
   /* 其余独立圆角卡（w-351 居中＝左右各 12px，卡间 gap16） */
   .ord-cards { display: flex; flex-direction: column; gap: 16px; padding: 16px 12px 0; }
   .ord-card { background: #fff; border-radius: 12px; padding: 16px; }
@@ -1141,7 +1145,8 @@
   .ord-dchip .d { font-size: 14px; line-height: 20px; font-weight: 600; color: #212121; }
   .ord-dchip .w { font-size: 12px; line-height: 16px; color: #727272; }
   .ord-dchip.sel { border-color: #26BEC9; background: #F0FAFB; }
-  .ord-dmore { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 8px 12px; background: #fff; box-shadow: -6px 0 8px -4px rgba(38,50,56,.12); }
+  .ord-dmore { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 8px 12px; background: #fff; box-shadow: -6px 0 8px -4px rgba(38,50,56,.12); position: relative; z-index: 2; }
+  .ord-date-wrap { position: relative; }
   .ord-dmore .ic { width: 16px; height: 16px; }
   .ord-dmore .w { font-size: 12px; line-height: 16px; color: #212121; }
   /* 数量步进器（Figma stepper：32 圆，minus 边 #ADE6EB / plus 边 #26BEC9，gap4） */
@@ -4409,7 +4414,7 @@
       '<div class="ord-ptitle">' + p.title + '</div>' +
       '<div class="ord-pspecs">' +
         '<div class="ord-pline"><span class="ic">' + ICONS.fileCheckLine + '</span>' + ordProdSpec(p) + '</div>' +
-        '<div class="ord-pline"><span class="ic">' + ICONS.locDark + '</span><span class="u">' + ordDestLine() + '</span></div>' +
+        '<button class="ord-pline" id="ordDestLine"><span class="ic">' + ICONS.locDark + '</span><span class="u">' + ordDestLine() + '</span></button>' +
       '</div>' +
       '<div class="ord-hr"></div>' +
       '<div class="ord-price-block">' +
@@ -4460,6 +4465,7 @@
     // 绑定
     var byId = function (id) { return document.getElementById(id); };
     byId('ordCancelInfo').onclick = function () { openSheet(byId('cancelSheet')); };
+    if (byId('ordDestLine')) byId('ordDestLine').onclick = openOrdScope;
     var mi = byId('qtyMinus'), pl = byId('qtyPlus');
     if (mi) mi.onclick = function () { if (st.qty > 1) { st.qty--; renderOrder(); } };
     if (pl) pl.onclick = function () { if (st.qty < 5) { st.qty++; renderOrder(); } };  // 最多 5
@@ -4486,17 +4492,23 @@
     var box = document.getElementById('ordDateChips'); if (!box) return;
     box.innerHTML = '';
     var selEl = null;
+    function centerChip(c, smooth) {
+      var target = c.offsetLeft - (box.clientWidth - c.offsetWidth) / 2;
+      box.scrollTo({ left: Math.max(0, Math.min(target, box.scrollWidth - box.clientWidth)), behavior: smooth ? 'smooth' : 'auto' });
+    }
     ordDatePresets().forEach(function (d) {
       var c = el('<button class="ord-dchip"><div class="d">' + d.chip + '</div><div class="w">' + d.w + '</div></button>');
       if (sameDate(orderState.useDate, d)) { c.classList.add('sel'); selEl = c; }
-      c.onclick = function () { orderState.useDate = d; renderOrder(); };
+      c.onclick = function () {  // 轻量：只切换选中态 + 平滑居中，不整页重渲染（避免闪跳/滚动过快）
+        orderState.useDate = d;
+        box.querySelectorAll('.ord-dchip.sel').forEach(function (x) { x.classList.remove('sel'); });
+        c.classList.add('sel');
+        centerChip(c, true);
+      };
       box.appendChild(c);
     });
-    // 选中项始终滚入可视区（居中，边界钳制）
-    if (selEl) requestAnimationFrame(function () {
-      var target = selEl.offsetLeft - (box.clientWidth - selEl.offsetWidth) / 2;
-      box.scrollLeft = Math.max(0, Math.min(target, box.scrollWidth - box.clientWidth));
-    });
+    // 首次渲染：选中项瞬时居中（无动画）
+    if (selEl) requestAnimationFrame(function () { centerChip(selEl, false); });
   }
   function renderContacts() {
     var chips = document.getElementById('ctChips'), cards = document.getElementById('ctCards');
@@ -4511,7 +4523,7 @@
       };
       chips.appendChild(chip);
     });
-    var add = el('<button class="ct-chip add"><span class="ic">' + ICONS.plus + '</span>新增</button>');
+    var add = el('<button class="ct-chip add"><span class="ic">' + ICONS.plus + '</span>新增旅客</button>');
     add.onclick = function () { editContactIdx = null; openContact(); };
     chips.appendChild(add);
     orderState.contacts.forEach(function (i) {
@@ -4646,7 +4658,12 @@
   document.getElementById('ordPriceToggle').addEventListener('click', function () { togglePricePanel('ordPricePanel', 'ordPriceToggle'); });
 
   // ---- coupon（复用折扣券 sheet）----
-  document.getElementById('ordCoupon').addEventListener('click', function () { openSheet(document.getElementById('couponSheet')); });
+  document.getElementById('ordCoupon').addEventListener('click', function () { renderCoupons(); openSheet(document.getElementById('couponSheet')); });
+  // 订单/付款页「亚洲通·N 个国家/地区」点击 → 复用详情页「包含地区」信息态 sheet
+  function openOrdScope() {
+    var dest = document.getElementById('destName') ? document.getElementById('destName').textContent : '亚洲通';
+    openScopeSheet(dest, ['日本', '韩国', '泰国', '新加坡', '马来西亚', '越南', '菲律宾', '印度尼西亚']);
+  }
 
   // ---- 返回 / 下一步 ----
   document.getElementById('ordBack').addEventListener('click', closeOrder);
@@ -4683,17 +4700,17 @@
   function renderPay() {
     var p = orderP, st = orderState, ps = payState, h = '';
     var useD = st.useDate ? (st.useDate.y + '-' + ('0' + st.useDate.m).slice(-2) + '-' + ('0' + st.useDate.d).slice(-2)) : null;
-    // 商品摘要（普通圆角卡，规格 + 分隔线 + 免费取消）
-    h += '<div class="ord-card">' +
+    // 商品摘要（顶部整块白底，非圆角卡；规格 + 分隔线 + 免费取消）
+    var summary = '<div class="pay-summary">' +
       '<div class="ord-ptitle" style="margin-bottom:12px">' + p.title + '</div>' +
       '<div class="ord-pspecs">' +
-        '<div class="ord-pline"><span class="ic">' + ICONS.fileDark + '</span>' + ordProdSpec(p) + '</div>' +
-        '<div class="ord-pline"><span class="ic">' + ICONS.locDark + '</span><span class="u">' + ordDestLine() + '</span></div>' +
+        '<div class="ord-pline"><span class="ic">' + ICONS.fileCheckLine + '</span>' + ordProdSpec(p) + '</div>' +
+        '<button class="ord-pline" id="payDestLine"><span class="ic">' + ICONS.locDark + '</span><span class="u">' + ordDestLine() + '</span></button>' +
         (useD ? '<div class="ord-pline"><span class="ic">' + ICONS.calendar + '</span>' + useD + '</div>' : '') +
         '<div class="ord-pline"><span class="ic">' + ICONS.simCard + '</span>eSIM X' + st.qty + '</div>' +
       '</div>' +
       '<div class="ord-hr" style="margin:12px 0"></div>' +
-      '<button class="ord-cancel" id="payCancelInfo">2025/12/16 前可免费取消 <span class="ic">' + ICONS.info + '</span></button>' +
+      '<button class="ord-cancel" id="payCancelInfo">2025/12/16 前可免费取消 <span class="ic">' + ICONS.infoCyan + '</span></button>' +
       '</div>';
     // 折扣与点数
     h += '<div class="ord-card"><div class="ord-sec-h"><div class="t">折扣与点数</div></div>' +
@@ -4728,10 +4745,11 @@
     h += '<div class="ord-card"><div class="pay-subh" style="font-size:18px;line-height:26px">确认</div>' +
       '<div class="pay-check' + (ps.agree ? ' on' : '') + '" id="payAgree"><span class="box"></span><span class="txt">我已阅读并同意 <a>利用规约</a>、<a>隐私政策</a>、<a>个人信息处理同意书</a> (必须)</span></div>' +
       '</div>';
-    document.getElementById('payBody').innerHTML = '<div class="ord-cards">' + h + '</div>';
+    document.getElementById('payBody').innerHTML = summary + '<div class="ord-cards">' + h + '</div>';
     document.getElementById('payFootAmt').textContent = ordTotal().toLocaleString();
     var byId = function (id) { return document.getElementById(id); };
     byId('payCancelInfo').onclick = function () { openSheet(byId('cancelSheet')); };
+    if (byId('payDestLine')) byId('payDestLine').onclick = openOrdScope;
     byId('payPromo').onclick = function () { toast('折扣码（开发中）'); };
     byId('payPoints').onclick = function () { ps.usePoints = !ps.usePoints; renderPay(); };
     byId('payAgree').onclick = function () { ps.agree = !ps.agree; renderPay(); };
