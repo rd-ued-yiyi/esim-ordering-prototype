@@ -809,16 +809,11 @@
   .det-policies .perk.cover { display: flex; width: 100%; }
   .det-policies .perk.cover .pt { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .det-policies .perk.cover .cnt { flex: 0 0 auto; text-decoration: underline; text-underline-offset: 2px; }
-  .det-intro {
-    margin: 24px 0 0; font-size: 14px; line-height: 20px; color: var(--kk-text-darker);
-    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
-  }
-  .det-intro.open { display: block; }
-  .det-more { display: inline-flex; align-items: center; gap: 4px; margin-top: 8px;
-    font-size: 14px; line-height: 20px; font-weight: 600; color: var(--kk-text-darker); }
-  .det-more .chev { transition: transform .2s; }
-  .det-more .chev img { width: 9.4px; height: 5.2px; }  /* arrowDown 裸矢量按 16 框占位 */
-  .det-more.open .chev { transform: rotate(180deg); }
+  /* 亮点标题（Figma 1009-43103）：20px 双色点赞图标 + 「亮点」Semibold 14；距上方 24px */
+  .det-hl-h { display: flex; align-items: center; gap: 8px; margin-top: 24px; }
+  .det-hl-h .lb { font-size: 14px; line-height: 20px; font-weight: 600; color: var(--kk-text-darker); }
+  /* 描述：距标题 8px；夹取 2 行、行尾内联「展开/收起」由 clampEl 处理 */
+  .det-intro { margin-top: 8px; font-size: 14px; line-height: 20px; color: var(--kk-text-darker); }
   .det-provider { margin-top: 8px; font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
   .det-sec .pkg-warns { margin-top: 24px; }  /* 提醒标签移到服务商信息上方，与上文留距 */
   .det-h2 { font-size: 18px; line-height: 26px; font-weight: 600; color: var(--kk-text-darker); margin: 0 0 20px; }
@@ -843,7 +838,7 @@
   .det-table .cur-badge .ic { width: 12px; height: 12px; }
   .det-table .spec-rest { font-size: 14px; line-height: 20px; color: var(--kk-text-darker); }
   /* 规格值超 3 行的「展开/收起」：深色下划线内联链接（Figma 998-42227） */
-  .det-table .clamp-toggle { border: 0; background: none; padding: 0; cursor: pointer;
+  .clamp-toggle { border: 0; background: none; padding: 0; cursor: pointer;
     font-size: 14px; line-height: 20px; color: var(--kk-text-darker);
     text-decoration: underline; text-underline-offset: 2px; }
   /* 列表/条列 */
@@ -1906,8 +1901,8 @@
           <div class="pkg-tags" id="detTags"></div>
         </div>
         <div class="det-policies" id="detPolicies"></div>
+        <div class="det-hl-h"><span class="ic ic-20"><img alt="" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTQuMTY2MDIgOC4zMzMwMUgxLjI1QzAuNTU5NjQ0IDguMzMzMDEgMCA3Ljc3MzM2IDAgNy4wODMwMVYxLjI1QzAgMC41NTk2NDQgMC41NTk2NDQgMCAxLjI1IDBINC4xNjYwMlY4LjMzMzAxWiIgZmlsbD0iIzI2QkVDOSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMi45MTYgOC43NSkiLz4KPHBhdGggZD0iTTMuMTQ3NDYgMEM0LjE3MDIzIDAuMDAwMTU4MTE1IDQuOTk5NjcgMC44Mjg4MzMgNSAxLjg1MTU2VjQuNTgzMDFDNSA0LjgxMzEzIDUuMTg2ODcgNSA1LjQxNjk5IDVIOS4wMDk3N0MxMC40MDUxIDUuMDAwMSAxMS40MDU3IDYuMzQ1MDggMTEuMDA0OSA3LjY4MTY0TDkuNTA0ODggMTIuNjgxNkM5LjI0MDQxIDEzLjU2MjcgOC40Mjk2NiAxNC4xNjYgNy41MDk3NyAxNC4xNjZIMFY1LjgzNTk0TDAuMDE3NTc4MSA1Ljc3NjM3TDEuMzc1IDEuMzEzNDhDMS42MTIyNyAwLjUzMzQxIDIuMzMyMTIgMC4wMDAxNDE5OTIgMy4xNDc0NiAwWiIgZmlsbD0iI0ZGQ0EyOCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNi4yNSAyLjkxNikiLz4KPC9zdmc+" width="20.00" height="20.00"></span><span class="lb">亮点</span></div>
         <p class="det-intro" id="detIntro">依据购买天数，可额外享有 3GB~30GB 的热点分享流量。由连续两年荣获 Opensignal 网路可靠性全球大奖的电信网络提供连线，讯号覆盖率高，市区、离岛与山区都能稳定上网；搭配 KKday App 可随时查询剩余流量，客服 24 小时在线协助安装与连线问题。</p>
-        <button class="det-more" id="detMore">展开更多 <span class="ic ic-16 chev"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE0LjE2NjciIGhlaWdodD0iNy45MTY2NyIgdmlld0JveD0iMCAwIDE0LjE2NjcgNy45MTY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0wLjI0NDA3OCAwLjI0NDA3OEMwLjU2OTUxNSAtMC4wODEzNTkyIDEuMDk3MTUgLTAuMDgxMzU5MiAxLjQyMjU5IDAuMjQ0MDc4TDcuMDgzMzMgNS45MDQ4MkwxMi43NDQxIDAuMjQ0MDc4QzEzLjA2OTUgLTAuMDgxMzU5MiAxMy41OTcyIC0wLjA4MTM1OTIgMTMuOTIyNiAwLjI0NDA3OEMxNC4yNDggMC41Njk1MTUgMTQuMjQ4IDEuMDk3MTUgMTMuOTIyNiAxLjQyMjU5TDcuNjcyNTkgNy42NzI1OUM3LjM0NzE1IDcuOTk4MDMgNi44MTk1MSA3Ljk5ODAzIDYuNDk0MDggNy42NzI1OUwwLjI0NDA3OCAxLjQyMjU5Qy0wLjA4MTM1OTIgMS4wOTcxNSAtMC4wODEzNTkyIDAuNTY5NTE1IDAuMjQ0MDc4IDAuMjQ0MDc4WiIgZmlsbD0iIzIxMjEyMSIvPgo8L3N2Zz4=" width="14.17" height="7.92"></span></button>
         <div class="pkg-warns" id="detWarns"></div>
         <div class="det-provider" id="detProvider"></div>
         <hr class="pkg-hr">
@@ -4046,11 +4041,10 @@
     area.innerHTML = '';
     var av = el('<div class="v-inner"></div>'); av.textContent = areaList.join('、');
     area.appendChild(av);
-    // 展开更多重置
-    document.getElementById('detIntro').classList.remove('open');
-    var more = document.getElementById('detMore');
-    more.classList.remove('open');
-    more.firstChild.textContent = '展开更多 ';
+    // 描述重置：恢复完整文案（首次缓存），rAF 内再 clampEl 夹取
+    var introEl = document.getElementById('detIntro');
+    if (!introEl.dataset.full) introEl.dataset.full = introEl.textContent;
+    introEl.textContent = introEl.dataset.full;
     document.getElementById('detProvider').innerHTML = '';
     document.getElementById('detProvider').append('服务由 ');
     var vb = document.createElement('b'); vb.style.fontWeight = '600'; vb.textContent = p.vendor;
@@ -4160,6 +4154,7 @@
       ['dtSpecDays', 'dtSpecBilling', 'dtSpecData'].forEach(function (id) {
         clampEl(document.querySelector('#' + id + ' .spec-rest'), 2);
       });
+      clampEl(document.getElementById('detIntro'), 2);  // 描述夹 2 行、行尾内联「展开」（Figma 1009-43103）
       clampEl(document.querySelector('#dtSpecArea .v-inner'), 3);  // 支持地区无当前行，整块 3 行
       var top = 0;
       if (anchor) { var sec = detBody.querySelector('.det-sec[data-sec="' + anchor + '"]'); if (sec) top = sec.offsetTop; }
@@ -4211,11 +4206,7 @@
     });
   });
   document.getElementById('detClose').addEventListener('click', closeDetail);
-  document.getElementById('detMore').addEventListener('click', function () {
-    this.classList.toggle('open');
-    document.getElementById('detIntro').classList.toggle('open');
-    this.firstChild.textContent = this.classList.contains('open') ? '收起 ' : '展开更多 ';
-  });
+  // 描述展开/收起改为 clampEl 行尾内联「展开/收起」（Figma 1009-43103），不再需要独立按钮
   // ---------- 折扣券（横幅→bottom sheet；领取成功；全部领取后横幅消失） ----------
   var COUPONS = [
     { amt: '95 折', cond: '订购金额须满 NT$0，至多抵 NT$120', desc: '【夏季全站活动】不限门槛 95 折', exp: '2026-08-31', got: false },

@@ -142,6 +142,7 @@ subs = {
     "{{IC_earthLine}}":    svg("earthLine"),
     "{{IC_earthCyan}}":    svg("earthLine", recolor=("#212121", "#26BEC9")),
     "{{IC_plus}}":         svg("plus"),
+    "{{IC_thumbsUp}}":     svg("thumbsUp"),  # 亮点标题：双色点赞图标（Figma 1126-91525 ic_thumbsUp_2_color，青#26BEC9+黄#FFCA28）
     "{{IC_plusSemibold}}": svg("plusSemibold"),  # 半粗 line 加号（Figma ic_plus_line_semibold）
     "{{IC_plusSemiCyan}}": svg("plusSemibold", recolor=("#212121", "#13A3B6")),  # 联系人「新增」文字按钮：cyan 半粗加号（Figma 1126-91395 #13A3B6）
     "{{IC_plusCyan}}":     svg("plus", recolor=("#212121", "#26BEC9")),
