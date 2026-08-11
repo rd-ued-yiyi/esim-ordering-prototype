@@ -2108,7 +2108,7 @@
       </div>
     </div>
     <div class="ord-body" id="payBody"></div>
-    <div class="pay-foot-note"><span class="ic">{{IC_checkCircle}}</span>別擔心，下訂後還可免費取消</div>
+    <div class="pay-foot-note" id="payFootNote"><span class="ic">{{IC_checkCircle}}</span>別擔心，下訂後還可免費取消</div>
     <div class="ord-foot">
       <div class="ord-price-panel" id="payPricePanel"></div>
       <div class="ord-foot-col">
@@ -4371,7 +4371,7 @@
   function cancelInlineText(p, ud) {
     var t = (p && p.cancelType) || 'fee';
     if (t === 'free') return '未使用可免費取消';
-    if (t === 'none') return '不可免費取消';
+    if (t === 'none') return '不可取消';
     var n = cancelFreeN(p);
     return ud ? fmtYmd(new Date(ud.y, ud.m - 1, ud.d - n)) + ' 前可免費取消' : n + '天前可免費取消';
   }
@@ -4824,6 +4824,9 @@
       '</div>';
     document.getElementById('payBody').innerHTML = summary + '<div class="ord-cards">' + h + '</div>';
     document.getElementById('payFootAmt').textContent = ordTotal().toLocaleString();
+    // 不可取消商品不顯示「下訂後還可免費取消」的安心提示
+    var footNote = document.getElementById('payFootNote');
+    if (footNote) footNote.style.display = (orderP.cancelType === 'none') ? 'none' : '';
     var byId = function (id) { return document.getElementById(id); };
     byId('payCancelInfo').onclick = function () { renderCancelSheet(); openSheet(byId('cancelSheet')); };
     if (byId('payDestLine')) byId('payDestLine').onclick = openOrdScope;
