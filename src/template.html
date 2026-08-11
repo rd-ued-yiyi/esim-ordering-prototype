@@ -664,9 +664,9 @@
   }
   .cond-flow-h { display: flex; align-items: center; }
   /* 展开/收起三角按钮：白色小 tab，骑在流量面板顶边中央（Figma 1116-89167） */
-  .cond-toggle { position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+  .cond-toggle { position: absolute; top: -5px; left: 50%; transform: translateX(-50%);
     background: #fff; border-radius: 8px 8px 0 0; padding: 0 12px;
-    display: flex; align-items: center; justify-content: center; }   /* Figma 1116-89167：白色小 tab、无阴影，骑在面板顶边 */
+    display: flex; align-items: flex-start; justify-content: center; }  /* Figma 1116-89167：白色小 tab、无阴影，top:-5px、px-12、items-start */
   .cond-toggle .ic { width: 24px; height: 24px; transform: rotate(180deg);
     transition: transform .3s cubic-bezier(.22, .61, .36, 1); }      /* 收起态 ▲（点击展开）；缓动与面板一致 */
   .cond-expanded .cond-toggle .ic { transform: rotate(0); }           /* 展开态 ▼ */
@@ -1749,7 +1749,7 @@
         </div>
       </div>
       <div class="cond-flow">
-        <button class="cond-toggle" id="condToggle" aria-label="展开/收起"><span class="ic ic-24">{{IC_arrowDown}}</span></button>
+        <button class="cond-toggle" id="condToggle" aria-label="展开/收起"><span class="ic ic-24">{{IC_arrowDownGray}}</span></button>
         <div class="cond-flow-h"><span class="t-subtitle-lg">选择流量</span></div>
         <div class="ftabs" id="condTabs">
           <button class="ftab" data-tab="daily">每日流量</button>
