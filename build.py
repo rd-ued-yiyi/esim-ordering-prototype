@@ -171,7 +171,7 @@ subs = {
     "{{IC_fileCheckLine}}": file_img("assets/ord/fileCheck.svg"),  # 订单页套餐规格 线性（intrinsic 13.75×16.25＝设计尺寸）
     "{{IC_editLine}}":     file_img("assets/ord/edit.svg"),         # 编辑按钮 ic_edit_line（intrinsic 15.6×15.6）
     "{{IC_infoCyan}}":     svg("info", recolor=("#727272", "#13A3B6")),  # 免费取消行 info（cyan）
-    "{{IC_infoBlue}}":     svg("info", recolor=("#727272", "#2D84D6")),  # 设备信息提示 info（Figma 1116-91131：text-info-dark #2D84D6）
+    "{{IC_infoFill}}":     svg("infoFill"),  # 设备信息提示：实心 info 图标（Figma 1116-91131 ic_info_fill，#2D84D6）
     "{{IC_spark}}":        inline_svg_to_img(DET_SPARK),
     "{{IC_smile}}":        inline_svg_to_img(DET_SMILE),
     "{{IC_neutral}}":      inline_svg_to_img(DET_NEUTRAL),
