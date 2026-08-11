@@ -3293,7 +3293,7 @@
           (i % 2 === 0) ? ['checkLine', '即日可用', false]
             : ['calendarD', '最早可使用日: ' + fmtDate(2), true]
         ],
-        warns: i % 4 === 0 ? ['需线下实名认证', '需提供航班'] : i % 4 === 3 ? ['需线下实名认证'] : [],
+        warns: i % 4 === 0 ? ['需线下实名认证', '需提供航班', '需EID/IMEI'] : i % 4 === 1 ? ['需提供航班'] : i % 4 === 3 ? ['需线下实名认证', '需EID/IMEI'] : [],
         vendor: v,
         rating: [4.6, 4.8, 3.0, 4.2, 4.5][i % 5],
         reviews: [234, 1024, 234, 89, 456][i % 5],
@@ -4354,10 +4354,13 @@
       remark: ''
     };
   }
-  // 商品需求（演示：含「需提供航班」的商品＝最多态，否则最少态）
+  // 商品需求 → 订单填写要显示哪些区块（各由对应 warn 独立驱动）
   function orderReq(p) {
-    var full = p && p.warns && p.warns.indexOf('需提供航班') >= 0;
-    return { date: full, flight: full, device: full, contacts: full };
+    var w = (p && p.warns) || [];
+    var flight = w.indexOf('需提供航班') >= 0;
+    var device = w.indexOf('需EID/IMEI') >= 0;     // 只有需 EID/IMEI 的商品才要填设备信息
+    var realname = w.indexOf('需线下实名认证') >= 0;  // 需实名 → 要填联系人
+    return { date: flight || device || realname, flight: flight, device: device, contacts: flight || realname };
   }
   function daysNumOf(p) { var m = /(\d+)\s*天/.exec(p.title + ' ' + (p.spec || '')); return m ? +m[1] : (state.days ? +state.days : 7); }
 
