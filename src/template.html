@@ -1167,9 +1167,10 @@
   .ord-dchip .d { font-size: 14px; line-height: 20px; font-weight: 600; color: #212121; }
   .ord-dchip .w { font-size: 12px; line-height: 16px; color: #727272; }
   .ord-dchip.sel { border-color: #26BEC9; background: #F0FAFB; }
-  .ord-dmore { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 8px 12px; background: #fff; position: relative; z-index: 2;
-    box-shadow: 0 1px 4px 0 rgba(38, 50, 56, .12); }  /* Figma 1067-79950「4-Action」阴影：offset(0,1) blur4 spread0 #2632381F */
+  .ord-dmore { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 8px 12px; background: #fff; position: relative; z-index: 2; }
   .ord-date-wrap { position: relative; }
+  /* 不用阴影：右端用白色渐变遮罩把 chip 淡出到白（Figma 1126-91155：宽 50px，透明→白，贴在「更多」左侧） */
+  .ord-dmore::before { content: ''; position: absolute; top: 0; bottom: 0; left: 0; width: 50px; transform: translateX(-100%); background: linear-gradient(to right, rgba(255, 255, 255, 0), #fff); pointer-events: none; }
   .ord-dmore .ic { width: 16px; height: 16px; }
   .ord-dmore .w { font-size: 12px; line-height: 16px; color: #212121; }
   /* 数量步进器（Figma stepper：32 圆，minus 边 #ADE6EB / plus 边 #26BEC9，gap4） */
