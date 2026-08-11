@@ -811,11 +811,8 @@
   .det-policies .perk.cover { display: flex; width: 100%; }
   .det-policies .perk.cover .pt { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .det-policies .perk.cover .cnt { flex: 0 0 auto; text-decoration: underline; text-underline-offset: 2px; }
-  /* 亮點標題（Figma 1009-43103）：20px 雙色點贊圖示 + 「亮點」Semibold 14；距上方 24px */
-  .det-hl-h { display: flex; align-items: center; gap: 8px; margin-top: 24px; }
-  .det-hl-h .lb { font-size: 14px; line-height: 20px; font-weight: 600; color: var(--kk-text-darker); }
-  /* 描述：距標題 8px；收合夾 2 行、行尾內聯「展開/收起」（clampEl 處理，位於最後一行尾端） */
-  .det-intro { margin-top: 8px; font-size: 14px; line-height: 20px; color: var(--kk-text-darker); }
+  /* 描述（亮點標題已移除）：距上方政策行 24px；收合夾 2 行、行尾內聯「展開/收起」（clampEl 處理，位於最後一行尾端） */
+  .det-intro { margin-top: 24px; font-size: 14px; line-height: 20px; color: var(--kk-text-darker); }
   .det-provider { margin-top: 8px; font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
   .det-sec .pkg-warns { margin-top: 24px; }  /* 提醒標籤移到服務商資訊上方，與上文留距 */
   .det-h2 { font-size: 18px; line-height: 26px; font-weight: 600; color: var(--kk-text-darker); margin: 0 0 20px; }
@@ -1903,7 +1900,6 @@
           <div class="pkg-tags" id="detTags"></div>
         </div>
         <div class="det-policies" id="detPolicies"></div>
-        <div class="det-hl-h"><span class="ic ic-20"><img alt="" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTQuMTY2MDIgOC4zMzMwMUgxLjI1QzAuNTU5NjQ0IDguMzMzMDEgMCA3Ljc3MzM2IDAgNy4wODMwMVYxLjI1QzAgMC41NTk2NDQgMC41NTk2NDQgMCAxLjI1IDBINC4xNjYwMlY4LjMzMzAxWiIgZmlsbD0iIzI2QkVDOSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMi45MTYgOC43NSkiLz4KPHBhdGggZD0iTTMuMTQ3NDYgMEM0LjE3MDIzIDAuMDAwMTU4MTE1IDQuOTk5NjcgMC44Mjg4MzMgNSAxLjg1MTU2VjQuNTgzMDFDNSA0LjgxMzEzIDUuMTg2ODcgNSA1LjQxNjk5IDVIOS4wMDk3N0MxMC40MDUxIDUuMDAwMSAxMS40MDU3IDYuMzQ1MDggMTEuMDA0OSA3LjY4MTY0TDkuNTA0ODggMTIuNjgxNkM5LjI0MDQxIDEzLjU2MjcgOC40Mjk2NiAxNC4xNjYgNy41MDk3NyAxNC4xNjZIMFY1LjgzNTk0TDAuMDE3NTc4MSA1Ljc3NjM3TDEuMzc1IDEuMzEzNDhDMS42MTIyNyAwLjUzMzQxIDIuMzMyMTIgMC4wMDAxNDE5OTIgMy4xNDc0NiAwWiIgZmlsbD0iI0ZGQ0EyOCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNi4yNSAyLjkxNikiLz4KPC9zdmc+" width="20.00" height="20.00"></span><span class="lb">亮點</span></div>
         <p class="det-intro" id="detIntro">依據購買天數，可額外享有 3GB~30GB 的熱點分享流量。由連續兩年榮獲 Opensignal 網路可靠性全球大獎的電信網路提供連線，訊號覆蓋率高，市區、離島與山區都能穩定上網；搭配 KKday App 可隨時查詢剩餘流量，客服 24 小時線上協助安裝與連線問題。</p>
         <div class="pkg-warns" id="detWarns"></div>
         <div class="det-provider" id="detProvider"></div>
