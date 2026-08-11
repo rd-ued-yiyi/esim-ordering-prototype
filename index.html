@@ -936,6 +936,10 @@
   .det-coupon .tkt i { position: relative; font-style: normal;
     font-size: 12px; line-height: 16px; font-weight: 600; color: #E65F50; white-space: nowrap; }  /* 折扣文字加粗（Figma 1138-91780） */
   .det-coupon { border: 0; text-align: left; cursor: pointer; width: 100%; }
+  /* footer 上方有 coupon banner 時不顯示 footer 分割線；橫幅隱藏（全部領取）後恢復 */
+  .det-coupon + .det-foot, .det-coupon + .ord-foot { border-top: 0; }
+  .det-coupon[hidden] { display: none; }
+  .det-coupon[hidden] + .det-foot, .det-coupon[hidden] + .ord-foot { border-top: 1px solid var(--kk-border-lighter); }
   .det-coupon .claim { margin-left: auto; display: inline-flex; align-items: center; gap: 4px;
     font-size: 14px; line-height: 20px; font-weight: 600; color: #E65F50; }
   .det-coupon .claim .car { display: inline-flex; }
@@ -4142,7 +4146,7 @@
         toast('領取成功，折扣券可在付款頁使用');
         // 全部領取 → 關閉 sheet 並隱藏橫幅
         if (COUPONS.every(function (x) { return x.got; })) {
-          document.getElementById('detCoupon').style.display = 'none';
+          document.getElementById('detCoupon').hidden = true;  // 用 hidden 讓 CSS 恢復 footer 分割線
           setTimeout(closeSheets, 400);
         }
       });
