@@ -250,6 +250,7 @@
     font-size: 12px; line-height: 16px; color: var(--kk-text-darker);
   }
   .inline-note .ic { margin-top: 0; }
+  .inline-note--info { background: #F2FAFF; }  /* 信息提示蓝底（Figma 1116-91131：background-info-lighter #F2FAFF） */
 
   .field-head { display: flex; align-items: center; gap: 8px; width: 100%; }
   .field-head .label-lg { font-size: 18px; line-height: 26px; font-weight: 600; color: var(--kk-text-darker); white-space: nowrap; }
@@ -1070,6 +1071,12 @@
     position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%);
     height: 36px; background: var(--kk-surface-light); pointer-events: none;
   }
+  /* 顶/底白色渐隐：远端天数淡出（对齐 Figma 871-80284 的上下 mask），底色为白 */
+  .bs-picker::before, .bs-picker::after {
+    content: ''; position: absolute; left: 0; right: 0; height: 96px; pointer-events: none; z-index: 2;
+  }
+  .bs-picker::before { top: 0; background: linear-gradient(#fff, rgba(255, 255, 255, 0)); }
+  .bs-picker::after { bottom: 0; background: linear-gradient(rgba(255, 255, 255, 0), #fff); }
   .bs-wheel {
     position: relative; height: 100%; overflow-y: auto;
     scrollbar-width: none; -webkit-overflow-scrolling: touch; overscroll-behavior: contain;
@@ -1079,10 +1086,10 @@
   .bs-wheel::-webkit-scrollbar { display: none; }
   .bs-day {
     height: 36px; line-height: 36px; text-align: center;
-    font-size: 16px; color: var(--kk-text-light);
+    font-size: 14px; font-weight: 400; color: var(--kk-text-dark);  /* Figma 871-80284：非选中 Body-md 14/20 #727272、常规不加粗 */
     scroll-snap-align: center;
   }
-  .bs-day.sel { color: var(--kk-text-darker); font-weight: 600; }
+  .bs-day.sel { font-size: 16px; color: var(--kk-text-darker); font-weight: 600; }  /* 选中 Subtitle-lg 16/24 #212121、半粗放大 */
 
   /* ================= 选中目的地飞入引导 ================= */
   .fly-chip {
@@ -2169,6 +2176,10 @@
     <div class="bs-handle"></div>
     <div class="bs-bar"><button class="bs-close" data-bs-close aria-label="关闭"><span class="ic ic-24">{{IC_cross}}</span></button><span class="bs-title">设备信息</span><span class="bs-spacer"></span></div>
     <div class="bs-body"><div class="fs-body" style="padding:8px 24px 24px;">
+      <div class="inline-note inline-note--info">
+        <span class="ic ic-16">{{IC_infoBlue}}</span>
+        <span>在手机拨号键盘输入「＊＃０６＃」可显示EID序号</span>
+      </div>
       <div class="ff"><div class="ff-label">手机型号<span class="req">*</span></div><input class="ff-input" id="dv-model" placeholder="请输入手机型号（例：iPhone 17）"></div>
       <div class="ff"><div class="ff-label">EID / IMEI<span class="req">*</span></div><input class="ff-input" id="dv-imid" placeholder="请输入设备 EID / IMEI"></div>
     </div></div>
