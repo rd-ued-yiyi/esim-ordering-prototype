@@ -1230,6 +1230,9 @@
   .ord-row-link .r.filled { color: #212121; }
   .ord-row-link .r .ic { width: 20px; height: 20px; flex: 0 0 auto; }
   /* 底部欄 */
+  /* 下一步校驗未通過：目標板塊滾入視野並輕微左右晃動提示 */
+  @keyframes ord-shake { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-6px); } 40% { transform: translateX(5px); } 60% { transform: translateX(-3px); } 80% { transform: translateX(2px); } }
+  .shake-attn { animation: ord-shake .45s ease; }
   .ord-foot { flex: 0 0 auto; background: #fff; border-top: 1px solid var(--kk-border-lighter); display: flex; align-items: center; gap: 12px; padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px)); position: relative; }
   /* 費用明細：在 footer 上方原地展開的面板 */
   .ord-price-panel { position: absolute; left: 0; right: 0; bottom: 100%; background: #fff; border-top: 1px solid var(--kk-border-lighter); box-shadow: 0 -8px 16px -8px rgba(38,50,56,.12); padding: 12px 16px; display: none; }
@@ -4656,17 +4659,20 @@
       vp.classList.toggle('at-end', chips.scrollLeft + chips.clientWidth >= chips.scrollWidth - 1);
     };
     chips.onscroll = updateEnd;
+    // 選中項若不在可視區，瞬時滾入（有緩衝）；已在可視區則不動
+    var scrollSelIntoView = function () {
+      var sel = chips.querySelector('.ct-chip.sel');
+      if (!sel || !chips.clientWidth) return;
+      var cr = chips.getBoundingClientRect(), sr = sel.getBoundingClientRect(), pad = 12;
+      if (sr.left < cr.left + pad) chips.scrollLeft = Math.max(0, chips.scrollLeft + (sr.left - cr.left) - pad);
+      else if (sr.right > cr.right - pad) chips.scrollLeft = chips.scrollLeft + (sr.right - cr.right) + pad;
+    };
     requestAnimationFrame(function () {
       area.classList.toggle('has-scroll', chips.scrollWidth > chips.clientWidth + 1);  // 溢位可滾 → 顯示遮罩
       chips.scrollLeft = ctScroll;  // 還原重繪前的滾動位置（切換選中時視圖不跳動）
-      // 選中項若不在可視區，平滑滾入（有緩衝）；已在可視區則不動
-      var sel = chips.querySelector('.ct-chip.sel');
-      if (sel) {
-        var cr = chips.getBoundingClientRect(), sr = sel.getBoundingClientRect(), pad = 12;
-        if (sr.left < cr.left + pad) chips.scrollTo({ left: Math.max(0, chips.scrollLeft + (sr.left - cr.left) - pad), behavior: 'smooth' });
-        else if (sr.right > cr.right - pad) chips.scrollTo({ left: chips.scrollLeft + (sr.right - cr.right) + pad, behavior: 'smooth' });
-      }
+      scrollSelIntoView();
       updateEnd();
+      requestAnimationFrame(function () { scrollSelIntoView(); updateEnd(); });  // 第二幀兜底：首幀佈局未穩時重試
     });
     orderState.contacts.forEach(function (i) {
       var c = ORD_CONTACTS[i];
@@ -4728,14 +4734,23 @@
     syncSelPh(s);
     s.addEventListener('change', function () { syncSelPh(s); });
   });
+  // 未填欄位隨機補全（演示用假資料，避免出現「—」）
+  function rnd(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+  function rndDigits(n) { var s = ''; for (var i = 0; i < n; i++) s += Math.floor(Math.random() * 10); return s; }
   document.getElementById('contactConfirm').addEventListener('click', function () {
     var last = document.getElementById('ct-last').value, first = document.getElementById('ct-first').value;
     var tel = document.getElementById('ct-phone').value;
     var appName = document.getElementById('ct-appname').value, appId = document.getElementById('ct-appid').value;
     var app = (appName ? appName + ' ' : '') + appId;
     if (editContactIdx === null) {
-      ORD_CONTACTS.push({ last: last || '新', first: first || '聯絡人', tel: tel || '—', email: '—', app: app || '—' });
-      orderState.contacts.push(ORD_CONTACTS.length - 1);
+      ORD_CONTACTS.push({
+        last: last || rnd(['陳', '林', '黃', '張', '李', '吳']),
+        first: first || rnd(['家豪', '雅婷', '志明', '怡君', '冠宇', '品睿']),
+        tel: tel || '09' + rndDigits(8),
+        email: '—',
+        app: app || rnd(CT_APPS) + ' ' + rndDigits(8)
+      });
+      orderState.contacts = [ORD_CONTACTS.length - 1];  // 單選：新增即選中新聯絡人（取消其他選中）
     } else {
       var c = ORD_CONTACTS[editContactIdx];
       if (last) c.last = last; if (first) c.first = first; if (tel) c.tel = tel;
@@ -4761,14 +4776,15 @@
     var g = function (id) { return document.getElementById(id); };
     var type = (document.querySelector('input[name=fl-type]:checked') || {}).value || '國內線';
     var apEl = g('fl-airport');
+    // 未填欄位隨機補全（演示用假資料，避免出現「—」）
     orderState.flight = {
       type: type,
-      airport: apEl.value || '桃園機場',
-      terminal: g('fl-terminal').value || '—',
-      airline: g('fl-airline').value || '—',
-      no: g('fl-no').value || '—',
-      date: g('fl-date').value || '—',
-      time: g('fl-time').value || '—',
+      airport: apEl.value || '桃園機場 TPE',
+      terminal: g('fl-terminal').value || rnd(['1 航廈', '2 航廈']),
+      airline: g('fl-airline').value || rnd(['長榮航空', '中華航空', '星宇航空', '台灣虎航']),
+      no: g('fl-no').value || rnd(['BR', 'CI', 'JX', 'IT']) + (100 + Math.floor(Math.random() * 800)),
+      date: g('fl-date').value || (orderState.useDate ? orderState.useDate.m + '月' + orderState.useDate.d + '日' : '9月' + (1 + Math.floor(Math.random() * 28)) + '日'),
+      time: g('fl-time').value || rnd(['08:00', '10:00', '12:00', '14:00', '18:00', '22:00']),
       visa: (document.querySelector('input[name=fl-visa]:checked') || {}).value === '1',
       _date: flDate
     };
@@ -4783,7 +4799,11 @@
     openSheet(document.getElementById('deviceSheet'));
   }
   document.getElementById('deviceConfirm').addEventListener('click', function () {
-    orderState.device = { model: document.getElementById('dv-model').value || 'iPhone 17', imid: document.getElementById('dv-imid').value || 'XXXXX' };
+    // 未填欄位隨機補全（演示用假資料，避免出現「—」）
+    orderState.device = {
+      model: document.getElementById('dv-model').value || rnd(['iPhone 17', 'iPhone 17 Pro', 'iPhone 16', 'Galaxy S25', 'Pixel 10']),
+      imid: document.getElementById('dv-imid').value || '35' + rndDigits(13)
+    };
     closeSheets(); renderOrder();
   });
 
@@ -4826,13 +4846,24 @@
   // ---- 返回 / 下一步 ----
   document.getElementById('ordBack').addEventListener('click', closeOrder);
   document.getElementById('ordNext').addEventListener('click', function () {
-    // 資料未填寫：toast 提示排序最上面的一個未填板塊
-    var req = orderReq(orderP), st = orderState, msg = null;
-    if (req.date && !st.useDate) msg = '請選擇使用日期';
-    else if (req.flight && !st.flight) msg = '請填寫航班資訊';
-    else if (req.device && !st.device) msg = '請填寫裝置資訊';
-    else if (req.contacts && (!st.contacts || !st.contacts.length)) msg = '請選擇聯絡人';
-    if (msg) { toast(msg); return; }
+    // 資料未填寫：toast 提示排序最上面的一個未填板塊，並滾動定位 + 輕微晃動該板塊
+    var req = orderReq(orderP), st = orderState, msg = null, target = null;
+    var byId = function (id) { return document.getElementById(id); };
+    var cardOf = function (el) { return el ? (el.closest('.ord-card') || el) : null; };
+    if (req.date && !st.useDate) { msg = '請選擇使用日期'; target = document.querySelector('.ord-date-sec'); }
+    else if (req.flight && !st.flight) { msg = '請填寫航班資訊'; target = cardOf(byId('ordFlightEdit')); }
+    else if (req.device && !st.device) { msg = '請填寫裝置資訊'; target = cardOf(byId('ordDeviceEdit')); }
+    else if (req.contacts && (!st.contacts || !st.contacts.length)) { msg = '請選擇聯絡人'; target = cardOf(byId('ctArea')); }
+    if (msg) {
+      toast(msg);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        target.classList.remove('shake-attn'); void target.offsetWidth;  // 重置以便重複觸發動畫
+        target.classList.add('shake-attn');
+        setTimeout(function () { target.classList.remove('shake-attn'); }, 600);
+      }
+      return;
+    }
     withLoading(this, openPay);
   });
 
