@@ -1200,8 +1200,8 @@
   .ct-area.has-scroll .ct-chips-vp:not(.at-end)::after { content: ''; position: absolute; top: 0; bottom: 0; right: 0; width: 50px; background: linear-gradient(to right, rgba(255, 255, 255, 0), #fff); pointer-events: none; }
   .ct-chip { flex: 0 0 auto; max-width: 120px; padding: 6px 8px; border-radius: 8px; background: #fff; border: 1px solid #D5D6DB; font-size: 14px; line-height: 20px; font-weight: 600; color: #212121; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .ct-chip.sel { background: #F0FAFB; border-color: #26BEC9; color: #26BEC9; }
-  /* 新增按钮：移到原展开收起位置、固定右侧（Figma 1110-85868：border #727272、pl8 pr12 py6、gap4、圆角8、+16 +「新增」14 半粗） */
-  .ct-add { flex: 0 0 auto; display: inline-flex; align-items: center; gap: 4px; padding: 6px 12px 6px 8px; border-radius: 8px; background: #fff; border: 1px solid #727272; font-size: 14px; line-height: 20px; font-weight: 600; color: #212121; white-space: nowrap; }
+  /* 新增按钮：移到原展开收起位置、固定右侧——无边框 cyan 文字按钮（Figma 1126-91395 Text primary：#13A3B6、px8 h36、gap4、+16 半粗） */
+  .ct-add { flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: center; gap: 4px; height: 36px; padding: 0 8px; background: #fff; border: 0; font-size: 14px; line-height: 20px; font-weight: 600; color: #13A3B6; white-space: nowrap; }
   .ct-add .ic { width: 16px; height: 16px; }
   /* 已选联系人卡：头部 #F7FAFC + 名字/编辑/删除，主体 kv */
   .ct-card { border-radius: 8px; overflow: hidden; margin-top: 12px; }
@@ -2637,7 +2637,7 @@
     smile: '{{IC_smile}}', neutral: '{{IC_neutral}}',  // 评论关键词表情
     starGrey: '{{IC_starGrey}}', thumb: '{{IC_thumb}}', // 评论页：灰星 / 有帮助
     // 订单填写页用
-    file: '{{IC_file}}', locGrey: '{{IC_locationGrey}}', plus: '{{IC_plus}}', plusBold: '{{IC_plusSemibold}}', cross: '{{IC_cross}}',
+    file: '{{IC_file}}', locGrey: '{{IC_locationGrey}}', plus: '{{IC_plus}}', plusBold: '{{IC_plusSemibold}}', plusCyan: '{{IC_plusSemiCyan}}', cross: '{{IC_cross}}',
     // 订单页行内小图标（描边 svg，直接内联，无需 build token；颜色对齐设计稿 #212121）
     fileDark: '{{IC_fileDark}}', locDark: '{{IC_locationDark}}',
     fileCheckLine: '{{IC_fileCheckLine}}', editLine: '{{IC_editLine}}', infoCyan: '{{IC_infoCyan}}',
@@ -4508,7 +4508,7 @@
       var hasCt = st.contacts.length > 0;
       c += '<div class="ord-card"><div class="ord-sec-h"><div class="t">选择 <span class="cnt">1</span> 位联系人' + (hasCt ? '<span class="hint">已选择</span>' : '') + '</div></div>' +
         '<div class="ct-area" id="ctArea"><div class="ct-chips-vp" id="ctChipsVp"><div class="ct-chips" id="ctChips"></div></div>' +
-        '<button class="ct-add" id="ctAdd"><span class="ic">' + ICONS.plusBold + '</span>新增</button></div>' +
+        '<button class="ct-add" id="ctAdd"><span class="ic">' + ICONS.plusCyan + '</span>新增</button></div>' +
         '<div id="ctCards"></div></div>';
     }
     var o = st.orderer;
@@ -4742,7 +4742,15 @@
 
   // ---- 返回 / 下一步 ----
   document.getElementById('ordBack').addEventListener('click', closeOrder);
-  document.getElementById('ordNext').addEventListener('click', function () { withLoading(this, openPay); });
+  document.getElementById('ordNext').addEventListener('click', function () {
+    // 资料未填写：toast 提示排序最上面的一个未填板块
+    var req = orderReq(orderP), st = orderState, msg = null;
+    if (req.flight && !st.flight) msg = '请填写航班信息';
+    else if (req.device && !st.device) msg = '请填写设备信息';
+    else if (req.contacts && (!st.contacts || !st.contacts.length)) msg = '请选择联系人';
+    if (msg) { toast(msg); return; }
+    withLoading(this, openPay);
+  });
 
   // ================= 付款页 =================
   var payState = null;

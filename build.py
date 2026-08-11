@@ -142,7 +142,8 @@ subs = {
     "{{IC_earthLine}}":    svg("earthLine"),
     "{{IC_earthCyan}}":    svg("earthLine", recolor=("#212121", "#26BEC9")),
     "{{IC_plus}}":         svg("plus"),
-    "{{IC_plusSemibold}}": svg("plusSemibold"),  # 新增按钮：半粗 line 加号（Figma 1110-85868 ic_plus_line_semibold）
+    "{{IC_plusSemibold}}": svg("plusSemibold"),  # 半粗 line 加号（Figma ic_plus_line_semibold）
+    "{{IC_plusSemiCyan}}": svg("plusSemibold", recolor=("#212121", "#13A3B6")),  # 联系人「新增」文字按钮：cyan 半粗加号（Figma 1126-91395 #13A3B6）
     "{{IC_plusCyan}}":     svg("plus", recolor=("#212121", "#26BEC9")),
     # 多国自由选择：circlesPlus（三圆 + 加号＝自由添加多个，Figma 662-30456）
     "{{IC_multi}}":        svg("circlesPlus"),
