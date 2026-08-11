@@ -1313,7 +1313,7 @@
   .ff-selwrap { position: relative; }
   .ff-selwrap .chev { position: absolute; right: 12px; top: 50%; transform: translateY(-50%) rotate(0); width: 16px; height: 16px; pointer-events: none; }
   .ff-area { min-height: 88px; resize: none; }
-  .ff-row { display: flex; gap: 12px; }
+  .ff-row { display: flex; gap: 12px; margin-bottom: 16px; }  /* 整行与下一字段的间距（内部 .ff 已清零，需由行补上） */
   .ff-row > .ff { flex: 1 1 0; margin-bottom: 0; }
   .ff-row2 { display: flex; gap: 12px; }
   .ff-row2 .cc { flex: 0 0 96px; }
