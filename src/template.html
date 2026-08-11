@@ -1226,10 +1226,13 @@
   .shake-attn { animation: ord-shake .45s ease; }
   .ord-foot { flex: 0 0 auto; background: #fff; border-top: 1px solid var(--kk-border-lighter); display: flex; align-items: center; gap: 12px; padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px)); position: relative; }
   /* 費用明細：在 footer 上方原地展開的面板 */
-  .ord-price-panel { position: absolute; left: 0; right: 0; bottom: 100%; background: #fff; border-top: 1px solid var(--kk-border-lighter); box-shadow: 0 -8px 16px -8px rgba(38,50,56,.12); padding: 12px 16px; display: none; }
+  /* 費用明細：footer 上方展開的 bottom sheet 樣式面板（把手＋✕＋標題，Figma 1074-82877） */
+  .ord-price-panel { position: absolute; left: 0; right: 0; bottom: 100%; background: #fff;
+    border-radius: 16px 16px 0 0; box-shadow: 0 -8px 24px rgba(38, 50, 56, .16); display: none; }
   .ord-price-panel.open { display: block; }
+  .ord-price-panel .pp-body { padding: 4px 16px 20px; }
   .ord-price-panel .price-line { display: flex; align-items: center; justify-content: space-between; font-size: 14px; line-height: 20px; color: #212121; padding: 4px 0; }
-  .ord-price-panel .price-line .k { color: #727272; }
+  .ord-price-panel .price-line .k { color: #212121; }  /* 明細行左側同深色（Figma 1074-82877） */
   .ord-price-toggle.open .caret { transform: rotate(0); }
   .ord-price-toggle { display: flex; align-items: center; gap: 2px; flex: 1 1 auto; }
   .ord-price-toggle .cur, .ord-price-toggle .amt { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 20px; line-height: 20px; font-weight: 700; color: #212121; }
@@ -4728,11 +4731,19 @@
     document.getElementById('priceBody').innerHTML =
       '<div class="price-line"><span class="k">訂單金額 X' + st.qty + '</span><span>NT$ ' + ordTotal().toLocaleString() + '</span></div>';
   }
-  function pricePanelHtml() { return '<div class="price-line"><span class="k">訂單金額 X' + orderState.qty + '</span><span>NT$ ' + ordTotal().toLocaleString() + '</span></div>'; }
+  // 費用明細面板：bottom sheet 樣式（把手＋✕＋標題＋明細行，Figma 1074-82877）
+  function pricePanelHtml() {
+    return '<div class="bs-handle"></div>' +
+      '<div class="bs-bar"><button class="bs-close pp-close" aria-label="關閉"><span class="ic ic-24">' + ICONS.cross + '</span></button><span class="bs-title">費用明細</span><span class="bs-spacer"></span></div>' +
+      '<div class="pp-body"><div class="price-line"><span class="k">訂單金額 X' + orderState.qty + '</span><span>NT$ ' + ordTotal().toLocaleString() + '</span></div></div>';
+  }
   function togglePricePanel(panelId, toggleId) {
     var panel = document.getElementById(panelId), tog = document.getElementById(toggleId);
     var open = panel.classList.toggle('open'); tog.classList.toggle('open', open);
-    if (open) panel.innerHTML = pricePanelHtml();
+    if (open) {
+      panel.innerHTML = pricePanelHtml();
+      panel.querySelector('.pp-close').onclick = function () { togglePricePanel(panelId, toggleId); };
+    }
   }
   document.getElementById('ordPriceToggle').addEventListener('click', function () { togglePricePanel('ordPricePanel', 'ordPriceToggle'); });
 
