@@ -729,7 +729,7 @@
     width: 24px; height: 24px; border-radius: 50%; background: #fff; border: 1px solid var(--kk-border-light);
     box-shadow: 0 1px 4px rgba(38,50,56,.2); cursor: pointer; }
   .fs-foot { flex: 0 0 auto; padding: 12px 24px calc(12px + env(safe-area-inset-bottom, 0px));
-    box-shadow: 0 -2px 8px rgba(38,50,56,.06); }
+    border-top: 1px solid var(--kk-border-lighter); }
   .fs-foot .cta { background: var(--kk-primary-button); color: #fff; }
   .fs-foot .cta:disabled { background: rgba(26,182,193,.4); color: rgba(255,255,255,.6); }  /* 0 結果禁用（Figma 1004-42393） */
   /* 日期日曆 */
@@ -1034,7 +1034,7 @@
   }
   .bs-bar .bs-spacer { width: 24px; }
   .bs-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
-  .bs-foot { flex: 0 0 auto; padding: 16px 24px calc(16px + env(safe-area-inset-bottom, 0px)); }
+  .bs-foot { flex: 0 0 auto; padding: 16px 24px calc(16px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--kk-border-lighter); }
   #bsRegion.info .bs-foot { display: none; }  /* 詳情頁適用範圍＝資訊態，無確定按鈕 */
   .bs-foot .cta { background: var(--kk-primary-button); color: #fff; }
 
