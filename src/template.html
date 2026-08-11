@@ -1310,6 +1310,7 @@
   .ff-input, .ff-select, .ff-area { width: 100%; border: 1px solid var(--kk-border-lighter); border-radius: 8px; padding: 12px; font-size: 16px; line-height: 20px; color: var(--kk-text-darker); background: #fff; }
   .ff-input::placeholder, .ff-area::placeholder { color: var(--kk-text-light); }
   .ff-select { appearance: none; background-image: none; }
+  .ff-select.is-empty { color: var(--kk-text-light); }  /* 未選（請選擇）顯示暗文占位色 */
   .ff-selwrap { position: relative; }
   .ff-selwrap .chev { position: absolute; right: 12px; top: 50%; transform: translateY(-50%) rotate(0); width: 16px; height: 16px; pointer-events: none; }
   .ff-area { min-height: 88px; resize: none; }
@@ -4611,8 +4612,15 @@
     var matched = CT_APPS.filter(function (o) { return o.toLowerCase() === (parts[0] || '').toLowerCase(); })[0] || '';
     document.getElementById('ct-appname').value = matched;
     document.getElementById('ct-appid').value = matched ? parts.slice(1).join(' ') : (c.app || '');
+    syncSelPh(document.getElementById('ct-appname'));  // 程式化設值後同步暗文狀態
     openSheet(document.getElementById('contactSheet'));
   }
+  // 下拉未選（value 為空）時顯示暗文占位色；選定後恢復深色
+  function syncSelPh(s) { if (s) s.classList.toggle('is-empty', !s.value); }
+  document.querySelectorAll('.ff-select').forEach(function (s) {
+    syncSelPh(s);
+    s.addEventListener('change', function () { syncSelPh(s); });
+  });
   document.getElementById('contactConfirm').addEventListener('click', function () {
     var last = document.getElementById('ct-last').value, first = document.getElementById('ct-first').value;
     var tel = document.getElementById('ct-phone').value;
