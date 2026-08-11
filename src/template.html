@@ -3299,7 +3299,7 @@
             : (i % 4 === 1) ? ['reloadD', '3天前可免費取消', true]
             : (i % 4 === 2) ? ['reloadD', '10天前可免費取消', true]
             : ['crossD', '不可取消', true],
-          (i % 2 === 0) ? ['checkLine', '即日可用', false]
+          (i % 2 === 0) ? ['checkLine', '即買即用', false]
             : ['calendarD', '最早可使用日: ' + fmtDate(2), true]
         ],
         warns: i % 4 === 0 ? ['需線下實名認證', '需提供航班', '需EID/IMEI'] : i % 4 === 1 ? ['需提供航班'] : i % 4 === 3 ? ['需線下實名認證', '需EID/IMEI'] : [],
@@ -3496,7 +3496,7 @@
   function filterCats() {
     return [
       { key: 'date', label: '使用日期', opts: ['今天', '明天'], date: true, single: true, rect: true },
-      { key: 'service', label: '服務保障', opts: ['免費取消', '立即確定', '即日可用'] },
+      { key: 'service', label: '服務保障', opts: ['免費取消', '立即確定', '即買即用'] },
       { key: 'cardType', label: '卡片型別', opts: ['原生卡', '國際漫遊卡', '虛商卡'] },
       { key: 'speed', label: '網速', opts: ['5G', '4G', '5G/4G'] },
       { key: 'activate', label: '啟用方式', opts: ['掃碼啟用', '一鍵啟用'] },
@@ -3549,7 +3549,7 @@
         var ok = st.service.every(function (s) {
           if (s === '免費取消') return pt.some(function (t) { return t.indexOf('免費取消') >= 0; });
           if (s === '立即確定') return pt.indexOf('立即確認') >= 0;
-          if (s === '即日可用') return pt.indexOf('即日可用') >= 0;
+          if (s === '即買即用') return pt.indexOf('即買即用') >= 0;
           return true;
         });
         if (!ok) return false;
@@ -3842,7 +3842,7 @@
     var pol = document.getElementById('detPolicies'); pol.innerHTML = '';
     // 政策順序與卡片一致：確認速度 → 可用日期 → 取消政策（取消政策放最後，適用範圍仍在其後）
     [p.perks[0], p.perks[2], p.perks[1]].forEach(function (pk) {
-      var label = pk[1] === '立即確認' ? '立即確認並傳送憑證' : pk[1] === '即日可用' ? '現在訂購，立即使用' : pk[1];
+      var label = pk[1] === '立即確認' ? '立即確認並傳送憑證' : pk[1] === '即買即用' ? '現在訂購，立即使用' : pk[1];
       var e = el('<span class="perk' + (pk[2] ? ' dark' : '') + '"><span class="ic">' + ICONS_BIG[PERK_ICONS[pk[0]]] + '</span><span class="pt"></span></span>');
       e.querySelector('.pt').textContent = label;
       pol.appendChild(e);
