@@ -2205,10 +2205,10 @@
     <div class="bs-bar"><button class="bs-close" data-bs-close aria-label="關閉"><span class="ic ic-24">{{IC_cross}}</span></button><span class="bs-title">取消政策</span><span class="bs-spacer"></span></div>
     <div class="bs-body"><div class="fs-body" style="padding:8px 24px 24px;">
       <div class="cxl-table">
-        <div class="cxl-row head"><span>取消日期</span><span class="fee">手續費</span><span></span></div>
-        <div class="cxl-row"><span>2025/12/16 之前</span><span class="fee">0%</span><span class="ic ic-20" style="color:#13A3B6">{{IC_checkCircle}}</span></div>
-        <div class="cxl-row"><span>2025/12/17 ～ 2025/12/20</span><span class="fee">50%</span><span></span></div>
-        <div class="cxl-row"><span>2025/12/20 之後</span><span class="fee">100%</span><span></span></div>
+        <div class="cxl-row head"><span>取消日期（含）</span><span class="fee">手續費</span><span></span></div>
+        <div class="cxl-row"><span id="cxl-d1"></span><span class="fee">0%</span><span class="ic ic-20" style="color:#13A3B6">{{IC_checkCircle}}</span></div>
+        <div class="cxl-row"><span id="cxl-d2"></span><span class="fee">50%</span><span></span></div>
+        <div class="cxl-row"><span id="cxl-d3"></span><span class="fee">100%</span><span></span></div>
       </div>
       <div class="cxl-note"><span class="ic">{{IC_info}}</span><span>上述資訊以目前日期試算，實際請依訂單資訊為主。注意：由於站內商品來自全球各地，訂單取消時間將依供應商所在時區判定。供應商需 2–5 個工作天進行取消流程，依照您購買的商品取消政策收取手續費，並於取消流程完成後 14 個工作天內退款。</span></div>
     </div></div>
@@ -4374,6 +4374,31 @@
   function ordDestLine() {
     return '<span class="u">支援' + destCoverageList().length + '個國家/地區</span>';
   }
+  // 取消政策：从商品取消 perk 解析免费取消天数（無則預設 3）
+  function cancelDaysOf(p) {
+    var perk = ((p && p.perks) || []).filter(function (pk) { return /可免費取消/.test(pk[1] || ''); })[0];
+    var m = perk && /(\d+)\s*天前/.exec(perk[1]);
+    return m ? +m[1] : 3;
+  }
+  function fmtYmd(d) { return d.getFullYear() + '/' + ('0' + (d.getMonth() + 1)).slice(-2) + '/' + ('0' + d.getDate()).slice(-2); }
+  // 外层取消政策入口文案：选了日期→换算绝对日期；没选→相对「N天前」（Figma 1074-82931 / 1144-93448）
+  function cancelInlineText(p, ud) {
+    var n = cancelDaysOf(p);
+    if (ud) return fmtYmd(new Date(ud.y, ud.m - 1, ud.d - n)) + ' 前可免費取消';
+    return n + '天前可免費取消';
+  }
+  // 取消政策 sheet 表格：选了日期→换算日期；没选→相对说法
+  function renderCancelSheet() {
+    var n = cancelDaysOf(orderP), ud = orderState.useDate;
+    var d1 = document.getElementById('cxl-d1'), d2 = document.getElementById('cxl-d2'), d3 = document.getElementById('cxl-d3');
+    if (!d1) return;
+    if (ud) {
+      var free = fmtYmd(new Date(ud.y, ud.m - 1, ud.d - n)), use = fmtYmd(new Date(ud.y, ud.m - 1, ud.d));
+      d1.textContent = free + ' 之前'; d2.textContent = free + ' ～ ' + use; d3.textContent = use + ' 之後';
+    } else {
+      d1.textContent = '所選日期 ' + n + ' 天前'; d2.textContent = '所選日期 ' + n + ' 天前 ～ 使用當日'; d3.textContent = '使用當日之後';
+    }
+  }
   function ordTotal() { return orderP.now * orderState.qty; }
 
   function openOrder(p) {
@@ -4381,8 +4406,7 @@
     orderState = newOrderState();
     ctScroll = 0;  // 每次開訂單頁聯絡人 chips 從最左開始
     var req = orderReq(p);
-    // 有使用日期需求時預設選第一個可選日
-    if (req.date) orderState.useDate = ordDatePresets()[0];
+    // 預設不選使用日期（取消政策顯示相對「N天前」；選日期後才換算絕對日期，Figma 1074-82931 / 1144-93448）
     renderOrder();
     var m = document.getElementById('orderModal');
     m.classList.add('open'); m.setAttribute('aria-hidden', 'false');
@@ -4423,7 +4447,7 @@
       '<div class="ord-hr"></div>' +
       '<div class="ord-price-block">' +
         '<div class="ord-price"><span class="cur">NT$</span><span class="num">' + p.now.toLocaleString() + '</span></div>' +
-        '<button class="ord-cancel" id="ordCancelInfo">2025/12/16 前可免費取消 <span class="ic">' + ICONS.infoCyan + '</span></button>' +
+        '<button class="ord-cancel" id="ordCancelInfo">' + cancelInlineText(orderP, orderState.useDate) + ' <span class="ic">' + ICONS.infoCyan + '</span></button>' +
       '</div></div>';
     // 使用日期 + 購買數量 收進內層容器（額外 px-16，兩側邊距比商品卡更大，Figma 1074-82674）
     var dq = '';
@@ -4473,7 +4497,7 @@
 
     // 繫結
     var byId = function (id) { return document.getElementById(id); };
-    byId('ordCancelInfo').onclick = function () { openSheet(byId('cancelSheet')); };
+    byId('ordCancelInfo').onclick = function () { renderCancelSheet(); openSheet(byId('cancelSheet')); };
     if (byId('ordDestLine')) byId('ordDestLine').onclick = openOrdScope;
     var mi = byId('qtyMinus'), pl = byId('qtyPlus');
     if (mi) mi.onclick = function () { if (st.qty > 1) { st.qty--; renderOrder(); } };
@@ -4512,6 +4536,8 @@
         box.querySelectorAll('.ord-dchip.sel').forEach(function (x) { x.classList.remove('sel'); });
         c.classList.add('sel');
         centerChip(c, true);
+        var ci = document.getElementById('ordCancelInfo');  // 同步外层取消政策入口为换算日期
+        if (ci && ci.firstChild) ci.firstChild.textContent = cancelInlineText(orderP, d) + ' ';
       };
       box.appendChild(c);
     });
@@ -4722,7 +4748,8 @@
   document.getElementById('ordNext').addEventListener('click', function () {
     // 資料未填寫：toast 提示排序最上面的一個未填板塊
     var req = orderReq(orderP), st = orderState, msg = null;
-    if (req.flight && !st.flight) msg = '請填寫航班資訊';
+    if (req.date && !st.useDate) msg = '請選擇使用日期';
+    else if (req.flight && !st.flight) msg = '請填寫航班資訊';
     else if (req.device && !st.device) msg = '請填寫裝置資訊';
     else if (req.contacts && (!st.contacts || !st.contacts.length)) msg = '請選擇聯絡人';
     if (msg) { toast(msg); return; }
@@ -4770,7 +4797,7 @@
         '<div class="ord-pline"><span class="ic">' + ICONS.simCard + '</span>eSIM X' + st.qty + '</div>' +
       '</div>' +
       '<div class="ord-hr" style="margin:12px 0"></div>' +
-      '<button class="ord-cancel" id="payCancelInfo">2025/12/16 前可免費取消 <span class="ic">' + ICONS.infoCyan + '</span></button>' +
+      '<button class="ord-cancel" id="payCancelInfo">' + cancelInlineText(orderP, orderState.useDate) + ' <span class="ic">' + ICONS.infoCyan + '</span></button>' +
       '</div>';
     // 折扣與點數
     h += '<div class="ord-card"><div class="ord-sec-h"><div class="t">折扣與點數</div></div>' +
@@ -4808,7 +4835,7 @@
     document.getElementById('payBody').innerHTML = summary + '<div class="ord-cards">' + h + '</div>';
     document.getElementById('payFootAmt').textContent = ordTotal().toLocaleString();
     var byId = function (id) { return document.getElementById(id); };
-    byId('payCancelInfo').onclick = function () { openSheet(byId('cancelSheet')); };
+    byId('payCancelInfo').onclick = function () { renderCancelSheet(); openSheet(byId('cancelSheet')); };
     if (byId('payDestLine')) byId('payDestLine').onclick = openOrdScope;
     byId('payPromo').onclick = function () { toast('折扣碼（開發中）'); };
     byId('payPoints').onclick = function () { ps.usePoints = !ps.usePoints; renderPay(); };
