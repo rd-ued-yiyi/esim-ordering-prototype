@@ -2175,10 +2175,10 @@
     <div class="bs-body"><div class="fs-body" style="padding:8px 24px 24px;">
       <div class="inline-note inline-note--info" style="margin-bottom:16px">
         <span class="ic ic-16">{{IC_infoFill}}</span>
-        <span>在手機撥號鍵盤輸入「＊＃０６＃」可顯示EID序號</span>
+        <span>在手機撥號鍵盤輸入「＊＃０６＃」可顯示IMID序號</span>
       </div>
-      <div class="ff"><div class="ff-label">手機型號<span class="req">*</span></div><input class="ff-input" id="dv-model" placeholder="請輸入手機型號（例：iPhone 17）"></div>
-      <div class="ff"><div class="ff-label">EID / IMEI<span class="req">*</span></div><input class="ff-input" id="dv-imid" placeholder="請輸入裝置 EID / IMEI"></div>
+      <div class="ff"><div class="ff-label">手機型號<span class="req">*</span></div><input class="ff-input" id="dv-model" placeholder="請輸入"></div>
+      <div class="ff"><div class="ff-label">IMID<span class="req">*</span></div><input class="ff-input" id="dv-imid" placeholder="請輸入15位IMID碼"></div>
     </div></div>
     <div class="fs-foot"><button class="cta" id="deviceConfirm">確定</button></div>
   </div>
@@ -4455,7 +4455,7 @@
     if (req.device) {
       c += '<div class="ord-card"><div class="ord-sec-h"><div class="t">裝置資訊</div>' +
         '<button class="ord-edit' + (st.device ? '' : ' empty') + '" id="ordDeviceEdit">' + (st.device ? '' : '請填寫') + '<span class="ic">' + ICONS.editLine + '</span></button></div>' +
-        (st.device ? '<div class="ord-kv"><div><div class="k">手機型號</div><div class="v">' + st.device.model + '</div></div><div><div class="k">EID / IMEI</div><div class="v">' + st.device.imid + '</div></div></div>' : '') + '</div>';
+        (st.device ? '<div class="ord-kv"><div><div class="k">手機型號</div><div class="v">' + st.device.model + '</div></div><div><div class="k">IMID</div><div class="v">' + st.device.imid + '</div></div></div>' : '') + '</div>';
     }
     if (req.contacts) {
       var hasCt = st.contacts.length > 0;
