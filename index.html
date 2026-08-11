@@ -166,7 +166,7 @@
   /* ---------- 内容区 ---------- */
   .con { position: relative; z-index: 1; padding-bottom: 40px; }
   .title-block { padding: 8px 24px 0; color: #fff; }
-  .title-block .t-h4 { font-size: 32px; line-height: 40px; }  /* 主题页 eSIM 标题调大（Figma 648-800） */
+  .title-block .t-h4 { font-size: 28px; line-height: 36px; }  /* 主题页 eSIM 标题（Figma 648-806：Semibold 28/36） */
   .title-block .sub { margin-top: 8px; }
 
   .page { display: flex; flex-direction: column; gap: 16px; padding: 20px 16px 0; }
@@ -673,12 +673,12 @@
   }
   .cond-flow-h { display: flex; align-items: center; }
   /* 展开/收起三角按钮：白色小 tab，骑在流量面板顶边中央（Figma 1116-89167） */
-  .cond-toggle { position: absolute; top: -24px; left: 50%; transform: translateX(-50%);
-    background: #fff; border-radius: 8px 8px 0 0; padding: 0 12px; height: 24px;
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 -3px 8px -5px rgba(38,50,56,.12); }
-  .cond-toggle .ic { width: 24px; height: 24px; transform: rotate(180deg); transition: transform .2s; }  /* 默认 ▲（收起态，点击展开） */
-  .cond-expanded .cond-toggle .ic { transform: rotate(0); }                    /* 展开态 ▼ */
+  .cond-toggle { position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+    background: #fff; border-radius: 8px 8px 0 0; padding: 0 12px;
+    display: flex; align-items: center; justify-content: center; }   /* Figma 1116-89167：白色小 tab、无阴影，骑在面板顶边 */
+  .cond-toggle .ic { width: 24px; height: 24px; transform: rotate(180deg);
+    transition: transform .3s cubic-bezier(.22, .61, .36, 1); }      /* 收起态 ▲（点击展开）；缓动与面板一致 */
+  .cond-expanded .cond-toggle .ic { transform: rotate(0); }           /* 展开态 ▼ */
   /* 展开：流量面板变高（5 行）向上覆盖天数区 */
   .cond-expanded #condOpts .opts-grid { grid-template-rows: repeat(5, auto); }
   /* 流量档滚动区通栏：负 margin 延伸到屏幕边缘，内容滚动时不被两侧留白切断 */
@@ -4429,9 +4429,25 @@
   document.getElementById('condClose').addEventListener('click', closeCondModal);
   document.getElementById('condToggle').addEventListener('click', function () {
     var m = document.getElementById('condModal');
-    m.classList.toggle('cond-expanded');
-    // 展开/收起后把选中档位重新滚回可视区
-    requestAnimationFrame(function () { revealOpt(document.getElementById('condOptsScroll'), false); });
+    var sc = document.getElementById('condOptsScroll');
+    if (sc._anim) return;                                   // 动画进行中忽略连点
+    var startH = sc.getBoundingClientRect().height;
+    m.classList.toggle('cond-expanded');                    // 网格 2⇄5 行，面板底部固定、向上生长
+    var endH = sc.getBoundingClientRect().height;           // 新状态下的自然高度
+    // 用缓动过渡流量区高度：裁掉溢出行，随高度增减逐行显隐，面板包络随之平滑升降
+    sc._anim = true;
+    sc.style.overflowY = 'hidden';
+    sc.style.height = startH + 'px';
+    void sc.offsetHeight;                                   // 强制回流，确立起始帧
+    sc.style.transition = 'height .3s cubic-bezier(.22, .61, .36, 1)';
+    sc.style.height = endH + 'px';
+    var cleanup = function () {
+      sc.style.transition = ''; sc.style.height = ''; sc.style.overflowY = '';
+      sc._anim = false;
+      sc.removeEventListener('transitionend', cleanup);
+      revealOpt(sc, false);                                 // 结束后把选中档位滚回可视区
+    };
+    sc.addEventListener('transitionend', cleanup);
   });
   document.getElementById('condConfirm').addEventListener('click', function () {
     withLoading(this, function () {
