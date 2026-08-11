@@ -1176,8 +1176,10 @@
   .ord-dchip .d { font-size: 14px; line-height: 20px; font-weight: 600; color: #212121; }
   .ord-dchip .w { font-size: 12px; line-height: 16px; color: #727272; }
   .ord-dchip.sel { border-color: #26BEC9; background: #F0FAFB; }
-  .ord-dmore { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 8px 12px; background: #fff; box-shadow: -6px 0 8px -4px rgba(38,50,56,.12); position: relative; z-index: 2; }
+  .ord-dmore { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 8px 12px; background: #fff; position: relative; z-index: 2; }
   .ord-date-wrap { position: relative; }
+  /* 仅左侧阴影：改用左邻渐变条（限定在按钮高度内），避免 box-shadow 的模糊从上下边缘漏出 */
+  .ord-dmore::before { content: ''; position: absolute; top: 0; bottom: 0; left: 0; width: 12px; transform: translateX(-100%); background: linear-gradient(to right, rgba(38, 50, 56, 0), rgba(38, 50, 56, .12)); pointer-events: none; }
   .ord-dmore .ic { width: 16px; height: 16px; }
   .ord-dmore .w { font-size: 12px; line-height: 16px; color: #212121; }
   /* 数量步进器（Figma stepper：32 圆，minus 边 #ADE6EB / plus 边 #26BEC9，gap4） */
