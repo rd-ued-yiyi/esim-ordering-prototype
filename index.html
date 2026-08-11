@@ -3513,9 +3513,10 @@
         perks.appendChild(e);
       });
       var warns = card.querySelector('.pkg-warns');
-      warns._all = p.warns;                 // 供掉行折叠时回溯全量
-      if (!p.warns.length) warns.style.display = 'none';
-      fillWarns(warns, p.warns);
+      var warns2 = p.warns.slice(0, 2);     // 列表页黄色提醒最多显示 2 项
+      warns._all = warns2;                  // 供掉行折叠时回溯（已限 2 项）
+      if (!warns2.length) warns.style.display = 'none';
+      fillWarns(warns, warns2);
       card.querySelector('.pkg-vendor').textContent = p.vendor;
       var rating = card.querySelector('.pkg-rating');
       // 评分描述：4.6-5.0 非常好 / 4.0-4.5 很好；3.5-3.9 的「好」刻意不显示（中性评价加正向标签反而放大平庸感）
