@@ -772,7 +772,7 @@
     overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain;
     background: var(--kk-surface-light);
   }
-  .det-sec { background: #fff; padding: 24px 20px 32px; }
+  .det-sec { background: #fff; padding: 24px 20px 24px; }  /* 區塊底距 24（Figma 1009-43085） */
   .det-sec + .det-sec { margin-top: 8px; }
   /* 區塊左右內距按 Figma 各不相同：服務說明 16 / 其餘 20 / 圖文說明 24 */
   .det-sec[data-sec="svc"] { padding-left: 16px; padding-right: 16px; }
@@ -788,8 +788,8 @@
   .det-cond .ic { width: 20px; height: 20px; }
   .det-title { font-size: 22px; line-height: 28px; font-weight: 600; color: var(--kk-text-darker); }
   .det-sec .pkg-hr { margin: 24px 0; }
-  /* 首屏政策 icon+text：20px 圖示 + 6px gap（Figma 902-41283，調整後）；距上方方案卡 24px */
-  .det-policies { display: flex; flex-direction: column; gap: 8px; margin-top: 24px;
+  /* 首屏政策 icon+text：20px 圖示 + 6px gap（Figma 902-41283，調整後）；距上方方案卡 20px（Figma 1009-43085） */
+  .det-policies { display: flex; flex-direction: column; gap: 8px; margin-top: 20px;
     font-size: 14px; line-height: 20px; color: #13A3B6; }
   .det-policies .perk { display: inline-flex; align-items: center; gap: 6px; }
   .det-policies .perk .ic { width: 20px; height: 20px; }
@@ -802,12 +802,12 @@
   .det-policies .perk.cover { display: flex; width: 100%; }
   .det-policies .perk.cover .pt { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .det-policies .perk.cover .cnt { flex: 0 0 auto; text-decoration: underline; text-underline-offset: 2px; }
-  /* 描述（亮點標題已移除）：距上方政策行 24px；收合夾 2 行、行尾內聯「展開/收起」（clampEl 處理，位於最後一行尾端） */
-  .det-intro { margin-top: 24px; font-size: 14px; line-height: 20px; color: var(--kk-text-darker); }
-  .det-provider { margin-top: 8px; font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
-  .det-sec .pkg-warns { margin-top: 24px; }  /* 提醒標籤移到服務商資訊上方，與上文留距 */
+  /* 描述：移到「基本資訊」標題下、表格上（Figma 1009-43085）；收合夾 2 行、行尾內聯「展開/收起」（clampEl 處理） */
+  .det-intro { margin: 0 0 20px; font-size: 14px; line-height: 20px; color: var(--kk-text-darker); }
+  .det-provider { margin-top: 6px; font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
+  .det-sec .pkg-warns { margin-top: 20px; }  /* 提醒標籤距政策行 20（Figma 1009-43085） */
   .det-h2 { font-size: 18px; line-height: 26px; font-weight: 600; color: var(--kk-text-darker); margin: 0 0 20px; }
-  .det-h5 { font-size: 22px; line-height: 28px; font-weight: 600; color: var(--kk-text-darker); margin: 0 0 24px; }
+  .det-h5 { font-size: 22px; line-height: 28px; font-weight: 600; color: var(--kk-text-darker); margin: 0 0 20px; }  /* 標題下距 20（Figma 1009-43085） */
   .det-sub { font-size: 16px; line-height: 24px; font-weight: 600; color: var(--kk-text-darker); margin: 24px 0 8px; }
   /* 基本資訊表（Figma 902-41074） */
   .det-table { border: 1px solid var(--kk-border-lighter); border-radius: var(--r-md); overflow: hidden; }
@@ -1806,11 +1806,12 @@
           <div class="pkg-tags" id="detTags"></div>
         </div>
         <div class="det-policies" id="detPolicies"></div>
-        <p class="det-intro" id="detIntro">依據購買天數，可額外享有 3GB~30GB 的熱點分享流量。由連續兩年榮獲 Opensignal 網路可靠性全球大獎的電信網路提供連線，訊號覆蓋率高，市區、離島與山區都能穩定上網；搭配 KKday App 可隨時查詢剩餘流量，客服 24 小時線上協助安裝與連線問題。</p>
         <div class="pkg-warns" id="detWarns"></div>
         <div class="det-provider" id="detProvider"></div>
         <hr class="pkg-hr">
         <h3 class="det-h2">基本資訊</h3>
+        <!-- 商品描述移到「基本資訊」標題下、表格上（Figma 1009-43085） -->
+        <p class="det-intro" id="detIntro">依據購買天數，可額外享有 3GB~30GB 的熱點分享流量。由連續兩年榮獲 Opensignal 網路可靠性全球大獎的電信網路提供連線，訊號覆蓋率高，市區、離島與山區都能穩定上網；搭配 KKday App 可隨時查詢剩餘流量，客服 24 小時線上協助安裝與連線問題。</p>
         <!-- 順序按調整後的 Figma 902-41074：卡片規格 / 加值與限制 / 通話與簡訊 / 啟用設定 / 網路詳情 -->
         <div class="det-table">
           <div class="th">卡片規格</div>
@@ -1869,7 +1870,7 @@
       </section>
 
       <section class="det-sec" data-sec="review">
-        <h2 class="det-h5" style="margin-bottom:20px;">評論</h2>
+        <h2 class="det-h5">評論</h2>
         <div class="det-score">
           <span class="badge9" id="dtScore"></span>
           <span class="gcol"><span class="gt" id="dtGrade"></span><span class="gc" id="dtRevCount"></span></span>
@@ -3843,9 +3844,8 @@
       if (i) warns.appendChild(el('<span class="wdiv"></span>'));
       var e = el('<span></span>'); e.textContent = w; warns.appendChild(e);
     });
-    // 供應商資訊上方間距恆定（距「展開更多」24px），不因黃色提醒是否顯示而變：
-    // 有提醒時提醒緊貼供應商（4px），無提醒時供應商自身補足 24px
-    document.getElementById('detProvider').style.marginTop = p.warns.length ? '4px' : '24px';
+    // 服務商行間距（Figma 1009-43085）：有提醒時距提醒 6px，無提醒時直接距政策行 20px
+    document.getElementById('detProvider').style.marginTop = p.warns.length ? '6px' : '20px';
     // 政策行：沿用卡面 perks 語義（詳情版文案更完整）+ 覆蓋範圍行（Figma 913-43597 帶下劃線）
     var pol = document.getElementById('detPolicies'); pol.innerHTML = '';
     // 政策順序與卡片一致：確認速度 → 可用日期 → 取消政策（取消政策放最後，適用範圍仍在其後）
