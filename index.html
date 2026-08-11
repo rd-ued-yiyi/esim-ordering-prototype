@@ -3970,7 +3970,7 @@
     document.getElementById('detProvider').innerHTML = '';
     document.getElementById('detProvider').append('服務由 ');
     var vb = document.createElement('b'); vb.style.fontWeight = '600'; vb.textContent = p.vendor;
-    document.getElementById('detProvider').append(vb, '（' + p.carrier + '）提供');
+    document.getElementById('detProvider').append(vb, ' 提供');  // 與列表頁一致，不加電信商縮寫括號
     document.getElementById('detCancelBody').innerHTML = renderCancelPolicy(p.cancelType || 'none');
     // 基本資訊（Figma 902-41074，動態格隨卡/條件變化）
     var isNative = p.title.indexOf('原生') >= 0 || p.title.indexOf('本地電信') >= 0;
