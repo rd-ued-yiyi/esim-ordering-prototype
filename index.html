@@ -4788,7 +4788,7 @@
 
   // ================= 付款页 =================
   var payState = null;
-  function newPayState() { return { usePoints: true, method: 'apple', receipt: 'personal', agree: false }; }
+  function newPayState() { return { usePoints: true, method: 'apple', receipt: 'personal', agree: true }; }
   var PAY_METHODS = [
     { k: 'apple', lb: 'Apple Pay', logo: '<span style="display:inline-flex;align-items:center;gap:1px;font-size:15px;line-height:20px;color:#000;font-weight:600"> Pay</span>' },
     { k: 'card', lb: '信用卡/签帐金融卡', tag: '优惠', logo: ICONS.payCard, logoCls: 'card' },
