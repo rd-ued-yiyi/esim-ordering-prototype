@@ -2637,7 +2637,7 @@
     smile: '{{IC_smile}}', neutral: '{{IC_neutral}}',  // 评论关键词表情
     starGrey: '{{IC_starGrey}}', thumb: '{{IC_thumb}}', // 评论页：灰星 / 有帮助
     // 订单填写页用
-    file: '{{IC_file}}', locGrey: '{{IC_locationGrey}}', plus: '{{IC_plus}}', cross: '{{IC_cross}}',
+    file: '{{IC_file}}', locGrey: '{{IC_locationGrey}}', plus: '{{IC_plus}}', plusBold: '{{IC_plusSemibold}}', cross: '{{IC_cross}}',
     // 订单页行内小图标（描边 svg，直接内联，无需 build token；颜色对齐设计稿 #212121）
     fileDark: '{{IC_fileDark}}', locDark: '{{IC_locationDark}}',
     fileCheckLine: '{{IC_fileCheckLine}}', editLine: '{{IC_editLine}}', infoCyan: '{{IC_infoCyan}}',
@@ -4508,7 +4508,7 @@
       var hasCt = st.contacts.length > 0;
       c += '<div class="ord-card"><div class="ord-sec-h"><div class="t">选择 <span class="cnt">1</span> 位联系人' + (hasCt ? '<span class="hint">已选择</span>' : '') + '</div></div>' +
         '<div class="ct-area" id="ctArea"><div class="ct-chips-vp" id="ctChipsVp"><div class="ct-chips" id="ctChips"></div></div>' +
-        '<button class="ct-add" id="ctAdd"><span class="ic">' + ICONS.plus + '</span>新增</button></div>' +
+        '<button class="ct-add" id="ctAdd"><span class="ic">' + ICONS.plusBold + '</span>新增</button></div>' +
         '<div id="ctCards"></div></div>';
     }
     var o = st.orderer;
