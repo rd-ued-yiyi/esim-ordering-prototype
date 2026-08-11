@@ -1106,8 +1106,8 @@
   .toast {
     position: fixed; left: 50%; bottom: 32px; transform: translate(-50%, 20px);
     background: rgba(33,33,33,.92); color: #fff; font-size: 14px; line-height: 20px;
-    padding: 10px 16px; border-radius: var(--r-md); z-index: 50;
-    opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; max-width: 300px;
+    padding: 10px 16px; border-radius: var(--r-md); z-index: 60;  /* 高于 bottom sheet(51)：领取成功 toast 盖在 sheet 之上 */
+    opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; max-width: 320px; text-align: center;
   }
   .toast.show { opacity: 1; transform: translate(-50%, 0); }
 
@@ -4208,7 +4208,7 @@
       btn.addEventListener('click', function () {
         if (c.got) return;
         c.got = true; btn.textContent = '已领取'; btn.disabled = true;
-        toast('领取成功');
+        toast('领取成功，折扣券可在付款页使用');
         // 全部领取 → 关闭 sheet 并隐藏横幅
         if (COUPONS.every(function (x) { return x.got; })) {
           document.getElementById('detCoupon').style.display = 'none';
