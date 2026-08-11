@@ -615,7 +615,7 @@
   .pkg-tag { background: var(--kk-surface-light); border-radius: var(--r-sm); padding: 2px 4px;
     font-size: 12px; line-height: 16px; color: var(--kk-text-darker); }
   .pkg-perks { display: flex; flex-wrap: wrap; gap: 4px 8px; margin-top: 12px;  /* 掉行行距 4px（Figma 970-49432）；標籤→政策 12 */
-    font-size: 14px; line-height: 20px; color: #13A3B6; }
+    font-size: 12px; line-height: 16px; color: #13A3B6; }  /* 政策文字 Body-sm 12/16（Figma 795-35558 spec icon+text） */
   .pkg-perks .perk { display: inline-flex; align-items: center; gap: 4px; }
   .pkg-perks .perk.dark { color: var(--kk-text-darker); }
   /* 黃色提醒標籤：僅詳情頁使用（列表卡已移除，Figma 795-35558） */
@@ -623,9 +623,9 @@
     font-size: 12px; line-height: 16px; color: #E78F37; }
   .pkg-warns .wdiv { width: 1px; height: 12px; background: var(--kk-border-lighter); }
   .pkg-vendor { margin-top: 12px; font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }  /* Figma 調整後：警示→供應商 12 */
-  /* 連續N則好評（Figma 795-35558）：雙色點讚 16px + 12/16 Regular，$color-text-primary-dark */
+  /* 連續N則好評（Figma 795-35558）：雙色點讚 16px + 12/16 Regular，文字 #212121 */
   .pkg-goodrev { display: flex; align-items: center; gap: 4px; margin-top: 2px;
-    font-size: 12px; line-height: 16px; color: #13A3B6; }
+    font-size: 12px; line-height: 16px; color: #212121; }
   .pkg-goodrev .ic { width: 16px; height: 16px; }
   .pkg-rating { display: flex; align-items: center; gap: 4px; margin-top: 2px; }
   .pkg-rating .score { font-size: 14px; line-height: 20px; font-weight: 600; color: #13A3B6; }
