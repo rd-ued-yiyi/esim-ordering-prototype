@@ -1198,7 +1198,7 @@
   /* 新增按鈕：移到原展開收起位置、固定右側——無邊框 cyan 文字按鈕（Figma 1126-91395 Text primary：#13A3B6、px8 h36、gap4、+16 半粗） */
   .ct-add { flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: center; gap: 4px; height: 36px; padding: 0 8px; background: #fff; border: 0; font-size: 14px; line-height: 20px; font-weight: 600; color: #13A3B6; white-space: nowrap; }
   .ct-add .ic { width: 16px; height: 16px; }
-  /* 已選聯絡人卡：頭部 #F7FAFC + 名字/編輯/刪除，主體 kv */
+  /* 已選聯絡人卡：頭部 #F7FAFC + 名字/編輯，主體兩欄 kv（聯絡電話｜APP 聯絡方式，Figma 1110-86983） */
   .ct-card { border-radius: 8px; overflow: hidden; margin-top: 12px; }
   .ct-card-h { display: flex; align-items: center; background: #F7FAFC; border: 1px solid var(--kk-border-lighter); border-bottom: 0; border-radius: 8px 8px 0 0; }
   .ct-card-h .nm { flex: 1 1 auto; min-width: 0; padding: 12px; display: flex; align-items: center; gap: 8px; font-weight: 600; color: #212121; font-size: 14px; line-height: 20px; }
@@ -1206,14 +1206,10 @@
   .ct-card-h .act { display: flex; align-items: center; }
   .ct-card-h .act button { padding: 12px; }
   .ct-card-h .ic { width: 20px; height: 20px; }
-  .ct-card-h .x { color: var(--kk-text-medium); }
   .ct-card-body { background: #fff; border: 1px solid var(--kk-border-lighter); border-top: 0; border-radius: 0 0 8px 8px; padding: 12px; }
   .ct-card-kv { display: grid; grid-template-columns: 1fr 1fr; gap: 2px 12px; }
   .ct-card-kv .k { font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
   .ct-card-kv .v { font-size: 14px; line-height: 20px; font-weight: 600; color: #212121; }
-  .ct-card-app { margin-top: 12px; }
-  .ct-card-app .k { font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
-  .ct-card-app .v { font-size: 14px; line-height: 20px; font-weight: 600; color: #212121; margin-top: 2px; }
   /* 備註行（備註＝Body-lg Regular 16，非 semibold） */
   .ord-row-link { display: flex; align-items: center; gap: 8px; width: 100%; }
   .ord-row-link .t { flex: 1 1 0; font-size: 16px; line-height: 24px; font-weight: 400; color: #212121; }
@@ -4584,16 +4580,14 @@
     });
     orderState.contacts.forEach(function (i) {
       var c = ORD_CONTACTS[i];
+      // Figma 1110-86983：卡頭只留「編輯」（無刪除）；主體兩欄＝聯絡電話｜APP 聯絡方式
       var card = el('<div class="ct-card">' +
         '<div class="ct-card-h"><div class="nm">' + c.last + c.first + '</div>' +
-        '<div class="act"><button class="edit"><span class="ic">' + ICONS.editLine + '</span></button>' +
-        '<button class="x"><span class="ic">' + ICONS.cross + '</span></button></div></div>' +
+        '<div class="act"><button class="edit"><span class="ic">' + ICONS.editLine + '</span></button></div></div>' +
         '<div class="ct-card-body">' +
-          '<div class="ct-card-kv"><div><div class="k">聯絡電話</div><div class="v">' + c.tel + '</div></div><div><div class="k">Email</div><div class="v">' + c.email + '</div></div></div>' +
-          '<div class="ct-card-app"><div class="k">APP 聯絡方式</div><div class="v">' + (c.app || '—') + '</div></div>' +
+          '<div class="ct-card-kv"><div><div class="k">聯絡電話</div><div class="v">' + c.tel + '</div></div><div><div class="k">APP 聯絡方式</div><div class="v">' + (c.app || '—') + '</div></div></div>' +
         '</div></div>');
       card.querySelector('.edit').onclick = function () { editContactIdx = i; openContact(); };
-      card.querySelector('.x').onclick = function () { orderState.contacts = []; renderOrder(); };
       cards.appendChild(card);
     });
   }
