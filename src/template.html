@@ -1191,14 +1191,23 @@
   .ord-info { display: flex; flex-direction: column; gap: 4px; }
   .ord-info-line { display: flex; align-items: center; gap: 8px; color: #212121; font-size: 14px; line-height: 20px; }
   .ord-info-line .ic { width: 16px; height: 16px; flex: 0 0 auto; }
-  /* 联系人 chips（flex-wrap；末尾展开/收合 chip 内联，非横向滚动） */
-  .ct-chips { display: flex; flex-wrap: wrap; gap: 8px; padding: 2px 0; }
+  /* 联系人 chips：收合＝单行 + 右端白色渐变遮罩 + 展开按钮；展开＝换行显示全部（Figma 1110-86906/88174） */
+  .ct-area { display: flex; align-items: center; width: 100%; }
+  .ct-area.expanded { align-items: flex-start; }              /* 展开时按钮贴第一行顶部 */
+  .ct-chips { flex: 1 1 0; min-width: 0; display: flex; gap: 8px; align-items: center; padding: 2px 0; position: relative; }
+  .ct-area.collapsed .ct-chips { flex-wrap: nowrap; overflow: hidden; }
+  .ct-area.expanded .ct-chips { flex-wrap: wrap; }
+  /* 收合且有溢出时：右端 50px 白色渐变遮罩把 chip 淡出（Figma 1126-91182，透明→白） */
+  .ct-area.collapsed.has-toggle .ct-chips::after { content: ''; position: absolute; top: 0; bottom: 0; right: 0; width: 50px; background: linear-gradient(to right, rgba(255, 255, 255, 0), #fff); pointer-events: none; }
   .ct-chip { flex: 0 0 auto; max-width: 120px; padding: 6px 8px; border-radius: 8px; background: #fff; border: 1px solid #D5D6DB; font-size: 14px; line-height: 20px; font-weight: 600; color: #212121; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .ct-chip.sel { background: #F0FAFB; border-color: #26BEC9; color: #26BEC9; }
   .ct-chip.add { display: inline-flex; align-items: center; gap: 4px; border-color: #727272; padding: 6px 12px 6px 8px; color: #212121; }
   .ct-chip.add .ic { width: 16px; height: 16px; }
-  .ct-chip.arrow { display: inline-flex; align-items: center; justify-content: center; padding: 6px 8px; }
-  .ct-chip.arrow .ic { width: 20px; height: 20px; }
+  /* 展开/收起按钮：白底无边框，h36 px12，箭头 16（Figma 1110-85870）；仅溢出时显示 */
+  .ct-toggle { flex: 0 0 auto; display: none; align-items: center; justify-content: center; height: 36px; padding: 0 12px; background: #fff; }
+  .ct-area.has-toggle .ct-toggle { display: flex; }
+  .ct-toggle .ic { width: 16px; height: 16px; transition: transform .2s cubic-bezier(.22, .61, .36, 1); }
+  .ct-area.expanded .ct-toggle .ic { transform: rotate(180deg); }
   /* 已选联系人卡：头部 #F7FAFC + 名字/编辑/删除，主体 kv */
   .ct-card { border-radius: 8px; overflow: hidden; margin-top: 12px; }
   .ct-card-h { display: flex; align-items: center; background: #F7FAFC; border: 1px solid var(--kk-border-lighter); border-bottom: 0; border-radius: 8px 8px 0 0; }
@@ -4503,7 +4512,9 @@
     if (req.contacts) {
       var hasCt = st.contacts.length > 0;
       c += '<div class="ord-card"><div class="ord-sec-h"><div class="t">选择 <span class="cnt">1</span> 位联系人' + (hasCt ? '<span class="hint">已选择</span>' : '') + '</div></div>' +
-        '<div class="ct-chips" id="ctChips"></div><div id="ctCards"></div></div>';
+        '<div class="ct-area collapsed" id="ctArea"><div class="ct-chips" id="ctChips"></div>' +
+        '<button class="ct-toggle" id="ctToggle" aria-label="展开/收起"><span class="ic">' + ICONS.arrowDownSm + '</span></button></div>' +
+        '<div id="ctCards"></div></div>';
     }
     var o = st.orderer;
     c += '<div class="ord-card"><div class="ord-sec-h"><div class="t">订购人资料</div><button class="ord-edit" id="ordOrdererEdit"><span class="ic">' + ICONS.editLine + '</span></button></div>' +
@@ -4569,16 +4580,11 @@
     var chips = document.getElementById('ctChips'), cards = document.getElementById('ctCards');
     if (!chips) return;
     chips.innerHTML = ''; cards.innerHTML = '';
+    var area = document.getElementById('ctArea');
+    var toggle = document.getElementById('ctToggle');
     var expanded = orderState.ctExpanded;
-    // 收合＝只显示 1 行（前 4 个，含已选）；展开＝全部换行 + 新增旅客
-    var idxs = ORD_CONTACTS.map(function (_, i) { return i; });
-    if (!expanded) {
-      var first = idxs.slice(0, 4);
-      orderState.contacts.forEach(function (i) { if (first.indexOf(i) < 0) first.unshift(i); });
-      idxs = first.slice(0, 4);
-    }
-    idxs.forEach(function (i) {
-      var c = ORD_CONTACTS[i];
+    // 渲染全部联系人（已选高亮）+ 末尾「新增」；收合时右端由白色遮罩淡出、展开时换行显示全部
+    ORD_CONTACTS.forEach(function (c, i) {
       var chip = el('<button class="ct-chip">' + c.last + c.first + '</button>');
       if (orderState.contacts.indexOf(i) >= 0) chip.classList.add('sel');
       chip.onclick = function () {  // 只能选一位：点击即单选（再点取消）
@@ -4587,15 +4593,20 @@
       };
       chips.appendChild(chip);
     });
-    if (expanded) {  // 新增旅客 chip 只在展开态出现
-      var add = el('<button class="ct-chip add"><span class="ic">' + ICONS.plus + '</span>新增旅客</button>');
-      add.onclick = function () { editContactIdx = null; openContact(); };
-      chips.appendChild(add);
-    }
-    // 展开/收合 chip（末尾，箭头 ▾/▲）
-    var arrow = el('<button class="ct-chip arrow"><span class="ic ic-20' + (expanded ? ' rot180' : '') + '">' + ICONS.arrowDownSm + '</span></button>');
-    arrow.onclick = function () { orderState.ctExpanded = !orderState.ctExpanded; renderOrder(); };
-    chips.appendChild(arrow);
+    var add = el('<button class="ct-chip add"><span class="ic">' + ICONS.plus + '</span>新增</button>');
+    add.onclick = function () { editContactIdx = null; openContact(); };
+    chips.appendChild(add);
+    if (toggle) toggle.onclick = function () { orderState.ctExpanded = !orderState.ctExpanded; renderOrder(); };
+    area.classList.toggle('expanded', expanded);
+    area.classList.toggle('collapsed', !expanded);
+    // 量测单行是否溢出，决定是否需要展开/收起按钮与遮罩（在 rAF 内以收合态量测再恢复目标态）
+    requestAnimationFrame(function () {
+      var wantExpanded = area.classList.contains('expanded');
+      area.classList.remove('has-toggle', 'expanded'); area.classList.add('collapsed');
+      var overflow = chips.scrollWidth > chips.clientWidth + 1;
+      area.classList.toggle('has-toggle', overflow);
+      if (wantExpanded && overflow) { area.classList.remove('collapsed'); area.classList.add('expanded'); }
+    });
     orderState.contacts.forEach(function (i) {
       var c = ORD_CONTACTS[i];
       var card = el('<div class="ct-card">' +
