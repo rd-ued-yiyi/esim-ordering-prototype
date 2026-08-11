@@ -3740,8 +3740,9 @@
   function buildCalendar() {
     var body = document.getElementById('calBody');
     body.innerHTML = '';
-    var base = { y: 2025, m: 5, today: 7 };  // 固定基準（原型）
-    for (var k = 0; k < 4; k++) {
+    var now = new Date();  // 從當天起算，往後顯示一年（12 個月）
+    var base = { y: now.getFullYear(), m: now.getMonth() + 1, today: now.getDate() };
+    for (var k = 0; k < 12; k++) {
       var mm = base.m + k, yy = base.y + Math.floor((mm - 1) / 12); mm = ((mm - 1) % 12) + 1;
       var mon = el('<div><div class="cal-mon"></div><div class="cal-grid"></div></div>');
       mon.querySelector('.cal-mon').textContent = yy + '年 ' + mm + '月';
