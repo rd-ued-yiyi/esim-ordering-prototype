@@ -1095,12 +1095,12 @@
 
   /* ---------- toast ---------- */
   .toast {
-    position: fixed; left: 50%; bottom: 32px; transform: translate(-50%, 20px);
+    position: fixed; left: 50%; top: 50%; transform: translate(-50%, calc(-50% + 8px));  /* 视觉中央 */
     background: rgba(33,33,33,.92); color: #fff; font-size: 14px; line-height: 20px;
     padding: 10px 16px; border-radius: var(--r-md); z-index: 60;  /* 高于 bottom sheet(51)：领取成功 toast 盖在 sheet 之上 */
     opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; max-width: 320px; text-align: center;
   }
-  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+  .toast.show { opacity: 1; transform: translate(-50%, -50%); }
 
   /* ================= 订单填写 / 订购确认（严格对齐 Figma 1074-82361 / 1004-42539） ================= */
   .ord-head { flex: 0 0 auto; background: #fff; }
