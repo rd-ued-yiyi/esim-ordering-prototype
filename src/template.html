@@ -3108,7 +3108,7 @@
   // 详情页「适用范围」信息态：同一个 sheet，标题换「包含地区」、隐藏底部确定按钮（Figma 936-48811）
   function openScopeSheet(heading, list) {
     regionSheetR = null;
-    document.querySelector('#bsRegion .bs-title').textContent = '支持国家/地区';  // Figma 936-48811
+    document.querySelector('#bsRegion .bs-title').textContent = '支持地区';
     document.getElementById('bsRegion').classList.add('info');
     document.getElementById('bsRegionName').textContent = '支持' + list.length + '个国家/地区';  // body 标题（Figma 1138-92251）
     var ul = document.getElementById('bsRegionList');
