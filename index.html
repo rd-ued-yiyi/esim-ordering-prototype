@@ -1934,14 +1934,6 @@
           <div class="tr"><div class="td-k">IP类型</div><div class="td-v" id="dtIp"></div></div>
           <div class="tr"><div class="td-k">传输规格</div><div class="td-v" id="dtTrans"></div></div>
         </div>
-        <!-- 规格总览：本商品支持的所有规格档位（只读，非可切换；超 3 行可展开/收起，Figma 998-42155） -->
-        <h3 class="det-h2" style="margin-top:32px;">套餐规格总览</h3>
-        <div class="det-table">
-          <div class="tr"><div class="td-k">用卡天数</div><div class="td-v" id="dtSpecDays"></div></div>
-          <div class="tr"><div class="td-k">计费方式</div><div class="td-v" id="dtSpecBilling"></div></div>
-          <div class="tr"><div class="td-k">流量额度</div><div class="td-v" id="dtSpecData"></div></div>
-          <div class="tr"><div class="td-k">支持地区</div><div class="td-v" id="dtSpecArea"></div></div>
-        </div>
       </section>
 
       <section class="det-sec" data-sec="howto">
@@ -3985,65 +3977,22 @@
       e.querySelector('.pt').textContent = label;
       pol.appendChild(e);
     });
-    // 适用范围＝跟随用户所选目的地（Figma 913-43597）：
-    //   单一目的地 → 纯文字，无下划线、不可点击
-    //   区域 → 区域名 + 国家数量，下划线可点，展开包含地区
-    //   多国 → 列出所选国家（超出尾部省略）+ 数量，下划线可点，展开所选清单
+    // 目的地＝本方案支持的所有国家/地区（不随用户选择变化 = 原「支持地区」清单）；交互不变：点击展开完整清单
     var region = GEO.regions.concat(GEO.hotRegions).filter(function (r) { return r.name === dest; })[0];
-    if (multi) {
-      var mlist = dest.split(' ').filter(Boolean);
-      var cov = el('<button class="perk dark link cover"><span class="ic">' + ICONS_BIG.location +
-        '</span><span class="pt"></span><span class="cnt"></span></button>');
-      cov.querySelector('.pt').textContent = mlist.join('、');
-      cov.querySelector('.cnt').textContent = '共' + mlist.length + '个';
-      cov.addEventListener('click', function () { openScopeSheet('已选 ' + mlist.length + ' 个国家/地区', mlist); });
-      pol.appendChild(cov);
-    } else if (region) {
-      var cov = el('<button class="perk dark link cover"><span class="ic">' + ICONS_BIG.location +
-        '</span><span class="pt"></span></button>');
-      cov.querySelector('.pt').textContent = region.name + '·' + region.count + '个国家/地区';
-      cov.addEventListener('click', function () { openScopeSheet(region.name + ' 包含的地区', region.list); });
-      pol.appendChild(cov);
-    } else {
-      // 单一目的地：纯文字（无下划线、不可点击）
-      var cov = el('<span class="perk dark"><span class="ic">' + ICONS_BIG.location + '</span><span class="pt"></span></span>');
-      cov.querySelector('.pt').textContent = dest;  // 单一国家直接显示国名，不加「支持」
-      pol.appendChild(cov);
-    }
-    // 规格总览：本商品支持的所有档位（只读），并把用户当前选择标为「✓当前」（Figma 998-42155）
-    // 套餐规格总览的「支持地区」= 商品覆盖的完整地区列表（比适用范围更全，故常有多国可展开）：
-    // 多国→所选；区域→区域国家；单一→取含该国的区域/大洲的完整清单
     var areaList;
-    if (multi) areaList = dest.split(' ').filter(Boolean);
-    else if (region) areaList = region.list;
+    if (region) areaList = region.list;                       // 区域/套装 → 该套装完整覆盖
     else {
-      var act = GEO.continents.filter(function (c) { return c.countries.indexOf(dest) >= 0; })[0];
-      var arg = GEO.regions.concat(GEO.hotRegions).filter(function (r) { return r.list.indexOf(dest) >= 0; })[0];
-      areaList = act ? act.countries : (arg ? arg.list : [dest]);  // 优先大洲完整清单（更全，必超 3 行）
+      var firstDest = multi ? (dest.split(' ').filter(Boolean)[0] || dest) : dest;  // 多国取首个判断所属大洲
+      var act = GEO.continents.filter(function (c) { return c.countries.indexOf(firstDest) >= 0; })[0];
+      var arg = GEO.regions.concat(GEO.hotRegions).filter(function (r) { return r.list.indexOf(firstDest) >= 0; })[0];
+      areaList = act ? act.countries : (arg ? arg.list : [firstDest]);  // 以大洲完整清单为主
     }
-    // 用卡天数：代表档 ≤ 商品上限，并确保含当前所选天数，数值升序
-    var dayNums = ['1', '2', '3', '5', '7', '10', '15', '20', '30', '60', '90']
-      .filter(function (n) { return +n <= (p.maxDays || 30); });
-    if (dayNums.indexOf(state.days) < 0) dayNums.push(state.days);
-    dayNums.sort(function (a, b) { return +a - +b; });
-    var dayOpts = dayNums.map(function (n) { return n + '天'; });
-    // 计费方式：商品支持集，确保含当前所选 tab，固定顺序 daily/total/unlimited
-    var billSet = p.billings.slice();
-    if (billSet.indexOf(state.tab) < 0) billSet.push(state.tab);
-    var billOpts = ['daily', 'total', 'unlimited'].filter(function (b) { return billSet.indexOf(b) >= 0; });
-    var billLabels = billOpts.map(tabFull);
-    // 流量额度：上述计费方式下全部档位
-    var dataOpts = billOpts.reduce(function (acc, b) {
-      return acc.concat(PLANS[b].opts.map(function (o) { return o.t; }));
-    }, []);
-    specCell(document.getElementById('dtSpecDays'), state.days + '天', dayOpts);
-    specCell(document.getElementById('dtSpecBilling'), tabFull(state.tab), billLabels);
-    specCell(document.getElementById('dtSpecData'), state.plan, dataOpts);
-    // 支持地区：无当前高亮，纯列表（超 3 行可展开）
-    var area = document.getElementById('dtSpecArea');
-    area.innerHTML = '';
-    var av = el('<div class="v-inner"></div>'); av.textContent = areaList.join('、');
-    area.appendChild(av);
+    var cov = el('<button class="perk dark link cover"><span class="ic">' + ICONS_BIG.location +
+      '</span><span class="pt"></span><span class="cnt"></span></button>');
+    cov.querySelector('.pt').textContent = areaList.join('、');
+    cov.querySelector('.cnt').textContent = '·' + areaList.length + '个国家/地区';
+    cov.addEventListener('click', function () { openScopeSheet('支持的国家/地区', areaList); });
+    pol.appendChild(cov);
     // 描述重置：恢复完整文案（首次缓存），rAF 内再 clampEl 夹取
     var introEl = document.getElementById('detIntro');
     if (!introEl.dataset.full) introEl.dataset.full = introEl.textContent;
@@ -4153,12 +4102,7 @@
     lockBody();
     // rAF 等 modal 可见后：先对超行的规格值做展开/收起夹取（会改变高度），再算锚点 offsetTop
     requestAnimationFrame(function () {
-      // 天数/计费/流量的「其余档位」超 2 行可展开（首行为当前选择）
-      ['dtSpecDays', 'dtSpecBilling', 'dtSpecData'].forEach(function (id) {
-        clampEl(document.querySelector('#' + id + ' .spec-rest'), 2);
-      });
       clampEl(document.getElementById('detIntro'), 2);  // 描述夹 2 行、行尾内联「展开」于最后一行尾端（Figma 1009-43103）
-      clampEl(document.querySelector('#dtSpecArea .v-inner'), 3);  // 支持地区无当前行，整块 3 行
       var top = 0;
       if (anchor) { var sec = detBody.querySelector('.det-sec[data-sec="' + anchor + '"]'); if (sec) top = sec.offsetTop; }
       detBody.scrollTop = top;
