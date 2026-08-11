@@ -4323,6 +4323,7 @@
     { last: '越前', first: '龍馬', tel: '13900005555', email: 'ryoma@example.com', app: 'Line echizen' }
   ];
   var orderState = null;
+  var ctScroll = 0;  // 聯絡人 chips 橫向滾動位置（跨重繪保留，避免切換時視圖跳動）
   function newOrderState() {
     var orderer = { last: '徐', first: '佳瑩', nation: '台灣', email: 'Lala.hsu@kkday.com', cc: '+886', phone: '0912345678' };
     // 預設選中與「訂購人資料」同名的聯絡人（找不到則退回第一位）
@@ -4334,6 +4335,7 @@
       flight: null,   // {type,airport,terminal,airline,no,date,time,visa}
       device: null,   // {model, imid}
       contacts: [defIdx],  // 選中的聯絡人索引（單選）：預設＝訂購人
+      defContact: defIdx,  // 固定排最前的預設聯絡人（切換選中時不重排）
       ctExpanded: false,  // 聯絡人 chips 是否展開（換行顯示全部）
       orderer: orderer,
       remark: ''
@@ -4375,6 +4377,7 @@
   function openOrder(p) {
     orderP = p;
     orderState = newOrderState();
+    ctScroll = 0;  // 每次開訂單頁聯絡人 chips 從最左開始
     var req = orderReq(p);
     // 有使用日期需求時預設選第一個可選日
     if (req.date) orderState.useDate = ordDatePresets()[0];
@@ -4521,10 +4524,11 @@
     var addBtn = document.getElementById('ctAdd');
     var vp = document.getElementById('ctChipsVp');
     // 渲染全部聯絡人（已選高亮）；單行橫向滾動，「新增」固定在右側
-    // 選中的聯絡人排在最前，其餘保持原順序
+    // 順序固定：預設聯絡人排最前，其餘保持原順序（切換選中不重排）
     var allIdx = ORD_CONTACTS.map(function (_, i) { return i; });
-    var order = allIdx.filter(function (i) { return orderState.contacts.indexOf(i) >= 0; })
-      .concat(allIdx.filter(function (i) { return orderState.contacts.indexOf(i) < 0; }));
+    var defIdx = (orderState.defContact != null) ? orderState.defContact : 0;
+    var order = (allIdx.indexOf(defIdx) >= 0 ? [defIdx] : [])
+      .concat(allIdx.filter(function (i) { return i !== defIdx; }));
     order.forEach(function (i) {
       var c = ORD_CONTACTS[i];
       var chip = el('<button class="ct-chip">' + c.last + c.first + '</button>');
@@ -4536,13 +4540,22 @@
       chips.appendChild(chip);
     });
     if (addBtn) addBtn.onclick = function () { editContactIdx = null; openContact(); };
-    var updateEnd = function () {  // 滾到底則隱藏右端遮罩（無更多內容可滾）
+    var updateEnd = function () {  // 滾到底則隱藏右端遮罩；同時記住滾動位置供重繪後還原
       if (!vp) return;
+      ctScroll = chips.scrollLeft;
       vp.classList.toggle('at-end', chips.scrollLeft + chips.clientWidth >= chips.scrollWidth - 1);
     };
     chips.onscroll = updateEnd;
     requestAnimationFrame(function () {
       area.classList.toggle('has-scroll', chips.scrollWidth > chips.clientWidth + 1);  // 溢位可滾 → 顯示遮罩
+      chips.scrollLeft = ctScroll;  // 還原重繪前的滾動位置（切換選中時視圖不跳動）
+      // 選中項若不在可視區，平滑滾入（有緩衝）；已在可視區則不動
+      var sel = chips.querySelector('.ct-chip.sel');
+      if (sel) {
+        var cr = chips.getBoundingClientRect(), sr = sel.getBoundingClientRect(), pad = 12;
+        if (sr.left < cr.left + pad) chips.scrollTo({ left: Math.max(0, chips.scrollLeft + (sr.left - cr.left) - pad), behavior: 'smooth' });
+        else if (sr.right > cr.right - pad) chips.scrollTo({ left: chips.scrollLeft + (sr.right - cr.right) + pad, behavior: 'smooth' });
+      }
       updateEnd();
     });
     orderState.contacts.forEach(function (i) {
