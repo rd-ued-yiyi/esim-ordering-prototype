@@ -2626,6 +2626,8 @@
     // 訂單頁行內小圖示（描邊 svg，直接內聯，無需 build token；顏色對齊設計稿 #212121）
     fileDark: '{{IC_fileDark}}', locDark: '{{IC_locationDark}}',
     fileCheckLine: '{{IC_fileCheckLine}}', editLine: '{{IC_editLine}}', infoCyan: '{{IC_infoCyan}}',
+    // 商品摘要行官方 20px 資產（Figma 1074-81598 / 1074-84069）
+    locLine20: '{{IC_locationLine20}}', calLine20: '{{IC_calendarLine20}}', simCard20: '{{IC_simCard20}}',
     user: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.5" stroke="#212121" stroke-width="1.6"/><path d="M5.5 19c0-3.6 2.9-5.5 6.5-5.5s6.5 1.9 6.5 5.5" stroke="#212121" stroke-width="1.6" stroke-linecap="round"/></svg>',
     globe2: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#212121" stroke-width="1.6"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.6 2.6 2.6 14.4 0 17M12 3.5c-2.6 2.6-2.6 14.4 0 17"/></svg>',
     mail: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#212121" stroke-width="1.6"><rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="M3.5 7l8.5 6 8.5-6"/></svg>',
@@ -2634,8 +2636,7 @@
     // 付款頁
     payApple: '{{PAY_applepay}}', payCard: '{{PAY_creditcard}}', payPayme: '{{PAY_payme}}',
     payAlipayhk: '{{PAY_alipayhk}}', payAlipay: '{{PAY_alipay}}', hsbc: '{{PAY_hsbc}}',
-    coupon: '{{IC_coupon}}', pointsCard: '{{IC_pointsCard}}', pointsColor: '{{IC_pointsColor}}', question2: '{{IC_question2}}',
-    simCard: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#212121" stroke-width="1.6"><path d="M6 3h8l4 4v14H6z"/><rect x="9" y="12" width="6" height="6" rx="1"/></svg>'
+    coupon: '{{IC_coupon}}', pointsCard: '{{IC_pointsCard}}', pointsColor: '{{IC_pointsColor}}', question2: '{{IC_question2}}'
   };
   // 詳情大號政策/費用圖示：內聯 svg（20px 清晰）
   var ICONS_BIG = {
@@ -4423,7 +4424,7 @@
       '<div class="ord-ptitle">' + p.title + '</div>' +
       '<div class="ord-pspecs">' +
         '<div class="ord-pline"><span class="ic">' + ICONS.fileCheckLine + '</span>' + ordProdSpec(p) + '</div>' +
-        '<button class="ord-pline" id="ordDestLine"><span class="ic">' + ICONS.locDark + '</span><span class="u">' + ordDestLine() + '</span></button>' +
+        '<button class="ord-pline" id="ordDestLine"><span class="ic">' + ICONS.locLine20 + '</span><span class="u">' + ordDestLine() + '</span></button>' +
       '</div>' +
       '<div class="ord-hr"></div>' +
       '<div class="ord-price-block">' +
@@ -4802,9 +4803,9 @@
       '<div class="ord-ptitle" style="margin-bottom:12px">' + p.title + '</div>' +
       '<div class="ord-pspecs">' +
         '<div class="ord-pline"><span class="ic">' + ICONS.fileCheckLine + '</span>' + ordProdSpec(p) + '</div>' +
-        '<button class="ord-pline" id="payDestLine"><span class="ic">' + ICONS.locDark + '</span><span class="u">' + ordDestLine() + '</span></button>' +
-        (useD ? '<div class="ord-pline"><span class="ic">' + ICONS.calendar + '</span>' + useD + '</div>' : '') +
-        '<div class="ord-pline"><span class="ic">' + ICONS.simCard + '</span>eSIM X' + st.qty + '</div>' +
+        '<button class="ord-pline" id="payDestLine"><span class="ic">' + ICONS.locLine20 + '</span><span class="u">' + ordDestLine() + '</span></button>' +
+        (useD ? '<div class="ord-pline"><span class="ic">' + ICONS.calLine20 + '</span>' + useD + '</div>' : '') +
+        '<div class="ord-pline"><span class="ic">' + ICONS.simCard20 + '</span>eSIM X' + st.qty + '</div>' +
       '</div>' +
       '<div class="ord-hr" style="margin:12px 0"></div>' +
       '<button class="ord-cancel" id="payCancelInfo">' + cancelInlineText(orderP, orderState.useDate) + ' <span class="ic">' + ICONS.infoCyan + '</span></button>' +

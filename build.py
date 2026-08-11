@@ -171,7 +171,11 @@ subs = {
     "{{IC_other}}":        strip_wh(GUIDE_OTHER),
     "{{IC_file}}":         inline_svg_to_img(DET_FILE),
     "{{IC_fileDark}}":     inline_svg_to_img(DET_FILE.replace('#13A3B6', '#212121')),  # 订单页套餐规格行（深色 #212121）
-    "{{IC_fileCheckLine}}": file_img("assets/ord/fileCheck.svg"),  # 订单页套餐规格 线性（intrinsic 13.75×16.25＝设计尺寸）
+    # 订单/订购确认页商品摘要行 4 个 icon：Figma 官方资产包装为 20×20 视口（按 inset 留白，视觉与设计稿 1:1）
+    "{{IC_fileCheckLine}}": file_img("assets/ord/fileCheck20.svg"),   # ic_fileCheck_line
+    "{{IC_locationLine20}}": file_img("assets/ord/location20.svg"),   # ic_location_line
+    "{{IC_calendarLine20}}": file_img("assets/ord/calendar20.svg"),   # ic_calendar_line
+    "{{IC_simCard20}}":      file_img("assets/ord/simCard20.svg"),    # ic_simCard_line
     "{{IC_editLine}}":     file_img("assets/ord/edit.svg"),         # 编辑按钮 ic_edit_line（intrinsic 15.6×15.6）
     "{{IC_infoCyan}}":     svg("info", recolor=("#727272", "#13A3B6")),  # 免费取消行 info（cyan）
     "{{IC_infoFill}}":     svg("infoFill"),  # 设备信息提示：实心 info 图标（Figma 1116-91131 ic_info_fill，#2D84D6）
