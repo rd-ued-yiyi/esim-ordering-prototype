@@ -1325,8 +1325,10 @@
   .ff-row { display: flex; gap: 12px; margin-bottom: 16px; }  /* 整行與下一欄位的間距（內部 .ff 已清零，需由行補上） */
   .ff-row > .ff { flex: 1 1 0; margin-bottom: 0; }
   .ff-row2 { display: flex; gap: 12px; }
-  .ff-row2 .cc { flex: 0 0 96px; }
+  .ff-row2 .cc { flex: 0 0 110px; }
   .ff-row2 .rest { flex: 1 1 auto; }
+  /* 联系人 sheet 底部隐私说明（Figma 1116-90867：Body-sm #727272） */
+  .ct-note { margin: 0; font-size: 12px; line-height: 16px; color: var(--kk-text-dark); }
   .ff-radio { display: flex; gap: 32px; align-items: center; }
   .ff-radio label { display: inline-flex; align-items: center; gap: 8px; font-size: 15px; color: var(--kk-text-darker); }
   .ff-radio .radio { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--kk-border-light); position: relative; }
@@ -2236,14 +2238,12 @@
   <!-- 聯絡人 編輯/新增 sheet（Figma 1080-85231） -->
   <div class="bsheet tall" id="contactSheet">
     <div class="bs-handle"></div>
-    <div class="bs-bar"><button class="bs-close" data-bs-close aria-label="關閉"><span class="ic ic-24"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjEzLjA2NzciIGhlaWdodD0iMTMuMDY3NyIgdmlld0JveD0iMCAwIDEzLjA2NzcgMTMuMDY3NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgaWQ9IlZlY3RvciI+CjxwYXRoIGQ9Ik0xMi44NDgxIDEuMjgwMzNDMTMuMTQxIDAuOTg3NDM3IDEzLjE0MSAwLjUxMjU2MyAxMi44NDgxIDAuMjE5NjdDMTIuNTU1MiAtMC4wNzMyMjMzIDEyLjA4MDMgLTAuMDczMjIzMyAxMS43ODc0IDAuMjE5NjdMNi41MzM4NyA1LjQ3MzIxTDEuMjgwMzMgMC4yMTk2N0MwLjk4NzQzNyAtMC4wNzMyMjMzIDAuNTEyNTYzIC0wLjA3MzIyMzMgMC4yMTk2NyAwLjIxOTY3Qy0wLjA3MzIyMzMgMC41MTI1NjMgLTAuMDczMjIzMyAwLjk4NzQzNyAwLjIxOTY3IDEuMjgwMzNMNS40NzMyMSA2LjUzMzg3TDAuMjE5NjcgMTEuNzg3NEMtMC4wNzMyMjMzIDEyLjA4MDMgLTAuMDczMjIzMyAxMi41NTUyIDAuMjE5NjcgMTIuODQ4MUMwLjUxMjU2MyAxMy4xNDEgMC45ODc0MzcgMTMuMTQxIDEuMjgwMzMgMTIuODQ4MUw2LjUzMzg3IDcuNTk0NTNMMTEuNzg3NCAxMi44NDgxQzEyLjA4MDMgMTMuMTQxIDEyLjU1NTIgMTMuMTQxIDEyLjg0ODEgMTIuODQ4MUMxMy4xNDEgMTIuNTU1MiAxMy4xNDEgMTIuMDgwMyAxMi44NDgxIDExLjc4NzRMNy41OTQ1MyA2LjUzMzg3TDEyLjg0ODEgMS4yODAzM1oiIGZpbGw9ImJsYWNrIi8+CjwvZz4KPC9zdmc+" width="13.07" height="13.07"></span></button><span class="bs-title" id="contactTitle">聯絡人資料</span><span class="bs-spacer"></span></div>
-    <div class="bs-body"><div class="fs-body" style="padding:8px 24px 24px;">
-      <div class="ff-row"><div class="ff"><div class="ff-label">姓氏<span class="req">*</span></div><input class="ff-input" id="ct-last" placeholder="例：陳"></div><div class="ff"><div class="ff-label">名字<span class="req">*</span></div><input class="ff-input" id="ct-first" placeholder="Guest"></div></div>
-      <div class="ff"><div class="ff-label">旅遊期間聯絡電話<span class="req">*</span></div><div class="ff-radio"><label><input type="radio" name="ct-tel" value="1" checked><span class="radio"></span>是</label><label><input type="radio" name="ct-tel" value="0"><span class="radio"></span>否</label></div></div>
+    <div class="bs-bar"><button class="bs-close" data-bs-close aria-label="關閉"><span class="ic ic-24"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjEzLjA2NzciIGhlaWdodD0iMTMuMDY3NyIgdmlld0JveD0iMCAwIDEzLjA2NzcgMTMuMDY3NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgaWQ9IlZlY3RvciI+CjxwYXRoIGQ9Ik0xMi44NDgxIDEuMjgwMzNDMTMuMTQxIDAuOTg3NDM3IDEzLjE0MSAwLjUxMjU2MyAxMi44NDgxIDAuMjE5NjdDMTIuNTU1MiAtMC4wNzMyMjMzIDEyLjA4MDMgLTAuMDczMjIzMyAxMS43ODc0IDAuMjE5NjdMNi41MzM4NyA1LjQ3MzIxTDEuMjgwMzMgMC4yMTk2N0MwLjk4NzQzNyAtMC4wNzMyMjMzIDAuNTEyNTYzIC0wLjA3MzIyMzMgMC4yMTk2NyAwLjIxOTY3Qy0wLjA3MzIyMzMgMC41MTI1NjMgLTAuMDczMjIzMyAwLjk4NzQzNyAwLjIxOTY3IDEuMjgwMzNMNS40NzMyMSA2LjUzMzg3TDAuMjE5NjcgMTEuNzg3NEMtMC4wNzMyMjMzIDEyLjA4MDMgLTAuMDczMjIzMyAxMi41NTUyIDAuMjE5NjcgMTIuODQ4MUMwLjUxMjU2MyAxMy4xNDEgMC45ODc0MzcgMTMuMTQxIDEuMjgwMzMgMTIuODQ4MUw2LjUzMzg3IDcuNTk0NTNMMTEuNzg3NCAxMi44NDgxQzEyLjA4MDMgMTMuMTQxIDEyLjU1NTIgMTMuMTQxIDEyLjg0ODEgMTIuODQ4MUMxMy4xNDEgMTIuNTU1MiAxMy4xNDEgMTIuMDgwMyAxMi44NDgxIDExLjc4NzRMNy41OTQ1MyA2LjUzMzg3TDEyLjg0ODEgMS4yODAzM1oiIGZpbGw9ImJsYWNrIi8+CjwvZz4KPC9zdmc+" width="13.07" height="13.07"></span></button><span class="bs-title" id="contactTitle">聯絡人</span><span class="bs-spacer"></span></div>
+    <div class="bs-body"><div class="fs-body" style="padding:20px 16px;">
+      <div class="ff-row"><div class="ff"><div class="ff-label">聯絡人姓<span class="req">*</span></div><input class="ff-input" id="ct-last" placeholder="例：陳"></div><div class="ff"><div class="ff-label">聯絡人名<span class="req">*</span></div><input class="ff-input" id="ct-first" placeholder="例：品睿"></div></div>
       <div class="ff"><div class="ff-label">聯絡電話<span class="req">*</span></div><div class="ff-row2"><div class="ff-selwrap cc"><select class="ff-select" id="ct-cc"><option>+886</option><option>+852</option><option>+86</option><option>+81</option></select><span class="ic chev"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE0LjE2NjciIGhlaWdodD0iNy45MTY2NyIgdmlld0JveD0iMCAwIDE0LjE2NjcgNy45MTY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0wLjI0NDA3OCAwLjI0NDA3OEMwLjU2OTUxNSAtMC4wODEzNTkyIDEuMDk3MTUgLTAuMDgxMzU5MiAxLjQyMjU5IDAuMjQ0MDc4TDcuMDgzMzMgNS45MDQ4MkwxMi43NDQxIDAuMjQ0MDc4QzEzLjA2OTUgLTAuMDgxMzU5MiAxMy41OTcyIC0wLjA4MTM1OTIgMTMuOTIyNiAwLjI0NDA3OEMxNC4yNDggMC41Njk1MTUgMTQuMjQ4IDEuMDk3MTUgMTMuOTIyNiAxLjQyMjU5TDcuNjcyNTkgNy42NzI1OUM3LjM0NzE1IDcuOTk4MDMgNi44MTk1MSA3Ljk5ODAzIDYuNDk0MDggNy42NzI1OUwwLjI0NDA3OCAxLjQyMjU5Qy0wLjA4MTM1OTIgMS4wOTcxNSAtMC4wODEzNTkyIDAuNTY5NTE1IDAuMjQ0MDc4IDAuMjQ0MDc4WiIgZmlsbD0iIzIxMjEyMSIvPgo8L3N2Zz4=" width="14.17" height="7.92"></span></div><input class="ff-input rest" id="ct-phone" inputmode="tel" placeholder="請輸入聯絡電話"></div></div>
-      <div class="ff"><div class="ff-label">APP 聯絡方式<span class="req">*</span></div><div class="ff-radio"><label><input type="radio" name="ct-app" value="1" checked><span class="radio"></span>是</label><label><input type="radio" name="ct-app" value="0"><span class="radio"></span>否</label></div></div>
-      <div class="ff"><div class="ff-label">可聯絡 App<span class="req">*</span></div><div class="ff-selwrap"><select class="ff-select" id="ct-appname"><option value="">請選擇</option><option>WhatsApp</option><option>LINE</option><option>WeChat</option><option>Telegram</option></select><span class="ic chev"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE0LjE2NjciIGhlaWdodD0iNy45MTY2NyIgdmlld0JveD0iMCAwIDE0LjE2NjcgNy45MTY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0wLjI0NDA3OCAwLjI0NDA3OEMwLjU2OTUxNSAtMC4wODEzNTkyIDEuMDk3MTUgLTAuMDgxMzU5MiAxLjQyMjU5IDAuMjQ0MDc4TDcuMDgzMzMgNS45MDQ4MkwxMi43NDQxIDAuMjQ0MDc4QzEzLjA2OTUgLTAuMDgxMzU5MiAxMy41OTcyIC0wLjA4MTM1OTIgMTMuOTIyNiAwLjI0NDA3OEMxNC4yNDggMC41Njk1MTUgMTQuMjQ4IDEuMDk3MTUgMTMuOTIyNiAxLjQyMjU5TDcuNjcyNTkgNy42NzI1OUM3LjM0NzE1IDcuOTk4MDMgNi44MTk1MSA3Ljk5ODAzIDYuNDk0MDggNy42NzI1OUwwLjI0NDA3OCAxLjQyMjU5Qy0wLjA4MTM1OTIgMS4wOTcxNSAtMC4wODEzNTkyIDAuNTY5NTE1IDAuMjQ0MDc4IDAuMjQ0MDc4WiIgZmlsbD0iIzIxMjEyMSIvPgo8L3N2Zz4=" width="14.17" height="7.92"></span></div></div>
-      <div class="ff"><div class="ff-label">App 賬號<span class="req">*</span></div><input class="ff-input" id="ct-appid" placeholder="請輸入 APP 賬號"></div>
+      <div class="ff"><div class="ff-label">App 帳號<span class="req">*</span></div><div class="ff-row2"><div class="ff-selwrap cc"><select class="ff-select" id="ct-appname"><option value="">請選擇</option><option>WhatsApp</option><option>LINE</option><option>WeChat</option><option>Telegram</option></select><span class="ic chev"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE0LjE2NjciIGhlaWdodD0iNy45MTY2NyIgdmlld0JveD0iMCAwIDE0LjE2NjcgNy45MTY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0wLjI0NDA3OCAwLjI0NDA3OEMwLjU2OTUxNSAtMC4wODEzNTkyIDEuMDk3MTUgLTAuMDgxMzU5MiAxLjQyMjU5IDAuMjQ0MDc4TDcuMDgzMzMgNS45MDQ4MkwxMi43NDQxIDAuMjQ0MDc4QzEzLjA2OTUgLTAuMDgxMzU5MiAxMy41OTcyIC0wLjA4MTM1OTIgMTMuOTIyNiAwLjI0NDA3OEMxNC4yNDggMC41Njk1MTUgMTQuMjQ4IDEuMDk3MTUgMTMuOTIyNiAxLjQyMjU5TDcuNjcyNTkgNy42NzI1OUM3LjM0NzE1IDcuOTk4MDMgNi44MTk1MSA3Ljk5ODAzIDYuNDk0MDggNy42NzI1OUwwLjI0NDA3OCAxLjQyMjU5Qy0wLjA4MTM1OTIgMS4wOTcxNSAtMC4wODEzNTkyIDAuNTY5NTE1IDAuMjQ0MDc4IDAuMjQ0MDc4WiIgZmlsbD0iIzIxMjEyMSIvPgo8L3N2Zz4=" width="14.17" height="7.92"></span></div><input class="ff-input rest" id="ct-appid" placeholder="請輸入 App 帳號"></div></div>
+      <p class="ct-note">為方便您下次快速預訂，系統已保存旅客資訊。您擁有完全的控制權，可隨時前往「會員資料」或「常用旅客」刪除或編輯資料。</p>
     </div></div>
     <div class="fs-foot"><button class="cta" id="contactConfirm">確定</button></div>
   </div>
@@ -4699,24 +4699,33 @@
 
   // ---- 聯絡人 sheet（新增/編輯）----
   var editContactIdx = null;
+  var CT_APPS = ['WhatsApp', 'LINE', 'WeChat', 'Telegram'];
   function openContact() {
-    document.getElementById('contactTitle').textContent = editContactIdx === null ? '新增聯絡人' : '編輯聯絡人';
-    var c = editContactIdx === null ? { last: '', first: '', cc: '+886', phone: '', app: '', appid: '' } : ORD_CONTACTS[editContactIdx];
+    document.getElementById('contactTitle').textContent = '聯絡人';  // Figma 1080-85231
+    var c = editContactIdx === null ? { last: '', first: '', cc: '+886', phone: '', app: '' } : ORD_CONTACTS[editContactIdx];
     document.getElementById('ct-last').value = c.last || '';
     document.getElementById('ct-first').value = c.first || '';
     document.getElementById('ct-cc').value = c.cc || '+886';
     document.getElementById('ct-phone').value = c.tel || c.phone || '';
+    // App：把「LINE 284949」拆成 类型(select) + 账号(input)
+    var parts = (c.app || '').split(' ');
+    var matched = CT_APPS.filter(function (o) { return o.toLowerCase() === (parts[0] || '').toLowerCase(); })[0] || '';
+    document.getElementById('ct-appname').value = matched;
+    document.getElementById('ct-appid').value = matched ? parts.slice(1).join(' ') : (c.app || '');
     openSheet(document.getElementById('contactSheet'));
   }
   document.getElementById('contactConfirm').addEventListener('click', function () {
     var last = document.getElementById('ct-last').value, first = document.getElementById('ct-first').value;
     var tel = document.getElementById('ct-phone').value;
+    var appName = document.getElementById('ct-appname').value, appId = document.getElementById('ct-appid').value;
+    var app = (appName ? appName + ' ' : '') + appId;
     if (editContactIdx === null) {
-      ORD_CONTACTS.push({ last: last || '新', first: first || '聯絡人', tel: tel || '—', email: '—' });
+      ORD_CONTACTS.push({ last: last || '新', first: first || '聯絡人', tel: tel || '—', email: '—', app: app || '—' });
       orderState.contacts.push(ORD_CONTACTS.length - 1);
     } else {
       var c = ORD_CONTACTS[editContactIdx];
       if (last) c.last = last; if (first) c.first = first; if (tel) c.tel = tel;
+      if (appName || appId) c.app = app;
     }
     closeSheets(); renderOrder();
   });
