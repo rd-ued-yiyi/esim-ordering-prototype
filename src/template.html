@@ -1027,11 +1027,10 @@
   .bs-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
   .bs-foot { flex: 0 0 auto; padding: 16px 24px calc(16px + env(safe-area-inset-bottom, 0px)); }
   #bsRegion.info .bs-foot { display: none; }  /* 详情页适用范围＝信息态，无确定按钮 */
-  #bsRegion.info .bs-region-title { display: none; }  /* 信息态：body 内不再显示标题（Figma 936-48811） */
   .bs-foot .cta { background: var(--kk-primary-button); color: #fff; }
 
   /* 包含地区 sheet */
-  .bs-region-title { font-size: 16px; line-height: 24px; font-weight: 600; color: var(--kk-text-darker); padding: 8px 24px 12px; }
+  .bs-region-title { font-size: 16px; line-height: 24px; font-weight: 600; color: var(--kk-text-darker); padding: 24px 24px 8px; }  /* Figma 936-48814：body p-24、标题到列表 gap-8 */
   .bs-country-list { list-style: none; padding: 0 24px 8px; }
   .bs-country-list li {
     position: relative; padding: 8px 0 8px 16px;
@@ -3111,7 +3110,7 @@
     regionSheetR = null;
     document.querySelector('#bsRegion .bs-title').textContent = '支持国家/地区';  // Figma 936-48811
     document.getElementById('bsRegion').classList.add('info');
-    document.getElementById('bsRegionName').textContent = '';  // info 态不显示 body 标题
+    document.getElementById('bsRegionName').textContent = '支持' + list.length + '个国家/地区';  // body 标题（Figma 1138-92251）
     var ul = document.getElementById('bsRegionList');
     ul.innerHTML = '';
     list.forEach(function (n) {
