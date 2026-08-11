@@ -1203,11 +1203,13 @@
   /* 联系人 chips：收合＝单行 + 右端白色渐变遮罩 + 展开按钮；展开＝换行显示全部（Figma 1110-86906/88174） */
   .ct-area { display: flex; align-items: center; width: 100%; }
   .ct-area.expanded { align-items: flex-start; }              /* 展开时按钮贴第一行顶部 */
-  .ct-chips { flex: 1 1 0; min-width: 0; display: flex; gap: 8px; align-items: center; padding: 2px 0; position: relative; }
-  .ct-area.collapsed .ct-chips { flex-wrap: nowrap; overflow: hidden; }
+  .ct-chips-vp { flex: 1 1 0; min-width: 0; position: relative; }  /* 不滚动的视口壳，承载右端遮罩 */
+  .ct-chips { display: flex; gap: 8px; align-items: center; padding: 2px 0; }
+  .ct-area.collapsed .ct-chips { flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; -webkit-overflow-scrolling: touch; }  /* 收合可横向滚动 */
+  .ct-area.collapsed .ct-chips::-webkit-scrollbar { display: none; }
   .ct-area.expanded .ct-chips { flex-wrap: wrap; }
-  /* 收合且有溢出时：右端 50px 白色渐变遮罩把 chip 淡出（Figma 1126-91182，透明→白） */
-  .ct-area.collapsed.has-toggle .ct-chips::after { content: ''; position: absolute; top: 0; bottom: 0; right: 0; width: 50px; background: linear-gradient(to right, rgba(255, 255, 255, 0), #fff); pointer-events: none; }
+  /* 收合、溢出、且未滚到底时：右端 50px 白色渐变遮罩（固定不随内容滚动，Figma 1126-91182） */
+  .ct-area.collapsed.has-toggle .ct-chips-vp:not(.at-end)::after { content: ''; position: absolute; top: 0; bottom: 0; right: 0; width: 50px; background: linear-gradient(to right, rgba(255, 255, 255, 0), #fff); pointer-events: none; }
   .ct-chip { flex: 0 0 auto; max-width: 120px; padding: 6px 8px; border-radius: 8px; background: #fff; border: 1px solid #D5D6DB; font-size: 14px; line-height: 20px; font-weight: 600; color: #212121; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .ct-chip.sel { background: #F0FAFB; border-color: #26BEC9; color: #26BEC9; }
   .ct-chip.add { display: inline-flex; align-items: center; gap: 4px; border-color: #727272; padding: 6px 12px 6px 8px; color: #212121; }
@@ -4613,7 +4615,7 @@
     if (req.contacts) {
       var hasCt = st.contacts.length > 0;
       c += '<div class="ord-card"><div class="ord-sec-h"><div class="t">选择 <span class="cnt">1</span> 位联系人' + (hasCt ? '<span class="hint">已选择</span>' : '') + '</div></div>' +
-        '<div class="ct-area collapsed" id="ctArea"><div class="ct-chips" id="ctChips"></div>' +
+        '<div class="ct-area collapsed" id="ctArea"><div class="ct-chips-vp" id="ctChipsVp"><div class="ct-chips" id="ctChips"></div></div>' +
         '<button class="ct-toggle" id="ctToggle" aria-label="展开/收起"><span class="ic">' + ICONS.arrowDownSm + '</span></button></div>' +
         '<div id="ctCards"></div></div>';
     }
@@ -4701,12 +4703,19 @@
     area.classList.toggle('expanded', expanded);
     area.classList.toggle('collapsed', !expanded);
     // 量测单行是否溢出，决定是否需要展开/收起按钮与遮罩（在 rAF 内以收合态量测再恢复目标态）
+    var vp = document.getElementById('ctChipsVp');
+    var updateEnd = function () {  // 滚到底则隐藏右端遮罩（无更多内容可滚）
+      if (!vp) return;
+      vp.classList.toggle('at-end', chips.scrollLeft + chips.clientWidth >= chips.scrollWidth - 1);
+    };
+    chips.onscroll = updateEnd;
     requestAnimationFrame(function () {
       var wantExpanded = area.classList.contains('expanded');
       area.classList.remove('has-toggle', 'expanded'); area.classList.add('collapsed');
       var overflow = chips.scrollWidth > chips.clientWidth + 1;
       area.classList.toggle('has-toggle', overflow);
       if (wantExpanded && overflow) { area.classList.remove('collapsed'); area.classList.add('expanded'); }
+      updateEnd();
     });
     orderState.contacts.forEach(function (i) {
       var c = ORD_CONTACTS[i];
