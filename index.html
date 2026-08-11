@@ -1136,7 +1136,7 @@
   /* 付款页顶部商品摘要：整块白底、全宽、无圆角（非圆角卡） */
   .pay-summary { background: #fff; padding: 16px; }
   /* 可点击的规格行（地区）：按钮归一化 */
-  button.ord-pline { padding: 0; background: none; border: 0; text-align: left; width: auto; }
+  button.ord-pline { padding: 0; background: none; border: 0; text-align: left; width: 100%; }
   /* 其余独立圆角卡（w-351 居中＝左右各 12px，卡间 gap16） */
   .ord-cards { display: flex; flex-direction: column; gap: 16px; padding: 16px 12px 0; }
   .ord-card { background: #fff; border-radius: 12px; padding: 16px; }
@@ -1146,7 +1146,10 @@
   .ord-pspecs { display: flex; flex-direction: column; gap: 8px; }
   .ord-pline { display: flex; align-items: center; gap: 8px; color: #212121; font-size: 14px; line-height: 20px; }
   .ord-pline .ic { flex: 0 0 auto; width: 20px; height: 20px; }
-  .ord-pline .u { text-decoration: underline; }
+  /* 目的地行：国家名单单行截断（…），「·N个国家/地区」计数固定不截断 */
+  .ord-pline .u { display: flex; flex: 0 1 auto; min-width: 0; }
+  .ord-pline .u .pt { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-decoration: underline; }
+  .ord-pline .u .cnt { flex: 0 0 auto; text-decoration: underline; }
   .ord-hr { height: 1px; background: var(--kk-border-lighter); width: 100%; }
   .ord-price-block { display: flex; flex-direction: column; gap: 4px; align-items: flex-start; }
   .ord-price { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 16px; line-height: 16px; color: #212121; }
@@ -4518,7 +4521,8 @@
   }
   function ordDestLine() {
     var dest = document.getElementById('destName') ? document.getElementById('destName').textContent : '亚洲通';
-    return dest + '·3个国家/地区';
+    // 国家名单放 .pt（单行截断），计数放 .cnt（固定不截断）
+    return '<span class="pt">' + dest + '</span><span class="cnt">·3个国家/地区</span>';
   }
   function ordTotal() { return orderP.now * orderState.qty; }
 
