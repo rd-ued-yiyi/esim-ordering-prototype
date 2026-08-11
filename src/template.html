@@ -803,15 +803,8 @@
   /* 亮点标题（Figma 1009-43103）：20px 双色点赞图标 + 「亮点」Semibold 14；距上方 24px */
   .det-hl-h { display: flex; align-items: center; gap: 8px; margin-top: 24px; }
   .det-hl-h .lb { font-size: 14px; line-height: 20px; font-weight: 600; color: var(--kk-text-darker); }
-  /* 描述：距标题 8px；收合夹 2 行（CSS clamp），展开/收起按钮单独一行始终靠右 */
-  .det-intro { margin-top: 8px; font-size: 14px; line-height: 20px; color: var(--kk-text-darker);
-    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-  .det-intro.open { display: block; overflow: visible; }
-  .det-intro-more { display: none; width: 100%; text-align: right; margin-top: 4px;
-    border: 0; background: none; padding: 0; cursor: pointer;
-    font-size: 14px; line-height: 20px; color: var(--kk-text-darker);
-    text-decoration: underline; text-underline-offset: 2px; }
-  .det-intro-more.show { display: block; }  /* 溢出时才显示；始终靠右 */
+  /* 描述：距标题 8px；收合夹 2 行、行尾内联「展开/收起」（clampEl 处理，位于最后一行尾端） */
+  .det-intro { margin-top: 8px; font-size: 14px; line-height: 20px; color: var(--kk-text-darker); }
   .det-provider { margin-top: 8px; font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
   .det-sec .pkg-warns { margin-top: 24px; }  /* 提醒标签移到服务商信息上方，与上文留距 */
   .det-h2 { font-size: 18px; line-height: 26px; font-weight: 600; color: var(--kk-text-darker); margin: 0 0 20px; }
@@ -1809,7 +1802,6 @@
         <div class="det-policies" id="detPolicies"></div>
         <div class="det-hl-h"><span class="ic ic-20">{{IC_thumbsUp}}</span><span class="lb">亮点</span></div>
         <p class="det-intro" id="detIntro">依据购买天数，可额外享有 3GB~30GB 的热点分享流量。由连续两年荣获 Opensignal 网路可靠性全球大奖的电信网络提供连线，讯号覆盖率高，市区、离岛与山区都能稳定上网；搭配 KKday App 可随时查询剩余流量，客服 24 小时在线协助安装与连线问题。</p>
-        <button class="det-intro-more" id="detIntroMore">展开</button>
         <div class="pkg-warns" id="detWarns"></div>
         <div class="det-provider" id="detProvider"></div>
         <hr class="pkg-hr">
@@ -3948,10 +3940,10 @@
     area.innerHTML = '';
     var av = el('<div class="v-inner"></div>'); av.textContent = areaList.join('、');
     area.appendChild(av);
-    // 描述重置为收合态；rAF 内再判断是否溢出以显示「展开」
-    document.getElementById('detIntro').classList.remove('open');
-    var introMore = document.getElementById('detIntroMore');
-    introMore.classList.remove('show'); introMore.textContent = '展开';
+    // 描述重置：恢复完整文案（首次缓存），rAF 内再 clampEl 夹取
+    var introEl = document.getElementById('detIntro');
+    if (!introEl.dataset.full) introEl.dataset.full = introEl.textContent;
+    introEl.textContent = introEl.dataset.full;
     document.getElementById('detProvider').innerHTML = '';
     document.getElementById('detProvider').append('服务由 ');
     var vb = document.createElement('b'); vb.style.fontWeight = '600'; vb.textContent = p.vendor;
@@ -4061,9 +4053,7 @@
       ['dtSpecDays', 'dtSpecBilling', 'dtSpecData'].forEach(function (id) {
         clampEl(document.querySelector('#' + id + ' .spec-rest'), 2);
       });
-      // 描述收合夹 2 行；溢出才显示「展开」按钮（始终靠右）
-      var dIntro = document.getElementById('detIntro');
-      document.getElementById('detIntroMore').classList.toggle('show', dIntro.scrollHeight > dIntro.clientHeight + 1);
+      clampEl(document.getElementById('detIntro'), 2);  // 描述夹 2 行、行尾内联「展开」于最后一行尾端（Figma 1009-43103）
       clampEl(document.querySelector('#dtSpecArea .v-inner'), 3);  // 支持地区无当前行，整块 3 行
       var top = 0;
       if (anchor) { var sec = detBody.querySelector('.det-sec[data-sec="' + anchor + '"]'); if (sec) top = sec.offsetTop; }
@@ -4115,11 +4105,7 @@
     });
   });
   document.getElementById('detClose').addEventListener('click', closeDetail);
-  // 描述展开/收起：单独一行、始终靠右
-  document.getElementById('detIntroMore').addEventListener('click', function () {
-    var open = document.getElementById('detIntro').classList.toggle('open');
-    this.textContent = open ? '收起' : '展开';
-  });
+  // 描述展开/收起由 clampEl 行尾内联处理（位于最后一行尾端），无需独立按钮
   // ---------- 折扣券（横幅→bottom sheet；领取成功；全部领取后横幅消失） ----------
   var COUPONS = [
     { amt: '95 折', cond: '订购金额须满 NT$0，至多抵 NT$120', desc: '【夏季全站活动】不限门槛 95 折', exp: '2026-08-31', got: false },
