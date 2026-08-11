@@ -4324,14 +4324,18 @@
   ];
   var orderState = null;
   function newOrderState() {
+    var orderer = { last: '徐', first: '佳莹', nation: '台湾', email: 'Lala.hsu@kkday.com', cc: '+886', phone: '0912345678' };
+    // 默认选中与「订购人资料」同名的联系人（找不到则退回第一位）
+    var defIdx = ORD_CONTACTS.findIndex(function (c) { return c.last === orderer.last && c.first === orderer.first; });
+    if (defIdx < 0) defIdx = 0;
     return {
       qty: 1,
       useDate: null,
       flight: null,   // {type,airport,terminal,airline,no,date,time,visa}
       device: null,   // {model, imid}
-      contacts: [0],  // 选中的联系人索引（单选）
+      contacts: [defIdx],  // 选中的联系人索引（单选）：默认＝订购人
       ctExpanded: false,  // 联系人 chips 是否展开（换行显示全部）
-      orderer: { last: '徐', first: '佳莹', nation: '台湾', email: 'Lala.hsu@kkday.com', cc: '+886', phone: '0912345678' },
+      orderer: orderer,
       remark: ''
     };
   }
