@@ -4521,7 +4521,12 @@
     var addBtn = document.getElementById('ctAdd');
     var vp = document.getElementById('ctChipsVp');
     // 渲染全部联系人（已选高亮）；单行横向滚动，「新增」固定在右侧
-    ORD_CONTACTS.forEach(function (c, i) {
+    // 选中的联系人排在最前，其余保持原顺序
+    var allIdx = ORD_CONTACTS.map(function (_, i) { return i; });
+    var order = allIdx.filter(function (i) { return orderState.contacts.indexOf(i) >= 0; })
+      .concat(allIdx.filter(function (i) { return orderState.contacts.indexOf(i) < 0; }));
+    order.forEach(function (i) {
+      var c = ORD_CONTACTS[i];
       var chip = el('<button class="ct-chip">' + c.last + c.first + '</button>');
       if (orderState.contacts.indexOf(i) >= 0) chip.classList.add('sel');
       chip.onclick = function () {  // 只能选一位：点击即单选（再点取消）
