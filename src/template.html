@@ -157,6 +157,7 @@
   /* ---------- 内容区 ---------- */
   .con { position: relative; z-index: 1; padding-bottom: 40px; }
   .title-block { padding: 8px 24px 0; color: #fff; }
+  .title-block .t-h4 { font-size: 32px; line-height: 40px; }  /* 主题页 eSIM 标题调大（Figma 648-800） */
   .title-block .sub { margin-top: 8px; }
 
   .page { display: flex; flex-direction: column; gap: 16px; padding: 20px 16px 0; }
@@ -655,12 +656,21 @@
     position: relative; background: #fff; flex: 0 0 auto;
     border-radius: var(--r-xl) var(--r-xl) 0 0;
     box-shadow: 0 -6px 14px -8px rgba(38, 50, 56, .12);  /* 负 spread：阴影只朝上分隔天数轮，不向下溢出到流量区下方 */
-    padding: 20px 24px 8px; margin-bottom: 16px;
-    display: flex; flex-direction: column; gap: 8px;
+    padding: 24px 20px 8px; margin-bottom: 16px;         /* 上下边距调大（Figma 871-80500：py-24 px-20） */
+    display: flex; flex-direction: column; gap: 12px;
     align-content: flex-start;
   }
+  .cond-flow-h { display: flex; align-items: center; }
+  /* 展开/收起三角按钮：白色小 tab，骑在流量面板顶边中央（Figma 1116-89167） */
+  .cond-toggle { position: absolute; top: -29px; left: 50%; transform: translateX(-50%);
+    background: #fff; border-radius: 8px 8px 0 0; padding: 4px 12px; box-shadow: 0 -4px 10px -6px rgba(38,50,56,.12); }
+  .cond-toggle .ic { transform: rotate(180deg); transition: transform .2s; }  /* 默认 ▲（收起态，点击展开） */
+  .cond-expanded .cond-toggle .ic { transform: rotate(0); }                    /* 展开态 ▼ */
+  /* 展开：天数滚轮收起，流量档区放大显示更多行 */
+  .cond-expanded .cond-picker-wrap { min-height: 44px; flex: 0 0 auto; overflow: hidden; }
+  .cond-expanded #condOpts .opts-grid { grid-template-rows: repeat(5, auto); }
   /* 流量档滚动区通栏：负 margin 延伸到屏幕边缘，内容滚动时不被两侧留白切断 */
-  .cond-flow .opts-scroll { width: calc(100% + 48px); margin-left: -24px; margin-right: -24px; padding-left: 24px; padding-right: 24px; }
+  .cond-flow .opts-scroll { width: calc(100% + 40px); margin-left: -20px; margin-right: -20px; padding-left: 20px; padding-right: 20px; }
   .cond-foot { border-top: 1px solid var(--kk-border-lighter); padding: 12px 24px calc(16px + env(safe-area-inset-bottom, 0px)); }
   .cond-sum { font-size: 16px; line-height: 24px; font-weight: 600; color: var(--kk-text-darker); margin-bottom: 12px; }
   .cond-foot .cta { background: var(--kk-primary-button); color: #fff; }
@@ -1489,7 +1499,7 @@
               <!-- 流量 -->
               <div class="group-8">
                 <div class="field-head">
-                  <span class="label-sm">流量</span>
+                  <span class="label-lg" style="flex:0 0 auto">流量</span>
                   <button class="hint" id="howtoHint">不知道怎么选<span class="ic ic-16">{{IC_question}}</span></button>
                 </div>
                 <div class="ftabs" id="dataTabs">
@@ -1736,7 +1746,8 @@
         </div>
       </div>
       <div class="cond-flow">
-        <div class="field-head"><span class="label-sm">选择流量</span></div>
+        <button class="cond-toggle" id="condToggle" aria-label="展开/收起"><span class="ic ic-24">{{IC_arrowDown}}</span></button>
+        <div class="cond-flow-h"><span class="t-subtitle-lg">选择流量</span></div>
         <div class="ftabs" id="condTabs">
           <button class="ftab" data-tab="daily">每日流量</button>
           <button class="ftab" data-tab="total">总流量</button>
@@ -4291,6 +4302,7 @@
     editState = { days: state.days || '4', tab: state.tab, plan: state.plan };
     renderCondOpts(); updateCondSum();
     var m = document.getElementById('condModal');
+    m.classList.remove('cond-expanded');  // 每次打开默认收起态
     m.classList.add('open');
     m.setAttribute('aria-hidden', 'false');
     lockBody();
@@ -4311,6 +4323,12 @@
     m.setAttribute('aria-hidden', 'true');
   }
   document.getElementById('condClose').addEventListener('click', closeCondModal);
+  document.getElementById('condToggle').addEventListener('click', function () {
+    var m = document.getElementById('condModal');
+    m.classList.toggle('cond-expanded');
+    // 展开/收起后把选中档位重新滚回可视区
+    requestAnimationFrame(function () { revealOpt(document.getElementById('condOptsScroll'), false); });
+  });
   document.getElementById('condConfirm').addEventListener('click', function () {
     withLoading(this, function () {
       state.tab = editState.tab;
