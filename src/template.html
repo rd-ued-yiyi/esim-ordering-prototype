@@ -650,24 +650,27 @@
     padding: 8px 20px; font-size: 16px; line-height: 24px; font-weight: 600; flex: 0 0 auto; }
 
   /* ================= 修改搜寻条件 modal / 排序 sheet ================= */
-  .cond-body { flex: 1 1 0; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: none; display: flex; flex-direction: column; }
-  .cond-picker-wrap { flex: 1 1 auto; display: flex; flex-direction: column; justify-content: center; min-height: 252px; }
+  /* 整个 body 不竖向滚动：天数滚轮铺满上方(顶部对齐)，流量面板绝对定位在底部作浮层 */
+  .cond-body { position: relative; flex: 1 1 0; min-height: 0; overflow: hidden; }
+  .cond-picker-wrap { position: absolute; left: 0; right: 0; top: 0; bottom: 0; display: flex; flex-direction: column; justify-content: flex-start; padding-top: 8px; }
   .cond-flow {
-    position: relative; background: #fff; flex: 0 0 auto;
+    position: absolute; left: 0; right: 0; bottom: 0; z-index: 2;   /* 浮层：向上展开时盖住天数区，天数区不滚动 */
+    background: #fff; max-height: 100%; box-sizing: border-box;
     border-radius: var(--r-xl) var(--r-xl) 0 0;
-    box-shadow: 0 -6px 14px -8px rgba(38, 50, 56, .12);  /* 负 spread：阴影只朝上分隔天数轮，不向下溢出到流量区下方 */
-    padding: 24px 20px 8px; margin-bottom: 16px;         /* 上下边距调大（Figma 871-80500：py-24 px-20） */
+    box-shadow: 0 -6px 14px -8px rgba(38, 50, 56, .12);
+    padding: 24px 20px 8px;                              /* 上下边距调大（Figma 871-80500：py-24 px-20） */
     display: flex; flex-direction: column; gap: 12px;
     align-content: flex-start;
   }
   .cond-flow-h { display: flex; align-items: center; }
   /* 展开/收起三角按钮：白色小 tab，骑在流量面板顶边中央（Figma 1116-89167） */
-  .cond-toggle { position: absolute; top: -29px; left: 50%; transform: translateX(-50%);
-    background: #fff; border-radius: 8px 8px 0 0; padding: 4px 12px; box-shadow: 0 -4px 10px -6px rgba(38,50,56,.12); }
-  .cond-toggle .ic { transform: rotate(180deg); transition: transform .2s; }  /* 默认 ▲（收起态，点击展开） */
+  .cond-toggle { position: absolute; top: -24px; left: 50%; transform: translateX(-50%);
+    background: #fff; border-radius: 8px 8px 0 0; padding: 0 12px; height: 24px;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 -3px 8px -5px rgba(38,50,56,.12); }
+  .cond-toggle .ic { width: 24px; height: 24px; transform: rotate(180deg); transition: transform .2s; }  /* 默认 ▲（收起态，点击展开） */
   .cond-expanded .cond-toggle .ic { transform: rotate(0); }                    /* 展开态 ▼ */
-  /* 展开：天数滚轮收起，流量档区放大显示更多行 */
-  .cond-expanded .cond-picker-wrap { min-height: 44px; flex: 0 0 auto; overflow: hidden; }
+  /* 展开：流量面板变高（5 行）向上覆盖天数区 */
   .cond-expanded #condOpts .opts-grid { grid-template-rows: repeat(5, auto); }
   /* 流量档滚动区通栏：负 margin 延伸到屏幕边缘，内容滚动时不被两侧留白切断 */
   .cond-flow .opts-scroll { width: calc(100% + 40px); margin-left: -20px; margin-right: -20px; padding-left: 20px; padding-right: 20px; }
