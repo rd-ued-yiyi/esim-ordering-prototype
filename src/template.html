@@ -4683,8 +4683,7 @@
   document.getElementById('ordCoupon').addEventListener('click', function () { renderCoupons(); openSheet(document.getElementById('couponSheet')); });
   // 訂單/付款頁「亞洲通·N 個國家/地區」點選 → 複用詳情頁「包含地區」資訊態 sheet
   function openOrdScope() {
-    var dest = document.getElementById('destName') ? document.getElementById('destName').textContent : '亞洲通';
-    openScopeSheet(dest, ['日本', '韓國', '泰國', '新加坡', '馬來西亞', '越南', '菲律賓', '印度尼西亞']);
+    openScopeSheet('', destCoverageList());  // 与外层「支援N个国家/地区」同源，保证内外一致
   }
 
   // ---- 返回 / 下一步 ----
