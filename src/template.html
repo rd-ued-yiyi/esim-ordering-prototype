@@ -2264,7 +2264,7 @@
   }
 
   // ---------- 目的地頁狀態 ----------
-  var state = { days: '1', daysTouched: false, tab: 'daily', plan: '1GB/天' };
+  var state = { days: '5', daysTouched: false, tab: 'daily', plan: '1GB/天' };  // 預設用卡天數 5 天
 
   // 模擬價格模型（NT$）：每日固定/無限流量按天計價（長天數有折扣），總流量一口價
   // 價格參照 2026 台灣市售亞洲 eSIM 行情（每日固定 1GB≈NT$25-30/天；總流量對齊 Airalo/Nomad 檔位價；
@@ -4283,7 +4283,7 @@
       document.querySelectorAll('#dataTabs .ftab').forEach(function (t) {
         t.classList.toggle('sel', t.getAttribute('data-tab') === state.tab);
       });
-      setDays(editState.days);  // 內部會 renderOpts + updateCta
+      setDays(editState.days, true);  // 列表頁規格總覽確認＝使用者主動選擇 → 天數顯示深色（內部會 renderOpts + updateCta）
       renderPlans('smooth');
       closeCondModal();
       window.scrollTo(0, 0);
