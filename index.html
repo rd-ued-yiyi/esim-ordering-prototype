@@ -850,20 +850,20 @@
   /* 區塊左右內距按 Figma 各不相同：服務說明 16 / 其餘 20 / 圖文說明 24 */
   .det-sec[data-sec="svc"] { padding-left: 16px; padding-right: 16px; }
   .det-sec[data-sec="imgs"] { padding: 24px; }
-  /* 首屏方案卡（Figma 1009-43088）：condition+標題+標籤 裝進 2px 描邊白卡 */
-  .det-hero { display: flex; flex-direction: column; gap: 8px;
-    border: 2px solid #E6E9ED; border-radius: 12px; padding: 16px; }
+  /* 首屏方案資訊（Figma 1202-102132）：去描邊卡，condition+標題+標籤 平鋪，其下分割線 */
+  .det-hero { display: flex; flex-direction: column; gap: 8px; }
   .det-hero .det-cond { margin-bottom: 0; }
   .det-hero .det-title { margin: 0; }
   .det-hero .pkg-tags { margin-top: 0; }
+  .det-hr20 { border: 0; border-top: 1px solid var(--kk-border-lighter); margin: 20px 0; }  /* 首屏方案資訊→政策 的分割線 */
   .det-cond { display: flex; align-items: center; gap: 6px;
     font-size: 14px; line-height: 20px; font-weight: 600; color: #13A3B6; }
   .det-cond .ic { width: 20px; height: 20px; }
   .det-title { font-size: 22px; line-height: 28px; font-weight: 600; color: var(--kk-text-darker); }
   .det-sec .pkg-hr { margin: 24px 0; }
-  /* 首屏政策 icon+text：20px 圖示 + 6px gap（Figma 902-41283，調整後）；距上方方案卡 20px（Figma 1009-43085） */
-  .det-policies { display: flex; flex-direction: column; gap: 8px; margin-top: 20px;
-    font-size: 14px; line-height: 20px; color: #13A3B6; }
+  /* 首屏政策 icon+text：20px 圖示；上距由 .det-hr20 提供（Figma 1202-102132）；文字深色 */
+  .det-policies { display: flex; flex-direction: column; gap: 8px; margin-top: 0;
+    font-size: 14px; line-height: 20px; color: var(--kk-text-darker); }  /* Figma 1202-102132：政策文字全深色 */
   .det-policies .perk { display: inline-flex; align-items: center; gap: 6px; }
   .det-policies .perk .ic { width: 20px; height: 20px; }
   /* 詳情大號政策/費用圖示：20px 框內 16px 字形（對齊 Figma 902-41283，字形留內距不撐滿） */
@@ -877,7 +877,7 @@
   .det-policies .perk.cover .cnt { flex: 0 0 auto; text-decoration: underline; text-underline-offset: 2px; }
   /* 描述：移到「基本資訊」標題下、表格上（Figma 1009-43085）；收合夾 2 行、行尾內聯「展開/收起」（clampEl 處理） */
   .det-intro { margin: 0 0 20px; font-size: 14px; line-height: 20px; color: var(--kk-text-darker); }
-  .det-provider { margin-top: 6px; font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
+  .det-provider { margin-top: 6px; font-size: 12px; line-height: 16px; color: var(--kk-text-dark); }  /* Figma 1202-102132：#727272 */
   .det-sec .pkg-warns { margin-top: 20px; }  /* 提醒標籤距政策行 20（Figma 1009-43085） */
   .det-h2 { font-size: 18px; line-height: 26px; font-weight: 600; color: var(--kk-text-darker); margin: 0 0 20px; }
   .det-h5 { font-size: 22px; line-height: 28px; font-weight: 600; color: var(--kk-text-darker); margin: 0 0 20px; }  /* 標題下距 20（Figma 1009-43085） */
@@ -2023,6 +2023,7 @@
           <h2 class="det-title" id="detTitle"></h2>
           <div class="pkg-tags" id="detTags"></div>
         </div>
+        <hr class="det-hr20">
         <div class="det-policies" id="detPolicies"></div>
         <div class="pkg-warns" id="detWarns"></div>
         <div class="det-provider" id="detProvider"></div>
@@ -3535,7 +3536,9 @@
           (i % 2 === 0) ? ['checkLine', '即買即用', false]
             : ['calendarD', '最早可使用日: ' + fmtDate(2), true]
         ],
-        warns: i % 4 === 0 ? ['需線下實名認證', '需提供航班', '需EID/IMEI'] : i % 4 === 1 ? ['需提供航班'] : i % 4 === 3 ? ['需線下實名認證', '需EID/IMEI'] : [],
+        // 「需指定啟用日」與 perks[2]「最早可使用日」同判準（i%2===1）：此類商品訂單頁才需選使用日期（Figma 1202-102132）
+        warns: (i % 4 === 0 ? ['需線下實名認證', '需提供航班', '需EID/IMEI'] : i % 4 === 1 ? ['需提供航班'] : i % 4 === 3 ? ['需線下實名認證', '需EID/IMEI'] : [])
+          .concat(i % 2 === 1 ? ['需指定啟用日'] : []),
         vendor: v,
         rating: [4.6, 4.8, 3.0, 4.2, 4.5][i % 5],
         reviews: [234, 1024, 234, 89, 456][i % 5],
@@ -4097,10 +4100,10 @@
     var introEl = document.getElementById('detIntro');
     if (!introEl.dataset.full) introEl.dataset.full = introEl.textContent;
     introEl.textContent = introEl.dataset.full;
+    // 服務商行「XX 提供服務」（vendor Medium＋後綴 Regular，Figma 1202-102132；與列表頁文案一致）
     document.getElementById('detProvider').innerHTML = '';
-    document.getElementById('detProvider').append('服務由 ');
-    var vb = document.createElement('b'); vb.style.fontWeight = '600'; vb.textContent = p.vendor;
-    document.getElementById('detProvider').append(vb, ' 提供');  // 與列表頁一致，不加電信商縮寫括號
+    var vb = document.createElement('b'); vb.style.fontWeight = '500'; vb.textContent = p.vendor;
+    document.getElementById('detProvider').append(vb, ' 提供服務');
     document.getElementById('detCancelBody').innerHTML = renderCancelPolicy(p.cancelType || 'none');
     // 基本資訊（Figma 1164-97098，動態格隨卡/條件變化）
     var isNative = p.title.indexOf('原生') >= 0 || p.title.indexOf('本地電信') >= 0;
@@ -4571,7 +4574,8 @@
     var flight = w.indexOf('需提供航班') >= 0;
     var device = w.indexOf('需EID/IMEI') >= 0;     // 只有需 EID/IMEI 的商品才要填裝置資訊
     var realname = w.indexOf('需線下實名認證') >= 0;  // 需實名 → 要填聯絡人
-    return { date: flight || device || realname, flight: flight, device: device, contacts: flight || realname };
+    var needDate = w.indexOf('需指定啟用日') >= 0;   // 需指定啟用日 → 訂單頁才顯示使用日期（Figma 1202-102132）
+    return { date: needDate, flight: flight, device: device, contacts: flight || realname };
   }
   function daysNumOf(p) { var m = /(\d+)\s*天/.exec(p.title + ' ' + (p.spec || '')); return m ? +m[1] : (state.days ? +state.days : 7); }
 
