@@ -4115,7 +4115,7 @@
     // rAF 等 modal 可見後：先對超行的規格值做展開/收起夾取（會改變高度），再算錨點 offsetTop
     requestAnimationFrame(function () {
       clampEl(document.getElementById('detIntro'), 2);  // 描述夾 2 行、行尾內聯「展開」於最後一行尾端（Figma 1009-43103）
-      clampEl(document.getElementById('dtSpecInner'), 1);  // 規格總覽·流量規格夾 1 行＋行尾「展開」（Figma 1164-97098）
+      clampEl(document.getElementById('dtSpecInner'), 2);  // 規格總覽·流量規格夾 2 行＋行尾「展開」可繼續展開
       var top = 0;
       if (anchor) { var sec = detBody.querySelector('.det-sec[data-sec="' + anchor + '"]'); if (sec) top = sec.offsetTop; }
       detBody.scrollTop = top;

@@ -193,9 +193,9 @@ subs = {
     # 详情大号政策/费用图标：内联矢量，CSS 定 20px，清晰不缩小
     "{{IP_flash}}":        raw_svg("flash"),
     "{{IP_send}}":         strip_wh(DET_SEND),
-    "{{IP_reload}}":       raw_svg("currencyReload"),
+    "{{IP_reload}}":       raw_svg("currencyReload", recolor=("#13A3B6", "#212121")),   # 免费取消：icon 与文字同深色（仅立即确认保持青色）
     "{{IP_reloadDark}}":   raw_svg("currencyReloadDark"),
-    "{{IP_checkLine}}":    raw_svg("checkCircleLine"),
+    "{{IP_checkLine}}":    raw_svg("checkCircleLine", recolor=("#13A3B6", "#212121")),  # 即买即用：同上
     "{{IP_calendar}}":     raw_svg("calendar"),
     "{{IP_crossLine}}":    raw_svg("crossCircleLine"),
     "{{IP_earth}}":        raw_svg("earthLine"),
