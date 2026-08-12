@@ -85,9 +85,8 @@
   .kkh-hot .hchip { flex: 0 0 auto; background: rgba(255, 255, 255, .92); color: #212121;
     font-size: 13px; line-height: 18px; padding: 6px 12px; border-radius: 16px; border: 0; }
   .kkh-body { background: #fff; }
-  .kkh-cats { display: flex; gap: 4px; overflow-x: auto; padding: 16px 8px 4px; scrollbar-width: none; }
-  .kkh-cats::-webkit-scrollbar { display: none; }
-  .kkh-cat { flex: 0 0 auto; width: 78px; display: flex; flex-direction: column; align-items: center; gap: 6px;
+  .kkh-cats { display: flex; padding: 16px 8px 4px; }  /* 5 個入口一行均分（簡化版，無橫滑） */
+  .kkh-cat { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 6px;
     background: none; border: 0; position: relative; padding: 4px 0; }
   .kkh-cat .em { width: 52px; height: 52px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 27px; }
   .kkh-cat:nth-child(8n+1) .em { background: #FFF3E0; }
@@ -1435,13 +1434,6 @@
           <span class="ph">搜尋目的地／景點／活動</span>
           <span class="go"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4.2-4.2"/></svg></span>
         </button>
-        <div class="kkh-hot">
-          <button class="hchip" data-action="kkh-demo">日本自由行</button>
-          <button class="hchip" data-action="kkh-demo">酒店自助餐優惠</button>
-          <button class="hchip" data-action="kkh-demo">澳門一日遊</button>
-          <button class="hchip" data-action="kkh-demo">珠海長隆</button>
-          <button class="hchip" data-action="kkh-demo">下午茶</button>
-        </div>
       </div>
       <div class="kkh-body">
         <div class="kkh-cats">
@@ -1450,14 +1442,7 @@
           <button class="kkh-cat" data-action="enter-esim"><span class="em">📶</span><span class="lb">eSIM</span><span class="hotdot">HOT</span></button>
           <button class="kkh-cat" data-action="kkh-demo"><span class="em">🏨</span><span class="lb">住宿</span></button>
           <button class="kkh-cat" data-action="kkh-demo"><span class="em">🚄</span><span class="lb">交通</span></button>
-          <button class="kkh-cat" data-action="kkh-demo"><span class="em">🚐</span><span class="lb">機場接送</span></button>
-          <button class="kkh-cat" data-action="kkh-demo"><span class="em">🛳️</span><span class="lb">郵輪</span></button>
-          <button class="kkh-cat" data-action="kkh-demo"><span class="em">♨️</span><span class="lb">溫泉</span></button>
         </div>
-        <button class="kkh-banner" data-action="enter-esim">
-          <div class="b1">出國上網 eSIM 掃碼即用 📶</div>
-          <div class="b2">全球 80+ 目的地・每日流量 NT$52 起・立即選購 →</div>
-        </button>
         <div class="kkh-sec">
           <div class="kkh-sec-t">為你推薦</div>
           <div class="kkh-feed">
@@ -1475,22 +1460,6 @@
                 <div class="tt">香港海洋公園門票｜即買即入園</div>
                 <div class="rate"><span class="ic">{{IC_star}}</span>4.4<span class="rc">(3,219)</span></div>
                 <div class="pr">NT$ 1,350 <span class="qi">起</span></div>
-              </div>
-            </button>
-            <button class="kkh-card" data-action="kkh-demo">
-              <div class="img" style="background:linear-gradient(135deg,#FFECEF,#FFCDD2)">🍽️<span class="tag">快閃 67 折</span></div>
-              <div class="inf">
-                <div class="tt">銅鑼灣柏寧酒店 PLAYT 主題自助餐</div>
-                <div class="rate"><span class="ic">{{IC_star}}</span>4.8<span class="rc">(1,024)</span></div>
-                <div class="pr">NT$ 980 <span class="qi">起</span></div>
-              </div>
-            </button>
-            <button class="kkh-card" data-action="kkh-demo">
-              <div class="img" style="background:linear-gradient(135deg,#E3F2FD,#BBDEFB)">🗼<span class="tag">熱門</span></div>
-              <div class="inf">
-                <div class="tt">東京晴空塔展望台門票｜當日可用</div>
-                <div class="rate"><span class="ic">{{IC_star}}</span>4.7<span class="rc">(856)</span></div>
-                <div class="pr">NT$ 420 <span class="qi">起</span></div>
               </div>
             </button>
           </div>
