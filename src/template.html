@@ -71,6 +71,8 @@
   .kkh-menu { display: flex; flex-direction: column; gap: 5px; background: none; border: 0; padding: 4px 0; }
   .kkh-menu i { width: 22px; height: 2.5px; border-radius: 2px; background: #fff; }
   .kkh-logo { font-size: 26px; line-height: 30px; font-weight: 800; color: #fff; letter-spacing: .5px; }
+  .kkh-test { border: 1px solid rgba(255, 255, 255, .85); color: #fff; font-size: 11px; line-height: 16px;
+    padding: 1px 6px; border-radius: 9px; font-weight: 600; }  /* header 測試標記 */
   .kkh-avatar { margin-left: auto; width: 32px; height: 32px; border-radius: 50%; background: #FFCA28;
     color: #fff; font-size: 16px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
   .kkh-search { width: 100%; background: #fff; border: 2px solid #1AB6C1; border-radius: 26px; height: 48px;
@@ -122,6 +124,7 @@
   .kkh-card .pr { margin-top: 6px; font-size: 15px; line-height: 20px; font-weight: 700; color: #212121; }
   .kkh-card .pr .qi { font-size: 12px; font-weight: 400; color: var(--kk-text-dark); }
   .kkh-tabbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; background: #fff;
+    max-width: 430px; margin: 0 auto;  /* 與 .app 同寬置中，桌面預覽不外溢 */
     border-top: 1px solid var(--kk-border-lighter); display: flex;
     padding: 6px 0 calc(6px + env(safe-area-inset-bottom, 0px)); }
   .kkh-tab { flex: 1 1 0; display: flex; flex-direction: column; align-items: center; gap: 2px;
@@ -1424,6 +1427,7 @@
         <div class="kkh-bar">
           <button class="kkh-menu" data-action="kkh-demo" aria-label="選單"><i></i><i></i><i></i></button>
           <div class="kkh-logo">kkday</div>
+          <span class="kkh-test">測試</span>
           <div class="kkh-avatar">k</div>
         </div>
         <button class="kkh-search" data-action="kkh-demo">
@@ -1442,9 +1446,9 @@
         <div class="kkh-cats">
           <button class="kkh-cat" data-action="kkh-demo"><span class="em">🎫</span><span class="lb">門票/體驗</span></button>
           <button class="kkh-cat" data-action="kkh-demo"><span class="em">🍱</span><span class="lb">餐飲美食</span></button>
+          <button class="kkh-cat" data-action="enter-esim"><span class="em">📶</span><span class="lb">eSIM</span><span class="hotdot">HOT</span></button>
           <button class="kkh-cat" data-action="kkh-demo"><span class="em">🏨</span><span class="lb">住宿</span></button>
           <button class="kkh-cat" data-action="kkh-demo"><span class="em">🚄</span><span class="lb">交通</span></button>
-          <button class="kkh-cat" data-action="enter-esim"><span class="em">📶</span><span class="lb">eSIM/WiFi</span><span class="hotdot">HOT</span></button>
           <button class="kkh-cat" data-action="kkh-demo"><span class="em">🚐</span><span class="lb">機場接送</span></button>
           <button class="kkh-cat" data-action="kkh-demo"><span class="em">🛳️</span><span class="lb">郵輪</span></button>
           <button class="kkh-cat" data-action="kkh-demo"><span class="em">♨️</span><span class="lb">溫泉</span></button>
@@ -1457,7 +1461,7 @@
           <div class="kkh-sec-t">為你推薦</div>
           <div class="kkh-feed">
             <button class="kkh-card" data-action="enter-esim">
-              <div class="img" style="background:linear-gradient(135deg,#E0F7FA,#B2EBF2)">📶<span class="tag">eSIM/WiFi</span></div>
+              <div class="img" style="background:linear-gradient(135deg,#E0F7FA,#B2EBF2)">📶<span class="tag">eSIM</span></div>
               <div class="inf">
                 <div class="tt">日本 eSIM｜每日高速流量・掃碼即裝・免翻牆</div>
                 <div class="rate"><span class="ic">{{IC_star}}</span>4.6<span class="rc">(234)</span></div>
