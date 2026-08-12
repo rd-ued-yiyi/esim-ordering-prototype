@@ -260,8 +260,9 @@
   .dest-bar {
     display: flex; align-items: center; gap: 8px;
     height: 48px; max-width: 240px;
-    background: rgba(255,255,255,.88);
-    border: 1.5px solid #fff; border-radius: var(--r-lg);
+    background: #fff;  /* Figma 871-75700：實心白卡＋柔陰影（原半透明改實心） */
+    border: 0; border-radius: var(--r-lg);
+    box-shadow: 0 2px 10px rgba(17,25,40,.10);
     padding: 0 12px; cursor: pointer;
     color: var(--kk-text-darker);  /* 不繼承 .title-block 的白色 */
   }
@@ -279,8 +280,9 @@
 
   .field-head { display: flex; align-items: center; gap: 8px; width: 100%; }
   .field-head .label-lg { font-size: 18px; line-height: 26px; font-weight: 600; color: var(--kk-text-darker); white-space: nowrap; }
-  .field-head .placeholder { flex: 1 1 0; min-width: 0; font-size: 18px; line-height: 26px; font-weight: 600; color: var(--kk-text-light); }
-  .field-head .placeholder.has-value { color: var(--kk-text-darker); }
+  /* 值緊跟標題後、箭頭再緊跟值（Figma 871-75700：用卡天數 5天 › 左對齊成組，不撐滿） */
+  .field-head .placeholder { flex: 0 0 auto; min-width: 0; font-size: 18px; line-height: 26px; font-weight: 600; color: var(--kk-text-light); }
+  .field-head .placeholder.has-value { color: var(--kk-text-medium); }  /* 已選值淺灰（Figma「5天」淡灰，非深色強調） */
   .field-head .label-sm { font-size: 14px; line-height: 20px; font-weight: 600; color: var(--kk-text-darker); white-space: nowrap; }
   .field-head .hint { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
 
@@ -328,9 +330,9 @@
 
   .opts-scroll { width: 100%; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
   .opts-scroll::-webkit-scrollbar { display: none; }
-  /* 頂部留白 4px 給第一排 badge(top:-4px)，負 margin 抵消——淨間距 8px */
-  .opts-scroll { margin-top: -4px; position: relative; }
-  .opts-row { display: flex; gap: 24px; width: max-content; padding-top: 4px; }  /* 三組拼合，組間 24px */
+  /* 頂部留白 16px 給第一排 badge 氣泡(top:-11px+尖角)浮於卡片上緣，負 margin 抵消——淨間距 8px */
+  .opts-scroll { margin-top: -16px; position: relative; }
+  .opts-row { display: flex; gap: 24px; width: max-content; padding-top: 16px; }  /* 三組拼合，組間 24px */
   .opts-grid { display: grid; grid-auto-flow: column; grid-template-rows: repeat(2, auto); gap: 8px; width: max-content; }
   /* 計費類目之間的虛線分隔（畫在 24px 組間隙中點）：顏色加深、更明顯 */
   .opts-grid + .opts-grid { position: relative; }
@@ -347,11 +349,18 @@
   .opt .t { font-size: 16px; line-height: 24px; font-weight: 600; color: var(--kk-text-darker); }
   .opt.sel .t { color: #13A3B6; }
   .opt .p { font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
+  /* 80%選擇 氣泡標籤（Figma 871-75700 新版）：珊瑚紅圓角氣泡，左下角帶朝下小尖角，浮於卡片上緣 */
   .opt .badge {
-    position: absolute; top: -4px; left: 0;
+    position: absolute; top: -11px; left: 6px; z-index: 3;
     background: var(--kk-text-critical); color: #fff;
-    font-size: 12px; line-height: 16px; padding: 2px 6px;
-    border-radius: var(--r-md) var(--r-lg) var(--r-lg) 0;
+    font-size: 12px; line-height: 16px; font-weight: 600;
+    padding: 1px 6px; white-space: nowrap;
+    border-radius: 8px 8px 8px 0;
+  }
+  .opt .badge::after {
+    content: ''; position: absolute; left: 0; bottom: -4px;
+    border-style: solid; border-width: 4px 5px 0 0;
+    border-color: var(--kk-text-critical) transparent transparent transparent;
   }
 
   .cta {
@@ -799,20 +808,22 @@
   /* 區塊左右內距按 Figma 各不相同：服務說明 16 / 其餘 20 / 圖文說明 24 */
   .det-sec[data-sec="svc"] { padding-left: 16px; padding-right: 16px; }
   .det-sec[data-sec="imgs"] { padding: 24px; }
-  /* 首屏方案卡（Figma 1009-43088）：condition+標題+標籤 裝進 2px 描邊白卡 */
-  .det-hero { display: flex; flex-direction: column; gap: 8px;
-    border: 2px solid #E6E9ED; border-radius: 12px; padding: 16px; }
+  /* 首屏方案卡（Figma 1249-109383 新版）：去描邊卡，改為扁平堆疊，標籤行下加分割線 */
+  .det-hero { display: flex; flex-direction: column; gap: 8px; }
   .det-hero .det-cond { margin-bottom: 0; }
   .det-hero .det-title { margin: 0; }
   .det-hero .pkg-tags { margin-top: 0; }
+  /* 標籤 → 政策 之間的分割線（Figma 1249-109981 Line 19），上下各 20px */
+  .det-top-hr { border: 0; border-top: 1px solid var(--kk-border-lighter); margin: 20px 0 0; }
   .det-cond { display: flex; align-items: center; gap: 6px;
     font-size: 14px; line-height: 20px; font-weight: 600; color: #13A3B6; }
   .det-cond .ic { width: 20px; height: 20px; }
   .det-title { font-size: 22px; line-height: 28px; font-weight: 600; color: var(--kk-text-darker); }
   .det-sec .pkg-hr { margin: 24px 0; }
   /* 首屏政策 icon+text：20px 圖示 + 6px gap（Figma 902-41283，調整後）；距上方方案卡 20px（Figma 1009-43085） */
+  /* 詳情頁政策行文字全深色（Figma 1249-109383：不按狀況高亮，僅「立即確認」icon 保留青色，見 DET_PERK_ICONS） */
   .det-policies { display: flex; flex-direction: column; gap: 8px; margin-top: 20px;
-    font-size: 14px; line-height: 20px; color: #13A3B6; }
+    font-size: 14px; line-height: 20px; color: var(--kk-text-darker); }
   .det-policies .perk { display: inline-flex; align-items: center; gap: 6px; }
   .det-policies .perk .ic { width: 20px; height: 20px; }
   /* 詳情大號政策/費用圖示：20px 框內 16px 字形（對齊 Figma 902-41283，字形留內距不撐滿） */
@@ -827,7 +838,7 @@
   /* 描述：移到「基本資訊」標題下、表格上（Figma 1009-43085）；收合夾 2 行、行尾內聯「展開/收起」（clampEl 處理） */
   .det-intro { margin: 0 0 20px; font-size: 14px; line-height: 20px; color: var(--kk-text-darker); }
   .det-provider { margin-top: 6px; font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
-  .det-sec .pkg-warns { margin-top: 20px; }  /* 提醒標籤距政策行 20（Figma 1009-43085） */
+  .det-sec .pkg-warns { margin-top: 20px; flex-wrap: wrap; row-gap: 4px; }  /* 提醒標籤距政策行 20；多項換行（Figma 1249-109400） */
   .det-h2 { font-size: 18px; line-height: 26px; font-weight: 600; color: var(--kk-text-darker); margin: 0 0 20px; }
   .det-h5 { font-size: 22px; line-height: 28px; font-weight: 600; color: var(--kk-text-darker); margin: 0 0 20px; }  /* 標題下距 20（Figma 1009-43085） */
   .det-sub { font-size: 16px; line-height: 24px; font-weight: 600; color: var(--kk-text-darker); margin: 24px 0 8px; }
@@ -1261,7 +1272,10 @@
   .ord-price-toggle .cur, .ord-price-toggle .amt { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 20px; line-height: 20px; font-weight: 700; color: #212121; }
   .ord-price-toggle .caret { width: 20px; height: 20px; transform: rotate(180deg); }
   .ord-foot .cta { flex: 0 0 120px; width: 120px; background: var(--kk-primary-button); color: #fff; }
-  .ord-coupon { margin: 0; border-radius: 0; }
+  /* 訂單頁 coupon banner（Figma 1074-82361）：移入卡片流、坐落頁面灰底 → 透明底無粉色；票券+領取 對齊 16px */
+  .ord-coupon { margin: 0; border-radius: 0; background: transparent; padding: 0 4px; }
+  /* 佔位以 display:contents 讓 #ordCoupon 直接成為 .ord-cards 的 flex 子項（隱藏時不占 gap） */
+  .ord-coupon-slot { display: contents; }
   /* 付款頁（嚴格對齊 Figma 1074-84069） */
   .pay-subh { display: flex; align-items: center; gap: 4px; font-size: 16px; line-height: 24px; font-weight: 600; color: #212121; }
   .pay-subh .ic { width: 20px; height: 20px; }
@@ -1420,7 +1434,7 @@
           <div class="card dest-card">
             <button class="search-bar" data-action="pick-destination">
               <span class="ic ic-24">{{IC_location}}</span>
-              <span class="label t-h6">請先選擇目的地</span>
+              <span class="label t-subtitle-lg">請先選擇目的地</span>
               <span class="ic ic-24"><span class="rot90 ic">{{IC_arrowRight}}</span></span>
             </button>
             <div class="chips">
@@ -1852,6 +1866,7 @@
           <h2 class="det-title" id="detTitle"></h2>
           <div class="pkg-tags" id="detTags"></div>
         </div>
+        <hr class="det-top-hr">
         <div class="det-policies" id="detPolicies"></div>
         <div class="pkg-warns" id="detWarns"></div>
         <div class="det-provider" id="detProvider"></div>
@@ -2695,7 +2710,7 @@
   // 詳情大號政策/費用圖示：內聯 svg（20px 清晰）
   var ICONS_BIG = {
     flash: '{{IP_flash}}', send: '{{IP_send}}', reload: '{{IP_reload}}', reloadDark: '{{IP_reloadDark}}',
-    checkLine: '{{IP_checkLine}}', calendar: '{{IP_calendar}}', crossLine: '{{IP_crossLine}}',
+    checkLine: '{{IP_checkLine}}', checkLineDark: '{{IP_checkLineDark}}', calendar: '{{IP_calendar}}', crossLine: '{{IP_crossLine}}',
     earthLine: '{{IP_earth}}', location: '{{IP_location}}'
   };
   function el(html) {
@@ -3374,7 +3389,7 @@
           (i % 2 === 0) ? ['checkLine', '即買即用', false]
             : ['calendarD', '最早可使用日: ' + fmtDate(2), true]
         ],
-        warns: i % 4 === 0 ? ['需線下實名認證', '需提供航班', '需EID/IMEI'] : i % 4 === 1 ? ['需提供航班'] : i % 4 === 3 ? ['需線下實名認證', '需EID/IMEI'] : [],
+        warns: i % 4 === 0 ? ['需線下實名認證', '需提供航班', '需EID/IMEI', '需指定啟用日'] : i % 4 === 1 ? ['需提供航班'] : i % 4 === 3 ? ['需線下實名認證', '需EID/IMEI'] : ['需指定啟用日'],
         vendor: v,
         rating: [4.6, 4.8, 3.0, 4.2, 4.5][i % 5],
         reviews: [234, 1024, 234, 89, 456][i % 5],
@@ -3395,9 +3410,12 @@
 
   var PERK_ICONS = { flash: 'flash', reload: 'reload', checkLine: 'checkLine', send: 'send',
                      reloadD: 'reloadDark', calendarD: 'calendar', crossD: 'crossLine' };
-  // 列表卡政策行全青（Figma 795-35558 新版）：深色變體換青色圖示；詳情頁仍用 PERK_ICONS 原映射
+  // 列表卡政策行全青（Figma 795-35558 新版）：深色變體換青色圖示
   var CARD_PERK_ICONS = { flash: 'flash', reload: 'reload', checkLine: 'checkLine',
                           reloadD: 'reload', calendarD: 'calendarCyan' };
+  // 詳情頁政策行（Figma 1249-109383）：文字全深、圖示全深，僅「立即確認」flash 保留青色高亮
+  var DET_PERK_ICONS = { flash: 'flash', send: 'send', reload: 'reloadDark', checkLine: 'checkLineDark',
+                         reloadD: 'reloadDark', calendarD: 'calendar', crossD: 'crossLine' };
 
   function renderPlans(centerSel) {
     var titleEl = document.getElementById('plTitle');
@@ -3917,7 +3935,8 @@
     // 政策順序與卡片一致：確認速度 → 可用日期 → 取消政策（取消政策放最後，適用範圍仍在其後）
     [p.perks[0], p.perks[2], p.perks[1]].forEach(function (pk) {
       var label = pk[1] === '立即確認' ? '立即確認並傳送憑證' : pk[1] === '即買即用' ? '現在訂購，立即使用' : pk[1];
-      var e = el('<span class="perk' + (pk[2] ? ' dark' : '') + '"><span class="ic">' + ICONS_BIG[PERK_ICONS[pk[0]]] + '</span><span class="pt"></span></span>');
+      // 詳情頁不按狀況高亮：文字全深、圖示走 DET_PERK_ICONS（僅 flash 青色），不再加 .dark 類切文字色
+      var e = el('<span class="perk"><span class="ic">' + ICONS_BIG[DET_PERK_ICONS[pk[0]]] + '</span><span class="pt"></span></span>');
       e.querySelector('.pt').textContent = label;
       pol.appendChild(e);
     });
@@ -4416,7 +4435,8 @@
     var flight = w.indexOf('需提供航班') >= 0;
     var device = w.indexOf('需EID/IMEI') >= 0;     // 只有需 EID/IMEI 的商品才要填裝置資訊
     var realname = w.indexOf('需線下實名認證') >= 0;  // 需實名 → 要填聯絡人
-    return { date: flight || device || realname, flight: flight, device: device, contacts: flight || realname };
+    var needDate = w.indexOf('需指定啟用日') >= 0;   // 僅「需指定啟用日」商品才需在訂單頁選使用日期（Figma 1249-109383）
+    return { date: needDate, flight: flight, device: device, contacts: flight || realname };
   }
   function daysNumOf(p) { var m = /(\d+)\s*天/.exec(p.title + ' ' + (p.spec || '')); return m ? +m[1] : (state.days ? +state.days : 7); }
 
@@ -4558,9 +4578,16 @@
         '<div class="ord-info-line"><span class="ic">' + ICONS.mail + '</span>' + o.email + '</div>' +
         '<div class="ord-info-line"><span class="ic">' + ICONS.phone + '</span>' + o.cc + ' ' + o.phone + '</div>' +
       '</div></div>';
+    // coupon banner 佔位：置於「訂購人資料」之後、「備註」之前（Figma 1074-82361）；下方 JS 把 #ordCoupon 節點移入
+    c += '<div class="ord-coupon-slot" id="ordCouponSlot"></div>';
     c += '<div class="ord-card"><button class="ord-row-link" id="ordRemarkRow"><div class="t">備註</div><div class="r' + (st.remark ? ' filled' : '') + '"><span class="lbl">' + (st.remark || '無備註') + '</span><span class="ic">' + ICONS.chevGrey + '</span></div></button></div>';
 
+    // 先把 coupon 節點抽離到 modal 根，避免下一行 innerHTML 覆蓋時把它連同監聽器一起銷毀
+    var _cp = document.getElementById('ordCoupon');
+    if (_cp) document.getElementById('orderModal').appendChild(_cp);
     document.getElementById('ordBody').innerHTML = '<div class="ord-wsec">' + w + '</div><div class="ord-cards">' + c + '</div>';
+    var _slot = document.getElementById('ordCouponSlot');
+    if (_cp && _slot) _slot.appendChild(_cp);
     document.getElementById('ordFootAmt').textContent = ordTotal().toLocaleString();
 
     // 繫結

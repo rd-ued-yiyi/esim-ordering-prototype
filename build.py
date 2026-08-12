@@ -198,6 +198,7 @@ subs = {
     "{{IP_reload}}":       raw_svg("currencyReload"),
     "{{IP_reloadDark}}":   raw_svg("currencyReloadDark"),
     "{{IP_checkLine}}":    raw_svg("checkCircleLine"),
+    "{{IP_checkLineDark}}": raw_svg("checkCircleLine", recolor=("#13A3B6", "#212121")),  # 详情页政策行「即买即用」深色变体（Figma 1249-109383：仅立即确认 icon 保留青色）
     "{{IP_calendar}}":     raw_svg("calendar"),
     "{{IP_crossLine}}":    raw_svg("crossCircleLine"),
     "{{IP_earth}}":        raw_svg("earthLine"),
