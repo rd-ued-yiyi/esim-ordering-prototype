@@ -75,15 +75,8 @@
     padding: 1px 6px; border-radius: 9px; font-weight: 600; }  /* header 測試標記 */
   .kkh-avatar { margin-left: auto; width: 32px; height: 32px; border-radius: 50%; background: #FFCA28;
     color: #fff; font-size: 16px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
-  .kkh-search { width: 100%; background: #fff; border: 2px solid #1AB6C1; border-radius: 26px; height: 48px;
-    display: flex; align-items: center; padding: 3px 3px 3px 16px; text-align: left; }
-  .kkh-search .ph { flex: 1 1 0; color: var(--kk-text-medium); font-size: 15px; line-height: 20px; }
-  .kkh-search .go { width: 40px; height: 40px; border-radius: 50%; background: #26BEC9;
-    display: flex; align-items: center; justify-content: center; flex: 0 0 auto; }
-  .kkh-hot { display: flex; gap: 8px; margin-top: 12px; overflow-x: auto; scrollbar-width: none; }
-  .kkh-hot::-webkit-scrollbar { display: none; }
-  .kkh-hot .hchip { flex: 0 0 auto; background: rgba(255, 255, 255, .92); color: #212121;
-    font-size: 13px; line-height: 18px; padding: 6px 12px; border-radius: 16px; border: 0; }
+  /* 易用性測試引導文字（取代搜索框） */
+  .kkh-guide { text-align: center; color: #fff; font-size: 16px; line-height: 24px; font-weight: 600; padding: 8px 0 4px; }
   .kkh-body { background: #fff; }
   .kkh-cats { display: flex; padding: 16px 8px 4px; }  /* 5 個入口一行均分（簡化版，無橫滑） */
   .kkh-cat { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 6px;
@@ -1430,10 +1423,7 @@
           <span class="kkh-test">易用性測試</span>
           <div class="kkh-avatar">k</div>
         </div>
-        <button class="kkh-search" data-action="kkh-demo">
-          <span class="ph">搜尋目的地／景點／活動</span>
-          <span class="go"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4.2-4.2"/></svg></span>
-        </button>
+        <div class="kkh-guide">點擊 eSIM 進入購買流程</div>
       </div>
       <div class="kkh-body">
         <div class="kkh-cats">
