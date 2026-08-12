@@ -74,6 +74,70 @@
   .screen { display: none; }
   .screen.is-active { display: block; }
 
+  /* ---------- KKday 模擬首頁（參考 kkday.com/zh-hk 行動版） ---------- */
+  .kkh-top { background: linear-gradient(180deg, #26BEC9 0%, #4FCBD3 100%); padding: 12px 16px 20px; }
+  .kkh-bar { display: flex; align-items: center; gap: 12px; padding: 6px 0 14px; }
+  .kkh-menu { display: flex; flex-direction: column; gap: 5px; background: none; border: 0; padding: 4px 0; }
+  .kkh-menu i { width: 22px; height: 2.5px; border-radius: 2px; background: #fff; }
+  .kkh-logo { font-size: 26px; line-height: 30px; font-weight: 800; color: #fff; letter-spacing: .5px; }
+  .kkh-avatar { margin-left: auto; width: 32px; height: 32px; border-radius: 50%; background: #FFCA28;
+    color: #fff; font-size: 16px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+  .kkh-search { width: 100%; background: #fff; border: 2px solid #1AB6C1; border-radius: 26px; height: 48px;
+    display: flex; align-items: center; padding: 3px 3px 3px 16px; text-align: left; }
+  .kkh-search .ph { flex: 1 1 0; color: var(--kk-text-medium); font-size: 15px; line-height: 20px; }
+  .kkh-search .go { width: 40px; height: 40px; border-radius: 50%; background: #26BEC9;
+    display: flex; align-items: center; justify-content: center; flex: 0 0 auto; }
+  .kkh-hot { display: flex; gap: 8px; margin-top: 12px; overflow-x: auto; scrollbar-width: none; }
+  .kkh-hot::-webkit-scrollbar { display: none; }
+  .kkh-hot .hchip { flex: 0 0 auto; background: rgba(255, 255, 255, .92); color: #212121;
+    font-size: 13px; line-height: 18px; padding: 6px 12px; border-radius: 16px; border: 0; }
+  .kkh-body { background: #fff; }
+  .kkh-cats { display: flex; gap: 4px; overflow-x: auto; padding: 16px 8px 4px; scrollbar-width: none; }
+  .kkh-cats::-webkit-scrollbar { display: none; }
+  .kkh-cat { flex: 0 0 auto; width: 78px; display: flex; flex-direction: column; align-items: center; gap: 6px;
+    background: none; border: 0; position: relative; padding: 4px 0; }
+  .kkh-cat .em { width: 52px; height: 52px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 27px; }
+  .kkh-cat:nth-child(8n+1) .em { background: #FFF3E0; }
+  .kkh-cat:nth-child(8n+2) .em { background: #FFECEF; }
+  .kkh-cat:nth-child(8n+3) .em { background: #FFF8E1; }
+  .kkh-cat:nth-child(8n+4) .em { background: #E8F5E9; }
+  .kkh-cat:nth-child(8n+5) .em { background: #E3F2FD; }
+  .kkh-cat:nth-child(8n+6) .em { background: #F3E5F5; }
+  .kkh-cat:nth-child(8n+7) .em { background: #E0F7FA; }
+  .kkh-cat:nth-child(8n+8) .em { background: #FBE9E7; }
+  .kkh-cat .lb { font-size: 12px; line-height: 16px; color: #212121; white-space: nowrap; }
+  .kkh-cat .hotdot { position: absolute; top: 0; right: 8px; background: #EF7A70; color: #fff;
+    font-size: 10px; line-height: 14px; padding: 0 5px; border-radius: 8px 8px 8px 2px; font-weight: 600; }
+  .kkh-banner { display: block; width: calc(100% - 32px); margin: 16px; border: 0; text-align: left;
+    border-radius: 12px; background: linear-gradient(120deg, #13A3B6, #26BEC9 55%, #8AE0E6);
+    color: #fff; padding: 20px; }
+  .kkh-banner .b1 { font-size: 17px; line-height: 24px; font-weight: 700; }
+  .kkh-banner .b2 { font-size: 13px; line-height: 18px; opacity: .92; margin-top: 4px; }
+  .kkh-sec { padding: 8px 16px calc(84px + env(safe-area-inset-bottom, 0px)); }  /* 底部留出 tabbar 高度 */
+  .kkh-sec-t { font-size: 18px; line-height: 26px; font-weight: 600; color: #212121; margin: 4px 0 12px; }
+  .kkh-feed { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .kkh-card { border-radius: 12px; overflow: hidden; background: #fff; border: 0; padding: 0; text-align: left;
+    box-shadow: 0 1px 8px rgba(38, 50, 56, .12); }
+  .kkh-card .img { position: relative; height: 108px; display: flex; align-items: center; justify-content: center; font-size: 42px; }
+  .kkh-card .tag { position: absolute; top: 8px; left: 8px; background: rgba(255, 255, 255, .95);
+    border-radius: 6px; font-size: 11px; line-height: 16px; padding: 2px 6px; color: #212121; }
+  .kkh-card .inf { padding: 10px 12px 12px; }
+  .kkh-card .tt { font-size: 14px; line-height: 20px; font-weight: 600; color: #212121;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 40px; }
+  .kkh-card .rate { display: flex; align-items: center; gap: 4px; margin-top: 6px;
+    font-size: 12px; line-height: 16px; color: #13A3B6; font-weight: 600; }
+  .kkh-card .rate .ic { width: 14px; height: 14px; }
+  .kkh-card .rate .rc { color: var(--kk-text-medium); font-weight: 400; }
+  .kkh-card .pr { margin-top: 6px; font-size: 15px; line-height: 20px; font-weight: 700; color: #212121; }
+  .kkh-card .pr .qi { font-size: 12px; font-weight: 400; color: var(--kk-text-dark); }
+  .kkh-tabbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; background: #fff;
+    border-top: 1px solid var(--kk-border-lighter); display: flex;
+    padding: 6px 0 calc(6px + env(safe-area-inset-bottom, 0px)); }
+  .kkh-tab { flex: 1 1 0; display: flex; flex-direction: column; align-items: center; gap: 2px;
+    font-size: 11px; line-height: 14px; color: var(--kk-text-medium); background: none; border: 0; }
+  .kkh-tab .tic { font-size: 20px; line-height: 24px; }
+  .kkh-tab.sel { color: #13A3B6; font-weight: 600; }
+
   /* ---------- 排版工具 ---------- */
   .t-h4          { font-size: 24px; line-height: 30px; font-weight: 600; }
   .t-h6          { font-size: 18px; line-height: 26px; font-weight: 600; }
@@ -1357,7 +1421,7 @@
 </style>
 
 <div class="esim-root">
-  <div class="app">
+  <div class="app no-hero"><!-- 初始＝KKday 首頁（無 hero 背景），進 eSIM 主頁後由 go() 切換 -->
 
     <!-- hero 背景：home / destination 兩屏共享（同一份，避免 SVG id 衝突） -->
     <svg class="hero-svg" viewBox="0 59 375 241" width="100%" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" style="display:block" aria-hidden="true"><defs><linearGradient id="heroCyanFade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#26BEC9" stop-opacity="0"/><stop offset="1" stop-color="#26BEC9"/></linearGradient><linearGradient id="heroPageFade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F1F4F8" stop-opacity="0"/><stop offset="1" stop-color="#F1F4F8"/></linearGradient></defs><rect width="375" height="300" fill="#26BEC9"/><g transform="translate(187.5 169.55) scale(-1 1) translate(-187.5 -169.55)"><svg x="-19.72" y="41.5" width="414.449" height="256.017" viewBox="0 0 414.449 256.017" overflow="visible" fill="none"><path id="hero__Vector 227" d="M12.5 72.5845C58.2843 73.1429 148.178 89.67 141.478 151.311C133.103 228.363 56.8892 225.85 82.8523 142.936C108.815 60.0214 199.345 -29.5932 211.908 34.0583C224.471 97.7097 163.332 179.787 187.62 158.849C211.908 137.911 301.523 39.921 274.722 102.735C247.922 165.549 221.881 277.776 250.356 233.388C278.832 188.999 328.246 92.6847 401.947 102.735" stroke="#1AB6C1" stroke-width="25" stroke-linecap="round"/></svg></g><g transform="translate(269.650 177.433) rotate(-158) skewX(-24) scale(1 -0.91) translate(-269.650 -177.433)"><svg x="226.254" y="95.991" width="86.791" height="162.883" viewBox="0 0 86.791 162.883" overflow="visible" fill="none"><path id="phone1__Rectangle 4" d="M3 18.7582C3 10.0552 10.0552 3 18.7582 3H71.1845C78.1469 3 83.791 8.64415 83.791 15.6066V144.124C83.791 152.827 76.7359 159.883 68.0328 159.883H15.6066C8.64415 159.883 3 154.238 3 147.276V18.7582Z" fill="#CEF0F3" stroke="white" stroke-width="6"/></svg></g><g transform="translate(237.246 188.120) rotate(-158) skewX(-24) scale(1 -0.91) translate(-237.246 -188.120)"><svg x="225.798" y="181.612" width="22.898" height="13.015" viewBox="0 0 22.8975 13.0155" overflow="visible" fill="none"><path id="phone2__Rectangle 7" opacity="0.5" d="M0 4C0 1.79086 1.79086 0 4 0H18.8975C21.1066 0 22.8975 1.79086 22.8975 4V9.01551C22.8975 11.2246 21.1066 13.0155 18.8975 13.0155H4C1.79086 13.0155 0 11.2247 0 9.01551V4Z" fill="#26BEC9"/></svg></g><g transform="translate(230.657 210.988) rotate(-158) skewX(-24) scale(1 -0.91) translate(-230.657 -210.988)"><svg x="205.372" y="198.139" width="50.570" height="25.700" viewBox="0 0 50.5703 25.6999" overflow="visible" fill="none"><path id="phone3__Rectangle 8" opacity="0.5" d="M0 8C0 3.58172 3.58172 0 8 0H46.5703C48.7795 0 50.5703 1.79086 50.5703 4V17.6999C50.5703 22.1182 46.9886 25.6999 42.5703 25.6999H4C1.79086 25.6999 0 23.909 0 21.6999V8Z" fill="#26BEC9"/></svg></g><g transform="translate(316.283 127.806) rotate(-156.8) scale(1 -1) translate(-316.283 -127.806)"><svg x="304.785" y="125.309" width="22.995" height="4.994" viewBox="0 0 22.9953 4.99362" overflow="visible" fill="none"><path id="line5__Line 5" d="M2.49681 2.49681H20.4984" stroke="white" stroke-width="4.99362" stroke-linecap="round"/></svg></g><g transform="translate(216.853 226.185) rotate(-156.8) scale(1 -1) translate(-216.853 -226.185)"><svg x="206.354" y="224.687" width="20.998" height="2.996" viewBox="0 0 20.9978 2.99617" overflow="visible" fill="none"><path id="line6__Line 6" d="M1.49809 1.49809H19.4997" stroke="#26BEC9" stroke-width="2.99617" stroke-linecap="round"/></svg></g><svg x="213.730" y="131.730" width="121.643" height="88.717" viewBox="0 0 121.643 88.7168" overflow="visible" fill="none"><g id="ring__Ellipse 3" filter="url(#ring__filter0_f_0_540)">
@@ -1455,7 +1519,88 @@
 </g></svg></g><g transform="translate(310.650 103.590) rotate(68.05) translate(-310.650 -103.590)"><svg x="306.150" y="99.090" width="9.000" height="9.000" viewBox="0 0 9.0 9.0" overflow="visible" fill="none"><path id="star1__Vector" d="M3.94211 0.369952C4.15049 -0.123318 4.84951 -0.123317 5.05789 0.369953L6.02308 2.65471C6.08444 2.79997 6.20003 2.91556 6.34529 2.97692L8.63005 3.94211C9.12332 4.15049 9.12332 4.84952 8.63005 5.05789L6.34529 6.02308C6.20003 6.08444 6.08444 6.20004 6.02308 6.34529L5.05789 8.63005C4.84951 9.12332 4.15049 9.12332 3.94211 8.63005L2.97692 6.34529C2.91556 6.20003 2.79997 6.08444 2.65471 6.02308L0.369952 5.05789C-0.123318 4.84952 -0.123317 4.15049 0.369953 3.94211L2.65471 2.97692C2.79997 2.91556 2.91556 2.79997 2.97692 2.65471L3.94211 0.369952Z" fill="#FFDD4A"/></svg></g><g transform="translate(352.080 175.690) rotate(68.05) translate(-352.080 -175.690)"><svg x="347.588" y="171.198" width="8.983" height="8.983" viewBox="0 0 8.98337 8.98337" overflow="visible" fill="none"><path id="star2__Vector" d="M3.93482 0.369268C4.14282 -0.12309 4.84055 -0.123089 5.04854 0.369269L6.01194 2.6498C6.07319 2.79479 6.18857 2.91017 6.33356 2.97142L8.6141 3.93482C9.10646 4.14282 9.10645 4.84055 8.6141 5.04855L6.33356 6.01195C6.18857 6.07319 6.07319 6.18858 6.01194 6.33356L5.04854 8.6141C4.84055 9.10646 4.14281 9.10646 3.93482 8.6141L2.97142 6.33356C2.91017 6.18858 2.79479 6.07319 2.6498 6.01195L0.369268 5.04855C-0.12309 4.84055 -0.123089 4.14282 0.369269 3.93482L2.6498 2.97142C2.79479 2.91017 2.91017 2.79479 2.97142 2.6498L3.93482 0.369268Z" fill="#FFDD4A"/></svg></g><g transform="translate(293.375 93.895) rotate(11.11) translate(-293.375 -93.895)"><svg x="285.337" y="85.857" width="16.077" height="16.077" viewBox="0 0 16.0767 16.0767" overflow="visible" fill="none"><path id="star3__Vector" d="M7.0418 0.660847C7.41403 -0.220283 8.66271 -0.220282 9.03494 0.660848L10.759 4.74212C10.8687 5.00159 11.0751 5.20808 11.3346 5.31769L15.4159 7.04181C16.297 7.41403 16.297 8.66271 15.4159 9.03494L11.3346 10.759C11.0751 10.8687 10.8687 11.0752 10.759 11.3346L9.03493 15.4159C8.66271 16.297 7.41403 16.297 7.0418 15.4159L5.31769 11.3346C5.20808 11.0751 5.00159 10.8687 4.74212 10.759L0.660846 9.03494C-0.220283 8.66271 -0.220282 7.41403 0.660848 7.04181L4.74212 5.31769C5.00159 5.20808 5.20808 5.00159 5.31769 4.74212L7.0418 0.660847Z" fill="#FFDD4A"/></svg></g><rect x="0" y="72.309" width="375" height="227.691" fill="url(#heroCyanFade)"/><rect x="0" y="140" width="375" height="160" fill="url(#heroPageFade)"/></svg>
 
     <!-- ============ SCREEN: 主題落地頁 ============ -->
-    <section class="screen is-active" data-screen="home">
+    <!-- ============ KKday 模擬首頁（參考 kkday.com/zh-hk）============ -->
+    <section class="screen is-active" data-screen="kkhome">
+      <div class="kkh-top">
+        <div class="kkh-bar">
+          <button class="kkh-menu" data-action="kkh-demo" aria-label="選單"><i></i><i></i><i></i></button>
+          <div class="kkh-logo">kkday</div>
+          <div class="kkh-avatar">k</div>
+        </div>
+        <button class="kkh-search" data-action="kkh-demo">
+          <span class="ph">搜尋目的地／景點／活動</span>
+          <span class="go"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4.2-4.2"/></svg></span>
+        </button>
+        <div class="kkh-hot">
+          <button class="hchip" data-action="kkh-demo">日本自由行</button>
+          <button class="hchip" data-action="kkh-demo">酒店自助餐優惠</button>
+          <button class="hchip" data-action="kkh-demo">澳門一日遊</button>
+          <button class="hchip" data-action="kkh-demo">珠海長隆</button>
+          <button class="hchip" data-action="kkh-demo">下午茶</button>
+        </div>
+      </div>
+      <div class="kkh-body">
+        <div class="kkh-cats">
+          <button class="kkh-cat" data-action="kkh-demo"><span class="em">🎫</span><span class="lb">門票/體驗</span></button>
+          <button class="kkh-cat" data-action="kkh-demo"><span class="em">🍱</span><span class="lb">餐飲美食</span></button>
+          <button class="kkh-cat" data-action="kkh-demo"><span class="em">🏨</span><span class="lb">住宿</span></button>
+          <button class="kkh-cat" data-action="kkh-demo"><span class="em">🚄</span><span class="lb">交通</span></button>
+          <button class="kkh-cat" data-action="enter-esim"><span class="em">📶</span><span class="lb">eSIM/WiFi</span><span class="hotdot">HOT</span></button>
+          <button class="kkh-cat" data-action="kkh-demo"><span class="em">🚐</span><span class="lb">機場接送</span></button>
+          <button class="kkh-cat" data-action="kkh-demo"><span class="em">🛳️</span><span class="lb">郵輪</span></button>
+          <button class="kkh-cat" data-action="kkh-demo"><span class="em">♨️</span><span class="lb">溫泉</span></button>
+        </div>
+        <button class="kkh-banner" data-action="enter-esim">
+          <div class="b1">出國上網 eSIM 掃碼即用 📶</div>
+          <div class="b2">全球 80+ 目的地・每日流量 NT$52 起・立即選購 →</div>
+        </button>
+        <div class="kkh-sec">
+          <div class="kkh-sec-t">為你推薦</div>
+          <div class="kkh-feed">
+            <button class="kkh-card" data-action="enter-esim">
+              <div class="img" style="background:linear-gradient(135deg,#E0F7FA,#B2EBF2)">📶<span class="tag">eSIM/WiFi</span></div>
+              <div class="inf">
+                <div class="tt">日本 eSIM｜每日高速流量・掃碼即裝・免翻牆</div>
+                <div class="rate"><span class="ic"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjIxLjAwMiIgaGVpZ2h0PSIyMC4yNDg1IiB2aWV3Qm94PSIwIDAgMjEuMDAyIDIwLjI0ODUiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGlkPSJWZWN0b3IiIGQ9Ik0yMC45MjI2IDcuNjMyNTdDMjAuODI5IDcuMzM4NTkgMjAuNjQ4OSA3LjA3OTY1IDIwLjQwNTkgNi44ODk1NUMyMC4xNjI5IDYuNjk5NDUgMTkuODY4MiA2LjU4NzAxIDE5LjU2MDMgNi41NjY5TDEzLjk5MjQgNi4xNzcyNUwxMS45MjcgMC45NzYzMTlDMTEuODE1MiAwLjY4ODc4NyAxMS42MTkyIDAuNDQxNzI2IDExLjM2NDYgMC4yNjc1MTFDMTEuMTEgMC4wOTMyOTU3IDEwLjgwODggNS4yNTU2MmUtMDUgMTAuNTAwMyAwSDEwLjQ5ODhDMTAuMTkwOCAwLjAwMDU0OTM4NiA5Ljg5MDEgMC4wOTQwMzAyIDkuNjM2MDcgMC4yNjgyMTlDOS4zODIwNCAwLjQ0MjQwOCA5LjE4NjQ4IDAuNjg5MTk4IDkuMDc0OTcgMC45NzYzMTlMNi45Nzg3OCA2LjIwNzI3TDEuNDQxNjcgNi41NjY5QzEuMTMzNzkgNi41ODcwMSAwLjgzOTExMiA2LjY5OTQ1IDAuNTk2MDk2IDYuODg5NTVDMC4zNTMwNzkgNy4wNzk2NSAwLjE3MzAwMyA3LjMzODU5IDAuMDc5MzYyMSA3LjYzMjU3Qy0wLjAxOTQyMjkgNy45MzA3MyAtMC4wMjYxNDMgOC4yNTE3MiAwLjA2MDA3NjggOC41NTM3NUMwLjE0NjI5NyA4Ljg1NTc4IDAuMzIxNDYxIDkuMTI0ODUgMC41NjI3NjEgOS4zMjU5M0w0LjgyMjUzIDEyLjkyNjVMMy41NTU0NCAxNy45MTA2QzMuNDY4MSAxOC4yNDY0IDMuNDg0MTYgMTguNjAwNiAzLjYwMTUxIDE4LjkyNzFDMy43MTg4NyAxOS4yNTM1IDMuOTMyMDUgMTkuNTM3IDQuMjEzMTUgMTkuNzQwMkM0LjQ4NDU0IDE5LjkzNzcgNC44MDkwOSAyMC4wNDg5IDUuMTQ0NTUgMjAuMDU5M0M1LjQ4MDAxIDIwLjA2OTggNS44MTA4NSAxOS45NzkgNi4wOTQwMSAxOS43OTg4TDEwLjQ4ODUgMTcuMDE0OUMxMC40OTQ0IDE3LjAxMDUgMTAuNTAwMyAxNy4wMDc2IDEwLjUxMzQgMTcuMDE0OUwxNS4yNDIgMjAuMDEwNUMxNS40OTg3IDIwLjE3NDUgMTUuNzk4OSAyMC4yNTcyIDE2LjEwMzQgMjAuMjQ3OEMxNi40MDc5IDIwLjIzODQgMTYuNzAyNCAyMC4xMzczIDE2Ljk0ODUgMTkuOTU3OEMxNy4yMDMyIDE5Ljc3MzYgMTcuMzk2NCAxOS41MTY5IDE3LjUwMjggMTkuMjIxMkMxNy42MDkxIDE4LjkyNTQgMTcuNjIzOCAxOC42MDQ1IDE3LjU0NDcgMTguMzAwM0wxNi4xOTg1IDEyLjg1NTVMMjAuNDM5MiA5LjMyNTkzQzIwLjY4MDUgOS4xMjQ4NSAyMC44NTU3IDguODU1NzggMjAuOTQxOSA4LjU1Mzc1QzIxLjAyODEgOC4yNTE3MiAyMS4wMjE0IDcuOTMwNzMgMjAuOTIyNiA3LjYzMjU3WiIgZmlsbD0iIzI2QkVDOSIvPgo8L3N2Zz4=" width="21.00" height="20.25"></span>4.6<span class="rc">(234)</span></div>
+                <div class="pr">NT$ 70 <span class="qi">起</span></div>
+              </div>
+            </button>
+            <button class="kkh-card" data-action="kkh-demo">
+              <div class="img" style="background:linear-gradient(135deg,#FFF3E0,#FFE0B2)">🎡<span class="tag">即買即用</span></div>
+              <div class="inf">
+                <div class="tt">香港海洋公園門票｜即買即入園</div>
+                <div class="rate"><span class="ic"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjIxLjAwMiIgaGVpZ2h0PSIyMC4yNDg1IiB2aWV3Qm94PSIwIDAgMjEuMDAyIDIwLjI0ODUiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGlkPSJWZWN0b3IiIGQ9Ik0yMC45MjI2IDcuNjMyNTdDMjAuODI5IDcuMzM4NTkgMjAuNjQ4OSA3LjA3OTY1IDIwLjQwNTkgNi44ODk1NUMyMC4xNjI5IDYuNjk5NDUgMTkuODY4MiA2LjU4NzAxIDE5LjU2MDMgNi41NjY5TDEzLjk5MjQgNi4xNzcyNUwxMS45MjcgMC45NzYzMTlDMTEuODE1MiAwLjY4ODc4NyAxMS42MTkyIDAuNDQxNzI2IDExLjM2NDYgMC4yNjc1MTFDMTEuMTEgMC4wOTMyOTU3IDEwLjgwODggNS4yNTU2MmUtMDUgMTAuNTAwMyAwSDEwLjQ5ODhDMTAuMTkwOCAwLjAwMDU0OTM4NiA5Ljg5MDEgMC4wOTQwMzAyIDkuNjM2MDcgMC4yNjgyMTlDOS4zODIwNCAwLjQ0MjQwOCA5LjE4NjQ4IDAuNjg5MTk4IDkuMDc0OTcgMC45NzYzMTlMNi45Nzg3OCA2LjIwNzI3TDEuNDQxNjcgNi41NjY5QzEuMTMzNzkgNi41ODcwMSAwLjgzOTExMiA2LjY5OTQ1IDAuNTk2MDk2IDYuODg5NTVDMC4zNTMwNzkgNy4wNzk2NSAwLjE3MzAwMyA3LjMzODU5IDAuMDc5MzYyMSA3LjYzMjU3Qy0wLjAxOTQyMjkgNy45MzA3MyAtMC4wMjYxNDMgOC4yNTE3MiAwLjA2MDA3NjggOC41NTM3NUMwLjE0NjI5NyA4Ljg1NTc4IDAuMzIxNDYxIDkuMTI0ODUgMC41NjI3NjEgOS4zMjU5M0w0LjgyMjUzIDEyLjkyNjVMMy41NTU0NCAxNy45MTA2QzMuNDY4MSAxOC4yNDY0IDMuNDg0MTYgMTguNjAwNiAzLjYwMTUxIDE4LjkyNzFDMy43MTg4NyAxOS4yNTM1IDMuOTMyMDUgMTkuNTM3IDQuMjEzMTUgMTkuNzQwMkM0LjQ4NDU0IDE5LjkzNzcgNC44MDkwOSAyMC4wNDg5IDUuMTQ0NTUgMjAuMDU5M0M1LjQ4MDAxIDIwLjA2OTggNS44MTA4NSAxOS45NzkgNi4wOTQwMSAxOS43OTg4TDEwLjQ4ODUgMTcuMDE0OUMxMC40OTQ0IDE3LjAxMDUgMTAuNTAwMyAxNy4wMDc2IDEwLjUxMzQgMTcuMDE0OUwxNS4yNDIgMjAuMDEwNUMxNS40OTg3IDIwLjE3NDUgMTUuNzk4OSAyMC4yNTcyIDE2LjEwMzQgMjAuMjQ3OEMxNi40MDc5IDIwLjIzODQgMTYuNzAyNCAyMC4xMzczIDE2Ljk0ODUgMTkuOTU3OEMxNy4yMDMyIDE5Ljc3MzYgMTcuMzk2NCAxOS41MTY5IDE3LjUwMjggMTkuMjIxMkMxNy42MDkxIDE4LjkyNTQgMTcuNjIzOCAxOC42MDQ1IDE3LjU0NDcgMTguMzAwM0wxNi4xOTg1IDEyLjg1NTVMMjAuNDM5MiA5LjMyNTkzQzIwLjY4MDUgOS4xMjQ4NSAyMC44NTU3IDguODU1NzggMjAuOTQxOSA4LjU1Mzc1QzIxLjAyODEgOC4yNTE3MiAyMS4wMjE0IDcuOTMwNzMgMjAuOTIyNiA3LjYzMjU3WiIgZmlsbD0iIzI2QkVDOSIvPgo8L3N2Zz4=" width="21.00" height="20.25"></span>4.4<span class="rc">(3,219)</span></div>
+                <div class="pr">NT$ 1,350 <span class="qi">起</span></div>
+              </div>
+            </button>
+            <button class="kkh-card" data-action="kkh-demo">
+              <div class="img" style="background:linear-gradient(135deg,#FFECEF,#FFCDD2)">🍽️<span class="tag">快閃 67 折</span></div>
+              <div class="inf">
+                <div class="tt">銅鑼灣柏寧酒店 PLAYT 主題自助餐</div>
+                <div class="rate"><span class="ic"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjIxLjAwMiIgaGVpZ2h0PSIyMC4yNDg1IiB2aWV3Qm94PSIwIDAgMjEuMDAyIDIwLjI0ODUiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGlkPSJWZWN0b3IiIGQ9Ik0yMC45MjI2IDcuNjMyNTdDMjAuODI5IDcuMzM4NTkgMjAuNjQ4OSA3LjA3OTY1IDIwLjQwNTkgNi44ODk1NUMyMC4xNjI5IDYuNjk5NDUgMTkuODY4MiA2LjU4NzAxIDE5LjU2MDMgNi41NjY5TDEzLjk5MjQgNi4xNzcyNUwxMS45MjcgMC45NzYzMTlDMTEuODE1MiAwLjY4ODc4NyAxMS42MTkyIDAuNDQxNzI2IDExLjM2NDYgMC4yNjc1MTFDMTEuMTEgMC4wOTMyOTU3IDEwLjgwODggNS4yNTU2MmUtMDUgMTAuNTAwMyAwSDEwLjQ5ODhDMTAuMTkwOCAwLjAwMDU0OTM4NiA5Ljg5MDEgMC4wOTQwMzAyIDkuNjM2MDcgMC4yNjgyMTlDOS4zODIwNCAwLjQ0MjQwOCA5LjE4NjQ4IDAuNjg5MTk4IDkuMDc0OTcgMC45NzYzMTlMNi45Nzg3OCA2LjIwNzI3TDEuNDQxNjcgNi41NjY5QzEuMTMzNzkgNi41ODcwMSAwLjgzOTExMiA2LjY5OTQ1IDAuNTk2MDk2IDYuODg5NTVDMC4zNTMwNzkgNy4wNzk2NSAwLjE3MzAwMyA3LjMzODU5IDAuMDc5MzYyMSA3LjYzMjU3Qy0wLjAxOTQyMjkgNy45MzA3MyAtMC4wMjYxNDMgOC4yNTE3MiAwLjA2MDA3NjggOC41NTM3NUMwLjE0NjI5NyA4Ljg1NTc4IDAuMzIxNDYxIDkuMTI0ODUgMC41NjI3NjEgOS4zMjU5M0w0LjgyMjUzIDEyLjkyNjVMMy41NTU0NCAxNy45MTA2QzMuNDY4MSAxOC4yNDY0IDMuNDg0MTYgMTguNjAwNiAzLjYwMTUxIDE4LjkyNzFDMy43MTg4NyAxOS4yNTM1IDMuOTMyMDUgMTkuNTM3IDQuMjEzMTUgMTkuNzQwMkM0LjQ4NDU0IDE5LjkzNzcgNC44MDkwOSAyMC4wNDg5IDUuMTQ0NTUgMjAuMDU5M0M1LjQ4MDAxIDIwLjA2OTggNS44MTA4NSAxOS45NzkgNi4wOTQwMSAxOS43OTg4TDEwLjQ4ODUgMTcuMDE0OUMxMC40OTQ0IDE3LjAxMDUgMTAuNTAwMyAxNy4wMDc2IDEwLjUxMzQgMTcuMDE0OUwxNS4yNDIgMjAuMDEwNUMxNS40OTg3IDIwLjE3NDUgMTUuNzk4OSAyMC4yNTcyIDE2LjEwMzQgMjAuMjQ3OEMxNi40MDc5IDIwLjIzODQgMTYuNzAyNCAyMC4xMzczIDE2Ljk0ODUgMTkuOTU3OEMxNy4yMDMyIDE5Ljc3MzYgMTcuMzk2NCAxOS41MTY5IDE3LjUwMjggMTkuMjIxMkMxNy42MDkxIDE4LjkyNTQgMTcuNjIzOCAxOC42MDQ1IDE3LjU0NDcgMTguMzAwM0wxNi4xOTg1IDEyLjg1NTVMMjAuNDM5MiA5LjMyNTkzQzIwLjY4MDUgOS4xMjQ4NSAyMC44NTU3IDguODU1NzggMjAuOTQxOSA4LjU1Mzc1QzIxLjAyODEgOC4yNTE3MiAyMS4wMjE0IDcuOTMwNzMgMjAuOTIyNiA3LjYzMjU3WiIgZmlsbD0iIzI2QkVDOSIvPgo8L3N2Zz4=" width="21.00" height="20.25"></span>4.8<span class="rc">(1,024)</span></div>
+                <div class="pr">NT$ 980 <span class="qi">起</span></div>
+              </div>
+            </button>
+            <button class="kkh-card" data-action="kkh-demo">
+              <div class="img" style="background:linear-gradient(135deg,#E3F2FD,#BBDEFB)">🗼<span class="tag">熱門</span></div>
+              <div class="inf">
+                <div class="tt">東京晴空塔展望台門票｜當日可用</div>
+                <div class="rate"><span class="ic"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjIxLjAwMiIgaGVpZ2h0PSIyMC4yNDg1IiB2aWV3Qm94PSIwIDAgMjEuMDAyIDIwLjI0ODUiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGlkPSJWZWN0b3IiIGQ9Ik0yMC45MjI2IDcuNjMyNTdDMjAuODI5IDcuMzM4NTkgMjAuNjQ4OSA3LjA3OTY1IDIwLjQwNTkgNi44ODk1NUMyMC4xNjI5IDYuNjk5NDUgMTkuODY4MiA2LjU4NzAxIDE5LjU2MDMgNi41NjY5TDEzLjk5MjQgNi4xNzcyNUwxMS45MjcgMC45NzYzMTlDMTEuODE1MiAwLjY4ODc4NyAxMS42MTkyIDAuNDQxNzI2IDExLjM2NDYgMC4yNjc1MTFDMTEuMTEgMC4wOTMyOTU3IDEwLjgwODggNS4yNTU2MmUtMDUgMTAuNTAwMyAwSDEwLjQ5ODhDMTAuMTkwOCAwLjAwMDU0OTM4NiA5Ljg5MDEgMC4wOTQwMzAyIDkuNjM2MDcgMC4yNjgyMTlDOS4zODIwNCAwLjQ0MjQwOCA5LjE4NjQ4IDAuNjg5MTk4IDkuMDc0OTcgMC45NzYzMTlMNi45Nzg3OCA2LjIwNzI3TDEuNDQxNjcgNi41NjY5QzEuMTMzNzkgNi41ODcwMSAwLjgzOTExMiA2LjY5OTQ1IDAuNTk2MDk2IDYuODg5NTVDMC4zNTMwNzkgNy4wNzk2NSAwLjE3MzAwMyA3LjMzODU5IDAuMDc5MzYyMSA3LjYzMjU3Qy0wLjAxOTQyMjkgNy45MzA3MyAtMC4wMjYxNDMgOC4yNTE3MiAwLjA2MDA3NjggOC41NTM3NUMwLjE0NjI5NyA4Ljg1NTc4IDAuMzIxNDYxIDkuMTI0ODUgMC41NjI3NjEgOS4zMjU5M0w0LjgyMjUzIDEyLjkyNjVMMy41NTU0NCAxNy45MTA2QzMuNDY4MSAxOC4yNDY0IDMuNDg0MTYgMTguNjAwNiAzLjYwMTUxIDE4LjkyNzFDMy43MTg4NyAxOS4yNTM1IDMuOTMyMDUgMTkuNTM3IDQuMjEzMTUgMTkuNzQwMkM0LjQ4NDU0IDE5LjkzNzcgNC44MDkwOSAyMC4wNDg5IDUuMTQ0NTUgMjAuMDU5M0M1LjQ4MDAxIDIwLjA2OTggNS44MTA4NSAxOS45NzkgNi4wOTQwMSAxOS43OTg4TDEwLjQ4ODUgMTcuMDE0OUMxMC40OTQ0IDE3LjAxMDUgMTAuNTAwMyAxNy4wMDc2IDEwLjUxMzQgMTcuMDE0OUwxNS4yNDIgMjAuMDEwNUMxNS40OTg3IDIwLjE3NDUgMTUuNzk4OSAyMC4yNTcyIDE2LjEwMzQgMjAuMjQ3OEMxNi40MDc5IDIwLjIzODQgMTYuNzAyNCAyMC4xMzczIDE2Ljk0ODUgMTkuOTU3OEMxNy4yMDMyIDE5Ljc3MzYgMTcuMzk2NCAxOS41MTY5IDE3LjUwMjggMTkuMjIxMkMxNy42MDkxIDE4LjkyNTQgMTcuNjIzOCAxOC42MDQ1IDE3LjU0NDcgMTguMzAwM0wxNi4xOTg1IDEyLjg1NTVMMjAuNDM5MiA5LjMyNTkzQzIwLjY4MDUgOS4xMjQ4NSAyMC44NTU3IDguODU1NzggMjAuOTQxOSA4LjU1Mzc1QzIxLjAyODEgOC4yNTE3MiAyMS4wMjE0IDcuOTMwNzMgMjAuOTIyNiA3LjYzMjU3WiIgZmlsbD0iIzI2QkVDOSIvPgo8L3N2Zz4=" width="21.00" height="20.25"></span>4.7<span class="rc">(856)</span></div>
+                <div class="pr">NT$ 420 <span class="qi">起</span></div>
+              </div>
+            </button>
+          </div>
+        </div>
+        <div class="kkh-tabbar">
+          <button class="kkh-tab sel"><span class="tic">🏠</span>首頁</button>
+          <button class="kkh-tab" data-action="kkh-demo"><span class="tic">🧭</span>分類</button>
+          <button class="kkh-tab" data-action="kkh-demo"><span class="tic">📋</span>訂單</button>
+          <button class="kkh-tab" data-action="kkh-demo"><span class="tic">👤</span>會員</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" data-screen="home">
 
       <!-- header -->
       <div class="mheader">
@@ -2349,13 +2494,13 @@
   }
 
   // ---------- 螢幕路由 ----------
-  var current = 'home';
+  var current = 'kkhome';  // 初始＝KKday 模擬首頁，經 eSIM 入口進入 eSIM 主頁
   function go(name) {
     current = name;
     document.querySelectorAll('.screen').forEach(function (s) {
       s.classList.toggle('is-active', s.getAttribute('data-screen') === name);
     });
-    document.querySelector('.app').classList.toggle('no-hero', name === 'plans');
+    document.querySelector('.app').classList.toggle('no-hero', name === 'plans' || name === 'kkhome');
     window.scrollTo(0, 0);
     // 重新進入目的地頁（如從列表返回）時把選中流量檔、選中天數 chip 滾回可視區，避免選中項落在螢幕外
     if (name === 'destination') {
@@ -3156,8 +3301,10 @@
       else if (a === 'change-destination') openModal(lastType()); // 再次開啟預設進入上次所選類目
       else if (a === 'guide') toast('安裝指南：' + el.getAttribute('data-guide') + '（開發中）');
       else if (a === 'faq-more') toast('常見問題列表（開發中）');
-      else if (a === 'back') { if (current === 'destination') go('home'); else if (current === 'plans') go('destination'); else toast('返回上一頁'); }
+      else if (a === 'back') { if (current === 'destination') go('home'); else if (current === 'plans') go('destination'); else if (current === 'home') go('kkhome'); else toast('返回上一頁'); }
       else if (a === 'back-plans') go('destination');
+      else if (a === 'enter-esim') go('home');            // 首頁 eSIM 入口 → eSIM 主頁
+      else if (a === 'kkh-demo') toast('原型僅提供 eSIM 訂購流程');
     });
   });
 

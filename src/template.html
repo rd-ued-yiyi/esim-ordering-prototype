@@ -65,6 +65,70 @@
   .screen { display: none; }
   .screen.is-active { display: block; }
 
+  /* ---------- KKday 模擬首頁（參考 kkday.com/zh-hk 行動版） ---------- */
+  .kkh-top { background: linear-gradient(180deg, #26BEC9 0%, #4FCBD3 100%); padding: 12px 16px 20px; }
+  .kkh-bar { display: flex; align-items: center; gap: 12px; padding: 6px 0 14px; }
+  .kkh-menu { display: flex; flex-direction: column; gap: 5px; background: none; border: 0; padding: 4px 0; }
+  .kkh-menu i { width: 22px; height: 2.5px; border-radius: 2px; background: #fff; }
+  .kkh-logo { font-size: 26px; line-height: 30px; font-weight: 800; color: #fff; letter-spacing: .5px; }
+  .kkh-avatar { margin-left: auto; width: 32px; height: 32px; border-radius: 50%; background: #FFCA28;
+    color: #fff; font-size: 16px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+  .kkh-search { width: 100%; background: #fff; border: 2px solid #1AB6C1; border-radius: 26px; height: 48px;
+    display: flex; align-items: center; padding: 3px 3px 3px 16px; text-align: left; }
+  .kkh-search .ph { flex: 1 1 0; color: var(--kk-text-medium); font-size: 15px; line-height: 20px; }
+  .kkh-search .go { width: 40px; height: 40px; border-radius: 50%; background: #26BEC9;
+    display: flex; align-items: center; justify-content: center; flex: 0 0 auto; }
+  .kkh-hot { display: flex; gap: 8px; margin-top: 12px; overflow-x: auto; scrollbar-width: none; }
+  .kkh-hot::-webkit-scrollbar { display: none; }
+  .kkh-hot .hchip { flex: 0 0 auto; background: rgba(255, 255, 255, .92); color: #212121;
+    font-size: 13px; line-height: 18px; padding: 6px 12px; border-radius: 16px; border: 0; }
+  .kkh-body { background: #fff; }
+  .kkh-cats { display: flex; gap: 4px; overflow-x: auto; padding: 16px 8px 4px; scrollbar-width: none; }
+  .kkh-cats::-webkit-scrollbar { display: none; }
+  .kkh-cat { flex: 0 0 auto; width: 78px; display: flex; flex-direction: column; align-items: center; gap: 6px;
+    background: none; border: 0; position: relative; padding: 4px 0; }
+  .kkh-cat .em { width: 52px; height: 52px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 27px; }
+  .kkh-cat:nth-child(8n+1) .em { background: #FFF3E0; }
+  .kkh-cat:nth-child(8n+2) .em { background: #FFECEF; }
+  .kkh-cat:nth-child(8n+3) .em { background: #FFF8E1; }
+  .kkh-cat:nth-child(8n+4) .em { background: #E8F5E9; }
+  .kkh-cat:nth-child(8n+5) .em { background: #E3F2FD; }
+  .kkh-cat:nth-child(8n+6) .em { background: #F3E5F5; }
+  .kkh-cat:nth-child(8n+7) .em { background: #E0F7FA; }
+  .kkh-cat:nth-child(8n+8) .em { background: #FBE9E7; }
+  .kkh-cat .lb { font-size: 12px; line-height: 16px; color: #212121; white-space: nowrap; }
+  .kkh-cat .hotdot { position: absolute; top: 0; right: 8px; background: #EF7A70; color: #fff;
+    font-size: 10px; line-height: 14px; padding: 0 5px; border-radius: 8px 8px 8px 2px; font-weight: 600; }
+  .kkh-banner { display: block; width: calc(100% - 32px); margin: 16px; border: 0; text-align: left;
+    border-radius: 12px; background: linear-gradient(120deg, #13A3B6, #26BEC9 55%, #8AE0E6);
+    color: #fff; padding: 20px; }
+  .kkh-banner .b1 { font-size: 17px; line-height: 24px; font-weight: 700; }
+  .kkh-banner .b2 { font-size: 13px; line-height: 18px; opacity: .92; margin-top: 4px; }
+  .kkh-sec { padding: 8px 16px calc(84px + env(safe-area-inset-bottom, 0px)); }  /* 底部留出 tabbar 高度 */
+  .kkh-sec-t { font-size: 18px; line-height: 26px; font-weight: 600; color: #212121; margin: 4px 0 12px; }
+  .kkh-feed { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .kkh-card { border-radius: 12px; overflow: hidden; background: #fff; border: 0; padding: 0; text-align: left;
+    box-shadow: 0 1px 8px rgba(38, 50, 56, .12); }
+  .kkh-card .img { position: relative; height: 108px; display: flex; align-items: center; justify-content: center; font-size: 42px; }
+  .kkh-card .tag { position: absolute; top: 8px; left: 8px; background: rgba(255, 255, 255, .95);
+    border-radius: 6px; font-size: 11px; line-height: 16px; padding: 2px 6px; color: #212121; }
+  .kkh-card .inf { padding: 10px 12px 12px; }
+  .kkh-card .tt { font-size: 14px; line-height: 20px; font-weight: 600; color: #212121;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 40px; }
+  .kkh-card .rate { display: flex; align-items: center; gap: 4px; margin-top: 6px;
+    font-size: 12px; line-height: 16px; color: #13A3B6; font-weight: 600; }
+  .kkh-card .rate .ic { width: 14px; height: 14px; }
+  .kkh-card .rate .rc { color: var(--kk-text-medium); font-weight: 400; }
+  .kkh-card .pr { margin-top: 6px; font-size: 15px; line-height: 20px; font-weight: 700; color: #212121; }
+  .kkh-card .pr .qi { font-size: 12px; font-weight: 400; color: var(--kk-text-dark); }
+  .kkh-tabbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; background: #fff;
+    border-top: 1px solid var(--kk-border-lighter); display: flex;
+    padding: 6px 0 calc(6px + env(safe-area-inset-bottom, 0px)); }
+  .kkh-tab { flex: 1 1 0; display: flex; flex-direction: column; align-items: center; gap: 2px;
+    font-size: 11px; line-height: 14px; color: var(--kk-text-medium); background: none; border: 0; }
+  .kkh-tab .tic { font-size: 20px; line-height: 24px; }
+  .kkh-tab.sel { color: #13A3B6; font-weight: 600; }
+
   /* ---------- 排版工具 ---------- */
   .t-h4          { font-size: 24px; line-height: 30px; font-weight: 600; }
   .t-h6          { font-size: 18px; line-height: 26px; font-weight: 600; }
@@ -1348,13 +1412,94 @@
 </style>
 
 <div class="esim-root">
-  <div class="app">
+  <div class="app no-hero"><!-- 初始＝KKday 首頁（無 hero 背景），進 eSIM 主頁後由 go() 切換 -->
 
     <!-- hero 背景：home / destination 兩屏共享（同一份，避免 SVG id 衝突） -->
     {{HERO_SVG}}
 
     <!-- ============ SCREEN: 主題落地頁 ============ -->
-    <section class="screen is-active" data-screen="home">
+    <!-- ============ KKday 模擬首頁（參考 kkday.com/zh-hk）============ -->
+    <section class="screen is-active" data-screen="kkhome">
+      <div class="kkh-top">
+        <div class="kkh-bar">
+          <button class="kkh-menu" data-action="kkh-demo" aria-label="選單"><i></i><i></i><i></i></button>
+          <div class="kkh-logo">kkday</div>
+          <div class="kkh-avatar">k</div>
+        </div>
+        <button class="kkh-search" data-action="kkh-demo">
+          <span class="ph">搜尋目的地／景點／活動</span>
+          <span class="go"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4.2-4.2"/></svg></span>
+        </button>
+        <div class="kkh-hot">
+          <button class="hchip" data-action="kkh-demo">日本自由行</button>
+          <button class="hchip" data-action="kkh-demo">酒店自助餐優惠</button>
+          <button class="hchip" data-action="kkh-demo">澳門一日遊</button>
+          <button class="hchip" data-action="kkh-demo">珠海長隆</button>
+          <button class="hchip" data-action="kkh-demo">下午茶</button>
+        </div>
+      </div>
+      <div class="kkh-body">
+        <div class="kkh-cats">
+          <button class="kkh-cat" data-action="kkh-demo"><span class="em">🎫</span><span class="lb">門票/體驗</span></button>
+          <button class="kkh-cat" data-action="kkh-demo"><span class="em">🍱</span><span class="lb">餐飲美食</span></button>
+          <button class="kkh-cat" data-action="kkh-demo"><span class="em">🏨</span><span class="lb">住宿</span></button>
+          <button class="kkh-cat" data-action="kkh-demo"><span class="em">🚄</span><span class="lb">交通</span></button>
+          <button class="kkh-cat" data-action="enter-esim"><span class="em">📶</span><span class="lb">eSIM/WiFi</span><span class="hotdot">HOT</span></button>
+          <button class="kkh-cat" data-action="kkh-demo"><span class="em">🚐</span><span class="lb">機場接送</span></button>
+          <button class="kkh-cat" data-action="kkh-demo"><span class="em">🛳️</span><span class="lb">郵輪</span></button>
+          <button class="kkh-cat" data-action="kkh-demo"><span class="em">♨️</span><span class="lb">溫泉</span></button>
+        </div>
+        <button class="kkh-banner" data-action="enter-esim">
+          <div class="b1">出國上網 eSIM 掃碼即用 📶</div>
+          <div class="b2">全球 80+ 目的地・每日流量 NT$52 起・立即選購 →</div>
+        </button>
+        <div class="kkh-sec">
+          <div class="kkh-sec-t">為你推薦</div>
+          <div class="kkh-feed">
+            <button class="kkh-card" data-action="enter-esim">
+              <div class="img" style="background:linear-gradient(135deg,#E0F7FA,#B2EBF2)">📶<span class="tag">eSIM/WiFi</span></div>
+              <div class="inf">
+                <div class="tt">日本 eSIM｜每日高速流量・掃碼即裝・免翻牆</div>
+                <div class="rate"><span class="ic">{{IC_star}}</span>4.6<span class="rc">(234)</span></div>
+                <div class="pr">NT$ 70 <span class="qi">起</span></div>
+              </div>
+            </button>
+            <button class="kkh-card" data-action="kkh-demo">
+              <div class="img" style="background:linear-gradient(135deg,#FFF3E0,#FFE0B2)">🎡<span class="tag">即買即用</span></div>
+              <div class="inf">
+                <div class="tt">香港海洋公園門票｜即買即入園</div>
+                <div class="rate"><span class="ic">{{IC_star}}</span>4.4<span class="rc">(3,219)</span></div>
+                <div class="pr">NT$ 1,350 <span class="qi">起</span></div>
+              </div>
+            </button>
+            <button class="kkh-card" data-action="kkh-demo">
+              <div class="img" style="background:linear-gradient(135deg,#FFECEF,#FFCDD2)">🍽️<span class="tag">快閃 67 折</span></div>
+              <div class="inf">
+                <div class="tt">銅鑼灣柏寧酒店 PLAYT 主題自助餐</div>
+                <div class="rate"><span class="ic">{{IC_star}}</span>4.8<span class="rc">(1,024)</span></div>
+                <div class="pr">NT$ 980 <span class="qi">起</span></div>
+              </div>
+            </button>
+            <button class="kkh-card" data-action="kkh-demo">
+              <div class="img" style="background:linear-gradient(135deg,#E3F2FD,#BBDEFB)">🗼<span class="tag">熱門</span></div>
+              <div class="inf">
+                <div class="tt">東京晴空塔展望台門票｜當日可用</div>
+                <div class="rate"><span class="ic">{{IC_star}}</span>4.7<span class="rc">(856)</span></div>
+                <div class="pr">NT$ 420 <span class="qi">起</span></div>
+              </div>
+            </button>
+          </div>
+        </div>
+        <div class="kkh-tabbar">
+          <button class="kkh-tab sel"><span class="tic">🏠</span>首頁</button>
+          <button class="kkh-tab" data-action="kkh-demo"><span class="tic">🧭</span>分類</button>
+          <button class="kkh-tab" data-action="kkh-demo"><span class="tic">📋</span>訂單</button>
+          <button class="kkh-tab" data-action="kkh-demo"><span class="tic">👤</span>會員</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" data-screen="home">
 
       <!-- header -->
       <div class="mheader">
@@ -2248,13 +2393,13 @@
   }
 
   // ---------- 螢幕路由 ----------
-  var current = 'home';
+  var current = 'kkhome';  // 初始＝KKday 模擬首頁，經 eSIM 入口進入 eSIM 主頁
   function go(name) {
     current = name;
     document.querySelectorAll('.screen').forEach(function (s) {
       s.classList.toggle('is-active', s.getAttribute('data-screen') === name);
     });
-    document.querySelector('.app').classList.toggle('no-hero', name === 'plans');
+    document.querySelector('.app').classList.toggle('no-hero', name === 'plans' || name === 'kkhome');
     window.scrollTo(0, 0);
     // 重新進入目的地頁（如從列表返回）時把選中流量檔、選中天數 chip 滾回可視區，避免選中項落在螢幕外
     if (name === 'destination') {
@@ -3055,8 +3200,10 @@
       else if (a === 'change-destination') openModal(lastType()); // 再次開啟預設進入上次所選類目
       else if (a === 'guide') toast('安裝指南：' + el.getAttribute('data-guide') + '（開發中）');
       else if (a === 'faq-more') toast('常見問題列表（開發中）');
-      else if (a === 'back') { if (current === 'destination') go('home'); else if (current === 'plans') go('destination'); else toast('返回上一頁'); }
+      else if (a === 'back') { if (current === 'destination') go('home'); else if (current === 'plans') go('destination'); else if (current === 'home') go('kkhome'); else toast('返回上一頁'); }
       else if (a === 'back-plans') go('destination');
+      else if (a === 'enter-esim') go('home');            // 首頁 eSIM 入口 → eSIM 主頁
+      else if (a === 'kkh-demo') toast('原型僅提供 eSIM 訂購流程');
     });
   });
 
