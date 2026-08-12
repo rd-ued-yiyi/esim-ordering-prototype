@@ -74,18 +74,22 @@
   .screen { display: none; }
   .screen.is-active { display: block; }
 
-  /* ---------- KKday 模擬首頁（參考 kkday.com/zh-hk 行動版） ---------- */
-  .kkh-top { background: linear-gradient(180deg, #26BEC9 0%, #4FCBD3 100%); padding: 12px 16px 20px; }
+  /* ---------- KKday 模擬首頁（易用性測試入口：全白背景、極簡） ---------- */
+  [data-screen="kkhome"] { background: #fff; min-height: 100vh; }
+  .kkh-top { background: #fff; padding: 12px 16px 8px; }
   .kkh-bar { display: flex; align-items: center; gap: 12px; padding: 6px 0 14px; }
   .kkh-menu { display: flex; flex-direction: column; gap: 5px; background: none; border: 0; padding: 4px 0; }
-  .kkh-menu i { width: 22px; height: 2.5px; border-radius: 2px; background: #fff; }
-  .kkh-logo { font-size: 26px; line-height: 30px; font-weight: 800; color: #fff; letter-spacing: .5px; }
-  .kkh-test { border: 1px solid rgba(255, 255, 255, .85); color: #fff; font-size: 11px; line-height: 16px;
+  .kkh-menu i { width: 22px; height: 2.5px; border-radius: 2px; background: #26BEC9; }
+  .kkh-logo { font-size: 26px; line-height: 30px; font-weight: 800; color: #26BEC9; letter-spacing: .5px; }
+  .kkh-test { border: 1px solid #26BEC9; color: #26BEC9; font-size: 11px; line-height: 16px;
     padding: 1px 6px; border-radius: 9px; font-weight: 600; }  /* header 測試標記 */
-  .kkh-avatar { margin-left: auto; width: 32px; height: 32px; border-radius: 50%; background: #FFCA28;
-    color: #fff; font-size: 16px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
   /* 易用性測試引導文字（取代搜索框） */
-  .kkh-guide { text-align: center; color: #fff; font-size: 16px; line-height: 24px; font-weight: 600; padding: 8px 0 4px; }
+  .kkh-guide { text-align: center; color: #212121; font-size: 16px; line-height: 24px; font-weight: 600; padding: 8px 0 4px; }
+  /* 簡繁語言選項（引導文字下方，預設簡體） */
+  .kkh-langs { display: flex; justify-content: center; gap: 12px; padding: 8px 0 4px; }
+  .kkh-lang { border: 1px solid var(--kk-border-light); border-radius: 16px; background: #fff;
+    padding: 5px 16px; font-size: 14px; line-height: 20px; color: var(--kk-text-darker); }
+  .kkh-lang.sel { border-color: #26BEC9; background: #F0FAFB; color: #13A3B6; font-weight: 600; }
   .kkh-body { background: #fff; }
   .kkh-cats { display: flex; padding: 16px 8px 4px; }  /* 5 個入口一行均分（簡化版，無橫滑） */
   .kkh-cat { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 6px;
@@ -96,42 +100,9 @@
   .kkh-cat:nth-child(8n+3) .em { background: #FFF8E1; }
   .kkh-cat:nth-child(8n+4) .em { background: #E8F5E9; }
   .kkh-cat:nth-child(8n+5) .em { background: #E3F2FD; }
-  .kkh-cat:nth-child(8n+6) .em { background: #F3E5F5; }
-  .kkh-cat:nth-child(8n+7) .em { background: #E0F7FA; }
-  .kkh-cat:nth-child(8n+8) .em { background: #FBE9E7; }
   .kkh-cat .lb { font-size: 12px; line-height: 16px; color: #212121; white-space: nowrap; }
   .kkh-cat .hotdot { position: absolute; top: 0; right: 8px; background: #EF7A70; color: #fff;
     font-size: 10px; line-height: 14px; padding: 0 5px; border-radius: 8px 8px 8px 2px; font-weight: 600; }
-  .kkh-banner { display: block; width: calc(100% - 32px); margin: 16px; border: 0; text-align: left;
-    border-radius: 12px; background: linear-gradient(120deg, #13A3B6, #26BEC9 55%, #8AE0E6);
-    color: #fff; padding: 20px; }
-  .kkh-banner .b1 { font-size: 17px; line-height: 24px; font-weight: 700; }
-  .kkh-banner .b2 { font-size: 13px; line-height: 18px; opacity: .92; margin-top: 4px; }
-  .kkh-sec { padding: 8px 16px calc(84px + env(safe-area-inset-bottom, 0px)); }  /* 底部留出 tabbar 高度 */
-  .kkh-sec-t { font-size: 18px; line-height: 26px; font-weight: 600; color: #212121; margin: 4px 0 12px; }
-  .kkh-feed { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .kkh-card { border-radius: 12px; overflow: hidden; background: #fff; border: 0; padding: 0; text-align: left;
-    box-shadow: 0 1px 8px rgba(38, 50, 56, .12); }
-  .kkh-card .img { position: relative; height: 108px; display: flex; align-items: center; justify-content: center; font-size: 42px; }
-  .kkh-card .tag { position: absolute; top: 8px; left: 8px; background: rgba(255, 255, 255, .95);
-    border-radius: 6px; font-size: 11px; line-height: 16px; padding: 2px 6px; color: #212121; }
-  .kkh-card .inf { padding: 10px 12px 12px; }
-  .kkh-card .tt { font-size: 14px; line-height: 20px; font-weight: 600; color: #212121;
-    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 40px; }
-  .kkh-card .rate { display: flex; align-items: center; gap: 4px; margin-top: 6px;
-    font-size: 12px; line-height: 16px; color: #13A3B6; font-weight: 600; }
-  .kkh-card .rate .ic { width: 14px; height: 14px; }
-  .kkh-card .rate .rc { color: var(--kk-text-medium); font-weight: 400; }
-  .kkh-card .pr { margin-top: 6px; font-size: 15px; line-height: 20px; font-weight: 700; color: #212121; }
-  .kkh-card .pr .qi { font-size: 12px; font-weight: 400; color: var(--kk-text-dark); }
-  .kkh-tabbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; background: #fff;
-    max-width: 430px; margin: 0 auto;  /* 與 .app 同寬置中，桌面預覽不外溢 */
-    border-top: 1px solid var(--kk-border-lighter); display: flex;
-    padding: 6px 0 calc(6px + env(safe-area-inset-bottom, 0px)); }
-  .kkh-tab { flex: 1 1 0; display: flex; flex-direction: column; align-items: center; gap: 2px;
-    font-size: 11px; line-height: 14px; color: var(--kk-text-medium); background: none; border: 0; }
-  .kkh-tab .tic { font-size: 20px; line-height: 24px; }
-  .kkh-tab.sel { color: #13A3B6; font-weight: 600; }
 
   /* ---------- 排版工具 ---------- */
   .t-h4          { font-size: 24px; line-height: 30px; font-weight: 600; }
@@ -1519,9 +1490,12 @@
           <button class="kkh-menu" data-action="kkh-demo" aria-label="選單"><i></i><i></i><i></i></button>
           <div class="kkh-logo">kkday</div>
           <span class="kkh-test">易用性測試</span>
-          <div class="kkh-avatar">k</div>
         </div>
         <div class="kkh-guide">點擊 eSIM 進入購買流程</div>
+        <div class="kkh-langs">
+          <button class="kkh-lang" data-lang="cn">简体</button>
+          <button class="kkh-lang" data-lang="tw">繁體</button>
+        </div>
       </div>
       <div class="kkh-body">
         <div class="kkh-cats">
@@ -1530,33 +1504,6 @@
           <button class="kkh-cat" data-action="enter-esim"><span class="em">📶</span><span class="lb">eSIM</span><span class="hotdot">HOT</span></button>
           <button class="kkh-cat" data-action="kkh-demo"><span class="em">🏨</span><span class="lb">住宿</span></button>
           <button class="kkh-cat" data-action="kkh-demo"><span class="em">🚄</span><span class="lb">交通</span></button>
-        </div>
-        <div class="kkh-sec">
-          <div class="kkh-sec-t">為你推薦</div>
-          <div class="kkh-feed">
-            <button class="kkh-card" data-action="enter-esim">
-              <div class="img" style="background:linear-gradient(135deg,#E0F7FA,#B2EBF2)">📶<span class="tag">eSIM</span></div>
-              <div class="inf">
-                <div class="tt">日本 eSIM｜每日高速流量・掃碼即裝・免翻牆</div>
-                <div class="rate"><span class="ic"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjIxLjAwMiIgaGVpZ2h0PSIyMC4yNDg1IiB2aWV3Qm94PSIwIDAgMjEuMDAyIDIwLjI0ODUiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGlkPSJWZWN0b3IiIGQ9Ik0yMC45MjI2IDcuNjMyNTdDMjAuODI5IDcuMzM4NTkgMjAuNjQ4OSA3LjA3OTY1IDIwLjQwNTkgNi44ODk1NUMyMC4xNjI5IDYuNjk5NDUgMTkuODY4MiA2LjU4NzAxIDE5LjU2MDMgNi41NjY5TDEzLjk5MjQgNi4xNzcyNUwxMS45MjcgMC45NzYzMTlDMTEuODE1MiAwLjY4ODc4NyAxMS42MTkyIDAuNDQxNzI2IDExLjM2NDYgMC4yNjc1MTFDMTEuMTEgMC4wOTMyOTU3IDEwLjgwODggNS4yNTU2MmUtMDUgMTAuNTAwMyAwSDEwLjQ5ODhDMTAuMTkwOCAwLjAwMDU0OTM4NiA5Ljg5MDEgMC4wOTQwMzAyIDkuNjM2MDcgMC4yNjgyMTlDOS4zODIwNCAwLjQ0MjQwOCA5LjE4NjQ4IDAuNjg5MTk4IDkuMDc0OTcgMC45NzYzMTlMNi45Nzg3OCA2LjIwNzI3TDEuNDQxNjcgNi41NjY5QzEuMTMzNzkgNi41ODcwMSAwLjgzOTExMiA2LjY5OTQ1IDAuNTk2MDk2IDYuODg5NTVDMC4zNTMwNzkgNy4wNzk2NSAwLjE3MzAwMyA3LjMzODU5IDAuMDc5MzYyMSA3LjYzMjU3Qy0wLjAxOTQyMjkgNy45MzA3MyAtMC4wMjYxNDMgOC4yNTE3MiAwLjA2MDA3NjggOC41NTM3NUMwLjE0NjI5NyA4Ljg1NTc4IDAuMzIxNDYxIDkuMTI0ODUgMC41NjI3NjEgOS4zMjU5M0w0LjgyMjUzIDEyLjkyNjVMMy41NTU0NCAxNy45MTA2QzMuNDY4MSAxOC4yNDY0IDMuNDg0MTYgMTguNjAwNiAzLjYwMTUxIDE4LjkyNzFDMy43MTg4NyAxOS4yNTM1IDMuOTMyMDUgMTkuNTM3IDQuMjEzMTUgMTkuNzQwMkM0LjQ4NDU0IDE5LjkzNzcgNC44MDkwOSAyMC4wNDg5IDUuMTQ0NTUgMjAuMDU5M0M1LjQ4MDAxIDIwLjA2OTggNS44MTA4NSAxOS45NzkgNi4wOTQwMSAxOS43OTg4TDEwLjQ4ODUgMTcuMDE0OUMxMC40OTQ0IDE3LjAxMDUgMTAuNTAwMyAxNy4wMDc2IDEwLjUxMzQgMTcuMDE0OUwxNS4yNDIgMjAuMDEwNUMxNS40OTg3IDIwLjE3NDUgMTUuNzk4OSAyMC4yNTcyIDE2LjEwMzQgMjAuMjQ3OEMxNi40MDc5IDIwLjIzODQgMTYuNzAyNCAyMC4xMzczIDE2Ljk0ODUgMTkuOTU3OEMxNy4yMDMyIDE5Ljc3MzYgMTcuMzk2NCAxOS41MTY5IDE3LjUwMjggMTkuMjIxMkMxNy42MDkxIDE4LjkyNTQgMTcuNjIzOCAxOC42MDQ1IDE3LjU0NDcgMTguMzAwM0wxNi4xOTg1IDEyLjg1NTVMMjAuNDM5MiA5LjMyNTkzQzIwLjY4MDUgOS4xMjQ4NSAyMC44NTU3IDguODU1NzggMjAuOTQxOSA4LjU1Mzc1QzIxLjAyODEgOC4yNTE3MiAyMS4wMjE0IDcuOTMwNzMgMjAuOTIyNiA3LjYzMjU3WiIgZmlsbD0iIzI2QkVDOSIvPgo8L3N2Zz4=" width="21.00" height="20.25"></span>4.6<span class="rc">(234)</span></div>
-                <div class="pr">NT$ 70 <span class="qi">起</span></div>
-              </div>
-            </button>
-            <button class="kkh-card" data-action="kkh-demo">
-              <div class="img" style="background:linear-gradient(135deg,#FFF3E0,#FFE0B2)">🎡<span class="tag">即買即用</span></div>
-              <div class="inf">
-                <div class="tt">香港海洋公園門票｜即買即入園</div>
-                <div class="rate"><span class="ic"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjIxLjAwMiIgaGVpZ2h0PSIyMC4yNDg1IiB2aWV3Qm94PSIwIDAgMjEuMDAyIDIwLjI0ODUiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGlkPSJWZWN0b3IiIGQ9Ik0yMC45MjI2IDcuNjMyNTdDMjAuODI5IDcuMzM4NTkgMjAuNjQ4OSA3LjA3OTY1IDIwLjQwNTkgNi44ODk1NUMyMC4xNjI5IDYuNjk5NDUgMTkuODY4MiA2LjU4NzAxIDE5LjU2MDMgNi41NjY5TDEzLjk5MjQgNi4xNzcyNUwxMS45MjcgMC45NzYzMTlDMTEuODE1MiAwLjY4ODc4NyAxMS42MTkyIDAuNDQxNzI2IDExLjM2NDYgMC4yNjc1MTFDMTEuMTEgMC4wOTMyOTU3IDEwLjgwODggNS4yNTU2MmUtMDUgMTAuNTAwMyAwSDEwLjQ5ODhDMTAuMTkwOCAwLjAwMDU0OTM4NiA5Ljg5MDEgMC4wOTQwMzAyIDkuNjM2MDcgMC4yNjgyMTlDOS4zODIwNCAwLjQ0MjQwOCA5LjE4NjQ4IDAuNjg5MTk4IDkuMDc0OTcgMC45NzYzMTlMNi45Nzg3OCA2LjIwNzI3TDEuNDQxNjcgNi41NjY5QzEuMTMzNzkgNi41ODcwMSAwLjgzOTExMiA2LjY5OTQ1IDAuNTk2MDk2IDYuODg5NTVDMC4zNTMwNzkgNy4wNzk2NSAwLjE3MzAwMyA3LjMzODU5IDAuMDc5MzYyMSA3LjYzMjU3Qy0wLjAxOTQyMjkgNy45MzA3MyAtMC4wMjYxNDMgOC4yNTE3MiAwLjA2MDA3NjggOC41NTM3NUMwLjE0NjI5NyA4Ljg1NTc4IDAuMzIxNDYxIDkuMTI0ODUgMC41NjI3NjEgOS4zMjU5M0w0LjgyMjUzIDEyLjkyNjVMMy41NTU0NCAxNy45MTA2QzMuNDY4MSAxOC4yNDY0IDMuNDg0MTYgMTguNjAwNiAzLjYwMTUxIDE4LjkyNzFDMy43MTg4NyAxOS4yNTM1IDMuOTMyMDUgMTkuNTM3IDQuMjEzMTUgMTkuNzQwMkM0LjQ4NDU0IDE5LjkzNzcgNC44MDkwOSAyMC4wNDg5IDUuMTQ0NTUgMjAuMDU5M0M1LjQ4MDAxIDIwLjA2OTggNS44MTA4NSAxOS45NzkgNi4wOTQwMSAxOS43OTg4TDEwLjQ4ODUgMTcuMDE0OUMxMC40OTQ0IDE3LjAxMDUgMTAuNTAwMyAxNy4wMDc2IDEwLjUxMzQgMTcuMDE0OUwxNS4yNDIgMjAuMDEwNUMxNS40OTg3IDIwLjE3NDUgMTUuNzk4OSAyMC4yNTcyIDE2LjEwMzQgMjAuMjQ3OEMxNi40MDc5IDIwLjIzODQgMTYuNzAyNCAyMC4xMzczIDE2Ljk0ODUgMTkuOTU3OEMxNy4yMDMyIDE5Ljc3MzYgMTcuMzk2NCAxOS41MTY5IDE3LjUwMjggMTkuMjIxMkMxNy42MDkxIDE4LjkyNTQgMTcuNjIzOCAxOC42MDQ1IDE3LjU0NDcgMTguMzAwM0wxNi4xOTg1IDEyLjg1NTVMMjAuNDM5MiA5LjMyNTkzQzIwLjY4MDUgOS4xMjQ4NSAyMC44NTU3IDguODU1NzggMjAuOTQxOSA4LjU1Mzc1QzIxLjAyODEgOC4yNTE3MiAyMS4wMjE0IDcuOTMwNzMgMjAuOTIyNiA3LjYzMjU3WiIgZmlsbD0iIzI2QkVDOSIvPgo8L3N2Zz4=" width="21.00" height="20.25"></span>4.4<span class="rc">(3,219)</span></div>
-                <div class="pr">NT$ 1,350 <span class="qi">起</span></div>
-              </div>
-            </button>
-          </div>
-        </div>
-        <div class="kkh-tabbar">
-          <button class="kkh-tab sel"><span class="tic">🏠</span>首頁</button>
-          <button class="kkh-tab" data-action="kkh-demo"><span class="tic">🧭</span>分類</button>
-          <button class="kkh-tab" data-action="kkh-demo"><span class="tic">📋</span>訂單</button>
-          <button class="kkh-tab" data-action="kkh-demo"><span class="tic">👤</span>會員</button>
         </div>
       </div>
     </section>
@@ -2457,6 +2404,51 @@
       fn();
     }, 600 + Math.random() * 200);
   }
+
+  // ---------- 簡繁切換（易用性測試：預設簡體） ----------
+  // 原型文案為繁體；簡體模式用構建時生成的 繁→簡 單字映射（OpenCC t2s）轉換整頁文字，
+  // MutationObserver 覆蓋 JS 動態渲染的內容。切換語言時記錄 sessionStorage 並重載。
+  var T2S_MAP = {"丟": "丢", "並": "并", "亞": "亚", "佈": "布", "佔": "占", "來": "来", "個": "个", "倫": "伦", "側": "侧", "備": "备", "傳": "传", "僅": "仅", "價": "价", "儘": "尽", "優": "优", "儲": "储", "兌": "兑", "內": "内", "兩": "两", "冪": "幂", "別": "别", "刪": "删", "則": "则", "剛": "刚", "劃": "划", "動": "动", "務": "务", "勻": "匀", "匯": "汇", "區": "区", "協": "协", "參": "参", "吳": "吴", "員": "员", "問": "问", "啟": "启", "喬": "乔", "單": "单", "嗎": "吗", "嚴": "严", "國": "国", "圍": "围", "園": "园", "圓": "圆", "圖": "图", "執": "执", "報": "报", "場": "场", "塊": "块", "壓": "压", "夠": "够", "夾": "夹", "奧": "奥", "學": "学", "實": "实", "寫": "写", "寬": "宽", "寶": "宝", "將": "将", "專": "专", "尋": "寻", "對": "对", "導": "导", "層": "层", "屬": "属", "島": "岛", "帳": "帐", "帶": "带", "幀": "帧", "幣": "币", "幫": "帮", "幾": "几", "廈": "厦", "廠": "厂", "廢": "废", "廣": "广", "張": "张", "強": "强", "彈": "弹", "後": "后", "從": "从", "復": "复", "恆": "恒", "惱": "恼", "愛": "爱", "態": "态", "慣": "惯", "憂": "忧", "憑": "凭", "應": "应", "捲": "卷", "掃": "扫", "換": "换", "搶": "抢", "撐": "撑", "撥": "拨", "擁": "拥", "擇": "择", "擊": "击", "擋": "挡", "擔": "担", "據": "据", "擠": "挤", "擬": "拟", "敗": "败", "數": "数", "斷": "断", "於": "于", "時": "时", "暢": "畅", "暫": "暂", "曆": "历", "書": "书", "會": "会", "東": "东", "柵": "栅", "條": "条", "棄": "弃", "楊": "杨", "業": "业", "極": "极", "榮": "荣", "構": "构", "樂": "乐", "標": "标", "樣": "样", "機": "机", "橢": "椭", "橫": "横", "檔": "档", "檢": "检", "檻": "槛", "欄": "栏", "權": "权", "歐": "欧", "歷": "历", "歸": "归", "殼": "壳", "氣": "气", "決": "决", "沒": "没", "沖": "冲", "淨": "净", "淺": "浅", "減": "减", "測": "测", "湊": "凑", "準": "准", "滙": "汇", "滾": "滚", "滿": "满", "漣": "涟", "漸": "渐", "濟": "济", "濾": "滤", "瀏": "浏", "灣": "湾", "為": "为", "烏": "乌", "無": "无", "煩": "烦", "熱": "热", "營": "营", "爍": "烁", "爾": "尔", "牆": "墙", "狀": "状", "獎": "奖", "獨": "独", "獲": "获", "現": "现", "瑩": "莹", "環": "环", "產": "产", "畫": "画", "異": "异", "當": "当", "疊": "叠", "發": "发", "監": "监", "盤": "盘", "盧": "卢", "確": "确", "碼": "码", "種": "种", "稱": "称", "積": "积", "穩": "稳", "窩": "窝", "競": "竞", "節": "节", "範": "范", "篩": "筛", "簡": "简", "簽": "签", "籤": "签", "約": "约", "納": "纳", "紐": "纽", "純": "纯", "級": "级", "細": "细", "終": "终", "組": "组", "結": "结", "絕": "绝", "絡": "络", "給": "给", "統": "统", "經": "经", "維": "维", "網": "网", "緊": "紧", "線": "线", "緣": "缘", "編": "编", "緩": "缓", "緬": "缅", "縫": "缝", "縮": "缩", "總": "总", "繞": "绕", "繩": "绳", "繪": "绘", "繫": "系", "繼": "继", "續": "续", "羅": "罗", "義": "义", "習": "习", "聖": "圣", "聯": "联", "聽": "听", "脫": "脱", "膠": "胶", "臘": "腊", "臨": "临", "與": "与", "舊": "旧", "茲": "兹", "華": "华", "萊": "莱", "蓋": "盖", "蕭": "萧", "薦": "荐", "薩": "萨", "藍": "蓝", "蘭": "兰", "處": "处", "虛": "虚", "號": "号", "螢": "萤", "術": "术", "衝": "冲", "補": "补", "裝": "装", "裡": "里", "製": "制", "複": "复", "見": "见", "規": "规", "視": "视", "親": "亲", "覺": "觉", "覽": "览", "觀": "观", "觸": "触", "訂": "订", "計": "计", "訊": "讯", "記": "记", "設": "设", "註": "注", "評": "评", "詞": "词", "詢": "询", "試": "试", "話": "话", "該": "该", "詳": "详", "認": "认", "語": "语", "說": "说", "調": "调", "請": "请", "論": "论", "諾": "诺", "證": "证", "識": "识", "議": "议", "護": "护", "讀": "读", "變": "变", "讓": "让", "讚": "赞", "豎": "竖", "豐": "丰", "負": "负", "買": "买", "費": "费", "貼": "贴", "資": "资", "賓": "宾", "賣": "卖", "質": "质", "購": "购", "贊": "赞", "跡": "迹", "軌": "轨", "軟": "软", "軸": "轴", "載": "载", "輕": "轻", "輪": "轮", "輯": "辑", "輸": "输", "轉": "转", "辦": "办", "迴": "回", "這": "这", "連": "连", "週": "周", "進": "进", "遊": "游", "運": "运", "過": "过", "達": "达", "遠": "远", "適": "适", "遲": "迟", "選": "选", "還": "还", "邊": "边", "邏": "逻", "鄰": "邻", "釋": "释", "針": "针", "鈕": "钮", "鉗": "钳", "銀": "银", "銷": "销", "鋪": "铺", "錄": "录", "錢": "钱", "錨": "锚", "錯": "错", "鍵": "键", "鎖": "锁", "鏈": "链", "鐘": "钟", "長": "长", "門": "门", "閃": "闪", "閉": "闭", "開": "开", "間": "间", "閱": "阅", "關": "关", "陰": "阴", "陳": "陈", "陸": "陆", "階": "阶", "際": "际", "隨": "随", "隱": "隐", "雙": "双", "離": "离", "電": "电", "靈": "灵", "靜": "静", "韓": "韩", "響": "响", "頁": "页", "頂": "顶", "項": "项", "順": "顺", "須": "须", "預": "预", "頓": "顿", "領": "领", "頭": "头", "顆": "颗", "題": "题", "額": "额", "顏": "颜", "類": "类", "顧": "顾", "顯": "显", "風": "风", "飆": "飙", "飛": "飞", "飲": "饮", "餘": "余", "饋": "馈", "馬": "马", "駐": "驻", "騎": "骑", "騰": "腾", "驅": "驱", "驗": "验", "驟": "骤", "體": "体", "鬆": "松", "魯": "鲁", "麥": "麦", "麼": "么", "黃": "黄", "點": "点", "齊": "齐", "龍": "龙"};
+  var LANG = (function () { try { return sessionStorage.getItem('protoLang') || 'cn'; } catch (e) { return 'cn'; } })();
+  function t2sText(s) {
+    var out = '', i;
+    for (i = 0; i < s.length; i++) out += T2S_MAP[s[i]] || s[i];
+    return out;
+  }
+  var T2S_ATTRS = ['placeholder', 'aria-label', 'alt', 'title'];
+  function t2sNode(n) {
+    if (n.nodeType === 3) { var v = t2sText(n.nodeValue); if (v !== n.nodeValue) n.nodeValue = v; return; }
+    if (n.nodeType !== 1) return;
+    for (var a = 0; a < T2S_ATTRS.length; a++) {
+      var name = T2S_ATTRS[a];
+      if (n.hasAttribute(name)) { var av = n.getAttribute(name), nv = t2sText(av); if (nv !== av) n.setAttribute(name, nv); }
+    }
+    for (var c = n.firstChild; c; c = c.nextSibling) t2sNode(c);
+  }
+  if (LANG === 'cn') {
+    var T2S_OBS_CFG = { childList: true, subtree: true, characterData: true };
+    var t2sObs = new MutationObserver(function (muts) {
+      t2sObs.disconnect();  // 轉換自身觸發的變更不再進迴圈
+      muts.forEach(function (m) {
+        if (m.type === 'characterData') t2sNode(m.target);
+        for (var i = 0; i < m.addedNodes.length; i++) t2sNode(m.addedNodes[i]);
+      });
+      t2sObs.observe(document.body, T2S_OBS_CFG);
+    });
+    t2sNode(document.body);
+    t2sObs.observe(document.body, T2S_OBS_CFG);
+    document.title = t2sText(document.title);
+  }
+  // 首頁語言選項：選中態 + 切換（切換時重載，繁體＝原文案零轉換）
+  document.querySelectorAll('.kkh-lang').forEach(function (b) {
+    b.classList.toggle('sel', b.getAttribute('data-lang') === LANG);
+    b.addEventListener('click', function () {
+      var l = b.getAttribute('data-lang');
+      if (l === LANG) return;
+      try { sessionStorage.setItem('protoLang', l); } catch (e) {}
+      location.reload();
+    });
+  });
 
   // ---------- 螢幕路由 ----------
   var current = 'kkhome';  // 初始＝KKday 模擬首頁，經 eSIM 入口進入 eSIM 主頁

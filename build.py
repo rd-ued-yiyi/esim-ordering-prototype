@@ -106,8 +106,22 @@ SHOTS = [
     '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80"><defs><linearGradient id="l" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7A3B4E"/><stop offset="1" stop-color="#C56B5C"/></linearGradient></defs><rect width="80" height="80" fill="url(#l)"/><g><ellipse cx="20" cy="30" rx="8" ry="10" fill="#F7B267"/><ellipse cx="44" cy="22" rx="7" ry="9" fill="#F4845F"/><ellipse cx="64" cy="34" rx="8" ry="10" fill="#F7B267"/></g><rect x="0" y="8" width="80" height="2" fill="#4A2530"/></svg>',
 ]
 
+def build_t2s_map():
+    """扫描模板全部 CJK 字符，用 OpenCC 生成 繁→简 单字映射（仅保留有差异的），
+    注入 JS 供运行时简体模式转换页面文案（含 JS 动态渲染的内容）。"""
+    import opencc, json
+    conv = opencc.OpenCC('t2s')
+    chars = sorted(set(ch for ch in TPL if '㐀' <= ch <= '鿿'))
+    pairs = {}
+    for ch in chars:
+        s = conv.convert(ch)
+        if s != ch and len(s) == 1:
+            pairs[ch] = s
+    return json.dumps(pairs, ensure_ascii=False)
+
 subs = {
     "{{HERO_SVG}}":        (ROOT / "assets" / "hero" / "hero-scene.svg").read_text(encoding="utf-8"),
+    "{{T2S_MAP}}":         build_t2s_map(),
     # 付款页品牌/图标（结帐选择器的支付方式标识，内联矢量）
     "{{PAY_applepay}}":    raw_svg("applepay", folder="pay"),
     "{{PAY_creditcard}}":  raw_svg("creditcard", folder="pay"),
