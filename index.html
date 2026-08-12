@@ -269,9 +269,9 @@
   .dest-bar {
     display: flex; align-items: center; gap: 8px;
     height: 48px; max-width: 240px;
-    background: #fff;  /* Figma 871-75700：實心白卡＋柔陰影（原半透明改實心） */
+    background: rgba(255,255,255,.88);  /* Figma 871-75700：淡薄荷磨砂（疊青底＝#E4F7F8），非純白 */
     border: 0; border-radius: var(--r-lg);
-    box-shadow: 0 2px 10px rgba(17,25,40,.10);
+    box-shadow: 0 2px 8px rgba(17,25,40,.06);
     padding: 0 12px; cursor: pointer;
     color: var(--kk-text-darker);  /* 不繼承 .title-block 的白色 */
   }
@@ -292,6 +292,7 @@
   /* 值緊跟標題後、箭頭再緊跟值（Figma 871-75700：用卡天數 5天 › 左對齊成組，不撐滿） */
   .field-head .placeholder { flex: 0 0 auto; min-width: 0; font-size: 18px; line-height: 26px; font-weight: 600; color: var(--kk-text-light); }
   .field-head .placeholder.has-value { color: var(--kk-text-medium); }  /* 已選值淺灰（Figma「5天」淡灰，非深色強調） */
+  #daysRow > .ic-24 { margin-left: 6px; }  /* 值→箭頭間距比標題→值更寬（Figma 871-75700） */
   .field-head .label-sm { font-size: 14px; line-height: 20px; font-weight: 600; color: var(--kk-text-darker); white-space: nowrap; }
   .field-head .hint { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
 
@@ -360,16 +361,18 @@
   .opt .p { font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
   /* 80%選擇 氣泡標籤（Figma 871-75700 新版）：珊瑚紅圓角氣泡，左下角帶朝下小尖角，浮於卡片上緣 */
   .opt .badge {
-    position: absolute; top: -11px; left: 6px; z-index: 3;
+    position: absolute; top: -12px; left: 8px; z-index: 3;
     background: var(--kk-text-critical); color: #fff;
     font-size: 12px; line-height: 16px; font-weight: 600;
-    padding: 1px 6px; white-space: nowrap;
-    border-radius: 8px 8px 8px 0;
+    padding: 2px 6px; white-space: nowrap;
+    border-radius: 8px 8px 8px 1px;
   }
+  /* 左下角向下尖角（直角靠左、斜邊朝右，尖端朝下指向卡片） */
   .opt .badge::after {
-    content: ''; position: absolute; left: 0; bottom: -4px;
-    border-style: solid; border-width: 4px 5px 0 0;
-    border-color: var(--kk-text-critical) transparent transparent transparent;
+    content: ''; position: absolute; left: 0; bottom: -5px;
+    width: 0; height: 0;
+    border-top: 6px solid var(--kk-text-critical);
+    border-right: 7px solid transparent;
   }
 
   .cta {
