@@ -106,38 +106,8 @@ SHOTS = [
     '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80"><defs><linearGradient id="l" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7A3B4E"/><stop offset="1" stop-color="#C56B5C"/></linearGradient></defs><rect width="80" height="80" fill="url(#l)"/><g><ellipse cx="20" cy="30" rx="8" ry="10" fill="#F7B267"/><ellipse cx="44" cy="22" rx="7" ry="9" fill="#F4845F"/><ellipse cx="64" cy="34" rx="8" ry="10" fill="#F7B267"/></g><rect x="0" y="8" width="80" height="2" fill="#4A2530"/></svg>',
 ]
 
-# 繁→简 一对多词组修正：这些字单字转换会取错义（如「覆」在覆盖=覆、回覆=复），
-# 必须在字符级映射之前按整词替换。构建时会自洽校验，若有未覆盖的一对多字会报错提示补充。
-T2S_PHRASE = {
-    "回覆": "回复", "答覆": "答复", "批覆": "批复", "覆核": "复核", "覆命": "复命",
-    "反覆": "反复", "重覆": "重复",
-}
-
-def build_t2s_data():
-    """扫描模板全部 CJK 字符，用 OpenCC 生成 繁→简 单字映射 + 词组修正表，
-    注入 JS 供运行时简体模式转换页面文案（含 JS 动态渲染的内容）。"""
-    import opencc, json
-    conv = opencc.OpenCC('t2s')
-    charmap = {ch: conv.convert(ch) for ch in set(TPL)
-               if '㐀' <= ch <= '鿿' and conv.convert(ch) != ch and len(conv.convert(ch)) == 1}
-    # 自洽校验：词组修正 + 字符级 应等于 OpenCC 词组级整篇转换（长度不变，逐字对齐）
-    def apply(s):
-        for k in sorted(T2S_PHRASE, key=len, reverse=True):
-            s = s.replace(k, T2S_PHRASE[k])
-        return "".join(charmap.get(c, c) for c in s)
-    word = conv.convert(TPL)
-    got = apply(TPL)
-    if got != word:
-        miss = {b for a, b in zip(word, got) if a != b}
-        raise SystemExit(f"简繁转换仍有一对多未覆盖字: {miss}，请在 T2S_PHRASE 补充对应词组")
-    return json.dumps(charmap, ensure_ascii=False), json.dumps(T2S_PHRASE, ensure_ascii=False)
-
-_t2s_map, _t2s_phrase = build_t2s_data()
-
 subs = {
     "{{HERO_SVG}}":        (ROOT / "assets" / "hero" / "hero-scene.svg").read_text(encoding="utf-8"),
-    "{{T2S_MAP}}":         _t2s_map,
-    "{{T2S_PHRASE}}":      _t2s_phrase,
     # 付款页品牌/图标（结帐选择器的支付方式标识，内联矢量）
     "{{PAY_applepay}}":    raw_svg("applepay", folder="pay"),
     "{{PAY_creditcard}}":  raw_svg("creditcard", folder="pay"),
@@ -260,7 +230,7 @@ if leftover:
 # 否则手机浏览器会按桌面宽度渲染再缩小，页面变成窄窄一条。
 DOC = (
     "<!doctype html>\n"
-    '<html lang="zh-Hans">\n'
+    '<html lang="zh-Hant">\n'
     "<head>\n"
     '<meta charset="utf-8">\n'
     '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n'

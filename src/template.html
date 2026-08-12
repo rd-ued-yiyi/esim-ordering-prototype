@@ -76,11 +76,6 @@
     padding: 1px 6px; border-radius: 9px; font-weight: 600; }  /* header 測試標記 */
   /* 易用性測試引導文字（取代搜索框） */
   .kkh-guide { text-align: center; color: #212121; font-size: 16px; line-height: 24px; font-weight: 600; padding: 8px 0 4px; }
-  /* 簡繁語言選項（引導文字下方，預設簡體） */
-  .kkh-langs { display: flex; justify-content: center; gap: 12px; padding: 8px 0 4px; }
-  .kkh-lang { border: 1px solid var(--kk-border-light); border-radius: 16px; background: #fff;
-    padding: 5px 16px; font-size: 14px; line-height: 20px; color: var(--kk-text-darker); }
-  .kkh-lang.sel { border-color: #26BEC9; background: #F0FAFB; color: #13A3B6; font-weight: 600; }
   .kkh-body { background: #fff; }
   .kkh-cats { display: flex; padding: 16px 8px 4px; }  /* 5 個入口一行均分（簡化版，無橫滑） */
   .kkh-cat { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 6px;
@@ -1391,10 +1386,6 @@
           <span class="kkh-test">易用性測試</span>
         </div>
         <div class="kkh-guide">點擊 eSIM 進入購買流程</div>
-        <div class="kkh-langs">
-          <button class="kkh-lang" data-lang="cn">简体</button>
-          <button class="kkh-lang" data-lang="tw">繁體</button>
-        </div>
       </div>
       <div class="kkh-body">
         <div class="kkh-cats">
@@ -2303,56 +2294,6 @@
       fn();
     }, 600 + Math.random() * 200);
   }
-
-  // ---------- 簡繁切換（易用性測試：預設簡體） ----------
-  // 原型文案為繁體；簡體模式用構建時生成的 繁→簡 單字映射（OpenCC t2s）轉換整頁文字，
-  // MutationObserver 覆蓋 JS 動態渲染的內容。切換語言時記錄 sessionStorage 並重載。
-  var T2S_MAP = {{T2S_MAP}};
-  var T2S_PHRASE = {{T2S_PHRASE}};  // 繁簡一對多詞組修正（如 回覆→回复），須先於字符級套用
-  var T2S_PK = Object.keys(T2S_PHRASE).sort(function (a, b) { return b.length - a.length; });
-  var LANG = (function () { try { return sessionStorage.getItem('protoLang') || 'cn'; } catch (e) { return 'cn'; } })();
-  function t2sText(s) {
-    for (var p = 0; p < T2S_PK.length; p++) {
-      if (s.indexOf(T2S_PK[p]) >= 0) s = s.split(T2S_PK[p]).join(T2S_PHRASE[T2S_PK[p]]);
-    }
-    var out = '', i;
-    for (i = 0; i < s.length; i++) out += T2S_MAP[s[i]] || s[i];
-    return out;
-  }
-  var T2S_ATTRS = ['placeholder', 'aria-label', 'alt', 'title'];
-  function t2sNode(n) {
-    if (n.nodeType === 3) { var v = t2sText(n.nodeValue); if (v !== n.nodeValue) n.nodeValue = v; return; }
-    if (n.nodeType !== 1) return;
-    for (var a = 0; a < T2S_ATTRS.length; a++) {
-      var name = T2S_ATTRS[a];
-      if (n.hasAttribute(name)) { var av = n.getAttribute(name), nv = t2sText(av); if (nv !== av) n.setAttribute(name, nv); }
-    }
-    for (var c = n.firstChild; c; c = c.nextSibling) t2sNode(c);
-  }
-  if (LANG === 'cn') {
-    var T2S_OBS_CFG = { childList: true, subtree: true, characterData: true };
-    var t2sObs = new MutationObserver(function (muts) {
-      t2sObs.disconnect();  // 轉換自身觸發的變更不再進迴圈
-      muts.forEach(function (m) {
-        if (m.type === 'characterData') t2sNode(m.target);
-        for (var i = 0; i < m.addedNodes.length; i++) t2sNode(m.addedNodes[i]);
-      });
-      t2sObs.observe(document.body, T2S_OBS_CFG);
-    });
-    t2sNode(document.body);
-    t2sObs.observe(document.body, T2S_OBS_CFG);
-    document.title = t2sText(document.title);
-  }
-  // 首頁語言選項：選中態 + 切換（切換時重載，繁體＝原文案零轉換）
-  document.querySelectorAll('.kkh-lang').forEach(function (b) {
-    b.classList.toggle('sel', b.getAttribute('data-lang') === LANG);
-    b.addEventListener('click', function () {
-      var l = b.getAttribute('data-lang');
-      if (l === LANG) return;
-      try { sessionStorage.setItem('protoLang', l); } catch (e) {}
-      location.reload();
-    });
-  });
 
   // ---------- 螢幕路由 ----------
   var current = 'kkhome';  // 初始＝KKday 模擬首頁，經 eSIM 入口進入 eSIM 主頁
