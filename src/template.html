@@ -266,7 +266,8 @@
     padding: 0 12px; cursor: pointer;
     color: var(--kk-text-darker);  /* 不繼承 .title-block 的白色 */
   }
-  .dest-bar .name { flex: 1 1 0; min-width: 0; text-align: left; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .dest-bar .name { flex: 1 1 0; min-width: 0; text-align: left; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    font-size: 14px; line-height: 20px; font-weight: 600; }  /* Figma 871-75700 實測：目的地名 ≈14px Semibold（非 18px） */
   .dest-bar .dest-num { flex: 0 0 auto; color: var(--kk-text-darker); }
 
   .inline-note {
@@ -350,20 +351,20 @@
   .opt .t { font-size: 16px; line-height: 24px; font-weight: 600; color: var(--kk-text-darker); }
   .opt.sel .t { color: #13A3B6; }
   .opt .p { font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
-  /* 80%選擇 氣泡標籤（Figma 871-75700 新版）：珊瑚紅圓角氣泡，左下角帶朝下小尖角，浮於卡片上緣 */
+  /* 80%選擇 氣泡標籤（Figma 871-75700 實測）：珊瑚紅圓角氣泡，貼卡片右上、右下角帶朝下小尖角 */
   .opt .badge {
-    position: absolute; top: -12px; left: 8px; z-index: 3;
+    position: absolute; top: -12px; right: 2px; z-index: 3;
     background: var(--kk-text-critical); color: #fff;
     font-size: 12px; line-height: 16px; font-weight: 600;
     padding: 2px 6px; white-space: nowrap;
-    border-radius: 8px 8px 8px 1px;
+    border-radius: 8px 8px 2px 8px;  /* 右下(BR)為尖角側 */
   }
-  /* 左下角向下尖角（直角靠左、斜邊朝右，尖端朝下指向卡片） */
+  /* 右下角向下尖角（豎邊在左、斜邊朝右下，尖端朝下指向卡片；對齊 Figma 尖角在右下） */
   .opt .badge::after {
-    content: ''; position: absolute; left: 0; bottom: -5px;
+    content: ''; position: absolute; right: 0; bottom: -5px;
     width: 0; height: 0;
     border-top: 6px solid var(--kk-text-critical);
-    border-right: 7px solid transparent;
+    border-right: 5px solid transparent;
   }
 
   .cta {
@@ -1551,7 +1552,7 @@
         <div class="destbar-block">
           <button class="dest-bar" data-action="change-destination">
             <span class="ic ic-24">{{IC_location}}</span>
-            <span class="name t-h6" id="destName">新加坡</span>
+            <span class="name" id="destName">新加坡</span>
             <span class="dest-num t-body-md" id="destNum" hidden></span>
             <span class="ic ic-24">{{IC_arrowDown}}</span>
           </button>
