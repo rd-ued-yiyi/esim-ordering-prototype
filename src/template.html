@@ -881,6 +881,7 @@
   .det-table .th { background: var(--kk-surface-lighter); padding: 12px 16px;
     font-size: 14px; line-height: 20px; font-weight: 600; color: var(--kk-text-darker);
     border-bottom: 1px solid var(--kk-border-lighter); }
+  .det-table .th .th-note { font-size: 12px; line-height: 16px; font-weight: 400; color: var(--kk-text-dark); margin-top: 2px; }  /* 分組標題副標（Figma 1164-97098 table-title） */
   .det-table .tr { display: flex; align-items: flex-start; border-bottom: 1px solid var(--kk-border-lighter); }  /* 兩列頂對齊 */
   .det-table .tr:last-child { border-bottom: 0; }
   .det-table .td-k { flex: 0 0 120px; padding: 16px; font-size: 14px; line-height: 20px; color: var(--kk-text-dark); box-sizing: border-box; }
@@ -1964,29 +1965,33 @@
         <h3 class="det-h2">基本資訊</h3>
         <!-- 商品描述移到「基本資訊」標題下、表格上（Figma 1009-43085） -->
         <p class="det-intro" id="detIntro">依據購買天數，可額外享有 3GB~30GB 的熱點分享流量。由連續兩年榮獲 Opensignal 網路可靠性全球大獎的電信網路提供連線，訊號覆蓋率高，市區、離島與山區都能穩定上網；搭配 KKday App 可隨時查詢剩餘流量，客服 24 小時線上協助安裝與連線問題。</p>
-        <!-- 順序按調整後的 Figma 902-41074：卡片規格 / 加值與限制 / 通話與簡訊 / 啟用設定 / 網路詳情 -->
+        <!-- 順序按 Figma 1164-97098：卡片規格 / 網路詳情 / 通話與簡訊 / 啟用設定 / 加值與限制 / 商品規格總覽 -->
         <div class="det-table">
           <div class="th">卡片規格</div>
           <div class="tr"><div class="td-k">SIM 卡片規格</div><div class="td-v">eSIM</div></div>
+          <div class="tr"><div class="td-k">SIM類型</div><div class="td-v" id="dtSimType"></div></div>
           <div class="tr"><div class="td-k">卡片有效期</div><div class="td-v">2030-12-12 前有效</div></div>
           <div class="tr"><div class="td-k">卡片供應商</div><div class="td-v" id="dtVendor"></div></div>
-          <div class="th">加值與限制</div>
-          <div class="tr"><div class="td-k">是否加值</div><div class="td-v" id="dtTopup"></div></div>
-          <div class="tr"><div class="td-k">不支援裝置</div><div class="td-v">非全網通/鎖網機型，以及不支援 eSIM 的部分舊款裝置</div></div>
-          <div class="th">通話與簡訊</div>
-          <div class="tr"><div class="td-k">是否含通話</div><div class="td-v" id="dtCall"></div></div>
-          <div class="tr"><div class="td-k">是否含簡訊</div><div class="td-v" id="dtSms"></div></div>
-          <div class="tr"><div class="td-k">支援熱點</div><div class="td-v" id="dtHotspot"></div></div>
-          <div class="th">啟用設定</div>
-          <div class="tr"><div class="td-k">啟用方式</div><div class="td-v" id="dtActivate"></div></div>
-          <div class="tr"><div class="td-k">流量啟用計算方式</div><div class="td-v" id="dtCalc"></div></div>
-          <div class="tr"><div class="td-k">套餐有效期</div><div class="td-v" id="dtValid"></div></div>
           <div class="th">網路詳情</div>
           <div class="tr"><div class="td-k">電信商</div><div class="td-v" id="dtCarrier"></div></div>
           <div class="tr"><div class="td-k">虛擬運營商MVNO</div><div class="td-v" id="dtMvno"></div></div>
           <div class="tr"><div class="td-k">網路資源</div><div class="td-v" id="dtNet"></div></div>
           <div class="tr"><div class="td-k">IP型別</div><div class="td-v" id="dtIp"></div></div>
           <div class="tr"><div class="td-k">傳輸規格</div><div class="td-v" id="dtTrans"></div></div>
+          <div class="th">通話與簡訊</div>
+          <div class="tr"><div class="td-k">是否含通話</div><div class="td-v" id="dtCall"></div></div>
+          <div class="tr"><div class="td-k">是否含簡訊</div><div class="td-v" id="dtSms"></div></div>
+          <div class="tr"><div class="td-k">支援熱點</div><div class="td-v" id="dtHotspot"></div></div>
+          <div class="tr"><div class="td-k">其他</div><div class="td-v" id="dtCallFee"></div></div>
+          <div class="th">啟用設定</div>
+          <div class="tr"><div class="td-k">啟用方式</div><div class="td-v" id="dtActivate"></div></div>
+          <div class="tr"><div class="td-k">流量啟用計算方式</div><div class="td-v" id="dtCalc"></div></div>
+          <div class="tr"><div class="td-k">套餐有效期</div><div class="td-v" id="dtValid"></div></div>
+          <div class="th">加值與限制</div>
+          <div class="tr"><div class="td-k">是否加值</div><div class="td-v" id="dtTopup"></div></div>
+          <div class="tr"><div class="td-k">不支援裝置</div><div class="td-v">非全網通/鎖網機型，以及不支援 eSIM 的部分舊款裝置</div></div>
+          <div class="th">商品規格總覽<div class="th-note">您使用以下規格搜尋也能搜到當前商品</div></div>
+          <div class="tr"><div class="td-k">流量規格</div><div class="td-v" id="dtSpecData"></div></div>
         </div>
       </section>
 
@@ -4025,13 +4030,14 @@
     var vb = document.createElement('b'); vb.style.fontWeight = '600'; vb.textContent = p.vendor;
     document.getElementById('detProvider').append(vb, ' 提供');  // 與列表頁一致，不加電信商縮寫括號
     document.getElementById('detCancelBody').innerHTML = renderCancelPolicy(p.cancelType || 'none');
-    // 基本資訊（Figma 902-41074，動態格隨卡/條件變化）
+    // 基本資訊（Figma 1164-97098，動態格隨卡/條件變化）
     var isNative = p.title.indexOf('原生') >= 0 || p.title.indexOf('本地電信') >= 0;
     var combo = p.tags[0];
+    document.getElementById('dtSimType').textContent = isNative ? '原生卡' : '漫遊卡';
     document.getElementById('dtVendor').textContent = p.vendor;
     document.getElementById('dtCarrier').textContent = p.carrier;
     document.getElementById('dtMvno').textContent = isNative ? '否，電信商直營網路' : '是，接入 ' + p.carrier + ' 4G/5G 網路';
-    document.getElementById('dtNet').textContent = p.title.indexOf('4G·') === 0 ? '4G LTE' : '5G / 4G LTE';
+    document.getElementById('dtNet').textContent = isNative ? '本地' : '漫遊';  // 與 SIM類型 同判準（原生卡＝本地資源）
     document.getElementById('dtIp').textContent = p.title.indexOf('原生IP') >= 0 ? '原生 IP（當地出口）' : '動態 IP（共享出口）';
     document.getElementById('dtTrans').textContent = detTransSpec();
     document.getElementById('dtActivate').textContent = '抵達' + (multi ? '目的地' : dest) + '後掃碼安裝，自動連線當地網路';
@@ -4041,6 +4047,15 @@
     document.getElementById('dtCall').textContent = combo.indexOf('通話') >= 0 ? '含' : '不含';
     document.getElementById('dtSms').textContent = combo.indexOf('簡訊') >= 0 ? '含' : '不含';
     document.getElementById('dtHotspot').textContent = combo.indexOf('熱點') >= 0 ? '支援，可開啟個人熱點分享' : '不支援';
+    document.getElementById('dtCallFee').textContent = combo.indexOf('通話') >= 0 ? '含通話費用' : '無';
+    // 商品規格總覽·流量規格：按商品支援的計費方式列出全部檔位，超 1 行夾取＋行尾「展開」
+    var specList = [];
+    if (p.billings.indexOf('unlimited') >= 0) specList.push('不限量');
+    if (p.billings.indexOf('daily') >= 0) specList = specList.concat(['500MB/天', '1GB/天', '2GB/天', '3GB/天', '4GB/天', '5GB/天', '6GB/天', '7GB/天', '8GB/天', '10GB/天']);
+    if (p.billings.indexOf('total') >= 0) specList = specList.concat(['共1GB', '共2GB', '共3GB', '共5GB', '共10GB', '共20GB', '共30GB', '共50GB']);
+    // 夾取須作用在無 padding 的內層（td-v 帶 16px padding，scrollHeight 恆超 1 行高導致夾到 0 字）
+    document.getElementById('dtSpecData').innerHTML = '<div class="v-inner" id="dtSpecInner"></div>';
+    document.getElementById('dtSpecInner').textContent = specList.join('、');
     document.getElementById('dtNick').textContent = p.carrier + ' ' + (multi ? 'eSIM' : dest);
     document.getElementById('dtExtend').textContent = state.days + ' 天方案：$' + p.perDay + ' × 天數（僅限延長 1–5 日者）';
     // 評論區（資料與卡面一致）
@@ -4126,6 +4141,7 @@
     // rAF 等 modal 可見後：先對超行的規格值做展開/收起夾取（會改變高度），再算錨點 offsetTop
     requestAnimationFrame(function () {
       clampEl(document.getElementById('detIntro'), 2);  // 描述夾 2 行、行尾內聯「展開」於最後一行尾端（Figma 1009-43103）
+      clampEl(document.getElementById('dtSpecInner'), 1);  // 規格總覽·流量規格夾 1 行＋行尾「展開」（Figma 1164-97098）
       var top = 0;
       if (anchor) { var sec = detBody.querySelector('.det-sec[data-sec="' + anchor + '"]'); if (sec) top = sec.offsetTop; }
       detBody.scrollTop = top;
