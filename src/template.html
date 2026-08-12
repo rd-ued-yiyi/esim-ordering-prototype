@@ -4355,6 +4355,7 @@
     if (b && b.scrollHeight > b.clientHeight + 1) return;  // body 真的可滾時放行
     e.preventDefault();
   }
+  var condAutoTimer = null;  // 進頁停留後自動展開流量區的計時器（使用者先手動操作則取消）
   function openCondModal() {
     document.addEventListener('touchmove', condTouchGuard, { passive: false });
     editState = { days: state.days || '4', tab: state.tab, plan: state.plan };
@@ -4372,8 +4373,16 @@
       revealOpt(sEl, false);  // 定位到當前選中檔位並居中
       setTimeout(function () { revealOpt(sEl, false); }, 350);  // 開場動畫結束後兜底重定位
     });
+    // 進頁停留 800ms 後自動展開流量區（功能引導：讓使用者注意到此處也能改流量）
+    clearTimeout(condAutoTimer);
+    condAutoTimer = setTimeout(function () {
+      if (m.classList.contains('open') && !m.classList.contains('cond-expanded')) {
+        document.getElementById('condToggle').click();  // 復用展開動畫
+      }
+    }, 800);
   }
   function closeCondModal() {
+    clearTimeout(condAutoTimer);
     document.removeEventListener('touchmove', condTouchGuard, { passive: false });
     var m = document.getElementById('condModal');
     if (m.classList.contains('open')) unlockBody();
@@ -4382,6 +4391,7 @@
   }
   document.getElementById('condClose').addEventListener('click', closeCondModal);
   document.getElementById('condToggle').addEventListener('click', function () {
+    clearTimeout(condAutoTimer);  // 使用者手動操作（或自動觸發本身）後不再自動展開
     var m = document.getElementById('condModal');
     var sc = document.getElementById('condOptsScroll');
     if (sc._anim) return;                                   // 動畫進行中忽略連點
