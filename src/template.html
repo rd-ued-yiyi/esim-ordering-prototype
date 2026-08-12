@@ -2445,6 +2445,7 @@
       filteredOpts(tab, d).forEach(function (o) {
         var b = el('<button class="opt' + (selTab === tab && selPlan === o.t ? ' sel' : '') + '"><span class="t"></span><span class="p"></span>' +
           (badge === o.t ? '<span class="badge">80%選擇</span>' : '') + '</button>');
+        b.setAttribute('data-val', o.t);  // 繁體原值：選中比較用（簡體模式下 .t 文本已被轉，不能當資料鍵）
         b.querySelector('.t').textContent = o.t;
         b.querySelector('.p').textContent = priceLabelFor(o, d);
         b.addEventListener('click', function () { onPick(tab, o.t); });
@@ -2538,7 +2539,7 @@
       state.plan = plan;
       var selEl = null;
       document.querySelectorAll('#dataOpts .opt').forEach(function (b) {
-        var on = b.closest('.opts-grid').getAttribute('data-g') === tab && b.querySelector('.t').textContent === plan;
+        var on = b.closest('.opts-grid').getAttribute('data-g') === tab && b.getAttribute('data-val') === plan;
         b.classList.toggle('sel', on);
         if (on) selEl = b;
       });
@@ -2767,6 +2768,7 @@
   }
   function chipEl(label, onTap, selected) {
     var c = el('<button class="chip' + (selected ? ' sel' : '') + '"><span class="chip-label t-body-md"></span></button>');
+    c.setAttribute('data-raw', label);  // 繁體原值：多選選中比較用（簡體模式下 chip 文本已被轉）
     c.querySelector('.chip-label').textContent = label;
     c.addEventListener('click', function () { onTap(label, c); });
     return c;
@@ -2922,7 +2924,7 @@
   function syncMultiUI() {
     var pane = document.getElementById('paneMulti');
     pane.querySelectorAll('.chip').forEach(function (c) {
-      var n = c.querySelector('.chip-label').textContent;
+      var n = c.getAttribute('data-raw') || c.querySelector('.chip-label').textContent;
       c.classList.toggle('sel', dm.multiSel.indexOf(n) >= 0);
     });
     pane.querySelectorAll('.dm-check').forEach(function (cb) {
@@ -3099,8 +3101,15 @@
     }, 520);
   }
 
+  // 目的地原始繁體值：簡體模式下 destName 的 textContent 被轉為簡體，但 GEO/VENDORS/CARRIERS
+  // 等資料仍是繁體 key，故用作資料匹配時一律讀 data-raw（繁體原值），顯示才讀 textContent。
+  function destRaw() {
+    var e = document.getElementById('destName');
+    return e ? (e.getAttribute('data-raw') || e.textContent) : '亞洲通';
+  }
   function finishSelect(name, type, count) {
-    document.getElementById('destName').textContent = name;
+    var _dn = document.getElementById('destName');
+    _dn.textContent = name; _dn.setAttribute('data-raw', name);  // data-raw 存繁體原值，簡體模式下邏輯匹配 GEO 用（observer 不轉 data-*）
     var num = document.getElementById('destNum');
     num.hidden = !(type === 'multi' && count > 1);
     if (!num.hidden) num.textContent = '(' + count + ')';
@@ -3390,7 +3399,7 @@
   function tabShort() { return state.tab === 'daily' ? '每日流量' : state.tab === 'total' ? '總流量' : '無限流量'; }
 
   function buildPlans() {
-    var dest = document.getElementById('destName').textContent;
+    var dest = destRaw();
     var vendors = VENDORS[dest] || VENDORS['default'];
     var base = basePrice();
     var d = state.days ? +state.days : 1;
@@ -3614,7 +3623,7 @@
   var fDraft = null;
   function fClone(s) { return JSON.parse(JSON.stringify(s)); }
   function carrierOpts() {
-    var dest = document.getElementById('destName').textContent.split(' ')[0];
+    var dest = destRaw().split(' ')[0];
     return (CARRIERS[dest] || CARRIERS['default']).slice();
   }
   // 全篩選分割槽（總篩選 sheet 用）
@@ -3947,7 +3956,7 @@
       '<div class="cxl-note-txt"><p>' + note1 + '</p><p>' + CXL_SUPPLIER + '</p></div></div></div>';
   }
   function fillDetail(p) {
-    var dest = document.getElementById('destName').textContent;
+    var dest = destRaw();
     var d = state.days ? +state.days : 1;
     var multi = !document.getElementById('destNum').hidden;
     document.getElementById('detCond').textContent = state.days + '天·' + tabFull(state.tab) + '·' + state.plan;
@@ -4325,7 +4334,7 @@
       editState.plan = plan;
       var selEl = null;
       document.querySelectorAll('#condOpts .opt').forEach(function (b) {
-        var on = b.closest('.opts-grid').getAttribute('data-g') === tab && b.querySelector('.t').textContent === plan;
+        var on = b.closest('.opts-grid').getAttribute('data-g') === tab && b.getAttribute('data-val') === plan;
         b.classList.toggle('sel', on);
         if (on) selEl = b;
       });
@@ -4477,8 +4486,7 @@
   }
   // 本方案支援的國家/地區完整清單（詳情/訂單/付款三處共用，不隨使用者選擇變化）
   function destCoverageList() {
-    var dEl = document.getElementById('destName');
-    var dest = dEl ? dEl.textContent : '亞洲通';
+    var dest = destRaw();
     var nEl = document.getElementById('destNum');
     var multi = nEl ? !nEl.hidden : false;
     var region = GEO.regions.concat(GEO.hotRegions).filter(function (r) { return r.name === dest; })[0];
