@@ -674,28 +674,25 @@
   .pkg-tag { background: var(--kk-surface-light); border-radius: var(--r-sm); padding: 2px 4px;
     font-size: 12px; line-height: 16px; color: var(--kk-text-darker); }
   .pkg-perks { display: flex; flex-wrap: wrap; gap: 4px 8px; margin-top: 12px;  /* 掉行行距 4px（Figma 970-49432）；標籤→政策 12 */
-    font-size: 12px; line-height: 16px; color: #13A3B6; }  /* 政策文字 Body-sm 12/16（Figma 795-35558 spec icon+text） */
+    font-size: 12px; line-height: 16px; color: #13A3B6; }  /* 政策文字全青（Figma 795-35558 新版，含最早可使用日/取消政策） */
   .pkg-perks .perk { display: inline-flex; align-items: center; gap: 4px; }
-  .pkg-perks .perk.dark { color: var(--kk-text-darker); }
   /* 黃色提醒標籤：僅詳情頁使用（列表卡已移除，Figma 795-35558） */
   .pkg-warns { display: flex; align-items: center; gap: 8px; margin-top: 6px;
     font-size: 12px; line-height: 16px; color: #E78F37; }
   .pkg-warns .wdiv { width: 1px; height: 12px; background: var(--kk-border-lighter); }
   .pkg-vendor { margin-top: 12px; font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }  /* Figma 調整後：警示→供應商 12 */
-  /* 連續N則好評（Figma 795-35558）：雙色點讚 16px + 12/16 Regular，文字 #212121 */
-  .pkg-goodrev { display: flex; align-items: center; gap: 4px; margin-top: 2px;
-    font-size: 12px; line-height: 16px; color: #212121; }
-  .pkg-goodrev .ic { width: 16px; height: 16px; }
   .pkg-rating { display: flex; align-items: center; gap: 4px; margin-top: 2px; }
   .pkg-rating .score { font-size: 14px; line-height: 20px; font-weight: 600; color: #13A3B6; }
-  .pkg-rating .grade { font-size: 12px; line-height: 16px; font-weight: 500; color: #13A3B6; }
   .pkg-rating .rcount { font-size: 12px; line-height: 16px; color: var(--kk-text-darker); text-decoration: underline; }  /* Figma 863-73998：評論數帶下劃線 */
+  /* 連續N則好評：並入評分行的純文字（Figma 795-35558 新版，無點讚圖示） */
+  .pkg-rating .gtxt { font-size: 12px; line-height: 16px; color: var(--kk-text-darker);
+    flex: 1 1 0; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .ic-14 { width: 14px; height: 14px; }
-  /* 火苗 ic_fire_fill 為 14 框（Figma 863-73870），裸向量按框內佔位渲染（≈10.1×11.5），不拉伸變形 */
-  .pkg-rating .bought .ic img { width: 10.1px; height: 11.5px; }
-  .pkg-rating .bought { margin-left: auto; display: inline-flex; align-items: center; gap: 4px;
+  .pkg-rating .bought { margin-left: auto; display: inline-flex; align-items: center; gap: 4px; flex: 0 0 auto;
     font-size: 12px; line-height: 16px; color: var(--kk-text-dark); }
+  /* hot 已購（Figma 795-35558 新版）：線框火苗 16 + 數字 Semibold 14 + 「已購」12，臨界色 */
   .pkg-rating .bought.hot { color: var(--kk-text-critical); }
+  .pkg-rating .bought .bn { font-size: 14px; line-height: 20px; font-weight: 600; }
   .pkg-hr { border: 0; border-top: 1px solid var(--kk-border-lighter); margin: 12px 0 16px; }  /* Figma 863-74100 調整後：評分→線 12，線→價格 16 */
   .pkg-buy { display: flex; align-items: center; gap: 8px; }
   .pkg-price { flex: 1 1 0; min-width: 0; }
@@ -2729,6 +2726,7 @@
     thumbsUp: '{{IC_thumbsUp}}',  // 列表卡「連續N則好評」標籤（雙色點讚，Figma 795-35558）
     flash: '{{IC_flash}}', reload: '{{IC_currencyReload}}', reloadDark: '{{IC_currencyReloadDark}}',
     checkLine: '{{IC_checkCircleLine}}', calendar: '{{IC_calendar}}', crossLine: '{{IC_crossCircleLine}}',
+    calendarCyan: '{{IC_calendarCyan}}', fireLine: '{{IC_fireLine}}',  // 列表卡新版（Figma 795-35558）：青色日曆＋線框火苗
     pencil: '{{IC_pencil}}', star: '{{IC_star}}', fire2: '{{IC_fire}}', chevDark: '{{IC_arrowRightGrey}}',
     locSearch: '{{IC_locationSearch}}',  // 搜尋結果·國家行（Figma 848-41868：深色 location_line 20px）
     earthLine: '{{IC_earthLine}}',       // 搜尋結果·區域行（線框地球，非實心 globe）
@@ -3450,6 +3448,9 @@
 
   var PERK_ICONS = { flash: 'flash', reload: 'reload', checkLine: 'checkLine', send: 'send',
                      reloadD: 'reloadDark', calendarD: 'calendar', crossD: 'crossLine' };
+  // 列表卡政策行全青（Figma 795-35558 新版）：深色變體換青色圖示；詳情頁仍用 PERK_ICONS 原映射
+  var CARD_PERK_ICONS = { flash: 'flash', reload: 'reload', checkLine: 'checkLine',
+                          reloadD: 'reload', calendarD: 'calendarCyan' };
 
   function renderPlans(centerSel) {
     var titleEl = document.getElementById('plTitle');
@@ -3531,39 +3532,39 @@
     var box = document.getElementById('plList');
     box.innerHTML = '';
     list.forEach(function (p) {
+      // 卡片結構（Figma 795-35558 新版）：標題 / 規格灰標 / 政策行（全青）/ 供應商 /
+      // 評分行（★分數＋評論數＋連續好評文字＋右側已購）/ 分割線 / 價格＋CTA
       var card = el('<div class="pkg-card">' +
         '<button class="pkg-head"><span class="pkg-title"></span><span class="ic ic-24 chev-r"></span></button>' +
         '<div class="pkg-tags"></div><div class="pkg-perks"></div>' +
-        '<div class="pkg-vendor"></div><div class="pkg-goodrev"></div><div class="pkg-rating"></div><hr class="pkg-hr">' +
+        '<div class="pkg-vendor"></div><div class="pkg-rating"></div><hr class="pkg-hr">' +
         '<div class="pkg-buy"><div class="pkg-price"></div><button class="pkg-cta">訂購</button></div></div>');
       card.querySelector('.chev-r').innerHTML = '<span class="rot90 ic">' + ICONS.chevDark + '</span>';
       card.querySelector('.pkg-title').textContent = p.title;
       var tags = card.querySelector('.pkg-tags');
       p.tags.forEach(function (t) { var e = el('<span class="pkg-tag"></span>'); e.textContent = t; tags.appendChild(e); });
       var perks = card.querySelector('.pkg-perks');
-      // 卡片政策順序：確認速度 → 可用日期 → 取消政策（取消政策放最後）
+      // 卡片政策順序：確認速度 → 可用日期 → 取消政策（取消政策放最後）；文字/圖示全青
       [p.perks[0], p.perks[2], p.perks[1]].forEach(function (pk) {
         if (pk === p.perks[0] && pk[2]) return;  // 確認速度非有利（24小時內回覆確認）只在詳情顯示，不上卡片
         if (pk === p.perks[1] && p.cancelType === 'none') return;  // 不可取消：列表卡不顯示取消政策（詳情保留，Figma 795-35558）
-        var e = el('<span class="perk' + (pk[2] ? ' dark' : '') + '"><span class="ic ic-16">' + ICONS[PERK_ICONS[pk[0]]] + '</span><span class="pt"></span></span>');
+        var icKey = CARD_PERK_ICONS[pk[0]] || PERK_ICONS[pk[0]];
+        var e = el('<span class="perk"><span class="ic ic-16">' + ICONS[icKey] + '</span><span class="pt"></span></span>');
         e.querySelector('.pt').textContent = pk[1];
         perks.appendChild(e);
       });
       card.querySelector('.pkg-vendor').textContent = p.vendor;
-      // 連續好評標籤（雙色點讚 + 青字，Figma 795-35558）；無則整行隱藏
-      var gr = card.querySelector('.pkg-goodrev');
-      if (p.streak) gr.innerHTML = '<span class="ic ic-16">' + ICONS.thumbsUp + '</span><span>連續' + p.streak + '則好評</span>';
-      else gr.style.display = 'none';
+      // 評分行：★分數＋(評論數)＋「連續N則好評」文字＋右側已購（Figma 795-35558 新版，無評語）
       var rating = card.querySelector('.pkg-rating');
-      // 評分描述：4.6-5.0 非常好 / 4.0-4.5 很好；3.5-3.9 的「好」刻意不顯示（中性評價加正向標籤反而放大平庸感）
-      var grade = p.rating >= 4.6 ? '非常好' : p.rating >= 4.0 ? '很好' : '';
+      var boughtHtml = p.hot
+        ? '<span class="bought hot"><span class="ic ic-16">' + ICONS.fireLine + '</span><span class="bn">' + p.bought.replace(/\s*已購$/, '') + '</span><span class="bt">已購</span></span>'
+        : '<span class="bought"><span class="bt">' + p.bought + '</span></span>';
       rating.innerHTML = '<span class="ic ic-16">' + ICONS.star + '</span>' +
-        '<span class="score"></span>' + (grade ? '<span class="grade">' + grade + '</span>' : '') +
-        '<span class="rcount"></span>' +
-        '<span class="bought' + (p.hot ? ' hot' : '') + '">' + (p.hot ? '<span class="ic ic-14">' + ICONS.fire2 + '</span>' : '') + '<span class="bt"></span></span>';
+        '<span class="score"></span><span class="rcount"></span>' +
+        (p.streak ? '<span class="gtxt">連續' + p.streak + '則好評</span>' : '') +
+        boughtHtml;
       rating.querySelector('.score').textContent = p.rating.toFixed(1);
       rating.querySelector('.rcount').textContent = '(' + p.reviews + ')';
-      rating.querySelector('.bt').textContent = p.bought;
       var price = card.querySelector('.pkg-price');
       // 1 天時每日≈價格與總價相同，冗餘 → 不顯示
       var showPer = (+state.days !== 1);

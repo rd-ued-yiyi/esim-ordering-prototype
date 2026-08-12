@@ -161,6 +161,8 @@ subs = {
     "{{IC_currencyReloadDark}}": svg("currencyReloadDark"),
     "{{IC_checkCircleLine}}": svg("checkCircleLine"),
     "{{IC_calendar}}":     svg("calendar"),
+    "{{IC_calendarCyan}}": svg("calendar", recolor=("#212121", "#13A3B6")),  # 列表卡政策行全青（Figma 795-35558 新版）
+    "{{IC_fireLine}}":     svg("fireLine"),  # 已购 hot 线框火苗 16px（Figma 795-35558 新版，#EF7A70）
     "{{IC_crossCircleLine}}": svg("crossCircleLine"),
     "{{IC_swapVertical}}": svg("swapVertical"),
     "{{IC_pencil}}":       svg("pencil"),
