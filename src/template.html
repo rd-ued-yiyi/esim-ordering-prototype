@@ -2308,8 +2308,13 @@
   // 原型文案為繁體；簡體模式用構建時生成的 繁→簡 單字映射（OpenCC t2s）轉換整頁文字，
   // MutationObserver 覆蓋 JS 動態渲染的內容。切換語言時記錄 sessionStorage 並重載。
   var T2S_MAP = {{T2S_MAP}};
+  var T2S_PHRASE = {{T2S_PHRASE}};  // 繁簡一對多詞組修正（如 回覆→回复），須先於字符級套用
+  var T2S_PK = Object.keys(T2S_PHRASE).sort(function (a, b) { return b.length - a.length; });
   var LANG = (function () { try { return sessionStorage.getItem('protoLang') || 'cn'; } catch (e) { return 'cn'; } })();
   function t2sText(s) {
+    for (var p = 0; p < T2S_PK.length; p++) {
+      if (s.indexOf(T2S_PK[p]) >= 0) s = s.split(T2S_PK[p]).join(T2S_PHRASE[T2S_PK[p]]);
+    }
     var out = '', i;
     for (i = 0; i < s.length; i++) out += T2S_MAP[s[i]] || s[i];
     return out;
