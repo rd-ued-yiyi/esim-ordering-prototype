@@ -332,9 +332,9 @@
 
   .opts-scroll { width: 100%; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
   .opts-scroll::-webkit-scrollbar { display: none; }
-  /* 頂部留白 16px 給第一排 badge 氣泡(top:-11px+尖角)浮於卡片上緣，負 margin 抵消——淨間距 8px */
-  .opts-scroll { margin-top: -16px; position: relative; }
-  .opts-row { display: flex; gap: 24px; width: max-content; padding-top: 16px; }  /* 三組拼合，組間 24px */
+  /* 頂部留白 6px 給第一排 badge(top:-4px 露出卡片上緣 4px)，負 margin 抵消——淨間距 8px */
+  .opts-scroll { margin-top: -6px; position: relative; }
+  .opts-row { display: flex; gap: 24px; width: max-content; padding-top: 6px; }  /* 三組拼合，組間 24px */
   .opts-grid { display: grid; grid-auto-flow: column; grid-template-rows: repeat(2, auto); gap: 8px; width: max-content; }
   /* 計費類目之間的虛線分隔（畫在 24px 組間隙中點）：顏色加深、更明顯 */
   .opts-grid + .opts-grid { position: relative; }
@@ -351,20 +351,20 @@
   .opt .t { font-size: 16px; line-height: 24px; font-weight: 600; color: var(--kk-text-darker); }
   .opt.sel .t { color: #13A3B6; }
   .opt .p { font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
-  /* 80%選擇 氣泡標籤（Figma 871-75700 實測）：珊瑚紅圓角氣泡，貼卡片右上、右下角帶朝下小尖角 */
+  /* 80%選擇 標籤（Figma 871-75700 實測）：珊瑚紅小圓角(4px)，貼卡片右上、僅露出卡片上緣 4px，右下角帶朝下小尖角 */
   .opt .badge {
-    position: absolute; top: -12px; right: 2px; z-index: 3;
+    position: absolute; top: -4px; right: 0; z-index: 3;
     background: var(--kk-text-critical); color: #fff;
     font-size: 12px; line-height: 16px; font-weight: 600;
     padding: 2px 6px; white-space: nowrap;
-    border-radius: 8px 8px 2px 8px;  /* 右下(BR)為尖角側 */
+    border-radius: 4px 4px 1px 4px;  /* 實測圓角 ~3-4px；右下(BR)為尖角側 */
   }
-  /* 右下角向下尖角（豎邊在左、斜邊朝右下，尖端朝下指向卡片；對齊 Figma 尖角在右下） */
+  /* 右下角向下小尖角（豎邊在左、斜邊朝右下，尖端朝下；對齊 Figma 尖角在 body 右端下方） */
   .opt .badge::after {
-    content: ''; position: absolute; right: 0; bottom: -5px;
+    content: ''; position: absolute; right: 1px; bottom: -4px;
     width: 0; height: 0;
-    border-top: 6px solid var(--kk-text-critical);
-    border-right: 5px solid transparent;
+    border-top: 5px solid var(--kk-text-critical);
+    border-right: 4px solid transparent;
   }
 
   .cta {
@@ -1551,10 +1551,10 @@
       <div class="con">
         <div class="destbar-block">
           <button class="dest-bar" data-action="change-destination">
-            <span class="ic ic-24">{{IC_location}}</span>
+            <span class="ic ic-20">{{IC_location}}</span>
             <span class="name" id="destName">新加坡</span>
             <span class="dest-num t-body-md" id="destNum" hidden></span>
-            <span class="ic ic-24">{{IC_arrowDown}}</span>
+            <span class="ic ic-20">{{IC_arrowDown}}</span>
           </button>
         </div>
 

@@ -341,9 +341,9 @@
 
   .opts-scroll { width: 100%; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
   .opts-scroll::-webkit-scrollbar { display: none; }
-  /* 頂部留白 16px 給第一排 badge 氣泡(top:-11px+尖角)浮於卡片上緣，負 margin 抵消——淨間距 8px */
-  .opts-scroll { margin-top: -16px; position: relative; }
-  .opts-row { display: flex; gap: 24px; width: max-content; padding-top: 16px; }  /* 三組拼合，組間 24px */
+  /* 頂部留白 6px 給第一排 badge(top:-4px 露出卡片上緣 4px)，負 margin 抵消——淨間距 8px */
+  .opts-scroll { margin-top: -6px; position: relative; }
+  .opts-row { display: flex; gap: 24px; width: max-content; padding-top: 6px; }  /* 三組拼合，組間 24px */
   .opts-grid { display: grid; grid-auto-flow: column; grid-template-rows: repeat(2, auto); gap: 8px; width: max-content; }
   /* 計費類目之間的虛線分隔（畫在 24px 組間隙中點）：顏色加深、更明顯 */
   .opts-grid + .opts-grid { position: relative; }
@@ -360,20 +360,20 @@
   .opt .t { font-size: 16px; line-height: 24px; font-weight: 600; color: var(--kk-text-darker); }
   .opt.sel .t { color: #13A3B6; }
   .opt .p { font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
-  /* 80%選擇 氣泡標籤（Figma 871-75700 實測）：珊瑚紅圓角氣泡，貼卡片右上、右下角帶朝下小尖角 */
+  /* 80%選擇 標籤（Figma 871-75700 實測）：珊瑚紅小圓角(4px)，貼卡片右上、僅露出卡片上緣 4px，右下角帶朝下小尖角 */
   .opt .badge {
-    position: absolute; top: -12px; right: 2px; z-index: 3;
+    position: absolute; top: -4px; right: 0; z-index: 3;
     background: var(--kk-text-critical); color: #fff;
     font-size: 12px; line-height: 16px; font-weight: 600;
     padding: 2px 6px; white-space: nowrap;
-    border-radius: 8px 8px 2px 8px;  /* 右下(BR)為尖角側 */
+    border-radius: 4px 4px 1px 4px;  /* 實測圓角 ~3-4px；右下(BR)為尖角側 */
   }
-  /* 右下角向下尖角（豎邊在左、斜邊朝右下，尖端朝下指向卡片；對齊 Figma 尖角在右下） */
+  /* 右下角向下小尖角（豎邊在左、斜邊朝右下，尖端朝下；對齊 Figma 尖角在 body 右端下方） */
   .opt .badge::after {
-    content: ''; position: absolute; right: 0; bottom: -5px;
+    content: ''; position: absolute; right: 1px; bottom: -4px;
     width: 0; height: 0;
-    border-top: 6px solid var(--kk-text-critical);
-    border-right: 5px solid transparent;
+    border-top: 5px solid var(--kk-text-critical);
+    border-right: 4px solid transparent;
   }
 
   .cta {
@@ -1652,10 +1652,10 @@
       <div class="con">
         <div class="destbar-block">
           <button class="dest-bar" data-action="change-destination">
-            <span class="ic ic-24"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE2LjUiIGhlaWdodD0iMjEiIHZpZXdCb3g9IjAgMCAxNi41IDIxIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cGF0aCBpZD0iVmVjdG9yIiBkPSJNOC4yNSAwQzYuMDYyNzYgMC4wMDI1OTUyMSAzLjk2NTg1IDAuODcyNjIyIDIuNDE5MjQgMi40MTkyNEMwLjg3MjYyMiAzLjk2NTg1IDAuMDAyNTk1MjEgNi4wNjI3NiAwIDguMjVDMCAxNS4zMDkxIDcuNSAyMC42NDExIDcuODE5MzQgMjAuODY0NUM3Ljk0NTYzIDIwLjk1MjcgOC4wOTU5NiAyMSA4LjI1IDIxQzguNDA0MDQgMjEgOC41NTQzNyAyMC45NTI3IDguNjgwNjYgMjAuODY0NUM5IDIwLjY0MTEgMTYuNSAxNS4zMDkxIDE2LjUgOC4yNUMxNi40OTc0IDYuMDYyNzYgMTUuNjI3NCAzLjk2NTg1IDE0LjA4MDggMi40MTkyNEMxMi41MzQyIDAuODcyNjIyIDEwLjQzNzIgMC4wMDI1OTQ5NiA4LjI1IDBWMFpNOC4yNTA1NSA1LjI1MDI3QzguODQzODkgNS4yNTAyNyA5LjQyMzkxIDUuNDI2MjIgOS45MTcyNiA1Ljc1NTg2QzEwLjQxMDYgNi4wODU1MSAxMC43OTUxIDYuNTU0MDQgMTEuMDIyMiA3LjEwMjIyQzExLjI0OTMgNy42NTA0IDExLjMwODcgOC4yNTM2IDExLjE5MjkgOC44MzU1NEMxMS4wNzcxIDkuNDE3NDkgMTAuNzkxNCA5Ljk1MjA0IDEwLjM3MTkgMTAuMzcxNkM5Ljk1MjMxIDEwLjc5MTIgOS40MTc3NiAxMS4wNzY5IDguODM1ODIgMTEuMTkyNkM4LjI1Mzg4IDExLjMwODQgNy42NTA2OCAxMS4yNDkgNy4xMDI1IDExLjAyMTlDNi41NTQzMiAxMC43OTQ4IDYuMDg1NzggMTAuNDEwMyA1Ljc1NjE0IDkuOTE2OThDNS40MjY1IDkuNDIzNjQgNS4yNTA1NSA4Ljg0MzYyIDUuMjUwNTUgOC4yNTAyN0M1LjI1MDU0IDcuODU2MyA1LjMyODEzIDcuNDY2MTkgNS40Nzg4OSA3LjEwMjIxQzUuNjI5NjUgNi43MzgyMyA1Ljg1MDYzIDYuNDA3NSA2LjEyOTIgNi4xMjg5M0M2LjQwNzc4IDUuODUwMzUgNi43Mzg1IDUuNjI5MzcgNy4xMDI0OSA1LjQ3ODYxQzcuNDY2NDcgNS4zMjc4NSA3Ljg1NjU4IDUuMjUwMjYgOC4yNTA1NSA1LjI1MDI3VjUuMjUwMjdaIiBmaWxsPSIjMjZCRUM5Ii8+Cjwvc3ZnPg==" width="16.50" height="21.00"></span>
+            <span class="ic ic-20"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE2LjUiIGhlaWdodD0iMjEiIHZpZXdCb3g9IjAgMCAxNi41IDIxIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cGF0aCBpZD0iVmVjdG9yIiBkPSJNOC4yNSAwQzYuMDYyNzYgMC4wMDI1OTUyMSAzLjk2NTg1IDAuODcyNjIyIDIuNDE5MjQgMi40MTkyNEMwLjg3MjYyMiAzLjk2NTg1IDAuMDAyNTk1MjEgNi4wNjI3NiAwIDguMjVDMCAxNS4zMDkxIDcuNSAyMC42NDExIDcuODE5MzQgMjAuODY0NUM3Ljk0NTYzIDIwLjk1MjcgOC4wOTU5NiAyMSA4LjI1IDIxQzguNDA0MDQgMjEgOC41NTQzNyAyMC45NTI3IDguNjgwNjYgMjAuODY0NUM5IDIwLjY0MTEgMTYuNSAxNS4zMDkxIDE2LjUgOC4yNUMxNi40OTc0IDYuMDYyNzYgMTUuNjI3NCAzLjk2NTg1IDE0LjA4MDggMi40MTkyNEMxMi41MzQyIDAuODcyNjIyIDEwLjQzNzIgMC4wMDI1OTQ5NiA4LjI1IDBWMFpNOC4yNTA1NSA1LjI1MDI3QzguODQzODkgNS4yNTAyNyA5LjQyMzkxIDUuNDI2MjIgOS45MTcyNiA1Ljc1NTg2QzEwLjQxMDYgNi4wODU1MSAxMC43OTUxIDYuNTU0MDQgMTEuMDIyMiA3LjEwMjIyQzExLjI0OTMgNy42NTA0IDExLjMwODcgOC4yNTM2IDExLjE5MjkgOC44MzU1NEMxMS4wNzcxIDkuNDE3NDkgMTAuNzkxNCA5Ljk1MjA0IDEwLjM3MTkgMTAuMzcxNkM5Ljk1MjMxIDEwLjc5MTIgOS40MTc3NiAxMS4wNzY5IDguODM1ODIgMTEuMTkyNkM4LjI1Mzg4IDExLjMwODQgNy42NTA2OCAxMS4yNDkgNy4xMDI1IDExLjAyMTlDNi41NTQzMiAxMC43OTQ4IDYuMDg1NzggMTAuNDEwMyA1Ljc1NjE0IDkuOTE2OThDNS40MjY1IDkuNDIzNjQgNS4yNTA1NSA4Ljg0MzYyIDUuMjUwNTUgOC4yNTAyN0M1LjI1MDU0IDcuODU2MyA1LjMyODEzIDcuNDY2MTkgNS40Nzg4OSA3LjEwMjIxQzUuNjI5NjUgNi43MzgyMyA1Ljg1MDYzIDYuNDA3NSA2LjEyOTIgNi4xMjg5M0M2LjQwNzc4IDUuODUwMzUgNi43Mzg1IDUuNjI5MzcgNy4xMDI0OSA1LjQ3ODYxQzcuNDY2NDcgNS4zMjc4NSA3Ljg1NjU4IDUuMjUwMjYgOC4yNTA1NSA1LjI1MDI3VjUuMjUwMjdaIiBmaWxsPSIjMjZCRUM5Ii8+Cjwvc3ZnPg==" width="16.50" height="21.00"></span>
             <span class="name" id="destName">新加坡</span>
             <span class="dest-num t-body-md" id="destNum" hidden></span>
-            <span class="ic ic-24"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE0LjE2NjciIGhlaWdodD0iNy45MTY2NyIgdmlld0JveD0iMCAwIDE0LjE2NjcgNy45MTY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0wLjI0NDA3OCAwLjI0NDA3OEMwLjU2OTUxNSAtMC4wODEzNTkyIDEuMDk3MTUgLTAuMDgxMzU5MiAxLjQyMjU5IDAuMjQ0MDc4TDcuMDgzMzMgNS45MDQ4MkwxMi43NDQxIDAuMjQ0MDc4QzEzLjA2OTUgLTAuMDgxMzU5MiAxMy41OTcyIC0wLjA4MTM1OTIgMTMuOTIyNiAwLjI0NDA3OEMxNC4yNDggMC41Njk1MTUgMTQuMjQ4IDEuMDk3MTUgMTMuOTIyNiAxLjQyMjU5TDcuNjcyNTkgNy42NzI1OUM3LjM0NzE1IDcuOTk4MDMgNi44MTk1MSA3Ljk5ODAzIDYuNDk0MDggNy42NzI1OUwwLjI0NDA3OCAxLjQyMjU5Qy0wLjA4MTM1OTIgMS4wOTcxNSAtMC4wODEzNTkyIDAuNTY5NTE1IDAuMjQ0MDc4IDAuMjQ0MDc4WiIgZmlsbD0iIzIxMjEyMSIvPgo8L3N2Zz4=" width="14.17" height="7.92"></span>
+            <span class="ic ic-20"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE0LjE2NjciIGhlaWdodD0iNy45MTY2NyIgdmlld0JveD0iMCAwIDE0LjE2NjcgNy45MTY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0wLjI0NDA3OCAwLjI0NDA3OEMwLjU2OTUxNSAtMC4wODEzNTkyIDEuMDk3MTUgLTAuMDgxMzU5MiAxLjQyMjU5IDAuMjQ0MDc4TDcuMDgzMzMgNS45MDQ4MkwxMi43NDQxIDAuMjQ0MDc4QzEzLjA2OTUgLTAuMDgxMzU5MiAxMy41OTcyIC0wLjA4MTM1OTIgMTMuOTIyNiAwLjI0NDA3OEMxNC4yNDggMC41Njk1MTUgMTQuMjQ4IDEuMDk3MTUgMTMuOTIyNiAxLjQyMjU5TDcuNjcyNTkgNy42NzI1OUM3LjM0NzE1IDcuOTk4MDMgNi44MTk1MSA3Ljk5ODAzIDYuNDk0MDggNy42NzI1OUwwLjI0NDA3OCAxLjQyMjU5Qy0wLjA4MTM1OTIgMS4wOTcxNSAtMC4wODEzNTkyIDAuNTY5NTE1IDAuMjQ0MDc4IDAuMjQ0MDc4WiIgZmlsbD0iIzIxMjEyMSIvPgo8L3N2Zz4=" width="14.17" height="7.92"></span>
           </button>
         </div>
 
