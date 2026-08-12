@@ -368,12 +368,12 @@
     padding: 2px 6px; white-space: nowrap;
     border-radius: 4px 4px 1px 4px;  /* 實測圓角 ~3-4px；右下(BR)為尖角側 */
   }
-  /* 右下角向下小尖角（豎邊在左、斜邊朝右下，尖端朝下；對齊 Figma 尖角在 body 右端下方） */
+  /* 右下角向下小尖角：貼齊 badge 右緣(right:0)、從卡角垂下、尖端朝下（實測 Figma x262-265 收斂） */
   .opt .badge::after {
-    content: ''; position: absolute; right: 1px; bottom: -4px;
+    content: ''; position: absolute; right: 0; bottom: -4px;
     width: 0; height: 0;
-    border-top: 5px solid var(--kk-text-critical);
-    border-right: 4px solid transparent;
+    border-top: 4px solid var(--kk-text-critical);
+    border-right: 3px solid transparent;
   }
 
   .cta {
