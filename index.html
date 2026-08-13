@@ -692,14 +692,16 @@
 
   /* 篩選列：純文字按鈕 + 細分隔線（Figma 1276-117307 / 狀態 1276-117772）。
      「篩選」固定在左（白底遮住滾動內容），其餘可橫向滾動；A/B 共用 */
-  .pl-filters { display: flex; align-items: center; padding: 16px 0; overflow: hidden; }
+  /* 垂直 padding 放在內層兩個容器（而非 .pl-filters），讓紅點有空間不被 overflow 裁切；
+     .pl-filter-scroll 因 overflow-x:auto 會連帶裁切上下溢出，故靠上下 8px padding 留白 */
+  .pl-filters { display: flex; align-items: center; padding: 8px 0; overflow: hidden; }
   .pl-filter-fixed {
-    flex: 0 0 auto; background: #fff; padding: 0 8px 0 16px;
+    flex: 0 0 auto; background: #fff; padding: 8px 8px 8px 16px;
     position: relative; z-index: 1;
   }
   .pl-filter-scroll {
     display: flex; align-items: center; gap: 12px; flex: 1 1 0; min-width: 0;
-    padding: 0 16px 0 8px;
+    padding: 8px 16px 8px 8px;
     overflow-x: auto; scrollbar-width: none;
   }
   .pl-filter-scroll::-webkit-scrollbar { display: none; }
