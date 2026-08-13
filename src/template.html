@@ -3348,6 +3348,8 @@
       b.textContent = d + '天';
       b.addEventListener('click', function () {
         setDays(d, true); closeSheets(); renderPlans('smooth');
+        // 目的地頁：選中天數若命中下方快捷 chip，把該 chip 捲入可視區（未命中時 .chip.sel 不存在、不捲動）
+        if (current === 'destination') revealOpt(document.getElementById('dayChips'), true, '.chip.sel');
       });
       wrap.appendChild(b);
     });
