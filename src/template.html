@@ -635,6 +635,7 @@
     transform: translateX(-100%); background: linear-gradient(to right, rgba(255, 255, 255, 0), #fff); pointer-events: none;
   }
   .pl-cond-more .cc { display: inline-flex; align-items: center; }
+  .pl-cond-more[hidden] { display: none; }  /* 修正：display:flex 會蓋過 [hidden] 的 display:none，方案 A 必須真正隱藏（含 ::before 遮罩） */
   /* 方案 B：去掉「5天」固定 chip 的右緣分割投影（Figma 1202-105549 無此陰影）。
      天數↔流量的 8px 間距留在「天數」這側（fixed padding-right，預設 8px 不動）、scroll 左內距歸零，
      這樣捲動時流量 chips 停在天數 chip 右緣外 8px、不會疊上去。 */
@@ -2424,7 +2425,9 @@
     // 重新進入目的地頁（如從列表返回）時把選中流量檔、選中天數 chip 滾回可視區，避免選中項落在螢幕外
     if (name === 'destination') {
       revealOpt(document.getElementById('dataOptsScroll'), false);
-      revealOpt(document.getElementById('dayChips'), false, '.chip.sel');
+      // 天數 chips：預設(未手動選過)不捲動、從 1 天起顯示；只有手動選過才把選中天數捲回可視區
+      if (state.daysTouched) revealOpt(document.getElementById('dayChips'), false, '.chip.sel');
+      else document.getElementById('dayChips').scrollLeft = 0;
     }
   }
 
