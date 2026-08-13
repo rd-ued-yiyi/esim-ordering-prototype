@@ -393,7 +393,7 @@
   .opt .badge {
     position: absolute; top: -4px; right: -4px; z-index: 3;
     background: var(--kk-text-critical); color: #fff;
-    font-size: 12px; line-height: 16px; font-weight: 600;
+    font-size: 12px; line-height: 16px; font-weight: 400;  /* 80%標籤文字不加粗 */
     padding: 2px 6px; white-space: nowrap;
     border-radius: 4px 4px 1px 4px;  /* 實測圓角 ~3-4px；右下(BR)為尖角側 */
   }
@@ -2498,12 +2498,12 @@
                          { t: '共30GB', price: 1290, gb: 30 }, { t: '共50GB', price: 1790, gb: 50 },
                          { t: '共80GB', price: 2490, gb: 80 }, { t: '共100GB', price: 2990, gb: 100 } ] },
     unlimited: { note: '不限流量，達公平使用量後降至標示網速',
-                 opts: [ { t: '不降速', per: 168 },
-                         { t: '降速後 128 Kbps', per: 45 }, { t: '降速後 256 Kbps', per: 52 },
-                         { t: '降速後 384 Kbps', per: 58 }, { t: '降速後 512 Kbps', per: 65 },
-                         { t: '降速後 1 Mbps', per: 78 }, { t: '降速後 3 Mbps', per: 95 },
-                         { t: '降速後 5 Mbps', per: 110 }, { t: '降速後 10 Mbps', per: 128 },
-                         { t: '降速後 20 Mbps', per: 145 } ] }
+                 opts: [ { t: '無限不降速', per: 168 },
+                         { t: '無限降速後 128 Kbps', per: 45 }, { t: '無限降速後 256 Kbps', per: 52 },
+                         { t: '無限降速後 384 Kbps', per: 58 }, { t: '無限降速後 512 Kbps', per: 65 },
+                         { t: '無限降速後 1 Mbps', per: 78 }, { t: '無限降速後 3 Mbps', per: 95 },
+                         { t: '無限降速後 5 Mbps', per: 110 }, { t: '無限降速後 10 Mbps', per: 128 },
+                         { t: '無限降速後 20 Mbps', per: 145 } ] }
   };
   function daysDiscount(d) { return d >= 30 ? 0.85 : d >= 15 ? 0.9 : d >= 7 ? 0.95 : 1; }
   function priceLabelFor(o, d) {
@@ -2530,7 +2530,7 @@
       opts.forEach(function (o) { if (Math.abs(o.gb - target) < Math.abs(best.gb - target)) best = o; });
       return best.t;
     }
-    return '降速後 1 Mbps';  // 無限流量推薦主流降速檔
+    return '無限降速後 1 Mbps';  // 無限流量推薦主流降速檔
   }
   function badgeFor() { return badgeForTab(state.tab, state.days ? +state.days : 0); }
 
@@ -3586,8 +3586,8 @@
     '土耳其': ['Turkcell', 'Vodafone', 'Türk Telekom'],
     'default': ['Ubigi', 'Truphone', '3HK']  // 未收錄目的地：真實全球漫遊運營商（不用「當地電信」）
   };
-  var sortMode = 0;  // 0 價格低到高 1 高評分優先 2 高銷量優先（Figma 902-41325）
-  var SORT_NAMES = ['價格低到高', '高評分優先', '高銷量優先'];
+  var sortMode = 0;  // 0 KKday推薦(預設) 1 價格低到高 2 高評分優先 3 高銷量優先
+  var SORT_NAMES = ['KKday推薦', '價格低到高', '高評分優先', '高銷量優先'];
   // 規格總覽：各商品支援的計費方式子集（1-3 種，體現商品差異）
   var BILLING_SETS = [
     ['daily', 'total'], ['daily', 'total', 'unlimited'], ['daily'],
@@ -3769,9 +3769,11 @@
     });
 
     var list = applyFilters(buildPlans());
-    if (sortMode === 0) list.sort(function (a, b) { return a.now - b.now; });
-    if (sortMode === 1) list.sort(function (a, b) { return b.rating - a.rating; });
-    if (sortMode === 2) list.sort(function (a, b) { return boughtNum(b) - boughtNum(a); });
+    // KKday推薦(預設)：熱門 → 高評分 → 高銷量 加權
+    if (sortMode === 0) list.sort(function (a, b) { return (b.hot - a.hot) || (b.rating - a.rating) || (boughtNum(b) - boughtNum(a)); });
+    if (sortMode === 1) list.sort(function (a, b) { return a.now - b.now; });
+    if (sortMode === 2) list.sort(function (a, b) { return b.rating - a.rating; });
+    if (sortMode === 3) list.sort(function (a, b) { return boughtNum(b) - boughtNum(a); });
     // 有篩選時按實際結果數，否則用模擬總數
     var anyFilter = fActiveCount() > 0;
     document.getElementById('plCount').textContent = (anyFilter ? list.length : 26 + list.length) + ' 項結果';
@@ -3886,11 +3888,12 @@
     return [
       { type: 'date' },
       { type: 'expand', cat: 'cardType' },
+      { type: 'quick', key: '立即確認' },
+      { type: 'quick', key: '即買即用' },
+      { type: 'quick', key: '免費取消' },
       { type: 'quick', key: '一鍵啟用' },
       { type: 'quick', key: '5G' },
-      { type: 'quick', key: '支援熱點' },
-      { type: 'quick', key: '免費取消' },
-      { type: 'quick', key: '立即確認' }
+      { type: 'quick', key: '支援熱點' }
     ];
   }
   function fActiveCount() {
@@ -3944,6 +3947,7 @@
       if (q['支援熱點'] && p.tags[0].indexOf('熱點') < 0) return false;
       if (q['免費取消'] && !p.perks.some(function (x) { return x[1].indexOf('免費取消') >= 0; })) return false;
       if (q['立即確認'] && p.perks[0][1] !== '立即確認') return false;
+      if (q['即買即用'] && !p.perks.some(function (x) { return x[1] === '即買即用'; })) return false;
       return true;
     });
   }
@@ -4154,8 +4158,8 @@
   function detTransSpec() {
     if (state.tab === 'daily') return '每日 ' + state.plan.replace('/天', '') + ' 高速，超量後限速 256Kbps 不限量';
     if (state.tab === 'total') return state.plan.replace('共', '共 ') + ' 高速流量，用完即止（可隨時加購）';
-    return state.plan === '不降速' ? '不限流量，全程不限速'
-         : '不限流量，達公平使用量後' + state.plan.replace('降速後 ', '限速 ');
+    return state.plan === '無限不降速' ? '不限流量，全程不限速'
+         : '不限流量，達公平使用量後' + state.plan.replace('無限降速後 ', '限速 ');
   }
   // 取消政策四態（Figma 1029-74421）：免費 / 不可 / 免費或不可(條件) / 收費(手續費表)
   var CXL_SUPPLIER = '由於站內商品來自全球各地，訂單取消時間將依該供應商所在時區判定。供應商需 2–5 個工作天進行取消流程，依照您購買的商品取消政策收取手續費，並於取消流程完成後 14 個工作天內退款。';
