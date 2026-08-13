@@ -4822,22 +4822,15 @@
   // 訂單填寫 / 訂購確認（Figma 1074-82361 / 1004-42539 / 1074-84069）
   // ==================================================================
   var orderP = null, flDate = null;
-  // 預設聯絡人（聯絡人區演示用）
-  var ORD_CONTACTS = [
-    { last: '楊', first: '冪',   tel: '14930594039', email: '12334455', app: 'Line 284949' },
-    { last: '徐', first: '佳瑩', tel: '13900001111', email: 'lala@kkday.com', app: 'WhatsApp 0912345678' },
-    { last: '張', first: '學友', tel: '13900002222', email: 'jacky@example.com', app: 'WeChat jacky_c' },
-    { last: '蕭', first: '敬騰', tel: '13900003333', email: 'jam@example.com', app: 'Line jam_x' },
-    { last: '成', first: '龍',   tel: '13900004444', email: 'jackie@example.com', app: 'WeChat jc_dragon' },
-    { last: '越前', first: '龍馬', tel: '13900005555', email: 'ryoma@example.com', app: 'Line echizen' }
+  // 旅客/聯絡人共用同一份人員名單（可選項一致）：每人同時含聯絡欄位(last/first/tel/app)與實名欄位(en/證件…)
+  var ORD_PEOPLE = [
+    { last: '楊', first: '冪', cnLast: '楊', cnFirst: '冪', enLast: 'YANG', enFirst: 'MI', tel: '14930594039', email: '12334455', app: 'Line 284949', nation: '中國', gender: '女', birth: '1993/10/11', twId: 'A128374873', twPass: '239024778', hkMacao: 'H08123456', docNo: '239024778', docExp: '2025/10/11' },
+    { last: '徐', first: '佳瑩', cnLast: '徐', cnFirst: '佳瑩', enLast: 'HSU', enFirst: 'CHIA YING', tel: '13900001111', email: 'lala@kkday.com', app: 'WhatsApp 0912345678', nation: '台灣', gender: '女', birth: '1990/05/20', twId: 'F223456789', twPass: '—', hkMacao: '—', docNo: '312345678', docExp: '2028/03/15' },
+    { last: '張', first: '學友', cnLast: '張', cnFirst: '學友', enLast: 'CHEUNG', enFirst: 'HOK YAU', tel: '13900002222', email: 'jacky@example.com', app: 'WeChat jacky_c', nation: '香港', gender: '男', birth: '1961/07/10', twId: '—', twPass: '—', hkMacao: 'H11223344', docNo: 'K12345678', docExp: '2027/12/01' },
+    { last: '不二', first: '周助', cnLast: '不二', cnFirst: '周助', enLast: 'FUJI', enFirst: 'SYUSUKE', tel: '13900006666', email: 'ryoma@example.com', app: 'Line fuji_s', nation: '日本', gender: '男', birth: '1996/02/29', twId: '—', twPass: '—', hkMacao: '—', docNo: 'TR9876543', docExp: '2029/08/20' }
   ];
-  // 旅客資料（實名認證用）：與聯絡人同名池，但含證件/出生等實名欄位（Figma 1281-118787）
-  var ORD_TRAVELERS = [
-    { enLast: 'YANG', enFirst: 'MI', cnLast: '楊', cnFirst: '冪', nation: '中國', gender: '女', birth: '1993/10/11', twId: 'A128374873', twPass: '239024778', hkMacao: 'H08123456', docNo: '239024778', docExp: '2025/10/11' },
-    { enLast: 'HSU', enFirst: 'CHIA YING', cnLast: '徐', cnFirst: '佳瑩', nation: '台灣', gender: '女', birth: '1990/05/20', twId: 'F223456789', twPass: '—', hkMacao: '—', docNo: '312345678', docExp: '2028/03/15' },
-    { enLast: 'CHEUNG', enFirst: 'HOK YAU', cnLast: '張', cnFirst: '學友', nation: '香港', gender: '男', birth: '1961/07/10', twId: '—', twPass: '—', hkMacao: 'H11223344', docNo: 'K12345678', docExp: '2027/12/01' },
-    { enLast: 'FUJI', enFirst: 'SYUSUKE', cnLast: '不二', cnFirst: '周助', nation: '日本', gender: '男', birth: '1996/02/29', twId: '—', twPass: '—', hkMacao: '—', docNo: 'TR9876543', docExp: '2029/08/20' }
-  ];
+  // 旅客區與聯絡人區指向同一份名單 → 兩邊可選項完全一致；任一區「新增」也會同時出現在另一區
+  var ORD_CONTACTS = ORD_PEOPLE, ORD_TRAVELERS = ORD_PEOPLE;
   var orderState = null;
   var ctScroll = 0;  // 聯絡人 chips 橫向滾動位置（跨重繪保留，避免切換時視圖跳動）
   var tvScroll = 0;  // 旅客 chips 橫向滾動位置
@@ -4859,10 +4852,10 @@
       useDate: filterDateAsPick(),  // 帶入篩選裡選過的使用日期（若有）
       flight: null,   // {type,airport,terminal,airline,no,date,time,visa}
       device: null,   // {model, eid, imid, imid2}
-      contacts: [defIdx],  // 選中的聯絡人索引（單選）：預設＝訂購人
-      defContact: defIdx,  // 固定排最前的預設聯絡人（切換選中時不重排）
-      travelers: [0],      // 選中的旅客索引（多選，上限＝購買數量）：預設選第一位
-      defTraveler: 0,      // 固定排最前的預設旅客
+      contacts: [defIdx],  // 選中的聯絡人索引（單選、不可取消只能切換）：預設＝訂購人
+      defContact: defIdx,  // 固定排最前的預設人員（切換選中時不重排）
+      travelers: [defIdx], // 選中的旅客索引（多選，上限＝購買數量）：預設＝訂購人（與聯絡人同名單）
+      defTraveler: defIdx, // 固定排最前的預設人員（與聯絡人一致，兩區順序相同）
       ctExpanded: false,  // 聯絡人 chips 是否展開（換行顯示全部）
       orderer: orderer,
       remark: ''
@@ -5121,8 +5114,9 @@
       var c = ORD_CONTACTS[i];
       var chip = el('<button class="ct-chip">' + c.last + c.first + '</button>');
       if (orderState.contacts.indexOf(i) >= 0) chip.classList.add('sel');
-      chip.onclick = function () {  // 只能選一位：點選即單選（再點取消）
-        orderState.contacts = (orderState.contacts.length === 1 && orderState.contacts[0] === i) ? [] : [i];
+      chip.onclick = function () {  // 只能切換、不可取消：點選即切換到該人（已選者再點無效，始終保持 1 位）
+        if (orderState.contacts.length === 1 && orderState.contacts[0] === i) return;
+        orderState.contacts = [i];
         renderOrder();
       };
       chips.appendChild(chip);
@@ -5269,17 +5263,22 @@
     var appName = document.getElementById('ct-appname').value, appId = document.getElementById('ct-appid').value;
     var app = (appName ? appName + ' ' : '') + appId;
     if (editContactIdx === null) {
-      ORD_CONTACTS.push({
-        last: last || rnd(['陳', '林', '黃', '張', '李', '吳']),
-        first: first || rnd(['家豪', '雅婷', '志明', '怡君', '冠宇', '品睿']),
-        tel: tel || '09' + rndDigits(8),
-        email: '—',
-        app: app || rnd(CT_APPS) + ' ' + rndDigits(8)
+      var cl = last || rnd(['陳', '林', '黃', '張', '李', '吳']), cf = first || rnd(['家豪', '雅婷', '志明', '怡君', '冠宇', '品睿']);
+      // 新增＝加入共用名單，補上實名欄位讓此人在旅客區也完整可用
+      ORD_PEOPLE.push({
+        last: cl, first: cf, cnLast: cl, cnFirst: cf,
+        enLast: rnd(['CHEN', 'LIN', 'HUANG', 'CHANG']), enFirst: rnd(['CHIA HAO', 'YA TING', 'KUAN YU']),
+        tel: tel || '09' + rndDigits(8), email: '—', app: app || rnd(CT_APPS) + ' ' + rndDigits(8),
+        nation: rnd(['中國', '台灣', '香港', '日本']), gender: rnd(['男', '女']),
+        birth: (1980 + Math.floor(Math.random() * 20)) + '/0' + (1 + Math.floor(Math.random() * 9)) + '/1' + Math.floor(Math.random() * 9),
+        twId: rnd(['A', 'B', 'F']) + rndDigits(9), twPass: rndDigits(9), hkMacao: 'H' + rndDigits(8),
+        docNo: rndDigits(9), docExp: (2026 + Math.floor(Math.random() * 5)) + '/0' + (1 + Math.floor(Math.random() * 9)) + '/1' + Math.floor(Math.random() * 9)
       });
-      orderState.contacts = [ORD_CONTACTS.length - 1];  // 單選：新增即選中新聯絡人（取消其他選中）
+      orderState.contacts = [ORD_PEOPLE.length - 1];  // 單選：新增即切換到新聯絡人
     } else {
-      var c = ORD_CONTACTS[editContactIdx];
-      if (last) c.last = last; if (first) c.first = first; if (tel) c.tel = tel;
+      var c = ORD_PEOPLE[editContactIdx];
+      if (last) { c.last = last; c.cnLast = last; } if (first) { c.first = first; c.cnFirst = first; }  // 同步 cn 名（旅客區用）
+      if (tel) c.tel = tel;
       if (appName || appId) c.app = app;
     }
     closeSheets(); renderOrder();
@@ -5320,13 +5319,16 @@
       docNo: g('tv-docno') || rndDigits(9),
       docExp: g('tv-docexp') || (2026 + Math.floor(Math.random() * 5)) + '/0' + (1 + Math.floor(Math.random() * 9)) + '/1' + Math.floor(Math.random() * 9)
     };
+    obj.last = obj.cnLast; obj.first = obj.cnFirst;  // 聯絡人區以 last/first 顯示名字
     if (editTravelerIdx === null) {
-      ORD_TRAVELERS.push(obj);
-      var ni = ORD_TRAVELERS.length - 1;
+      // 新增＝加入共用名單，補上聯絡欄位讓此人在聯絡人區也完整可用
+      obj.tel = '09' + rndDigits(8); obj.email = '—'; obj.app = rnd(['WhatsApp', 'LINE', 'WeChat']) + ' ' + rndDigits(8);
+      ORD_PEOPLE.push(obj);
+      var ni = ORD_PEOPLE.length - 1;
       if (orderState.travelers.length < orderState.qty) orderState.travelers.push(ni);  // 未滿則自動選中新旅客
       else { orderState.travelers[orderState.travelers.length - 1] = ni; toast('已替換最後一位旅客'); }  // 已滿：替換最後一位
     } else {
-      ORD_TRAVELERS[editTravelerIdx] = obj;
+      Object.assign(ORD_PEOPLE[editTravelerIdx], obj);  // 合併：保留既有聯絡欄位(tel/app)
     }
     closeSheets(); renderOrder();
   });
