@@ -4810,6 +4810,14 @@
   ];
   var orderState = null;
   var ctScroll = 0;  // 聯絡人 chips 橫向滾動位置（跨重繪保留，避免切換時視圖跳動）
+  // 篩選裡選過的「使用日期」→ 轉成訂單頁日期 pick（帶進訂單填寫頁預選）；未選則 null。A/B 共用
+  function filterDateAsPick() {
+    var fd = fState.date;
+    if (!fd) return null;
+    if (typeof fd === 'object' && fd.y) return { y: fd.y, m: fd.m, d: fd.d, label: fd.label };
+    var dd = (fd === '明天') ? 2 : 1;  // 快捷「今天/明天」對齊原型固定基準 2026-09-01＝今天
+    return { y: 2026, m: 9, d: dd, label: '9月' + dd + '日' };
+  }
   function newOrderState() {
     var orderer = { last: '徐', first: '佳瑩', nation: '台灣', email: 'Lala.hsu@kkday.com', cc: '+886', phone: '0912345678' };
     // 預設選中與「訂購人資料」同名的聯絡人（找不到則退回第一位）
@@ -4817,7 +4825,7 @@
     if (defIdx < 0) defIdx = 0;
     return {
       qty: 1,
-      useDate: null,
+      useDate: filterDateAsPick(),  // 帶入篩選裡選過的使用日期（若有）
       flight: null,   // {type,airport,terminal,airline,no,date,time,visa}
       device: null,   // {model, imid}
       contacts: [defIdx],  // 選中的聯絡人索引（單選）：預設＝訂購人
