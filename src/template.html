@@ -2404,10 +2404,12 @@
     <div class="bs-body"><div class="fs-body" style="padding:8px 24px 24px;">
       <div class="inline-note inline-note--info" style="margin-bottom:16px">
         <span class="ic ic-16">{{IC_infoFill}}</span>
-        <span>在手機撥號鍵盤輸入「＊＃０６＃」可顯示IMID序號</span>
+        <span>在手機撥號鍵盤輸入「＊＃０６＃」可顯示 EID／IMID／IMID2 序號</span>
       </div>
       <div class="ff"><div class="ff-label">手機型號<span class="req">*</span></div><input class="ff-input" id="dv-model" placeholder="請輸入"></div>
-      <div class="ff"><div class="ff-label">IMID<span class="req">*</span></div><input class="ff-input" id="dv-imid" placeholder="請輸入15位IMID碼"></div>
+      <div class="ff"><div class="ff-label">EID<span class="req">*</span></div><input class="ff-input" id="dv-eid" placeholder="請輸入"></div>
+      <div class="ff"><div class="ff-label">IMID<span class="req">*</span></div><input class="ff-input" id="dv-imid" placeholder="請輸入"></div>
+      <div class="ff"><div class="ff-label">IMID2<span class="req">*</span></div><input class="ff-input" id="dv-imid2" placeholder="請輸入"></div>
     </div></div>
     <div class="fs-foot"><button class="cta" id="deviceConfirm">確定</button></div>
   </div>
@@ -4724,7 +4726,7 @@
       qty: 1,
       useDate: filterDateAsPick(),  // 帶入篩選裡選過的使用日期（若有）
       flight: null,   // {type,airport,terminal,airline,no,date,time,visa}
-      device: null,   // {model, imid}
+      device: null,   // {model, eid, imid, imid2}
       contacts: [defIdx],  // 選中的聯絡人索引（單選）：預設＝訂購人
       defContact: defIdx,  // 固定排最前的預設聯絡人（切換選中時不重排）
       ctExpanded: false,  // 聯絡人 chips 是否展開（換行顯示全部）
@@ -5117,14 +5119,18 @@
   function openDevice() {
     var d = orderState.device;
     document.getElementById('dv-model').value = d ? d.model : '';
+    document.getElementById('dv-eid').value = d ? d.eid : '';
     document.getElementById('dv-imid').value = d ? d.imid : '';
+    document.getElementById('dv-imid2').value = d ? d.imid2 : '';
     openSheet(document.getElementById('deviceSheet'));
   }
   document.getElementById('deviceConfirm').addEventListener('click', function () {
     // 未填欄位隨機補全（演示用假資料，避免出現「—」）
     orderState.device = {
       model: document.getElementById('dv-model').value || rnd(['iPhone 17', 'iPhone 17 Pro', 'iPhone 16', 'Galaxy S25', 'Pixel 10']),
-      imid: document.getElementById('dv-imid').value || '35' + rndDigits(13)
+      eid: document.getElementById('dv-eid').value || '89' + rndDigits(30),
+      imid: document.getElementById('dv-imid').value || '35' + rndDigits(13),
+      imid2: document.getElementById('dv-imid2').value || '35' + rndDigits(13)
     };
     closeSheets(); renderOrder();
   });
