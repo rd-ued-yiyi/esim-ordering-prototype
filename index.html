@@ -634,6 +634,16 @@
     overflow-x: auto; scrollbar-width: none;
   }
   .pl-cond-scroll::-webkit-scrollbar { display: none; }
+  /* 方案 B：流量 chips 尾端固定「∨」按鈕（開啟流量 sheet），左側白色漸變讓 chips 滑入時淡出（Figma 1202-105549） */
+  .pl-cond-more {
+    flex: 0 0 auto; display: flex; align-items: center; justify-content: center;
+    background: #fff; padding: 0 16px 0 6px; margin-left: -8px; position: relative; z-index: 1; color: #13A3B6;
+  }
+  .pl-cond-more::before {
+    content: ''; position: absolute; top: 0; bottom: 0; left: 0; width: 28px;
+    transform: translateX(-100%); background: linear-gradient(to right, rgba(255, 255, 255, 0), #fff); pointer-events: none;
+  }
+  .pl-cond-more .cc { display: inline-flex; align-items: center; }
   .cond-chip {
     display: inline-flex; align-items: center; gap: 4px; flex: 0 0 auto;
     background: var(--kk-surface-light); border-radius: var(--r-md);
@@ -1838,7 +1848,7 @@
             <span class="ic ic-20"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE0LjE2NjciIGhlaWdodD0iNy45MTY2NyIgdmlld0JveD0iMCAwIDE0LjE2NjcgNy45MTY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0wLjI0NDA3OCAwLjI0NDA3OEMwLjU2OTUxNSAtMC4wODEzNTkyIDEuMDk3MTUgLTAuMDgxMzU5MiAxLjQyMjU5IDAuMjQ0MDc4TDcuMDgzMzMgNS45MDQ4MkwxMi43NDQxIDAuMjQ0MDc4QzEzLjA2OTUgLTAuMDgxMzU5MiAxMy41OTcyIC0wLjA4MTM1OTIgMTMuOTIyNiAwLjI0NDA3OEMxNC4yNDggMC41Njk1MTUgMTQuMjQ4IDEuMDk3MTUgMTMuOTIyNiAxLjQyMjU5TDcuNjcyNTkgNy42NzI1OUM3LjM0NzE1IDcuOTk4MDMgNi44MTk1MSA3Ljk5ODAzIDYuNDk0MDggNy42NzI1OUwwLjI0NDA3OCAxLjQyMjU5Qy0wLjA4MTM1OTIgMS4wOTcxNSAtMC4wODEzNTkyIDAuNTY5NTE1IDAuMjQ0MDc4IDAuMjQ0MDc4WiIgZmlsbD0iIzIxMjEyMSIvPgo8L3N2Zz4=" width="14.17" height="7.92"></span>
           </button>
         </div>
-        <div class="pl-conds"><div class="pl-cond-fixed" id="plCondFixed"></div><div class="pl-cond-scroll" id="plCondScroll"></div></div>
+        <div class="pl-conds"><div class="pl-cond-fixed" id="plCondFixed"></div><div class="pl-cond-scroll" id="plCondScroll"></div><button class="pl-cond-more" id="plCondMore" aria-label="更多流量" hidden></button></div>
         <div class="pl-filters">
           <div class="pl-filter-fixed">
             <button class="fpill ficon" id="plFilterBtn"><span class="ic ic-16 ic-off"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjEyIiBoZWlnaHQ9IjkiIHZpZXdCb3g9IjAgMCAxMiA5IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8ZyBpZD0iVmVjdG9yIj4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0yLjgyMjQ2IDEuMjUwMDNMMC41MDAwMDkgMS4yNDk5OUMwLjIyMzg2NyAxLjI0OTk4IDQuOTI3NTZlLTA2IDEuNDczODQgMCAxLjc0OTk4Qy00LjkyNzA3ZS0wNiAyLjAyNjEyIDAuMjIzODQ5IDIuMjQ5OTggMC40OTk5OTEgMi4yNDk5OUwyLjgyMjQ4IDIuMjUwMDNDMy4wMzc2MyAyLjk3Mjg5IDMuNzA3MjYgMy41IDQuNSAzLjVDNS4yOTI3NCAzLjUgNS45NjIzNyAyLjk3Mjg5IDYuMTc3NTIgMi4yNTAwNEwxMS41IDIuMjQ5OTlDMTEuNzc2MSAyLjI0OTk5IDEyIDIuMDI2MTMgMTIgMS43NDk5OUMxMiAxLjQ3Mzg0IDExLjc3NjEgMS4yNDk5OSAxMS41IDEuMjQ5OTlMNi4xNzc1NCAxLjI1MDA0QzUuOTYyNDEgMC41MjcxNDUgNS4yOTI3NyAwIDQuNSAwQzMuNzA3MjMgMCAzLjAzNzU5IDAuNTI3MTQzIDIuODIyNDYgMS4yNTAwM1pNMy43NSAxLjc1QzMuNzUgMS4zMzU3OSA0LjA4NTc5IDEgNC41IDFDNC45MTQyMSAxIDUuMjUgMS4zMzU3OSA1LjI1IDEuNzVDNS4yNSAyLjE2NDIxIDQuOTE0MjEgMi41IDQuNSAyLjVDNC4wODU3OSAyLjUgMy43NTAwMSAyLjE2NDIxIDMuNzUgMS43NUMzLjc1IDEuNzUgMy43NSAxLjc1IDMuNzUgMS43NVoiIGZpbGw9ImJsYWNrIi8+CjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNMC41IDYuNzUwMDFMNi44MjI0NyA2Ljc1QzcuMDM3NjEgNi4wMjcxMyA3LjcwNzI1IDUuNSA4LjUgNS41QzkuMjkyNzYgNS41IDkuOTYyMzkgNi4wMjcxMyAxMC4xNzc1IDYuNzVMMTEuNSA2Ljc1MDAxQzExLjc3NjEgNi43NTAwMSAxMiA2Ljk3Mzg3IDEyIDcuMjUwMDFDMTIgNy41MjYxNiAxMS43NzYxIDcuNzUwMDEgMTEuNSA3Ljc1MDAxTDEwLjE3NzUgNy43NUM5Ljk2MjM5IDguNDcyODcgOS4yOTI3NSA5IDguNSA5QzcuNzA3MjUgOSA3LjAzNzYxIDguNDcyODcgNi44MjI0NyA3Ljc1TDAuNSA3Ljc1MDAxQzAuMjIzODU4IDcuNzUwMDEgMCA3LjUyNjE1IDAgNy4yNTAwMUMwIDYuOTczODcgMC4yMjM4NTcgNi43NTAwMSAwLjUgNi43NTAwMVpNOC41IDYuNUM4LjA4NTc5IDYuNSA3Ljc1IDYuODM1NzkgNy43NSA3LjI1QzcuNzUgNy42NjQyMSA4LjA4NTc5IDggOC41IDhDOC45MTQyMSA4IDkuMjUgNy42NjQyMSA5LjI1IDcuMjVDOS4yNSA2LjgzNTc5IDguOTE0MjEgNi41IDguNSA2LjVaIiBmaWxsPSJibGFjayIvPgo8L2c+Cjwvc3ZnPg==" width="12.00" height="9.00"></span><span class="ic ic-16 ic-on"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjEyIiBoZWlnaHQ9IjkiIHZpZXdCb3g9IjAgMCAxMiA5IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8ZyBpZD0iVmVjdG9yIj4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0yLjgyMjQ2IDEuMjUwMDNMMC41MDAwMDkgMS4yNDk5OUMwLjIyMzg2NyAxLjI0OTk4IDQuOTI3NTZlLTA2IDEuNDczODQgMCAxLjc0OTk4Qy00LjkyNzA3ZS0wNiAyLjAyNjEyIDAuMjIzODQ5IDIuMjQ5OTggMC40OTk5OTEgMi4yNDk5OUwyLjgyMjQ4IDIuMjUwMDNDMy4wMzc2MyAyLjk3Mjg5IDMuNzA3MjYgMy41IDQuNSAzLjVDNS4yOTI3NCAzLjUgNS45NjIzNyAyLjk3Mjg5IDYuMTc3NTIgMi4yNTAwNEwxMS41IDIuMjQ5OTlDMTEuNzc2MSAyLjI0OTk5IDEyIDIuMDI2MTMgMTIgMS43NDk5OUMxMiAxLjQ3Mzg0IDExLjc3NjEgMS4yNDk5OSAxMS41IDEuMjQ5OTlMNi4xNzc1NCAxLjI1MDA0QzUuOTYyNDEgMC41MjcxNDUgNS4yOTI3NyAwIDQuNSAwQzMuNzA3MjMgMCAzLjAzNzU5IDAuNTI3MTQzIDIuODIyNDYgMS4yNTAwM1pNMy43NSAxLjc1QzMuNzUgMS4zMzU3OSA0LjA4NTc5IDEgNC41IDFDNC45MTQyMSAxIDUuMjUgMS4zMzU3OSA1LjI1IDEuNzVDNS4yNSAyLjE2NDIxIDQuOTE0MjEgMi41IDQuNSAyLjVDNC4wODU3OSAyLjUgMy43NTAwMSAyLjE2NDIxIDMuNzUgMS43NUMzLjc1IDEuNzUgMy43NSAxLjc1IDMuNzUgMS43NVoiIGZpbGw9IiMxM0EzQjYiLz4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0wLjUgNi43NTAwMUw2LjgyMjQ3IDYuNzVDNy4wMzc2MSA2LjAyNzEzIDcuNzA3MjUgNS41IDguNSA1LjVDOS4yOTI3NiA1LjUgOS45NjIzOSA2LjAyNzEzIDEwLjE3NzUgNi43NUwxMS41IDYuNzUwMDFDMTEuNzc2MSA2Ljc1MDAxIDEyIDYuOTczODcgMTIgNy4yNTAwMUMxMiA3LjUyNjE2IDExLjc3NjEgNy43NTAwMSAxMS41IDcuNzUwMDFMMTAuMTc3NSA3Ljc1QzkuOTYyMzkgOC40NzI4NyA5LjI5Mjc1IDkgOC41IDlDNy43MDcyNSA5IDcuMDM3NjEgOC40NzI4NyA2LjgyMjQ3IDcuNzVMMC41IDcuNzUwMDFDMC4yMjM4NTggNy43NTAwMSAwIDcuNTI2MTUgMCA3LjI1MDAxQzAgNi45NzM4NyAwLjIyMzg1NyA2Ljc1MDAxIDAuNSA2Ljc1MDAxWk04LjUgNi41QzguMDg1NzkgNi41IDcuNzUgNi44MzU3OSA3Ljc1IDcuMjVDNy43NSA3LjY2NDIxIDguMDg1NzkgOCA4LjUgOEM4LjkxNDIxIDggOS4yNSA3LjY2NDIxIDkuMjUgNy4yNUM5LjI1IDYuODM1NzkgOC45MTQyMSA2LjUgOC41IDYuNVoiIGZpbGw9IiMxM0EzQjYiLz4KPC9nPgo8L3N2Zz4=" width="12.00" height="9.00"></span>篩選</button>
@@ -3742,7 +3752,11 @@
       dayChip.querySelector('.lb').textContent = state.days + '天';
       dayChip.addEventListener('click', openDaysGrid);
       fixed.appendChild(dayChip);
-      filteredOpts(state.tab, d0).forEach(function (o) {
+      // 選中流量檔 rotate 到最前（Figma 1202-105549），其後接續其餘檔位；選中帶 caret → 流量 sheet，其餘快速切換
+      var bopts = filteredOpts(state.tab, d0);
+      var si = bopts.map(function (o) { return o.t; }).indexOf(state.plan);
+      if (si > 0) bopts = bopts.slice(si).concat(bopts.slice(0, si));
+      bopts.forEach(function (o) {
         var isSel = o.t === state.plan;
         var c = el('<button class="cond-chip' + (isSel ? ' sel' : '') + '"><span class="lb"></span>' + (isSel ? '<span class="ic cc">' + ICONS.caretDown + '</span>' : '') + '</button>');
         c.querySelector('.lb').textContent = o.t;
@@ -3752,6 +3766,10 @@
         });
         conds.appendChild(c);
       });
+      var more = document.getElementById('plCondMore');  // 尾端固定「∨」→ 流量 sheet
+      more.innerHTML = '<span class="ic cc">' + ICONS.caretDown + '</span>';
+      more.hidden = false;
+      more.onclick = openFlowSheet;
     } else {
       // 方案 A（現行）：組合條件 chip（→ 滾輪＋展開流量面板 modal）+ 同 tab 快速切換 chips
       var edit = el('<button class="cond-chip sel"><span class="lb"></span><span class="ic ic-16">' + ICONS.pencil + '</span></button>');
@@ -3772,27 +3790,32 @@
         });
         conds.appendChild(c);
       });
+      document.getElementById('plCondMore').hidden = true;  // A 案無尾端「∨」
     }
     // centerSel='smooth'（點選切換/modal 確定）：選中項平滑滾到可視區中央；
     // centerSel='center'（進入列表頁）：選中項瞬時定位到中央（不播進場動畫）；
     // 不傳（排序等重渲染）：僅在選中項跑出可視區時拉回，不打斷使用者手動滾過的位置。
     // scrollTo 自動夾取邊界，滾不動時貼邊。
     // rAF 等螢幕切到 plans 後再量尺寸（進頁時 renderPlans 先於 go('plans')，隱藏態 rect 全 0）
-    conds.scrollLeft = prevScroll;
-    var selChip = conds.querySelector('.cond-chip.sel');
-    if (selChip) requestAnimationFrame(function () {
-      var sr = conds.getBoundingClientRect(), cr = selChip.getBoundingClientRect();
-      if (!sr.width) return;
-      var target = null;
-      if (centerSel) {
-        target = conds.scrollLeft + (cr.left + cr.width / 2) - (sr.left + sr.width / 2);
-      } else {
-        var pad = 16;
-        if (cr.left < sr.left + pad) target = conds.scrollLeft - (sr.left + pad - cr.left);
-        else if (cr.right > sr.right - pad) target = conds.scrollLeft + (cr.right - (sr.right - pad));
-      }
-      if (target !== null) conds.scrollTo({ left: Math.max(0, target), behavior: centerSel === 'smooth' ? 'smooth' : 'auto' });
-    });
+    if (state.variant === 'B') {
+      conds.scrollLeft = 0;  // 選中檔已 rotate 到最前，從左緣顯示（Figma 1202-105549）
+    } else {
+      conds.scrollLeft = prevScroll;
+      var selChip = conds.querySelector('.cond-chip.sel');
+      if (selChip) requestAnimationFrame(function () {
+        var sr = conds.getBoundingClientRect(), cr = selChip.getBoundingClientRect();
+        if (!sr.width) return;
+        var target = null;
+        if (centerSel) {
+          target = conds.scrollLeft + (cr.left + cr.width / 2) - (sr.left + sr.width / 2);
+        } else {
+          var pad = 16;
+          if (cr.left < sr.left + pad) target = conds.scrollLeft - (sr.left + pad - cr.left);
+          else if (cr.right > sr.right - pad) target = conds.scrollLeft + (cr.right - (sr.right - pad));
+        }
+        if (target !== null) conds.scrollTo({ left: Math.max(0, target), behavior: centerSel === 'smooth' ? 'smooth' : 'auto' });
+      });
+    }
 
     var list = applyFilters(buildPlans());
     if (sortMode === 0) list.sort(function (a, b) { return a.now - b.now; });
