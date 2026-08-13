@@ -1245,7 +1245,7 @@
   /* 新增按鈕：移到原展開收起位置、固定右側——無邊框 cyan 文字按鈕（Figma 1126-91395 Text primary：#13A3B6、px8 h36、gap4、+16 半粗） */
   .ct-add { flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: center; gap: 4px; height: 36px; padding: 0 8px; background: #fff; border: 0; font-size: 14px; line-height: 20px; font-weight: 600; color: #13A3B6; white-space: nowrap; }
   .ct-add .ic { width: 16px; height: 16px; }
-  /* 已選聯絡人卡：頭部 #F7FAFC + 名字/編輯，主體兩欄 kv（聯絡電話｜APP 聯絡方式，Figma 1110-86983） */
+  /* 已選聯絡人卡：頭部 #F7FAFC + 名字/編輯，主體上下堆疊 kv（聯絡電話↑值、APP 聯絡方式↑值，Figma 1110-86983） */
   .ct-card { border-radius: 8px; overflow: hidden; margin-top: 12px; }
   .ct-card-h { display: flex; align-items: center; background: #F7FAFC; border: 1px solid var(--kk-border-lighter); border-bottom: 0; border-radius: 8px 8px 0 0; }
   .ct-card-h .nm { flex: 1 1 auto; min-width: 0; padding: 12px; display: flex; align-items: center; gap: 8px; font-weight: 600; color: #212121; font-size: 14px; line-height: 20px; }
@@ -1254,7 +1254,8 @@
   .ct-card-h .act button { padding: 12px; }
   .ct-card-h .ic { width: 20px; height: 20px; }
   .ct-card-body { background: #fff; border: 1px solid var(--kk-border-lighter); border-top: 0; border-radius: 0 0 8px 8px; padding: 12px; }
-  .ct-card-kv { display: grid; grid-template-columns: 1fr 1fr; gap: 2px 12px; }
+  .ct-card-kv { display: flex; flex-direction: column; gap: 12px; }  /* 兩組上下堆疊，組間 12px（Figma 1110-86983） */
+  .ct-card-kv > div { display: flex; flex-direction: column; gap: 2px; }  /* 組內 標籤↑值，gap 2px */
   .ct-card-kv .k { font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
   .ct-card-kv .v { font-size: 14px; line-height: 20px; font-weight: 600; color: #212121; }
   /* 備註行（備註＝Body-lg Regular 16，非 semibold） */
