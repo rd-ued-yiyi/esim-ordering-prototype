@@ -292,7 +292,7 @@
   .field-head .label-lg { font-size: 18px; line-height: 26px; font-weight: 600; color: var(--kk-text-darker); white-space: nowrap; }
   /* 值緊跟標題後、箭頭再緊跟值（Figma 871-75700：用卡天數 5天 › 左對齊成組，不撐滿） */
   .field-head .placeholder { flex: 0 0 auto; min-width: 0; font-size: 18px; line-height: 26px; font-weight: 600; color: var(--kk-text-light); }
-  .field-head .placeholder.has-value { color: var(--kk-text-light); }  /* 已選值淺灰＝#BABBBE（Figma 871-75700 實測「5天」text-light，選前選後同色，不加深） */
+  .field-head .placeholder.has-value { color: var(--kk-text-darker); }  /* 手動選過天數後：值改為與標題同深色 #212121（強調已選）；未選時維持淺灰 placeholder */
   #daysRow > .ic-24 { margin-left: auto; }  /* 箭頭推到整行最右緣（Figma 871-75700：用卡天數 5天 靠左成組、› 貼右邊） */
   .field-head .label-sm { font-size: 14px; line-height: 20px; font-weight: 600; color: var(--kk-text-darker); white-space: nowrap; }
   .field-head .hint { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
@@ -343,6 +343,12 @@
   .opts-scroll::-webkit-scrollbar { display: none; }
   /* 頂部留白 6px 給第一排 badge(top:-4px 露出卡片上緣 4px)，負 margin 抵消——淨間距 8px */
   .opts-scroll { margin-top: -6px; position: relative; }
+  /* 天數 chips 與 流量檔橫滾區通欄：抵消 dest-card 16px 內距、延伸到卡片左右邊緣，
+     捲動內容直接顯示到卡邊、不被兩側內距色塊切斷（首/末項仍靠 16px padding 對齊其餘內容） */
+  .dest-card .chips-row, .dest-card .opts-scroll {
+    width: calc(100% + 32px); margin-left: -16px; margin-right: -16px;
+    padding-left: 16px; padding-right: 16px;
+  }
   .opts-row { display: flex; gap: 24px; width: max-content; padding-top: 6px; }  /* 三組拼合，組間 24px */
   .opts-grid { display: grid; grid-auto-flow: column; grid-template-rows: repeat(2, auto); gap: 8px; width: max-content; }
   /* 計費類目之間的虛線分隔（畫在 24px 組間隙中點）：顏色加深、更明顯 */
@@ -360,20 +366,20 @@
   .opt .t { font-size: 16px; line-height: 24px; font-weight: 600; color: var(--kk-text-darker); }
   .opt.sel .t { color: #13A3B6; }
   .opt .p { font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
-  /* 80%選擇 標籤（Figma 871-75700 實測）：珊瑚紅小圓角(4px)，貼卡片右上、僅露出卡片上緣 4px，右下角帶朝下小尖角 */
+  /* 80%選擇 標籤（Figma 871-75700 實測）：珊瑚紅小圓角(4px)，貼卡片右上、露出卡片上緣 4px；整體右移 4px 使下方尖角左緣正好貼齊卡片右緣 → 折紙尖角 */
   .opt .badge {
-    position: absolute; top: -4px; right: 0; z-index: 3;
+    position: absolute; top: -4px; right: -4px; z-index: 3;
     background: var(--kk-text-critical); color: #fff;
     font-size: 12px; line-height: 16px; font-weight: 600;
     padding: 2px 6px; white-space: nowrap;
     border-radius: 4px 4px 1px 4px;  /* 實測圓角 ~3-4px；右下(BR)為尖角側 */
   }
-  /* 右下角向下小尖角：貼齊 badge 右緣(right:0)、從卡角垂下、尖端朝下（實測 Figma x262-265 收斂） */
+  /* 右下向下小尖角：尖角寬 4px＝badge 右移量，left 緣落在卡片右緣、tip 朝下，形成折紙效果 */
   .opt .badge::after {
     content: ''; position: absolute; right: 0; bottom: -4px;
     width: 0; height: 0;
     border-top: 4px solid var(--kk-text-critical);
-    border-right: 3px solid transparent;
+    border-right: 4px solid transparent;
   }
 
   .cta {
@@ -2662,7 +2668,7 @@
     });
     var dv = document.getElementById('daysValue');
     dv.textContent = state.days + ' 天';
-    dv.classList.toggle('has-value', state.daysTouched);  // 未主動選時淺灰，主動選後深色
+    dv.classList.toggle('has-value', !!state.days);  // 有選中天數(含預設5天/highlight chip)即深色＝與標題同色；純空態才淺灰 placeholder
     renderOpts();  // 天數變化聯動流量檔：起價重算、檔位過濾、推薦 badge 調整；內部 revealOpt 已把選中檔位滾回可視區
     updateCta();
   }
