@@ -1949,7 +1949,7 @@
 
     <div class="dm-foot" id="dmFoot">
       <div class="fdesc">
-        <span>最多可選擇30個</span>
+        <span>最多可選擇5個</span>
         <span id="dmSelInfo" hidden>已選擇 <b id="dmSelCount">0</b> 個</span>
       </div>
       <div class="fbtns">
@@ -2912,7 +2912,7 @@
         list: ['阿聯酋','沙烏地阿拉伯','卡達','科威特','巴林','阿曼','約旦','埃及','摩洛哥','突尼西亞'] }
     ]
   };
-  var MAX_MULTI = 30;
+  var MAX_MULTI = 5;
 
   var dm = {
     el: document.getElementById('destModal'),
@@ -3116,14 +3116,13 @@
     pane.innerHTML = '';
     pane.appendChild(contTabsEl(pane, 'm'));
     GEO.continents.forEach(function (c, i) {
-      var g = groupEl(c.name, '<button class="gact"><span class="dm-check" data-cont="' + i + '"></span></button>');
+      var g = groupEl(c.name);
       g.setAttribute('data-sec', 'm' + i);
       var chips = el('<div class="dm-chips"></div>');
       c.countries.forEach(function (n) {
         chips.appendChild(chipEl(n, function (label, chipBtn) { toggleMulti(label, chipBtn); }, dm.multiSel.indexOf(n) >= 0));
       });
       g.appendChild(chips);
-      g.querySelector('.dm-check').addEventListener('click', function () { toggleContAll(i); });
       pane.appendChild(g);
     });
     syncMultiUI();
@@ -3137,29 +3136,11 @@
     }
     syncMultiUI();
   }
-  function toggleContAll(i) {
-    var cs = GEO.continents[i].countries;
-    var allIn = cs.every(function (n) { return dm.multiSel.indexOf(n) >= 0; });
-    if (allIn) {
-      dm.multiSel = dm.multiSel.filter(function (n) { return cs.indexOf(n) < 0; });
-    } else {
-      cs.forEach(function (n) {
-        if (dm.multiSel.indexOf(n) < 0 && dm.multiSel.length < MAX_MULTI) dm.multiSel.push(n);
-      });
-    }
-    syncMultiUI();
-  }
   function syncMultiUI() {
     var pane = document.getElementById('paneMulti');
     pane.querySelectorAll('.chip').forEach(function (c) {
       var n = c.getAttribute('data-raw') || c.querySelector('.chip-label').textContent;
       c.classList.toggle('sel', dm.multiSel.indexOf(n) >= 0);
-    });
-    pane.querySelectorAll('.dm-check').forEach(function (cb) {
-      var cs = GEO.continents[+cb.getAttribute('data-cont')].countries;
-      var hit = cs.filter(function (n) { return dm.multiSel.indexOf(n) >= 0; }).length;
-      cb.classList.toggle('on', hit === cs.length);           // 全選：勾
-      cb.classList.toggle('part', hit > 0 && hit < cs.length); // 部分：minus（indeterminate）
     });
     var n = dm.multiSel.length;
     dm.confirm.classList.toggle('enabled', n >= 2);  // 多國組合至少選擇 2 個
