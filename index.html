@@ -2847,7 +2847,7 @@
     row.querySelector('.rn').textContent = r.name;
     // 國家串用完整 list 拼出，統一交給 CSS 尾部省略（手寫 desc 有的只列了部分，短了不觸發省略號會像“顯示完了”）
     row.querySelector('.desc').textContent = (r.list && r.list.length) ? r.list.join('、') : r.desc;
-    row.querySelector('.cnt span').textContent = r.count + '個國家';
+    row.querySelector('.cnt span').textContent = '共' + r.count + '個國家';  // 數量前綴「共」（如 Figma 截圖：共12個國家）
     row.addEventListener('click', function () { onTap(r); });
     // 點「N個國家 ⓘ」→ 展開包含地區 bottom sheet（不觸發行選擇）
     row.querySelector('.cnt').addEventListener('click', function (e) {
