@@ -3821,7 +3821,7 @@
     });
     function bindCondChip(c, it) {  // 點選可跨計費方式；A 案前置 chip 的計費方式文字隨之更新
       c.addEventListener('click', function () {
-        state.tab = it.tab; state.plan = it.o.t;
+        state.tab = it.tab; state.plan = it.o.t; state.planTouched = true;  // 標記已選，否則 renderOpts(B) 會把 plan 重設回推薦檔
         renderOpts(); updateCta(); renderPlans('smooth');
       });
     }
