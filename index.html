@@ -713,11 +713,17 @@
     white-space: nowrap;
   }
   .fpill .lb { position: relative; }
-  /* 快捷篩選選中：青字 + 加粗 */
+  /* 快捷篩選選中（方案 A）：青字 + 加粗 */
   .fpill.fquick.sel { color: #13A3B6; font-weight: 600; }
   /* 下拉／日期／篩選選中：深字加粗 + 右上紅點 */
   .fpill.sel:not(.fquick) { font-weight: 600; }
   .fpill.sel:not(.fquick) .lb::after {
+    content: ''; position: absolute; top: -1px; right: -6px;
+    width: 5px; height: 5px; border-radius: 50%; background: #E65F50;
+  }
+  /* 方案 B：純文字快捷篩選選中改為「深字加粗 + 紅點」（對齊 DS SelectItem selected 純文字態，不用青字） */
+  :root[data-variant="B"] .fpill.fquick.sel { color: var(--kk-text-darker); }
+  :root[data-variant="B"] .fpill.fquick.sel .lb::after {
     content: ''; position: absolute; top: -1px; right: -6px;
     width: 5px; height: 5px; border-radius: 50%; background: #E65F50;
   }
