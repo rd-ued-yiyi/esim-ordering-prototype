@@ -2567,7 +2567,7 @@
     });
     var dv = document.getElementById('daysValue');
     dv.textContent = state.days + ' 天';
-    dv.classList.toggle('has-value', !!state.days);  // 有選中天數(含預設5天/highlight chip)即深色＝與標題同色；純空態才淺灰 placeholder
+    dv.classList.toggle('has-value', state.daysTouched);  // 預設(未手動點選)＝淺灰；手動點選後＝深色(與標題同色 #212121)
     renderOpts();  // 天數變化聯動流量檔：起價重算、檔位過濾、推薦 badge 調整；內部 revealOpt 已把選中檔位滾回可視區
     updateCta();
   }
