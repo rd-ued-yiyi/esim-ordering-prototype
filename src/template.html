@@ -4919,15 +4919,15 @@
     if (req.travelers) {
       var maxTv = st.qty;  // 旅客數 = 購買數量（每張 eSIM 一位旅客）
       if (st.travelers.length > maxTv) st.travelers = st.travelers.slice(0, maxTv);  // qty 下調時裁掉超額
-      var tvFull = st.travelers.length >= maxTv;
-      c += '<div class="ord-card"><div class="ord-sec-h"><div class="t">選擇 <span class="cnt">' + maxTv + '</span> 旅客' + (tvFull ? '<span class="hint">已選滿</span>' : '') + '</div></div>' +
+      // 數量表現＝「選擇旅客 (已選/上限)」青字比例（Figma 1074-81598：取代原「N 旅客 已選滿」）
+      c += '<div class="ord-card"><div class="ord-sec-h"><div class="t">選擇旅客 <span class="cnt">(' + st.travelers.length + '/' + maxTv + ')</span></div></div>' +
         '<div class="ct-area" id="tvArea"><div class="ct-chips-vp" id="tvChipsVp"><div class="ct-chips" id="tvChips"></div></div>' +
         '<button class="ct-add" id="tvAdd"><span class="ic">' + ICONS.plusCyan + '</span>新增</button></div>' +
         '<div id="tvCards"></div></div>';
     }
     if (req.contacts) {
-      var hasCt = st.contacts.length > 0;
-      c += '<div class="ord-card"><div class="ord-sec-h"><div class="t">選擇 <span class="cnt">1</span> 位聯絡人' + (hasCt ? '<span class="hint">已選滿</span>' : '') + '</div></div>' +
+      // 數量表現＝「選擇聯絡人 (已選/上限)」青字比例（上限 1）
+      c += '<div class="ord-card"><div class="ord-sec-h"><div class="t">選擇聯絡人 <span class="cnt">(' + st.contacts.length + '/1)</span></div></div>' +
         '<div class="ct-area" id="ctArea"><div class="ct-chips-vp" id="ctChipsVp"><div class="ct-chips" id="ctChips"></div></div>' +
         '<button class="ct-add" id="ctAdd"><span class="ic">' + ICONS.plusCyan + '</span>新增</button></div>' +
         '<div id="ctCards"></div></div>';
