@@ -76,12 +76,29 @@
     padding: 1px 6px; border-radius: 9px; font-weight: 600; }  /* header 測試標記 */
   /* 易用性測試引導文字（取代搜索框） */
   .kkh-guide { text-align: center; color: #212121; font-size: 16px; line-height: 24px; font-weight: 600; padding: 8px 0 4px; }
-  /* A/B 對照方案選擇器（易用性測試工具，僅落地頁可見；兩種交互方式對照） */
-  .kkh-variant { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 2px 0 6px; }
-  .kkh-variant .lb { font-size: 13px; color: var(--kk-text-medium); }
-  .kkh-variant .seg { display: inline-flex; background: #EEF1F5; border-radius: 999px; padding: 3px; }
-  .kkh-variant .seg-btn { padding: 6px 18px; border-radius: 999px; font-size: 14px; line-height: 20px; font-weight: 600; color: var(--kk-text-medium); background: transparent; }
-  .kkh-variant .seg-btn.sel { background: #fff; color: #13A3B6; box-shadow: 0 1px 3px rgba(17,25,40,.12); }
+  /* A/B 對照方案入口卡（易用性測試：兩案並排放大，點卡即選定方案並進入 eSIM 流程） */
+  .kkh-plans { display: flex; gap: 14px; padding: 28px 16px; }
+  .kkh-plan {
+    flex: 1 1 0; min-width: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px;
+    min-height: 260px; padding: 32px 16px;
+    background: #fff; border: 1px solid var(--kk-border-lighter); border-radius: 20px;
+    box-shadow: 0 6px 20px rgba(17, 25, 40, .06);
+    cursor: pointer; transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+  }
+  .kkh-plan:active { transform: scale(.98); }
+  @media (hover: hover) { .kkh-plan:hover { border-color: var(--kk-primary-medium); box-shadow: 0 10px 26px rgba(19, 163, 182, .16); } }
+  .kkh-plan .pbadge {
+    width: 68px; height: 68px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 32px; font-weight: 700; color: #fff; letter-spacing: .5px;
+    background: linear-gradient(135deg, #34C8D3, #13A3B6);
+    box-shadow: 0 8px 18px rgba(19, 163, 182, .30);
+  }
+  .kkh-plan .ptit { font-size: 20px; line-height: 28px; font-weight: 700; color: var(--kk-text-darker); }
+  .kkh-plan .pcta { display: inline-flex; align-items: center; gap: 4px; font-size: 14px; line-height: 20px; font-weight: 600; color: #13A3B6; }
+  .kkh-plan .parr { transition: transform .15s ease; }
+  .kkh-plan:active .parr { transform: translateX(3px); }
   .kkh-body { background: #fff; }
   .kkh-cats { display: flex; padding: 16px 8px 4px; }  /* 5 個入口一行均分（簡化版，無橫滑） */
   .kkh-cat { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 6px;
@@ -1438,22 +1455,20 @@
           <div class="kkh-logo">kkday</div>
           <span class="kkh-test">易用性測試</span>
         </div>
-        <div class="kkh-guide">點擊 eSIM 進入購買流程</div>
-        <div class="kkh-variant" id="kkhVariant">
-          <span class="lb">體驗方案</span>
-          <div class="seg">
-            <button class="seg-btn" data-variant="A">方案 A</button>
-            <button class="seg-btn" data-variant="B">方案 B</button>
-          </div>
-        </div>
+        <div class="kkh-guide">選擇一種方案，開始體驗 eSIM 訂購流程</div>
       </div>
       <div class="kkh-body">
-        <div class="kkh-cats">
-          <button class="kkh-cat" data-action="kkh-demo"><span class="em">🎫</span><span class="lb">門票/體驗</span></button>
-          <button class="kkh-cat" data-action="kkh-demo"><span class="em">🍱</span><span class="lb">餐飲美食</span></button>
-          <button class="kkh-cat" data-action="enter-esim"><span class="em">📶</span><span class="lb">eSIM</span><span class="hotdot">HOT</span></button>
-          <button class="kkh-cat" data-action="kkh-demo"><span class="em">🏨</span><span class="lb">住宿</span></button>
-          <button class="kkh-cat" data-action="kkh-demo"><span class="em">🚄</span><span class="lb">交通</span></button>
+        <div class="kkh-plans" id="kkhPlans">
+          <button class="kkh-plan" data-variant="A">
+            <span class="pbadge">A</span>
+            <span class="ptit">方案 A</span>
+            <span class="pcta">進入體驗<span class="parr">→</span></span>
+          </button>
+          <button class="kkh-plan" data-variant="B">
+            <span class="pbadge">B</span>
+            <span class="ptit">方案 B</span>
+            <span class="pcta">進入體驗<span class="parr">→</span></span>
+          </button>
         </div>
       </div>
     </section>
@@ -2411,9 +2426,6 @@
   })();
   function syncVariantUI() {
     document.documentElement.setAttribute('data-variant', state.variant);
-    document.querySelectorAll('#kkhVariant .seg-btn').forEach(function (b) {
-      b.classList.toggle('sel', b.getAttribute('data-variant') === state.variant);
-    });
   }
   function setVariant(v) {
     if (v !== 'A' && v !== 'B') return;
@@ -3229,9 +3241,9 @@
     });
   });
 
-  // A/B 方案切換（落地頁分段控制）＋ 初始化
-  document.querySelectorAll('#kkhVariant .seg-btn').forEach(function (b) {
-    b.addEventListener('click', function () { setVariant(b.getAttribute('data-variant')); });
+  // A/B 方案入口卡：點卡＝選定方案並進入 eSIM 流程
+  document.querySelectorAll('#kkhPlans .kkh-plan').forEach(function (b) {
+    b.addEventListener('click', function () { setVariant(b.getAttribute('data-variant')); go('home'); });
   });
   syncVariantUI();
 
