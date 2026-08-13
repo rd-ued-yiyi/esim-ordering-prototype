@@ -1333,7 +1333,9 @@
   /* 已填資料網格（航班/裝置）：k=12 #9C9DA0 / v=14 #212121 */
   .ord-kv { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; }
   .ord-kv .k { font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
-  .ord-kv .v { font-size: 14px; line-height: 20px; font-weight: 600; color: #212121; margin-top: 2px; }
+  .ord-kv .v { font-size: 14px; line-height: 20px; font-weight: 600; color: #212121; margin-top: 2px; word-break: break-all; }
+  /* 已填資料外框：航班/裝置的 kv 收進描邊圓角盒（Figma 1074-81598：border-lighter r8 p12） */
+  .ord-databox { border: 1px solid var(--kk-border-lighter); border-radius: 8px; padding: 12px; }
   /* 訂購人資料明細行：icon16 + 14/20 #212121，行距 gap4 */
   .ord-info { display: flex; flex-direction: column; gap: 4px; }
   .ord-info-line { display: flex; align-items: center; gap: 8px; color: #212121; font-size: 14px; line-height: 20px; }
@@ -1470,6 +1472,7 @@
   .ff:last-child { margin-bottom: 0; }
   .ff-label { font-size: 13px; color: var(--kk-text-darker); margin-bottom: 6px; }
   .ff-label .req { color: #EF7A70; margin-left: 2px; }
+  .ff-hint { margin-top: 4px; font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }  /* 欄位下方輔助說明（如「請參考護照英文姓名」） */
   .ff-input, .ff-select, .ff-area { width: 100%; border: 1px solid var(--kk-border-lighter); border-radius: 8px; padding: 12px; font-size: 16px; line-height: 20px; color: var(--kk-text-darker); background: #fff; }
   .ff-input::placeholder, .ff-area::placeholder { color: var(--kk-text-light); }
   .ff-input:focus, .ff-select:focus, .ff-area:focus { outline: none; border-color: #212121; }  /* 选中态深灰边框（Figma 1144-92340 border-darker #212121） */
@@ -2378,6 +2381,26 @@
       <p class="ct-note">為方便您下次快速預訂，系統已保存旅客資訊。您擁有完全的控制權，可隨時前往「會員資料」或「常用旅客」刪除或編輯資料。</p>
     </div></div>
     <div class="fs-foot"><button class="cta" id="contactConfirm">確定</button></div>
+  </div>
+
+  <!-- 旅客資料 sheet（Figma 1281-118787） -->
+  <div class="bsheet tall" id="travelerSheet">
+    <div class="bs-handle"></div>
+    <div class="bs-bar"><button class="bs-close" data-bs-close aria-label="關閉"><span class="ic ic-24">{{IC_cross}}</span></button><span class="bs-title" id="travelerTitle">新增旅客資料</span><span class="bs-spacer"></span></div>
+    <div class="bs-body"><div class="fs-body" style="padding:20px 16px;">
+      <div class="ff"><div class="ff-label">國籍<span class="req">*</span></div><div class="ff-selwrap"><select class="ff-select" id="tv-nation"><option value="">請選擇</option><option>中國</option><option>台灣</option><option>香港</option><option>澳門</option><option>日本</option><option>韓國</option><option>其他</option></select><span class="ic chev">{{IC_arrowDown}}</span></div></div>
+      <div class="ff-row"><div class="ff"><div class="ff-label">中文姓<span class="req">*</span></div><input class="ff-input" id="tv-cnlast" placeholder="例：楊"></div><div class="ff"><div class="ff-label">中文名<span class="req">*</span></div><input class="ff-input" id="tv-cnfirst" placeholder="例：冪"></div></div>
+      <div class="ff-row"><div class="ff"><div class="ff-label">英文姓<span class="req">*</span></div><input class="ff-input" id="tv-enlast" placeholder="例：CHEN"><div class="ff-hint">請參考護照英文姓名</div></div><div class="ff"><div class="ff-label">英文名<span class="req">*</span></div><input class="ff-input" id="tv-enfirst" placeholder="例：PIN RUI"><div class="ff-hint">請參考護照英文姓名</div></div></div>
+      <div class="ff"><div class="ff-label">性別<span class="req">*</span></div><div class="ff-radio"><label><input type="radio" name="tv-gender" value="男"><span class="radio"></span>男</label><label><input type="radio" name="tv-gender" value="女"><span class="radio"></span>女</label></div></div>
+      <div class="ff"><div class="ff-label">出生日期<span class="req">*</span></div><div class="ff-selwrap"><input class="ff-input" id="tv-birth" readonly placeholder="請選擇"><span class="ic chev">{{IC_arrowDown}}</span></div></div>
+      <div class="ff"><div class="ff-label">台灣身分證字號<span class="req">*</span></div><input class="ff-input" id="tv-twid" placeholder="請輸入台灣身分證字號"></div>
+      <div class="ff"><div class="ff-label">台胞證字號<span class="req">*</span></div><input class="ff-input" id="tv-twpass" placeholder="請輸入台胞證字號"></div>
+      <div class="ff"><div class="ff-label">港澳回鄉證號<span class="req">*</span></div><input class="ff-input" id="tv-hkmacao" placeholder="請輸入港澳回鄉證號"></div>
+      <div class="ff"><div class="ff-label">證件號碼（護照/身分證）<span class="req">*</span></div><input class="ff-input" id="tv-docno" placeholder="請輸入證件號碼"></div>
+      <div class="ff"><div class="ff-label">證件效期（護照/身分證）<span class="req">*</span></div><div class="ff-selwrap"><input class="ff-input" id="tv-docexp" readonly placeholder="請選擇"><span class="ic chev">{{IC_arrowDown}}</span></div></div>
+      <p class="ct-note">為方便您下次快速預訂，系統已保存旅客資訊。您擁有完全的控制權，可隨時前往「會員資料」或「常用旅客」刪除或編輯資料。</p>
+    </div></div>
+    <div class="fs-foot"><button class="cta" id="travelerConfirm">確定</button></div>
   </div>
 
   <!-- 航班資訊 sheet（Figma 1074-82959） -->
@@ -4707,8 +4730,16 @@
     { last: '成', first: '龍',   tel: '13900004444', email: 'jackie@example.com', app: 'WeChat jc_dragon' },
     { last: '越前', first: '龍馬', tel: '13900005555', email: 'ryoma@example.com', app: 'Line echizen' }
   ];
+  // 旅客資料（實名認證用）：與聯絡人同名池，但含證件/出生等實名欄位（Figma 1281-118787）
+  var ORD_TRAVELERS = [
+    { enLast: 'YANG', enFirst: 'MI', cnLast: '楊', cnFirst: '冪', nation: '中國', gender: '女', birth: '1993/10/11', twId: 'A128374873', twPass: '239024778', hkMacao: 'H08123456', docNo: '239024778', docExp: '2025/10/11' },
+    { enLast: 'HSU', enFirst: 'CHIA YING', cnLast: '徐', cnFirst: '佳瑩', nation: '台灣', gender: '女', birth: '1990/05/20', twId: 'F223456789', twPass: '—', hkMacao: '—', docNo: '312345678', docExp: '2028/03/15' },
+    { enLast: 'CHEUNG', enFirst: 'HOK YAU', cnLast: '張', cnFirst: '學友', nation: '香港', gender: '男', birth: '1961/07/10', twId: '—', twPass: '—', hkMacao: 'H11223344', docNo: 'K12345678', docExp: '2027/12/01' },
+    { enLast: 'FUJI', enFirst: 'SYUSUKE', cnLast: '不二', cnFirst: '周助', nation: '日本', gender: '男', birth: '1996/02/29', twId: '—', twPass: '—', hkMacao: '—', docNo: 'TR9876543', docExp: '2029/08/20' }
+  ];
   var orderState = null;
   var ctScroll = 0;  // 聯絡人 chips 橫向滾動位置（跨重繪保留，避免切換時視圖跳動）
+  var tvScroll = 0;  // 旅客 chips 橫向滾動位置
   // 篩選裡選過的「使用日期」→ 轉成訂單頁日期 pick（帶進訂單填寫頁預選）；未選則 null。A/B 共用
   function filterDateAsPick() {
     var fd = fState.date;
@@ -4729,6 +4760,8 @@
       device: null,   // {model, eid, imid, imid2}
       contacts: [defIdx],  // 選中的聯絡人索引（單選）：預設＝訂購人
       defContact: defIdx,  // 固定排最前的預設聯絡人（切換選中時不重排）
+      travelers: [0],      // 選中的旅客索引（多選，上限＝購買數量）：預設選第一位
+      defTraveler: 0,      // 固定排最前的預設旅客
       ctExpanded: false,  // 聯絡人 chips 是否展開（換行顯示全部）
       orderer: orderer,
       remark: ''
@@ -4741,7 +4774,7 @@
     var device = w.indexOf('需EID/IMEI') >= 0;     // 只有需 EID/IMEI 的商品才要填裝置資訊
     var realname = w.indexOf('需線下實名認證') >= 0;  // 需實名 → 要填聯絡人
     var needDate = w.indexOf('需指定啟用日') >= 0;   // 僅「需指定啟用日」商品才需在訂單頁選使用日期（Figma 1249-109383）
-    return { date: needDate, flight: flight, device: device, contacts: flight || realname };
+    return { date: needDate, flight: flight, device: device, travelers: realname, contacts: flight || realname };
   }
   function daysNumOf(p) { var m = /(\d+)\s*天/.exec(p.title + ' ' + (p.spec || '')); return m ? +m[1] : (state.days ? +state.days : 7); }
 
@@ -4869,18 +4902,32 @@
     // coupon banner 佔位：置於卡片流最上面（Figma 1074-82361）；下方 JS 把 #ordCoupon 節點移入。A/B 兩案一致。
     var c = '<div class="ord-coupon-slot" id="ordCouponSlot"></div>';
     if (req.flight) {
-      c += '<div class="ord-card"><div class="ord-sec-h"><div class="t">航班資訊</div>' +
+      c += '<div class="ord-card"><div class="ord-sec-h"><div class="t">抵達航班資訊</div>' +
         '<button class="ord-edit' + (st.flight ? '' : ' empty') + '" id="ordFlightEdit">' + (st.flight ? '' : '請填寫') + '<span class="ic">' + ICONS.editLine + '</span></button></div>' +
-        (st.flight ? flightKvHtml(st.flight) : '') + '</div>';
+        (st.flight ? '<div class="ord-databox">' + flightKvHtml(st.flight) + '</div>' : '') + '</div>';
     }
     if (req.device) {
       c += '<div class="ord-card"><div class="ord-sec-h"><div class="t">裝置資訊</div>' +
         '<button class="ord-edit' + (st.device ? '' : ' empty') + '" id="ordDeviceEdit">' + (st.device ? '' : '請填寫') + '<span class="ic">' + ICONS.editLine + '</span></button></div>' +
-        (st.device ? '<div class="ord-kv"><div><div class="k">手機型號</div><div class="v">' + st.device.model + '</div></div><div><div class="k">IMID</div><div class="v">' + st.device.imid + '</div></div></div>' : '') + '</div>';
+        (st.device ? '<div class="ord-databox"><div class="ord-kv">' +
+          '<div><div class="k">手機型號</div><div class="v">' + st.device.model + '</div></div>' +
+          '<div><div class="k">EID</div><div class="v">' + st.device.eid + '</div></div>' +
+          '<div><div class="k">IMID</div><div class="v">' + st.device.imid + '</div></div>' +
+          '<div><div class="k">IMID2</div><div class="v">' + st.device.imid2 + '</div></div>' +
+        '</div></div>' : '') + '</div>';
+    }
+    if (req.travelers) {
+      var maxTv = st.qty;  // 旅客數 = 購買數量（每張 eSIM 一位旅客）
+      if (st.travelers.length > maxTv) st.travelers = st.travelers.slice(0, maxTv);  // qty 下調時裁掉超額
+      var tvFull = st.travelers.length >= maxTv;
+      c += '<div class="ord-card"><div class="ord-sec-h"><div class="t">選擇 <span class="cnt">' + maxTv + '</span> 旅客' + (tvFull ? '<span class="hint">已選滿</span>' : '') + '</div></div>' +
+        '<div class="ct-area" id="tvArea"><div class="ct-chips-vp" id="tvChipsVp"><div class="ct-chips" id="tvChips"></div></div>' +
+        '<button class="ct-add" id="tvAdd"><span class="ic">' + ICONS.plusCyan + '</span>新增</button></div>' +
+        '<div id="tvCards"></div></div>';
     }
     if (req.contacts) {
       var hasCt = st.contacts.length > 0;
-      c += '<div class="ord-card"><div class="ord-sec-h"><div class="t">選擇 <span class="cnt">1</span> 位聯絡人' + (hasCt ? '<span class="hint">已選擇</span>' : '') + '</div></div>' +
+      c += '<div class="ord-card"><div class="ord-sec-h"><div class="t">選擇 <span class="cnt">1</span> 位聯絡人' + (hasCt ? '<span class="hint">已選滿</span>' : '') + '</div></div>' +
         '<div class="ct-area" id="ctArea"><div class="ct-chips-vp" id="ctChipsVp"><div class="ct-chips" id="ctChips"></div></div>' +
         '<button class="ct-add" id="ctAdd"><span class="ic">' + ICONS.plusCyan + '</span>新增</button></div>' +
         '<div id="ctCards"></div></div>';
@@ -4916,6 +4963,7 @@
     if (byId('ordRemarkRow')) byId('ordRemarkRow').onclick = openRemark;
     if (byId('ordDateMore')) byId('ordDateMore').onclick = function () { dateReturn = 'orderUse'; openDateSheet(); };
     if (req.date) renderOrdDateChips();
+    if (req.travelers) renderTravelers();
     if (req.contacts) renderContacts();
   }
   // 已填航班：兩欄逐列（航班類別｜航班編號 / 抵達機場｜抵達日期 / 航廈｜抵達時間 / 航空公司名稱｜落地簽證），Figma 1146-95005
@@ -5013,6 +5061,57 @@
       cards.appendChild(card);
     });
   }
+  // 旅客：多選（上限＝購買數量）；卡頭＝英文名｜中文名 + 編輯 + 刪除(X)（Figma 1110-86983 / 1281-118787）
+  function renderTravelers() {
+    var chips = document.getElementById('tvChips'), cards = document.getElementById('tvCards');
+    if (!chips) return;
+    chips.innerHTML = ''; cards.innerHTML = '';
+    var area = document.getElementById('tvArea'), addBtn = document.getElementById('tvAdd'), vp = document.getElementById('tvChipsVp');
+    var maxTv = orderState.qty;
+    var allIdx = ORD_TRAVELERS.map(function (_, i) { return i; });
+    var defIdx = (orderState.defTraveler != null) ? orderState.defTraveler : 0;
+    var order = (allIdx.indexOf(defIdx) >= 0 ? [defIdx] : []).concat(allIdx.filter(function (i) { return i !== defIdx; }));
+    order.forEach(function (i) {
+      var t = ORD_TRAVELERS[i];
+      var chip = el('<button class="ct-chip">' + t.cnLast + t.cnFirst + '</button>');
+      if (orderState.travelers.indexOf(i) >= 0) chip.classList.add('sel');
+      chip.onclick = function () {
+        var pos = orderState.travelers.indexOf(i);
+        if (pos >= 0) { orderState.travelers.splice(pos, 1); }          // 取消選中
+        else if (orderState.travelers.length >= maxTv) { toast('最多選擇 ' + maxTv + ' 位旅客'); return; }  // 已達上限
+        else { orderState.travelers.push(i); }                          // 新增選中
+        renderOrder();
+      };
+      chips.appendChild(chip);
+    });
+    if (addBtn) addBtn.onclick = function () { editTravelerIdx = null; openTraveler(); };
+    var updateEnd = function () { if (!vp) return; tvScroll = chips.scrollLeft; vp.classList.toggle('at-end', chips.scrollLeft + chips.clientWidth >= chips.scrollWidth - 1); };
+    chips.onscroll = updateEnd;
+    requestAnimationFrame(function () {
+      area.classList.toggle('has-scroll', chips.scrollWidth > chips.clientWidth + 1);
+      chips.scrollLeft = tvScroll; updateEnd();
+    });
+    orderState.travelers.forEach(function (i) {
+      var t = ORD_TRAVELERS[i];
+      var card = el('<div class="ct-card">' +
+        '<div class="ct-card-h"><div class="nm">' + t.enLast + ', ' + t.enFirst + '<span class="sep"></span>' + t.cnLast + t.cnFirst + '</div>' +
+        '<div class="act"><button class="edit"><span class="ic">' + ICONS.editLine + '</span></button>' +
+        '<button class="del" aria-label="移除"><span class="ic">' + ICONS.cross + '</span></button></div></div>' +
+        '<div class="ct-card-body"><div class="ord-kv">' +
+          '<div><div class="k">國籍</div><div class="v">' + t.nation + '</div></div>' +
+          '<div><div class="k">性別/出生日期</div><div class="v">' + t.gender + ' ' + t.birth + '</div></div>' +
+          '<div><div class="k">台灣身分證字號</div><div class="v">' + t.twId + '</div></div>' +
+          '<div><div class="k">台胞證字號</div><div class="v">' + t.twPass + '</div></div>' +
+          '<div><div class="k">證件號碼（護照/身分證）</div><div class="v">' + t.docNo + '</div></div>' +
+          '<div><div class="k">證件效期（護照/身分證）</div><div class="v">' + t.docExp + '</div></div>' +
+        '</div></div></div>');
+      card.querySelector('.edit').onclick = function () { editTravelerIdx = i; openTraveler(); };
+      card.querySelector('.del').onclick = function () {  // X＝取消選中該旅客
+        var pos = orderState.travelers.indexOf(i); if (pos >= 0) orderState.travelers.splice(pos, 1); renderOrder();
+      };
+      cards.appendChild(card);
+    });
+  }
 
   // ---- 訂購人資料 sheet ----
   function openOrderer() {
@@ -5081,6 +5180,52 @@
       var c = ORD_CONTACTS[editContactIdx];
       if (last) c.last = last; if (first) c.first = first; if (tel) c.tel = tel;
       if (appName || appId) c.app = app;
+    }
+    closeSheets(); renderOrder();
+  });
+
+  // ---- 旅客 sheet（新增/編輯）----
+  var editTravelerIdx = null;
+  function openTraveler() {
+    var g = function (id) { return document.getElementById(id); };
+    document.getElementById('travelerTitle').textContent = editTravelerIdx === null ? '新增旅客資料' : '編輯旅客資料';
+    var t = editTravelerIdx === null ? {} : ORD_TRAVELERS[editTravelerIdx];
+    g('tv-nation').value = t.nation || '';
+    g('tv-cnlast').value = t.cnLast || ''; g('tv-cnfirst').value = t.cnFirst || '';
+    g('tv-enlast').value = t.enLast || ''; g('tv-enfirst').value = t.enFirst || '';
+    document.querySelectorAll('input[name=tv-gender]').forEach(function (r) { r.checked = t.gender === r.value; });
+    g('tv-birth').value = (t.birth && t.birth !== '—') ? t.birth : '';
+    g('tv-twid').value = (t.twId && t.twId !== '—') ? t.twId : '';
+    g('tv-twpass').value = (t.twPass && t.twPass !== '—') ? t.twPass : '';
+    g('tv-hkmacao').value = (t.hkMacao && t.hkMacao !== '—') ? t.hkMacao : '';
+    g('tv-docno').value = (t.docNo && t.docNo !== '—') ? t.docNo : '';
+    g('tv-docexp').value = (t.docExp && t.docExp !== '—') ? t.docExp : '';
+    syncSelPh(g('tv-nation'));
+    openSheet(document.getElementById('travelerSheet'));
+  }
+  document.getElementById('travelerConfirm').addEventListener('click', function () {
+    var g = function (id) { return document.getElementById(id).value; };
+    var gender = (document.querySelector('input[name=tv-gender]:checked') || {}).value;
+    // 未填欄位隨機補全（演示用假資料，避免出現空白）
+    var obj = {
+      nation: g('tv-nation') || rnd(['中國', '台灣', '香港', '日本']),
+      cnLast: g('tv-cnlast') || rnd(['陳', '林', '黃', '張', '李']), cnFirst: g('tv-cnfirst') || rnd(['家豪', '雅婷', '冠宇', '品睿']),
+      enLast: (g('tv-enlast') || rnd(['CHEN', 'LIN', 'HUANG', 'CHANG'])).toUpperCase(), enFirst: (g('tv-enfirst') || rnd(['CHIA HAO', 'YA TING', 'KUAN YU'])).toUpperCase(),
+      gender: gender || rnd(['男', '女']),
+      birth: g('tv-birth') || (1980 + Math.floor(Math.random() * 20)) + '/0' + (1 + Math.floor(Math.random() * 9)) + '/1' + Math.floor(Math.random() * 9),
+      twId: g('tv-twid') || (rnd(['A', 'B', 'F']) + rndDigits(9)),
+      twPass: g('tv-twpass') || rndDigits(9),
+      hkMacao: g('tv-hkmacao') || ('H' + rndDigits(8)),
+      docNo: g('tv-docno') || rndDigits(9),
+      docExp: g('tv-docexp') || (2026 + Math.floor(Math.random() * 5)) + '/0' + (1 + Math.floor(Math.random() * 9)) + '/1' + Math.floor(Math.random() * 9)
+    };
+    if (editTravelerIdx === null) {
+      ORD_TRAVELERS.push(obj);
+      var ni = ORD_TRAVELERS.length - 1;
+      if (orderState.travelers.length < orderState.qty) orderState.travelers.push(ni);  // 未滿則自動選中新旅客
+      else { orderState.travelers[orderState.travelers.length - 1] = ni; toast('已替換最後一位旅客'); }  // 已滿：替換最後一位
+    } else {
+      ORD_TRAVELERS[editTravelerIdx] = obj;
     }
     closeSheets(); renderOrder();
   });
@@ -5197,6 +5342,7 @@
     if (req.date && !st.useDate) { msg = '請選擇使用日期'; target = document.querySelector('.ord-date-sec'); }
     else if (req.flight && !st.flight) { msg = '請填寫航班資訊'; target = cardOf(byId('ordFlightEdit')); }
     else if (req.device && !st.device) { msg = '請填寫裝置資訊'; target = cardOf(byId('ordDeviceEdit')); }
+    else if (req.travelers && (!st.travelers || st.travelers.length < st.qty)) { msg = '請選擇 ' + st.qty + ' 位旅客'; target = cardOf(byId('tvArea')); }
     else if (req.contacts && (!st.contacts || !st.contacts.length)) { msg = '請選擇聯絡人'; target = cardOf(byId('ctArea')); }
     if (msg) {
       toast(msg);
