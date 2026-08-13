@@ -40,6 +40,18 @@ def raw_svg(name, folder="icons", recolor=None):
     txt = re.sub(r'(<svg\b[^>]*?)\s+width="[\d.]+"\s+height="[\d.]+"', r'\1', txt, count=1)
     return re.sub(r'\s+', ' ', txt).strip()  # 单行：可安全注入 JS 字符串
 
+def uniquify_svg_ids(markup, suffix):
+    """给内联 SVG 的所有 id 及其引用（url(#..)/href/mask/clip-path）追加 suffix，
+    避免同一段 SVG 被内联多次时 id 冲突（url(#id) 只会解析到文档中第一个同名 id，
+    若第一个在 display:none 子树里，mask 会算成空 → 后续实例的描边整块消失）。"""
+    for _id in set(re.findall(r'id="([^"]+)"', markup)):
+        new = _id + suffix
+        markup = (markup
+                  .replace(f'id="{_id}"', f'id="{new}"')
+                  .replace(f'url(#{_id})', f'url(#{new})')
+                  .replace(f'href="#{_id}"', f'href="#{new}"'))
+    return markup
+
 def file_img(relpath, recolor=None):
     """读取 svg 文件 → data-URI <img>（保留 intrinsic 宽高＝设计尺寸，去掉 preserveAspectRatio 防变形）。"""
     txt = (ROOT / relpath).read_text(encoding="utf-8")
@@ -193,6 +205,11 @@ subs = {
     "{{IC_ticket1dash}}":  raw_svg("ticket1-dash", "detail"),
     "{{IC_ticket2}}":      raw_svg("ticket2", "detail"),
     "{{IC_ticket2dash}}":  raw_svg("ticket2-dash", "detail"),
+    # 订单页 coupon 的票券：与详情页同图但 id 加 _o 后缀，避免两处内联 mask id 冲突（详情页在隐藏子树 → 空 mask → 订单页描边消失）
+    "{{IC_ticket1_ord}}":      uniquify_svg_ids(raw_svg("ticket1", "detail"), "_o"),
+    "{{IC_ticket1dash_ord}}":  uniquify_svg_ids(raw_svg("ticket1-dash", "detail"), "_o"),
+    "{{IC_ticket2_ord}}":      uniquify_svg_ids(raw_svg("ticket2", "detail"), "_o"),
+    "{{IC_ticket2dash_ord}}":  uniquify_svg_ids(raw_svg("ticket2-dash", "detail"), "_o"),
     # 详情大号政策/费用图标：内联矢量，CSS 定 20px，清晰不缩小
     "{{IP_flash}}":        raw_svg("flash"),
     "{{IP_send}}":         strip_wh(DET_SEND),
