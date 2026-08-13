@@ -3647,47 +3647,45 @@
     fixed.innerHTML = '';
     conds.innerHTML = '';
     var d0 = state.days ? +state.days : 0;
+    // 橫向滾動＝三種計費方式全部檔位拼成一條（每日→總→無限），每項記住所屬計費方式；選中項滾到視口中央
+    var allOpts = [];
+    ['daily', 'total', 'unlimited'].forEach(function (tab) {
+      filteredOpts(tab, d0).forEach(function (o) { allOpts.push({ tab: tab, o: o }); });
+    });
+    function bindCondChip(c, it) {  // 點選可跨計費方式；A 案前置 chip 的計費方式文字隨之更新
+      c.addEventListener('click', function () {
+        state.tab = it.tab; state.plan = it.o.t;
+        renderOpts(); updateCta(); renderPlans('smooth');
+      });
+    }
     if (state.variant === 'B') {
-      // 方案 B（Figma 1202-105534）：天數下拉 chip → 天數網格 sheet；流量 chips 選中檔帶 caret → 流量分頁 sheet，其餘快速切換
+      // 方案 B：天數下拉 chip → 天數網格 sheet；流量 chips 無箭頭、點按即快速切換；尾端「∨」→ 流量分頁 sheet
       var dayChip = el('<button class="cond-chip sel"><span class="lb"></span><span class="ic cc">' + ICONS.caretDown + '</span></button>');
       dayChip.querySelector('.lb').textContent = state.days + '天';
       dayChip.addEventListener('click', openDaysGrid);
       fixed.appendChild(dayChip);
-      // 選中流量檔 rotate 到最前（Figma 1202-105549），其後接續其餘檔位；選中帶 caret → 流量 sheet，其餘快速切換
-      var bopts = filteredOpts(state.tab, d0);
-      var si = bopts.map(function (o) { return o.t; }).indexOf(state.plan);
-      if (si > 0) bopts = bopts.slice(si).concat(bopts.slice(0, si));
-      bopts.forEach(function (o) {
-        var isSel = o.t === state.plan;
-        var c = el('<button class="cond-chip' + (isSel ? ' sel' : '') + '"><span class="lb"></span></button>');  // 流量 chip 無箭頭、點按即快速切換（不進選擇頁）
-        c.querySelector('.lb').textContent = o.t;
-        c.addEventListener('click', function () {
-          state.plan = o.t; renderOpts(); updateCta(); renderPlans('smooth');
-        });
+      allOpts.forEach(function (it) {
+        var isSel = it.tab === state.tab && it.o.t === state.plan;
+        var c = el('<button class="cond-chip' + (isSel ? ' sel' : '') + '"><span class="lb"></span></button>');
+        c.querySelector('.lb').textContent = it.o.t;
+        bindCondChip(c, it);
         conds.appendChild(c);
       });
-      var more = document.getElementById('plCondMore');  // 尾端固定「∨」→ 流量 sheet
+      var more = document.getElementById('plCondMore');
       more.innerHTML = '<span class="ic cc">' + ICONS.caretDown + '</span>';
       more.hidden = false;
       more.onclick = openFlowSheet;
     } else {
-      // 方案 A（現行）：組合條件 chip（→ 滾輪＋展開流量面板 modal）+ 同 tab 快速切換 chips
+      // 方案 A：組合條件 chip（→ 滾輪＋展開流量面板 modal），計費方式文字＝選中項所屬方式（點跨方式檔位即更新）
       var edit = el('<button class="cond-chip sel"><span class="lb"></span><span class="ic ic-16">' + ICONS.pencil + '</span></button>');
       edit.querySelector('.lb').textContent = state.days + '天·' + tabShort();
       edit.addEventListener('click', function () { openCondModal(); });
       fixed.appendChild(edit);
-      var opts = PLANS[state.tab].opts;
-      if (state.tab === 'total' && d0) {
-        var fit0 = opts.filter(function (o) { return o.gb >= d0 * 0.2; });
-        opts = fit0.length >= 2 ? fit0 : PLANS.total.opts.slice(-2);
-      }
-      opts.forEach(function (o) {
-        var c = el('<button class="cond-chip' + (o.t === state.plan ? ' sel' : '') + '"></button>');
-        c.textContent = o.t;
-        c.addEventListener('click', function () {
-          state.plan = o.t;
-          renderOpts(); updateCta(); renderPlans('smooth');  // 點選切換：平滑滾到中央
-        });
+      allOpts.forEach(function (it) {
+        var isSel = it.tab === state.tab && it.o.t === state.plan;
+        var c = el('<button class="cond-chip' + (isSel ? ' sel' : '') + '"></button>');
+        c.textContent = it.o.t;
+        bindCondChip(c, it);
         conds.appendChild(c);
       });
       document.getElementById('plCondMore').hidden = true;  // A 案無尾端「∨」
@@ -3697,25 +3695,21 @@
     // 不傳（排序等重渲染）：僅在選中項跑出可視區時拉回，不打斷使用者手動滾過的位置。
     // scrollTo 自動夾取邊界，滾不動時貼邊。
     // rAF 等螢幕切到 plans 後再量尺寸（進頁時 renderPlans 先於 go('plans')，隱藏態 rect 全 0）
-    if (state.variant === 'B') {
-      conds.scrollLeft = 0;  // 選中檔已 rotate 到最前，從左緣顯示（Figma 1202-105549）
-    } else {
-      conds.scrollLeft = prevScroll;
-      var selChip = conds.querySelector('.cond-chip.sel');
-      if (selChip) requestAnimationFrame(function () {
-        var sr = conds.getBoundingClientRect(), cr = selChip.getBoundingClientRect();
-        if (!sr.width) return;
-        var target = null;
-        if (centerSel) {
-          target = conds.scrollLeft + (cr.left + cr.width / 2) - (sr.left + sr.width / 2);
-        } else {
-          var pad = 16;
-          if (cr.left < sr.left + pad) target = conds.scrollLeft - (sr.left + pad - cr.left);
-          else if (cr.right > sr.right - pad) target = conds.scrollLeft + (cr.right - (sr.right - pad));
-        }
-        if (target !== null) conds.scrollTo({ left: Math.max(0, target), behavior: centerSel === 'smooth' ? 'smooth' : 'auto' });
-      });
-    }
+    conds.scrollLeft = prevScroll;
+    var selChip = conds.querySelector('.cond-chip.sel');
+    if (selChip) requestAnimationFrame(function () {
+      var sr = conds.getBoundingClientRect(), cr = selChip.getBoundingClientRect();
+      if (!sr.width) return;
+      var target = null;
+      if (centerSel) {
+        target = conds.scrollLeft + (cr.left + cr.width / 2) - (sr.left + sr.width / 2);
+      } else {
+        var pad = 16;
+        if (cr.left < sr.left + pad) target = conds.scrollLeft - (sr.left + pad - cr.left);
+        else if (cr.right > sr.right - pad) target = conds.scrollLeft + (cr.right - (sr.right - pad));
+      }
+      if (target !== null) conds.scrollTo({ left: Math.max(0, target), behavior: centerSel === 'smooth' ? 'smooth' : 'auto' });
+    });
 
     var list = applyFilters(buildPlans());
     if (sortMode === 0) list.sort(function (a, b) { return a.now - b.now; });
