@@ -4893,8 +4893,9 @@
       '<button class="qty-btn qplus" id="qtyPlus"' + (st.qty >= 5 ? ' disabled' : '') + '></button></div></div>';
     w += '<div class="ord-dq">' + dq + '</div>';
 
-    // ── 獨立圓角卡區：[航班][裝置][聯絡人] 訂購人 備註 ──
-    var c = '';
+    // ── 獨立圓角卡區：coupon banner（最上）＋ [航班][裝置][聯絡人] 訂購人 備註 ──
+    // coupon banner 佔位：置於卡片流最上面（Figma 1074-82361）；下方 JS 把 #ordCoupon 節點移入。A/B 兩案一致。
+    var c = '<div class="ord-coupon-slot" id="ordCouponSlot"></div>';
     if (req.flight) {
       c += '<div class="ord-card"><div class="ord-sec-h"><div class="t">航班資訊</div>' +
         '<button class="ord-edit' + (st.flight ? '' : ' empty') + '" id="ordFlightEdit">' + (st.flight ? '' : '請填寫') + '<span class="ic">' + ICONS.editLine + '</span></button></div>' +
@@ -4921,8 +4922,6 @@
         '<div class="ord-info-line"><span class="ic">' + ICONS.phone + '</span>' + o.cc + ' ' + o.phone + '</div>' +
       '</div></div>';
     c += '<div class="ord-card"><button class="ord-row-link" id="ordRemarkRow"><div class="t">備註</div><div class="r' + (st.remark ? ' filled' : '') + '"><span class="lbl">' + (st.remark || '無備註') + '</span><span class="ic">' + ICONS.chevGrey + '</span></div></button></div>';
-    // coupon banner 佔位：置於卡片流最後（「備註」之後，Figma 1074-82361）；下方 JS 把 #ordCoupon 節點移入
-    c += '<div class="ord-coupon-slot" id="ordCouponSlot"></div>';
 
     // 先把 coupon 節點抽離到 modal 根，避免下一行 innerHTML 覆蓋時把它連同監聽器一起銷毀
     var _cp = document.getElementById('ordCoupon');
