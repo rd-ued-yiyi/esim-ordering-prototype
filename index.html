@@ -557,6 +557,17 @@
   .dm-row .rd .desc { flex: 1 1 0; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .dm-row .rd .cnt { display: inline-flex; align-items: center; gap: 4px; flex: 0 0 auto; }
 
+  /* 方案 B：選擇目的地 modal 內國家 chips / 區域行 預設態改為描邊樣式（僅樣式、僅 modal 內、僅未選中；
+     選中態沿用 .sel 的 cyan 樣式。用 inset box-shadow 當邊框，避免與選中態尺寸跳動） */
+  :root[data-variant="B"] .dest-modal .chip:not(.sel) {
+    background: #fff;
+    box-shadow: inset 0 0 0 1px var(--kk-border-lighter);
+  }
+  :root[data-variant="B"] .dest-modal .dm-row:not(.sel) {
+    background: #fff;
+    box-shadow: inset 0 0 0 1px var(--kk-border-lighter);
+  }
+
   /* 多國自由選擇 checkbox */
   .dm-check {
     width: 20px; height: 20px; border-radius: var(--r-sm);
