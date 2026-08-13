@@ -644,8 +644,9 @@
     transform: translateX(-100%); background: linear-gradient(to right, rgba(255, 255, 255, 0), #fff); pointer-events: none;
   }
   .pl-cond-more .cc { display: inline-flex; align-items: center; }
-  /* 方案 B：去掉「5天」固定 chip 的右緣分割投影（Figma 1202-105549 無此陰影） */
-  :root[data-variant="B"] .pl-cond-fixed { filter: none; clip-path: none; }
+  /* 方案 B：去掉「5天」固定 chip 的右緣分割投影（Figma 1202-105549 無此陰影）＋收窄與流量 chips 的間距到 8px（＝chip 間距） */
+  :root[data-variant="B"] .pl-cond-fixed { filter: none; clip-path: none; padding-right: 0; }
+  :root[data-variant="B"] .pl-cond-scroll { padding-left: 8px; }
   .cond-chip {
     display: inline-flex; align-items: center; gap: 4px; flex: 0 0 auto;
     background: var(--kk-surface-light); border-radius: var(--r-md);
@@ -1161,17 +1162,18 @@
   .days-grid .dchip.sel { background: var(--kk-primary-lighter); box-shadow: inset 0 0 0 1px var(--kk-primary-medium); color: #13A3B6; font-weight: 600; }
 
   /* ===== 方案 B：流量分頁 sheet（Figma 1249-106143） ===== */
-  .flow-tabs { display: flex; gap: 24px; padding: 8px 20px 0; border-bottom: 1px solid var(--kk-border-lighter); flex: 0 0 auto; }
-  .flow-tab { padding: 8px 0 10px; font-size: 14px; line-height: 20px; color: var(--kk-text-medium); position: relative; white-space: nowrap; }
-  .flow-tab.sel { color: #13A3B6; font-weight: 600; }
+  .flow-tabs { display: flex; gap: 24px; padding: 8px 24px 0; border-bottom: 1px solid var(--kk-border-lighter); flex: 0 0 auto; }
+  /* KKTab（Figma 1249-106264）：16px semibold，未選＝深色 #212121、選中＝cyan + 底部 cyan 下劃線 */
+  .flow-tab { padding: 8px 0 12px; font-size: 16px; line-height: 24px; font-weight: 600; color: var(--kk-text-darker); position: relative; white-space: nowrap; }
+  .flow-tab.sel { color: #13A3B6; }
   .flow-tab.sel::after { content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: #13A3B6; border-radius: 2px; }
-  .flow-body { padding: 0 20px 20px; }
+  .flow-body { padding: 0 24px 24px; }
   .flow-sec { padding-top: 4px; }
-  .flow-sec-h { display: flex; align-items: baseline; gap: 8px; padding: 16px 0 2px; }
+  .flow-sec-h { display: flex; align-items: baseline; gap: 8px; padding: 20px 0 2px; }
   .flow-sec-h .t { font-size: 16px; line-height: 24px; font-weight: 600; color: var(--kk-text-darker); }
   .flow-sec-h .note { font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
   .flow-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding-top: 8px; }
-  .flow-grid .opt { align-items: flex-start; width: auto; }  /* 左對齊（Figma），沿用 .opt 其餘樣式與 80% badge */
+  .flow-grid .opt { width: auto; }  /* 沿用 .opt 置中對齊與 80% badge（Figma 選項文字置中） */
 
   /* 天數滾輪 picker：高亮條固定在中間，選項滾動吸附（iOS wheel 風格） */
   .bs-picker { position: relative; height: 252px; overflow: hidden; }  /* 7 行 × 36px */
