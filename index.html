@@ -70,6 +70,11 @@
     padding-top: max(12px, calc(env(safe-area-inset-top, 0px) + 8px));
   }
 
+  /* 模擬首頁：鎖在可視視窗高度、不可滾動（100dvh 排除行動端網址列造成的溢出） */
+  .esim-root.kkh-lock { min-height: 0; height: 100vh; height: 100dvh; overflow: hidden; }
+  .esim-root.kkh-lock .app { min-height: 0; height: 100%; overflow: hidden; }
+  .esim-root.kkh-lock [data-screen="kkhome"] { min-height: 0; height: 100%; }
+
   /* ---------- 螢幕路由 ---------- */
   .screen { display: none; }
   .screen.is-active { display: block; }
@@ -2550,6 +2555,7 @@
       s.classList.toggle('is-active', s.getAttribute('data-screen') === name);
     });
     document.querySelector('.app').classList.toggle('no-hero', name === 'plans' || name === 'kkhome');
+    document.querySelector('.esim-root').classList.toggle('kkh-lock', name === 'kkhome');  // 模擬首頁鎖高、不可滾動
     window.scrollTo(0, 0);
     // 重新進入目的地頁（如從列表返回）時把選中流量檔、選中天數 chip 滾回可視區，避免選中項落在螢幕外
     if (name === 'destination') {
@@ -3406,6 +3412,7 @@
     b.addEventListener('click', function () { setVariant(b.getAttribute('data-variant')); go('home'); });
   });
   syncVariantUI();
+  document.querySelector('.esim-root').classList.add('kkh-lock');  // 初始＝模擬首頁：鎖高不可滾動（go() 之後會依畫面切換）
 
   // 首頁目的地 chip → 進入目的地頁（亞洲通/東南亞/北歐地區等區域按區域型別處理）
   function regionByName(name) {
