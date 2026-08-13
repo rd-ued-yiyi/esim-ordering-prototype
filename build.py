@@ -145,6 +145,7 @@ subs = {
     "{{IC_arrowDownTeal}}":svg("arrowDown", recolor=("#212121", "#26BEC9")),  # 目的地選框下拉箭頭（Figma 871-75700：與地點 pin 同色 teal，非深色）
     "{{IC_arrowDownGray}}":svg("arrowDown", recolor=("#212121", "#727272")),  # 修改条件展开/收起 tab 箭头（Figma 1116-89167：text-dark #727272）
     "{{IC_question}}":     svg("question"),
+    "{{IC_questionOrange}}": svg("question", recolor=("#212121", "#E78F37")),  # 方案 B 目的地頁「不知道怎麼選」橙色版
     "{{IC_arrowRightDark}}": svg("arrowRight", recolor=("#26BEC9", "#212121")),
     "{{IC_arrowRightGrey}}": svg("arrowRight", recolor=("#26BEC9", "#9C9DA0")),  # 套餐卡标题箭头（设计稿 $color-text-medium）
     "{{IC_cross}}":        svg("cross"),

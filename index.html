@@ -316,7 +316,11 @@
   /* 值緊跟標題後、箭頭再緊跟值（Figma 871-75700：用卡天數 5天 › 左對齊成組，不撐滿） */
   .field-head .placeholder { flex: 0 0 auto; min-width: 0; font-size: 18px; line-height: 26px; font-weight: 600; color: var(--kk-text-light); }
   .field-head .placeholder.has-value { color: var(--kk-text-darker); }  /* 手動選過天數後：值改為與標題同深色 #212121（強調已選）；未選時維持淺灰 placeholder */
-  #daysRow > .ic-24 { margin-left: auto; }  /* 箭頭推到整行最右緣（Figma 871-75700：用卡天數 5天 靠左成組、› 貼右邊） */
+  #daysRow > .ic-24, #flowRow > .ic-24 { margin-left: auto; }  /* 箭頭推到整行最右緣（Figma 871-75700：用卡天數 5天 靠左成組、› 貼右邊） */
+  /* 方案 B：目的地頁流量區塊＝「流量 值 ›」選框 + 快捷卡 + 橙色「不知道怎麼選」；方案 A 維持原本 tab+選項 */
+  :root[data-variant="B"] .flow-head-a, :root[data-variant="B"] #dataTabs, :root[data-variant="B"] #dataNote { display: none; }
+  :root[data-variant="A"] .flow-row-b, :root[data-variant="A"] .howto-b { display: none; }
+  .howto-b { display: inline-flex; align-items: center; align-self: flex-start; gap: 4px; font-size: 12px; line-height: 16px; color: #E78F37; }
   .field-head .label-sm { font-size: 14px; line-height: 20px; font-weight: 600; color: var(--kk-text-darker); white-space: nowrap; }
   .field-head .hint { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
 
@@ -1754,10 +1758,17 @@
 
               <!-- 流量 -->
               <div class="group-8">
-                <div class="field-head">
+                <!-- 方案 A：流量標題 + inline 不知道怎麼選 -->
+                <div class="field-head flow-head-a">
                   <span class="label-lg" style="flex:0 0 auto">流量</span>
                   <button class="hint" id="howtoHint">不知道怎麼選<span class="ic ic-16"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjEzIiBoZWlnaHQ9IjEzIiB2aWV3Qm94PSIwIDAgMTMgMTMiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJWZWN0b3IiPgo8cGF0aCBkPSJNNi41IDEwLjE2NjdDNi44NjgxOSAxMC4xNjY3IDcuMTY2NjcgOS44NjgxOSA3LjE2NjY3IDkuNUM3LjE2NjY3IDkuMTMxODEgNi44NjgxOSA4LjgzMzMzIDYuNSA4LjgzMzMzQzYuMTMxODEgOC44MzMzMyA1LjgzMzMzIDkuMTMxODEgNS44MzMzMyA5LjVDNS44MzMzMyA5Ljg2ODE5IDYuMTMxODEgMTAuMTY2NyA2LjUgMTAuMTY2N1oiIGZpbGw9IiM5QzlEQTAiLz4KPHBhdGggZD0iTTYuOTM4OTUgMy4wNDM1NkM2LjUwMjUgMi45NTY3NCA2LjA1MDEgMy4wMDEzIDUuNjM4OTYgMy4xNzE2QzUuMjI3ODMgMy4zNDE4OSA0Ljg3NjQzIDMuNjMwMjggNC42MjkxOSA0LjAwMDI5QzQuMzgxOTYgNC4zNzAzIDQuMjUgNC44MDUzMiA0LjI1IDUuMjUwMzNDNC4yNSA1LjUyNjQ3IDQuNDczODYgNS43NTAzMyA0Ljc1IDUuNzUwMzNDNS4wMjYxNCA1Ljc1MDMzIDUuMjUgNS41MjY0NyA1LjI1IDUuMjUwMzNDNS4yNSA1LjAwMzEgNS4zMjMzMSA0Ljc2MTQzIDUuNDYwNjYgNC41NTU4NkM1LjU5ODAyIDQuMzUwMyA1Ljc5MzI0IDQuMTkwMDkgNi4wMjE2NSA0LjA5NTQ4QzYuMjUwMDUgNC4wMDA4NyA2LjUwMTM5IDMuOTc2MTEgNi43NDM4NiA0LjAyNDM0QzYuOTg2MzQgNC4wNzI1OCA3LjIwOTA3IDQuMTkxNjMgNy4zODM4OCA0LjM2NjQ0QzcuNTU4NyA0LjU0MTI2IDcuNjc3NzUgNC43NjM5OSA3LjcyNTk4IDUuMDA2NDZDNy43NzQyMSA1LjI0ODk0IDcuNzQ5NDYgNS41MDAyNyA3LjY1NDg1IDUuNzI4NjhDNy41NjAyNCA1Ljk1NzA5IDcuNDAwMDMgNi4xNTIzMSA3LjE5NDQ2IDYuMjg5NjZDNi45ODg5IDYuNDI3MDIgNi43NDcyMyA2LjUwMDMzIDYuNSA2LjUwMDMzQzYuMzY3MzkgNi41MDAzMyA2LjI0MDIyIDYuNTUzMDEgNi4xNDY0NSA2LjY0Njc3QzYuMDUyNjggNi43NDA1NCA2IDYuODY3NzIgNiA3LjAwMDMzVjcuNTAwMzNDNiA3Ljc3NjQ3IDYuMjIzODYgOC4wMDAzMyA2LjUgOC4wMDAzM0M2Ljc3NjE0IDguMDAwMzMgNyA3Ljc3NjQ3IDcgNy41MDAzM1Y3LjQ0NDA3QzcuMjY2MjYgNy4zODMzOCA3LjUyMDY0IDcuMjc0NDEgNy43NTAwMyA3LjEyMTEzQzguMTIwMDQgNi44NzM5IDguNDA4NDMgNi41MjI1IDguNTc4NzMgNi4xMTEzNkM4Ljc0OTAzIDUuNzAwMjMgOC43OTM1OCA1LjI0NzgzIDguNzA2NzcgNC44MTEzN0M4LjYxOTk1IDQuMzc0OTIgOC40MDU2NiAzLjk3NCA4LjA5MDk5IDMuNjU5MzRDNy43NzYzMiAzLjM0NDY3IDcuMzc1NDEgMy4xMzAzOCA2LjkzODk1IDMuMDQzNTZaIiBmaWxsPSIjOUM5REEwIi8+CjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNMCA2LjVDMCAyLjkxMDE1IDIuOTEwMTUgMCA2LjUgMEMxMC4wODk5IDAgMTMgMi45MTAxNSAxMyA2LjVDMTMgMTAuMDg5OSAxMC4wODk5IDEzIDYuNSAxM0MyLjkxMDE1IDEzIDAgMTAuMDg5OSAwIDYuNVpNNi41IDFDMy40NjI0MyAxIDEgMy40NjI0MyAxIDYuNUMxIDkuNTM3NTcgMy40NjI0MyAxMiA2LjUgMTJDOS41Mzc1NyAxMiAxMiA5LjUzNzU3IDEyIDYuNUMxMiAzLjQ2MjQzIDkuNTM3NTcgMSA2LjUgMVoiIGZpbGw9IiM5QzlEQTAiLz4KPC9nPgo8L3N2Zz4=" width="13.00" height="13.00"></span></button>
                 </div>
+                <!-- 方案 B：流量 選框（標題 + 值 + 箭頭）→ 點擊開啟流量分頁 sheet -->
+                <button class="field-head flow-row-b" id="flowRow">
+                  <span class="label-lg">流量</span>
+                  <span class="placeholder" id="flowValue">請選擇</span>
+                  <span class="ic ic-24"><span class="rot90 ic"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE0IiBoZWlnaHQ9IjgiIHZpZXdCb3g9IjAgMCAxNCA4IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cGF0aCBpZD0iVmVjdG9yIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTYuMjkyODkgMC4yOTI4OTNDNi42ODM0MiAtMC4wOTc2MzExIDcuMzE2NTggLTAuMDk3NjMxMSA3LjcwNzExIDAuMjkyODkzTDEzLjcwNzEgNi4yOTI4OUMxNC4wOTc2IDYuNjgzNDIgMTQuMDk3NiA3LjMxNjU4IDEzLjcwNzEgNy43MDcxMUMxMy4zMTY2IDguMDk3NjMgMTIuNjgzNCA4LjA5NzYzIDEyLjI5MjkgNy43MDcxMUw3IDIuNDE0MjFMMS43MDcxMSA3LjcwNzExQzEuMzE2NTggOC4wOTc2MyAwLjY4MzQxOCA4LjA5NzYzIDAuMjkyODkzIDcuNzA3MTFDLTAuMDk3NjMxMSA3LjMxNjU4IC0wLjA5NzYzMTEgNi42ODM0MiAwLjI5Mjg5MyA2LjI5Mjg5TDYuMjkyODkgMC4yOTI4OTNaIiBmaWxsPSIjMjEyMTIxIi8+Cjwvc3ZnPg==" width="14.00" height="8.00"></span></span>
+                </button>
                 <div class="ftabs" id="dataTabs">
                   <button class="ftab sel" data-tab="daily">每日流量</button>
                   <button class="ftab" data-tab="total">總流量</button>
@@ -1765,6 +1776,8 @@
                 </div>
                 <div class="field-note" id="dataNote">每日重置，用完降速</div>
                 <div class="opts-scroll" id="dataOptsScroll"><div class="opts-row" id="dataOpts"></div></div>
+                <!-- 方案 B：不知道怎麼選（橙色，置底） -->
+                <button class="hint howto-b" id="howtoHintB">不知道怎麼選<span class="ic ic-16"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjEzIiBoZWlnaHQ9IjEzIiB2aWV3Qm94PSIwIDAgMTMgMTMiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJWZWN0b3IiPgo8cGF0aCBkPSJNNi41IDEwLjE2NjdDNi44NjgxOSAxMC4xNjY3IDcuMTY2NjcgOS44NjgxOSA3LjE2NjY3IDkuNUM3LjE2NjY3IDkuMTMxODEgNi44NjgxOSA4LjgzMzMzIDYuNSA4LjgzMzMzQzYuMTMxODEgOC44MzMzMyA1LjgzMzMzIDkuMTMxODEgNS44MzMzMyA5LjVDNS44MzMzMyA5Ljg2ODE5IDYuMTMxODEgMTAuMTY2NyA2LjUgMTAuMTY2N1oiIGZpbGw9IiM5QzlEQTAiLz4KPHBhdGggZD0iTTYuOTM4OTUgMy4wNDM1NkM2LjUwMjUgMi45NTY3NCA2LjA1MDEgMy4wMDEzIDUuNjM4OTYgMy4xNzE2QzUuMjI3ODMgMy4zNDE4OSA0Ljg3NjQzIDMuNjMwMjggNC42MjkxOSA0LjAwMDI5QzQuMzgxOTYgNC4zNzAzIDQuMjUgNC44MDUzMiA0LjI1IDUuMjUwMzNDNC4yNSA1LjUyNjQ3IDQuNDczODYgNS43NTAzMyA0Ljc1IDUuNzUwMzNDNS4wMjYxNCA1Ljc1MDMzIDUuMjUgNS41MjY0NyA1LjI1IDUuMjUwMzNDNS4yNSA1LjAwMzEgNS4zMjMzMSA0Ljc2MTQzIDUuNDYwNjYgNC41NTU4NkM1LjU5ODAyIDQuMzUwMyA1Ljc5MzI0IDQuMTkwMDkgNi4wMjE2NSA0LjA5NTQ4QzYuMjUwMDUgNC4wMDA4NyA2LjUwMTM5IDMuOTc2MTEgNi43NDM4NiA0LjAyNDM0QzYuOTg2MzQgNC4wNzI1OCA3LjIwOTA3IDQuMTkxNjMgNy4zODM4OCA0LjM2NjQ0QzcuNTU4NyA0LjU0MTI2IDcuNjc3NzUgNC43NjM5OSA3LjcyNTk4IDUuMDA2NDZDNy43NzQyMSA1LjI0ODk0IDcuNzQ5NDYgNS41MDAyNyA3LjY1NDg1IDUuNzI4NjhDNy41NjAyNCA1Ljk1NzA5IDcuNDAwMDMgNi4xNTIzMSA3LjE5NDQ2IDYuMjg5NjZDNi45ODg5IDYuNDI3MDIgNi43NDcyMyA2LjUwMDMzIDYuNSA2LjUwMDMzQzYuMzY3MzkgNi41MDAzMyA2LjI0MDIyIDYuNTUzMDEgNi4xNDY0NSA2LjY0Njc3QzYuMDUyNjggNi43NDA1NCA2IDYuODY3NzIgNiA3LjAwMDMzVjcuNTAwMzNDNiA3Ljc3NjQ3IDYuMjIzODYgOC4wMDAzMyA2LjUgOC4wMDAzM0M2Ljc3NjE0IDguMDAwMzMgNyA3Ljc3NjQ3IDcgNy41MDAzM1Y3LjQ0NDA3QzcuMjY2MjYgNy4zODMzOCA3LjUyMDY0IDcuMjc0NDEgNy43NTAwMyA3LjEyMTEzQzguMTIwMDQgNi44NzM5IDguNDA4NDMgNi41MjI1IDguNTc4NzMgNi4xMTEzNkM4Ljc0OTAzIDUuNzAwMjMgOC43OTM1OCA1LjI0NzgzIDguNzA2NzcgNC44MTEzN0M4LjYxOTk1IDQuMzc0OTIgOC40MDU2NiAzLjk3NCA4LjA5MDk5IDMuNjU5MzRDNy43NzYzMiAzLjM0NDY3IDcuMzc1NDEgMy4xMzAzOCA2LjkzODk1IDMuMDQzNTZaIiBmaWxsPSIjOUM5REEwIi8+CjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNMCA2LjVDMCAyLjkxMDE1IDIuOTEwMTUgMCA2LjUgMEMxMC4wODk5IDAgMTMgMi45MTAxNSAxMyA2LjVDMTMgMTAuMDg5OSAxMC4wODk5IDEzIDYuNSAxM0MyLjkxMDE1IDEzIDAgMTAuMDg5OSAwIDYuNVpNNi41IDFDMy40NjI0MyAxIDEgMy40NjI0MyAxIDYuNUMxIDkuNTM3NTcgMy40NjI0MyAxMiA2LjUgMTJDOS41Mzc1NyAxMiAxMiA5LjUzNzU3IDEyIDYuNUMxMiAzLjQ2MjQzIDkuNTM3NTcgMSA2LjUgMVoiIGZpbGw9IiM5QzlEQTAiLz4KPC9nPgo8L3N2Zz4=" width="13.00" height="13.00"></span></button>
               </div>
             </div>
 
@@ -2525,6 +2538,7 @@
     window.scrollTo(0, 0);
     // 重新進入目的地頁（如從列表返回）時把選中流量檔、選中天數 chip 滾回可視區，避免選中項落在螢幕外
     if (name === 'destination') {
+      renderOpts();  // 依當前方案(A/B)重建流量區塊（落地頁選過方案後才進目的地頁，需按新方案渲染）
       revealOpt(document.getElementById('dataOptsScroll'), false);
       // 天數 chips：預設(未手動選過)不捲動、從 1 天起顯示；只有手動選過才把選中天數捲回可視區
       if (state.daysTouched) revealOpt(document.getElementById('dayChips'), false, '.chip.sel');
@@ -2533,7 +2547,7 @@
   }
 
   // ---------- 目的地頁狀態 ----------
-  var state = { days: '5', daysTouched: false, tab: 'daily', plan: '1GB/天' };  // 預設用卡天數 5 天
+  var state = { days: '5', daysTouched: false, tab: 'daily', plan: '1GB/天', planTouched: false };  // 預設用卡天數 5 天
 
   // ---------- A/B 對照方案 ----------
   // 僅「列表頁條件切換區」與「天數/流量選擇 UI」兩處分歧；其餘全部共用同一份程式碼（改動自動同步兩案）。
@@ -2709,26 +2723,65 @@
     });
   }
 
+  // 方案 B：目的地頁流量值（同天數值：預設淺灰，手動選過＝深色）
+  function updateFlowValue() {
+    var fv = document.getElementById('flowValue');
+    if (!fv) return;
+    fv.textContent = state.plan;
+    fv.classList.toggle('has-value', !!state.planTouched);
+  }
+  // 方案 B：只渲染「當前計費方式」單一 grid（無分頁、無分隔線）；切計費方式改由流量 sheet
+  function buildSingleGrid(rowEl, d, tab, selPlan, onPick) {
+    rowEl.innerHTML = '';
+    var badge = badgeForTab(tab, d);
+    var grid = el('<div class="opts-grid" data-g="' + tab + '"></div>');
+    filteredOpts(tab, d).forEach(function (o) {
+      var b = el('<button class="opt' + (selPlan === o.t ? ' sel' : '') + '"><span class="t"></span><span class="p"></span>' +
+        (badge === o.t ? '<span class="badge">80%選擇</span>' : '') + '</button>');
+      b.setAttribute('data-val', o.t);
+      b.querySelector('.t').textContent = o.t;
+      b.querySelector('.p').textContent = priceLabelFor(o, d);
+      b.addEventListener('click', function () { onPick(tab, o.t); });
+      grid.appendChild(b);
+    });
+    rowEl.appendChild(grid);
+  }
   function renderOpts() {
     var d = state.days ? +state.days : 0;
     if (!state.plan || !filteredOpts(state.tab, d).some(function (o) { return o.t === state.plan; })) {
       state.plan = filteredOpts(state.tab, d)[0].t;
     }
     var scrollEl = document.getElementById('dataOptsScroll');
-    buildMergedRow(document.getElementById('dataOpts'), d, state.tab, state.plan, function (tab, plan) {
-      state.tab = tab;
-      state.plan = plan;
-      var selEl = null;
-      document.querySelectorAll('#dataOpts .opt').forEach(function (b) {
-        var on = b.closest('.opts-grid').getAttribute('data-g') === tab && b.getAttribute('data-val') === plan;
-        b.classList.toggle('sel', on);
-        if (on) selEl = b;
+    if (state.variant === 'B') {
+      buildSingleGrid(document.getElementById('dataOpts'), d, state.tab, state.plan, function (tab, plan) {
+        state.plan = plan; state.planTouched = true;  // 點快捷卡＝手動選過 → 值變深色
+        var selEl = null;
+        document.querySelectorAll('#dataOpts .opt').forEach(function (b) {
+          var on = b.getAttribute('data-val') === plan;
+          b.classList.toggle('sel', on);
+          if (on) selEl = b;
+        });
+        updateFlowValue();
+        centerOpt(scrollEl, selEl);
+        updateCta();
       });
-      setTabsActive(document.getElementById('dataTabs'), document.getElementById('dataNote'), tab);
-      centerOpt(scrollEl, selEl);  // 點選選中項自動居中
-      updateCta();
-    });
-    setTabsActive(document.getElementById('dataTabs'), document.getElementById('dataNote'), state.tab);
+      updateFlowValue();
+    } else {
+      buildMergedRow(document.getElementById('dataOpts'), d, state.tab, state.plan, function (tab, plan) {
+        state.tab = tab;
+        state.plan = plan;
+        var selEl = null;
+        document.querySelectorAll('#dataOpts .opt').forEach(function (b) {
+          var on = b.closest('.opts-grid').getAttribute('data-g') === tab && b.getAttribute('data-val') === plan;
+          b.classList.toggle('sel', on);
+          if (on) selEl = b;
+        });
+        setTabsActive(document.getElementById('dataTabs'), document.getElementById('dataNote'), tab);
+        centerOpt(scrollEl, selEl);  // 點選選中項自動居中
+        updateCta();
+      });
+      setTabsActive(document.getElementById('dataTabs'), document.getElementById('dataNote'), state.tab);
+    }
     revealOpt(scrollEl, false);  // 重建後把選中檔位滾入可視區（切天數/換目的地都杜絕空白）
   }
 
@@ -3447,7 +3500,8 @@
         b.querySelector('.t').textContent = o.t;
         b.querySelector('.p').textContent = priceLabelFor(o, d);
         b.addEventListener('click', function () {
-          state.tab = tab; state.plan = o.t; renderOpts(); updateCta(); closeSheets(); renderPlans('smooth');
+          state.tab = tab; state.plan = o.t; state.planTouched = true;  // 選過流量＝深色值（目的地頁）
+          renderOpts(); updateCta(); closeSheets(); renderPlans('smooth');
         });
         grid.appendChild(b);
       });
@@ -3555,6 +3609,7 @@
   }
   wheel.addEventListener('scroll', updateWheel, { passive: true });
   document.getElementById('daysRow').addEventListener('click', function () {
+    if (state.variant === 'B') { openDaysGrid(); return; }  // 方案 B：與列表頁一致的天數網格 sheet
     var v = state.days || '4';
     var idx = Math.max(0, DAYS_ALL.indexOf(v));
     openSheet(document.getElementById('bsDays'));
@@ -3562,6 +3617,12 @@
       wheel.scrollTop = idx * DAY_H;
       updateWheel();
     });
+  });
+  // 方案 B：點「流量 值 ›」選框 → 與列表頁一致的流量分頁 sheet；橙色「不知道怎麼選」→ 選擇建議 sheet
+  document.getElementById('flowRow').addEventListener('click', openFlowSheet);
+  document.getElementById('howtoHintB').addEventListener('click', function () {
+    document.querySelector('#bsHowto .bs-body').scrollTop = 0;
+    openSheet(document.getElementById('bsHowto'));
   });
   document.getElementById('bsDaysConfirm').addEventListener('click', function () {
     withLoading(this, function () {
