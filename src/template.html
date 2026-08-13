@@ -1355,11 +1355,11 @@
   /* 已選聯絡人卡：頭部 #F7FAFC + 名字/編輯，主體上下堆疊 kv（聯絡電話↑值、APP 聯絡方式↑值，Figma 1110-86983） */
   .ct-card { border-radius: 8px; overflow: hidden; margin-top: 12px; }
   .ct-card-h { display: flex; align-items: center; background: #F7FAFC; border: 1px solid var(--kk-border-lighter); border-bottom: 0; border-radius: 8px 8px 0 0; }
-  /* 卡頭名字：英文名整段不斷字；過長時「中文名(含分隔線)」整組掉到下一行，不讓兩邊各自逐字換行 */
+  /* 卡頭名字：英文名(含尾隨分隔線)整段不斷字，分隔線始終跟在英文名同一行；
+     過長時只有「中文名」整組掉到下一行（wbr 是唯一斷點），兩邊都不逐字換行 */
   .ct-card-h .nm { flex: 1 1 auto; min-width: 0; padding: 12px; font-weight: 600; color: #212121; font-size: 14px; line-height: 20px; }
-  .ct-card-h .nm .en { white-space: nowrap; }
-  .ct-card-h .nm .cn { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
-  .ct-card-h .nm .sep { width: 1px; height: 14px; background: var(--kk-border-light); }
+  .ct-card-h .nm .en, .ct-card-h .nm .cn { white-space: nowrap; }
+  .ct-card-h .nm .sep { display: inline-block; width: 1px; height: 14px; margin: 0 8px; background: var(--kk-border-light); vertical-align: -2px; }
   .ct-card-h .act { display: flex; align-items: center; }
   .ct-card-h .act button { padding: 12px; }
   .ct-card-h .ic { width: 20px; height: 20px; }
@@ -5097,7 +5097,7 @@
     orderState.travelers.forEach(function (i) {
       var t = ORD_TRAVELERS[i];
       var card = el('<div class="ct-card">' +
-        '<div class="ct-card-h"><div class="nm"><span class="en">' + t.enLast + ', ' + t.enFirst + '</span> <span class="cn"><span class="sep"></span>' + t.cnLast + t.cnFirst + '</span></div>' +
+        '<div class="ct-card-h"><div class="nm"><span class="en">' + t.enLast + ', ' + t.enFirst + '<span class="sep"></span></span><wbr><span class="cn">' + t.cnLast + t.cnFirst + '</span></div>' +
         '<div class="act"><button class="edit"><span class="ic">' + ICONS.editLine + '</span></button>' +
         '<button class="del" aria-label="移除"><span class="ic">' + ICONS.cross + '</span></button></div></div>' +
         '<div class="ct-card-body"><div class="ord-kv">' +
