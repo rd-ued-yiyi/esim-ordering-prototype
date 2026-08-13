@@ -1189,10 +1189,11 @@
   .flow-tab.sel::after { content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: #13A3B6; border-radius: 2px; }
   .flow-body { padding: 0 24px 24px; }
   .flow-sec { padding-top: 4px; }
-  .flow-sec-h { display: flex; align-items: baseline; gap: 8px; padding: 20px 0 2px; }
+  /* 標題與描述改為上下堆疊（Figma 1249-106143：標題 24 / 2px / 描述 16，區塊頭↔卡片組 16px） */
+  .flow-sec-h { display: flex; flex-direction: column; gap: 2px; padding: 20px 0 0; }
   .flow-sec-h .t { font-size: 16px; line-height: 24px; font-weight: 600; color: var(--kk-text-darker); }
   .flow-sec-h .note { font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
-  .flow-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding-top: 8px; align-items: stretch; }
+  .flow-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding-top: 16px; align-items: stretch; }
   /* 長文案(無限流量)換行不溢出；grid stretch 讓同一行兩格等高；文字置中 */
   .flow-grid .opt { width: auto; white-space: normal; text-align: center; }
   .flow-grid .opt .t, .flow-grid .opt .p { white-space: normal; text-align: center; }
