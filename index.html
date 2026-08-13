@@ -1354,6 +1354,11 @@
   .ord-price-panel { position: absolute; left: 0; right: 0; bottom: 100%; background: #fff;
     border-radius: 16px 16px 0 0; box-shadow: 0 -8px 24px rgba(38, 50, 56, .16); display: none; }
   .ord-price-panel.open { display: block; }
+  /* 費用明細展開時的暗底遮罩（bottom sheet 樣式；footer+面板 浮在遮罩之上，Figma 1074-82877） */
+  .pp-mask { position: absolute; inset: 0; background: rgba(17, 25, 40, .5); opacity: 0; visibility: hidden; transition: opacity .25s ease, visibility .25s ease; z-index: 40; }
+  .pp-mask.open { opacity: 1; visibility: visible; }
+  .ord-modal .ord-foot { z-index: 42; }
+  .ord-modal .pay-foot-note { position: relative; z-index: 41; }
   .ord-price-panel .pp-body { padding: 4px 16px 20px; }
   .ord-price-panel .price-line { display: flex; align-items: center; justify-content: space-between; font-size: 14px; line-height: 20px; color: #212121; padding: 4px 0; }
   .ord-price-panel .price-line .k { color: #212121; }  /* 明細行左側同深色（Figma 1074-82877） */
@@ -1363,7 +1368,7 @@
   .ord-price-toggle .caret { width: 20px; height: 20px; transform: rotate(180deg); }
   .ord-foot .cta { flex: 0 0 120px; width: 120px; background: var(--kk-primary-button); color: #fff; }
   /* 訂單頁 coupon banner（Figma 1074-82361）：白底獨立圓角卡（與其餘 ord-card 同：白底 r12、px16、上下 6px 讓 32px picto 置中≈44 高），置於卡片流最後 */
-  .ord-coupon { margin: 0; border-radius: 12px; background: #fff; padding: 6px 16px; }
+  .ord-coupon { margin: 0; border-radius: 12px; background: #fff; padding: 8px 16px; }  /* 高 48px＝Figma 1074-82361 coupon banner（8+32 picto+8） */
   /* 佔位以 display:contents 讓 #ordCoupon 直接成為 .ord-cards 的 flex 子項（隱藏時不占 gap） */
   .ord-coupon-slot { display: contents; }
   /* 付款頁（嚴格對齊 Figma 1074-84069） */
@@ -2385,6 +2390,7 @@
       </span>
       <span class="claim">領取<span class="car"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjkuMzMzMzMiIGhlaWdodD0iNS4zMzMzMyIgdmlld0JveD0iMCAwIDkuMzMzMzMgNS4zMzMzMyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciAoU3Ryb2tlKSIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik00LjE5NTI2IDAuMTk1MjYyQzQuNDU1NjEgLTAuMDY1MDg3NCA0Ljg3NzcyIC0wLjA2NTA4NzQgNS4xMzgwNyAwLjE5NTI2Mkw5LjEzODA3IDQuMTk1MjZDOS4zOTg0MiA0LjQ1NTYxIDkuMzk4NDIgNC44Nzc3MiA5LjEzODA3IDUuMTM4MDdDOC44Nzc3MiA1LjM5ODQyIDguNDU1NjEgNS4zOTg0MiA4LjE5NTI2IDUuMTM4MDdMNC42NjY2NyAxLjYwOTQ4TDEuMTM4MDcgNS4xMzgwN0MwLjg3NzcyMiA1LjM5ODQyIDAuNDU1NjEyIDUuMzk4NDIgMC4xOTUyNjIgNS4xMzgwN0MtMC4wNjUwODc0IDQuODc3NzIgLTAuMDY1MDg3NCA0LjQ1NTYxIDAuMTk1MjYyIDQuMTk1MjZMNC4xOTUyNiAwLjE5NTI2MloiIGZpbGw9IiNFNjVGNTAiLz4KPC9zdmc+" width="9.33" height="5.33"></span></span>
     </button>
+    <div class="pp-mask" data-panel="ordPricePanel" data-toggle="ordPriceToggle"></div>
     <div class="ord-foot">
       <div class="ord-price-panel" id="ordPricePanel"></div>
       <button class="ord-price-toggle" id="ordPriceToggle"><span class="cur">NT$</span><span class="amt" id="ordFootAmt">0</span><span class="ic ic-16 caret"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE0LjE2NjciIGhlaWdodD0iNy45MTY2NyIgdmlld0JveD0iMCAwIDE0LjE2NjcgNy45MTY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0wLjI0NDA3OCAwLjI0NDA3OEMwLjU2OTUxNSAtMC4wODEzNTkyIDEuMDk3MTUgLTAuMDgxMzU5MiAxLjQyMjU5IDAuMjQ0MDc4TDcuMDgzMzMgNS45MDQ4MkwxMi43NDQxIDAuMjQ0MDc4QzEzLjA2OTUgLTAuMDgxMzU5MiAxMy41OTcyIC0wLjA4MTM1OTIgMTMuOTIyNiAwLjI0NDA3OEMxNC4yNDggMC41Njk1MTUgMTQuMjQ4IDEuMDk3MTUgMTMuOTIyNiAxLjQyMjU5TDcuNjcyNTkgNy42NzI1OUM3LjM0NzE1IDcuOTk4MDMgNi44MTk1MSA3Ljk5ODAzIDYuNDk0MDggNy42NzI1OUwwLjI0NDA3OCAxLjQyMjU5Qy0wLjA4MTM1OTIgMS4wOTcxNSAtMC4wODEzNTkyIDAuNTY5NTE1IDAuMjQ0MDc4IDAuMjQ0MDc4WiIgZmlsbD0iIzIxMjEyMSIvPgo8L3N2Zz4=" width="14.17" height="7.92"></span></button>
@@ -2402,6 +2408,7 @@
       </div>
     </div>
     <div class="ord-body" id="payBody"></div>
+    <div class="pp-mask" data-panel="payPricePanel" data-toggle="payPriceToggle"></div>
     <div class="pay-foot-note" id="payFootNote"><span class="ic"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE5LjUiIGhlaWdodD0iMTkuNSIgdmlld0JveD0iMCAwIDE5LjUgMTkuNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZD0iTTkuNzUgMEM3LjgyMTY0IDAgNS45MzY1NyAwLjU3MTgyOCA0LjMzMzE5IDEuNjQzMTdDMi43Mjk4MiAyLjcxNDUyIDEuNDgwMTMgNC4yMzcyNiAwLjc0MjE3OSA2LjAxODg0QzAuMDA0MjI0NDkgNy44MDA0MiAtMC4xODg4NTggOS43NjA4MiAwLjE4NzM0OCAxMS42NTIxQzAuNTYzNTU0IDEzLjU0MzQgMS40OTIxNSAxNS4yODA3IDIuODU1NzEgMTYuNjQ0M0M0LjIxOTI4IDE4LjAwNzkgNS45NTY1NiAxOC45MzY1IDcuODQ3ODcgMTkuMzEyN0M5LjczOTE5IDE5LjY4ODkgMTEuNjk5NiAxOS40OTU4IDEzLjQ4MTIgMTguNzU3OEMxNS4yNjI3IDE4LjAxOTkgMTYuNzg1NSAxNi43NzAyIDE3Ljg1NjggMTUuMTY2OEMxOC45MjgyIDEzLjU2MzQgMTkuNSAxMS42Nzg0IDE5LjUgOS43NUMxOS40OTcgNy4xNjUwNiAxOC40Njg4IDQuNjg2ODQgMTYuNjQxIDIuODU5MDFDMTQuODEzMiAxLjAzMTE4IDEyLjMzNDkgMC4wMDI5ODc2MyA5Ljc1IDBWMFpNMTQuMzkzNiA4LjA0MjcyTDguODkzMDcgMTMuMjkyN0M4Ljc1MzIyIDEzLjQyNTggOC41Njc1NiAxMy41IDguMzc0NTIgMTMuNUM4LjE4MTQ3IDEzLjUgNy45OTU4MiAxMy40MjU4IDcuODU1OTYgMTMuMjkyN0w1LjEwNjQ1IDEwLjY2NzdDNC45NjI4IDEwLjUzMDEgNC44Nzk2NSAxMC4zNDExIDQuODc1MjQgMTAuMTQyM0M0Ljg3MDg0IDkuOTQzNDEgNC45NDU1NSA5Ljc1MDkyIDUuMDgyOTcgOS42MDcxQzUuMjIwMzggOS40NjMyOCA1LjQwOTI3IDkuMzc5ODkgNS42MDgxMyA5LjM3NTIzQzUuODA2OTkgOS4zNzA1OCA1Ljk5OTU2IDkuNDQ1MDQgNi4xNDM1NiA5LjU4MjI4TDguMzc0NTIgMTEuNzEyOUwxMy4zNTY0IDYuOTU3MjhDMTMuNTAwNCA2LjgyMDA0IDEzLjY5MyA2Ljc0NTU4IDEzLjg5MTkgNi43NTAyM0MxNC4wOTA3IDYuNzU0ODkgMTQuMjc5NiA2LjgzODI4IDE0LjQxNyA2Ljk4MjFDMTQuNTU0NSA3LjEyNTkyIDE0LjYyOTIgNy4zMTg0MSAxNC42MjQ4IDcuNTE3MjdDMTQuNjIwNCA3LjcxNjE0IDE0LjUzNzIgNy45MDUxMyAxNC4zOTM2IDguMDQyNzJWOC4wNDI3MloiIGZpbGw9IiMyNkJFQzkiLz4KPC9zdmc+" width="19.50" height="19.50"></span>別擔心，下訂後還可免費取消</div>
     <div class="ord-foot">
       <div class="ord-price-panel" id="payPricePanel"></div>
@@ -5231,11 +5238,17 @@
   function togglePricePanel(panelId, toggleId) {
     var panel = document.getElementById(panelId), tog = document.getElementById(toggleId);
     var open = panel.classList.toggle('open'); tog.classList.toggle('open', open);
+    var modal = panel.closest('.ord-modal');
+    var mask = modal ? modal.querySelector('.pp-mask') : null;
+    if (mask) mask.classList.toggle('open', open);
     if (open) {
       panel.innerHTML = pricePanelHtml();
       panel.querySelector('.pp-close').onclick = function () { togglePricePanel(panelId, toggleId); };
     }
   }
+  document.querySelectorAll('.pp-mask').forEach(function (m) {  // 點暗底遮罩＝收起費用明細
+    m.addEventListener('click', function () { togglePricePanel(m.getAttribute('data-panel'), m.getAttribute('data-toggle')); });
+  });
   document.getElementById('ordPriceToggle').addEventListener('click', function () { togglePricePanel('ordPricePanel', 'ordPriceToggle'); });
 
   // ---- coupon（複用折扣券 sheet）----

@@ -1345,6 +1345,11 @@
   .ord-price-panel { position: absolute; left: 0; right: 0; bottom: 100%; background: #fff;
     border-radius: 16px 16px 0 0; box-shadow: 0 -8px 24px rgba(38, 50, 56, .16); display: none; }
   .ord-price-panel.open { display: block; }
+  /* 費用明細展開時的暗底遮罩（bottom sheet 樣式；footer+面板 浮在遮罩之上，Figma 1074-82877） */
+  .pp-mask { position: absolute; inset: 0; background: rgba(17, 25, 40, .5); opacity: 0; visibility: hidden; transition: opacity .25s ease, visibility .25s ease; z-index: 40; }
+  .pp-mask.open { opacity: 1; visibility: visible; }
+  .ord-modal .ord-foot { z-index: 42; }
+  .ord-modal .pay-foot-note { position: relative; z-index: 41; }
   .ord-price-panel .pp-body { padding: 4px 16px 20px; }
   .ord-price-panel .price-line { display: flex; align-items: center; justify-content: space-between; font-size: 14px; line-height: 20px; color: #212121; padding: 4px 0; }
   .ord-price-panel .price-line .k { color: #212121; }  /* 明細行左側同深色（Figma 1074-82877） */
@@ -1354,7 +1359,7 @@
   .ord-price-toggle .caret { width: 20px; height: 20px; transform: rotate(180deg); }
   .ord-foot .cta { flex: 0 0 120px; width: 120px; background: var(--kk-primary-button); color: #fff; }
   /* 訂單頁 coupon banner（Figma 1074-82361）：白底獨立圓角卡（與其餘 ord-card 同：白底 r12、px16、上下 6px 讓 32px picto 置中≈44 高），置於卡片流最後 */
-  .ord-coupon { margin: 0; border-radius: 12px; background: #fff; padding: 6px 16px; }
+  .ord-coupon { margin: 0; border-radius: 12px; background: #fff; padding: 8px 16px; }  /* 高 48px＝Figma 1074-82361 coupon banner（8+32 picto+8） */
   /* 佔位以 display:contents 讓 #ordCoupon 直接成為 .ord-cards 的 flex 子項（隱藏時不占 gap） */
   .ord-coupon-slot { display: contents; }
   /* 付款頁（嚴格對齊 Figma 1074-84069） */
@@ -2284,6 +2289,7 @@
       </span>
       <span class="claim">領取<span class="car">{{IC_arrowSmRight}}</span></span>
     </button>
+    <div class="pp-mask" data-panel="ordPricePanel" data-toggle="ordPriceToggle"></div>
     <div class="ord-foot">
       <div class="ord-price-panel" id="ordPricePanel"></div>
       <button class="ord-price-toggle" id="ordPriceToggle"><span class="cur">NT$</span><span class="amt" id="ordFootAmt">0</span><span class="ic ic-16 caret">{{IC_arrowDown}}</span></button>
@@ -2301,6 +2307,7 @@
       </div>
     </div>
     <div class="ord-body" id="payBody"></div>
+    <div class="pp-mask" data-panel="payPricePanel" data-toggle="payPriceToggle"></div>
     <div class="pay-foot-note" id="payFootNote"><span class="ic">{{IC_checkCircle}}</span>別擔心，下訂後還可免費取消</div>
     <div class="ord-foot">
       <div class="ord-price-panel" id="payPricePanel"></div>
@@ -5130,11 +5137,17 @@
   function togglePricePanel(panelId, toggleId) {
     var panel = document.getElementById(panelId), tog = document.getElementById(toggleId);
     var open = panel.classList.toggle('open'); tog.classList.toggle('open', open);
+    var modal = panel.closest('.ord-modal');
+    var mask = modal ? modal.querySelector('.pp-mask') : null;
+    if (mask) mask.classList.toggle('open', open);
     if (open) {
       panel.innerHTML = pricePanelHtml();
       panel.querySelector('.pp-close').onclick = function () { togglePricePanel(panelId, toggleId); };
     }
   }
+  document.querySelectorAll('.pp-mask').forEach(function (m) {  // 點暗底遮罩＝收起費用明細
+    m.addEventListener('click', function () { togglePricePanel(m.getAttribute('data-panel'), m.getAttribute('data-toggle')); });
+  });
   document.getElementById('ordPriceToggle').addEventListener('click', function () { togglePricePanel('ordPricePanel', 'ordPriceToggle'); });
 
   // ---- coupon（複用折扣券 sheet）----
