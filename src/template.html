@@ -76,6 +76,12 @@
     padding: 1px 6px; border-radius: 9px; font-weight: 600; }  /* header 測試標記 */
   /* 易用性測試引導文字（取代搜索框） */
   .kkh-guide { text-align: center; color: #212121; font-size: 16px; line-height: 24px; font-weight: 600; padding: 8px 0 4px; }
+  /* A/B 對照方案選擇器（易用性測試工具，僅落地頁可見；兩種交互方式對照） */
+  .kkh-variant { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 2px 0 6px; }
+  .kkh-variant .lb { font-size: 13px; color: var(--kk-text-medium); }
+  .kkh-variant .seg { display: inline-flex; background: #EEF1F5; border-radius: 999px; padding: 3px; }
+  .kkh-variant .seg-btn { padding: 6px 18px; border-radius: 999px; font-size: 14px; line-height: 20px; font-weight: 600; color: var(--kk-text-medium); background: transparent; }
+  .kkh-variant .seg-btn.sel { background: #fff; color: #13A3B6; box-shadow: 0 1px 3px rgba(17,25,40,.12); }
   .kkh-body { background: #fff; }
   .kkh-cats { display: flex; padding: 16px 8px 4px; }  /* 5 個入口一行均分（簡化版，無橫滑） */
   .kkh-cat { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 6px;
@@ -613,6 +619,7 @@
     box-shadow: inset 0 0 0 1px var(--kk-primary-medium);
     color: #13A3B6;
   }
+  .cond-chip .cc { display: inline-flex; align-items: center; margin-left: -1px; }  /* 方案 B 下拉 caret（隨字色 currentColor） */
   .cond-div { width: 1px; height: 24px; background: var(--kk-border-lighter); flex: 0 0 auto; }
 
   .pl-filters { display: flex; align-items: center; padding: 12px 0; overflow: hidden; }
@@ -1107,6 +1114,27 @@
   }
   .howto-table th:first-child, .howto-table td:first-child { width: 52%; }
 
+  /* ===== 方案 B：天數網格 sheet（Figma 1249-106028） ===== */
+  .days-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 4px 0 8px; }
+  .days-grid .dchip {
+    padding: 12px; border-radius: var(--r-md); background: var(--kk-surface-light);
+    font-size: 14px; line-height: 20px; color: var(--kk-text-darker); text-align: center; white-space: nowrap;
+  }
+  .days-grid .dchip.sel { background: var(--kk-primary-lighter); box-shadow: inset 0 0 0 1px var(--kk-primary-medium); color: #13A3B6; font-weight: 600; }
+
+  /* ===== 方案 B：流量分頁 sheet（Figma 1249-106143） ===== */
+  .flow-tabs { display: flex; gap: 24px; padding: 8px 20px 0; border-bottom: 1px solid var(--kk-border-lighter); flex: 0 0 auto; }
+  .flow-tab { padding: 8px 0 10px; font-size: 14px; line-height: 20px; color: var(--kk-text-medium); position: relative; white-space: nowrap; }
+  .flow-tab.sel { color: #13A3B6; font-weight: 600; }
+  .flow-tab.sel::after { content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: #13A3B6; border-radius: 2px; }
+  .flow-body { padding: 0 20px 20px; }
+  .flow-sec { padding-top: 4px; }
+  .flow-sec-h { display: flex; align-items: baseline; gap: 8px; padding: 16px 0 2px; }
+  .flow-sec-h .t { font-size: 16px; line-height: 24px; font-weight: 600; color: var(--kk-text-darker); }
+  .flow-sec-h .note { font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
+  .flow-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding-top: 8px; }
+  .flow-grid .opt { align-items: flex-start; width: auto; }  /* 左對齊（Figma），沿用 .opt 其餘樣式與 80% badge */
+
   /* 天數滾輪 picker：高亮條固定在中間，選項滾動吸附（iOS wheel 風格） */
   .bs-picker { position: relative; height: 252px; overflow: hidden; }  /* 7 行 × 36px */
   .bs-highlight {
@@ -1411,6 +1439,13 @@
           <span class="kkh-test">易用性測試</span>
         </div>
         <div class="kkh-guide">點擊 eSIM 進入購買流程</div>
+        <div class="kkh-variant" id="kkhVariant">
+          <span class="lb">體驗方案</span>
+          <div class="seg">
+            <button class="seg-btn" data-variant="A">方案 A</button>
+            <button class="seg-btn" data-variant="B">方案 B</button>
+          </div>
+        </div>
       </div>
       <div class="kkh-body">
         <div class="kkh-cats">
@@ -1816,6 +1851,33 @@
       <div class="bs-wheel" id="bsDaysList"></div>
     </div>
     <div class="bs-foot"><button class="cta" id="bsDaysConfirm">確定</button></div>
+  </div>
+
+  <!-- ===== 方案 B：天數網格 sheet（Figma 1249-106028） ===== -->
+  <div class="bsheet tall" id="bsDaysGrid">
+    <div class="bs-handle"></div>
+    <div class="bs-bar">
+      <button class="bs-close" data-bs-close aria-label="關閉"><span class="ic ic-24">{{IC_cross}}</span></button>
+      <span class="bs-title">選擇天數</span>
+      <span class="bs-spacer"></span>
+    </div>
+    <div class="bs-body"><div class="days-grid" id="bsDaysGridList"></div></div>
+  </div>
+
+  <!-- ===== 方案 B：流量分頁 sheet（Figma 1249-106143） ===== -->
+  <div class="bsheet tall" id="bsFlow">
+    <div class="bs-handle"></div>
+    <div class="bs-bar">
+      <button class="bs-close" data-bs-close aria-label="關閉"><span class="ic ic-24">{{IC_cross}}</span></button>
+      <span class="bs-title">選擇流量</span>
+      <span class="bs-spacer"></span>
+    </div>
+    <div class="flow-tabs" id="bsFlowTabs">
+      <button class="flow-tab sel" data-tab="daily">每日流量</button>
+      <button class="flow-tab" data-tab="total">總流量</button>
+      <button class="flow-tab" data-tab="unlimited">無限流量</button>
+    </div>
+    <div class="bs-body flow-body" id="bsFlowBody"></div>
   </div>
 
   <!-- 修改搜尋條件 modal（列表頁「N天·型別 ✏」） -->
@@ -2338,6 +2400,28 @@
   // ---------- 目的地頁狀態 ----------
   var state = { days: '5', daysTouched: false, tab: 'daily', plan: '1GB/天' };  // 預設用卡天數 5 天
 
+  // ---------- A/B 對照方案 ----------
+  // 僅「列表頁條件切換區」與「天數/流量選擇 UI」兩處分歧；其餘全部共用同一份程式碼（改動自動同步兩案）。
+  // A = 現行（組合條件 chip → 滾輪＋展開流量面板）；B = Figma 新設計（下拉 chip → 天數網格 / 流量分頁 sheet）
+  state.variant = (function () {
+    var q = (new URLSearchParams(location.search).get('v') || '').toLowerCase();
+    if (q === 'a' || q === 'b') return q.toUpperCase();
+    try { var s = localStorage.getItem('esim_variant'); if (s === 'A' || s === 'B') return s; } catch (e) {}
+    return 'A';
+  })();
+  function syncVariantUI() {
+    document.documentElement.setAttribute('data-variant', state.variant);
+    document.querySelectorAll('#kkhVariant .seg-btn').forEach(function (b) {
+      b.classList.toggle('sel', b.getAttribute('data-variant') === state.variant);
+    });
+  }
+  function setVariant(v) {
+    if (v !== 'A' && v !== 'B') return;
+    state.variant = v;
+    try { localStorage.setItem('esim_variant', v); } catch (e) {}
+    syncVariantUI();
+  }
+
   // 模擬價格模型（NT$）：每日固定/無限流量按天計價（長天數有折扣），總流量一口價
   // 價格參照 2026 台灣市售亞洲 eSIM 行情（每日固定 1GB≈NT$25-30/天；總流量對齊 Airalo/Nomad 檔位價；
   // 無限流量按降速後網速分檔 NT$45-168/天，最高檔=全程不限速）
@@ -2711,6 +2795,7 @@
     mail: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#212121" stroke-width="1.6"><rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="M3.5 7l8.5 6 8.5-6"/></svg>',
     phone: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#212121" stroke-width="1.6"><path d="M6 3.5h3l1.5 4-2 1.5a12 12 0 005 5l1.5-2 4 1.5v3c0 1-.8 1.8-1.8 1.7C11 18.7 5.3 13 4.3 5.8 4.2 4.3 5 3.5 6 3.5z"/></svg>',
     chevGrey: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9C9DA0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>',
+    caretDown: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>',  // 方案 B 條件 chip 下拉小箭頭（隨字色）
     // 付款頁
     payApple: '{{PAY_applepay}}', payCard: '{{PAY_creditcard}}', payPayme: '{{PAY_payme}}',
     payAlipayhk: '{{PAY_alipayhk}}', payAlipay: '{{PAY_alipay}}', hsbc: '{{PAY_hsbc}}',
@@ -3144,6 +3229,12 @@
     });
   });
 
+  // A/B 方案切換（落地頁分段控制）＋ 初始化
+  document.querySelectorAll('#kkhVariant .seg-btn').forEach(function (b) {
+    b.addEventListener('click', function () { setVariant(b.getAttribute('data-variant')); });
+  });
+  syncVariantUI();
+
   // 首頁目的地 chip → 進入目的地頁（亞洲通/東南亞/北歐地區等區域按區域型別處理）
   function regionByName(name) {
     var all = GEO.regions.concat(GEO.hotRegions);
@@ -3189,6 +3280,85 @@
   document.querySelectorAll('[data-bs-close]').forEach(function (b) {
     b.addEventListener('click', closeSheets);
   });
+
+  // ===== 方案 B：天數網格 sheet（Figma 1249-106028）＝ 與 A 同一份天數選項，僅 UI 為網格 =====
+  function openDaysGrid() {
+    var wrap = document.getElementById('bsDaysGridList');
+    wrap.innerHTML = '';
+    DAYS_ALL.forEach(function (d) {
+      var b = el('<button class="dchip' + (d === state.days ? ' sel' : '') + '"></button>');
+      b.textContent = d + '天';
+      b.addEventListener('click', function () {
+        setDays(d, true); closeSheets(); renderPlans('smooth');
+      });
+      wrap.appendChild(b);
+    });
+    openSheet(document.getElementById('bsDaysGrid'));
+  }
+
+  // ===== 方案 B：流量分頁 sheet（Figma 1249-106143）＝ 與 A 同一份 PLANS，僅 UI 為分頁網格 =====
+  function buildFlowSheet() {
+    var body = document.getElementById('bsFlowBody');
+    body.innerHTML = '';
+    var d = state.days ? +state.days : 0;
+    ['daily', 'total', 'unlimited'].forEach(function (tab) {
+      var badge = badgeForTab(tab, d);
+      var sec = el('<div class="flow-sec" data-sec="' + tab + '"></div>');
+      var h = el('<div class="flow-sec-h"><span class="t"></span><span class="note"></span></div>');
+      h.querySelector('.t').textContent = tab === 'daily' ? '每日流量' : tab === 'total' ? '總流量' : '無限流量';
+      h.querySelector('.note').textContent = PLANS[tab].note;
+      sec.appendChild(h);
+      var grid = el('<div class="flow-grid"></div>');
+      filteredOpts(tab, d).forEach(function (o) {
+        var b = el('<button class="opt' + (state.tab === tab && state.plan === o.t ? ' sel' : '') + '"><span class="t"></span><span class="p"></span>' +
+          (badge === o.t ? '<span class="badge">80%選擇</span>' : '') + '</button>');
+        b.querySelector('.t').textContent = o.t;
+        b.querySelector('.p').textContent = priceLabelFor(o, d);
+        b.addEventListener('click', function () {
+          state.tab = tab; state.plan = o.t; renderOpts(); updateCta(); closeSheets(); renderPlans('smooth');
+        });
+        grid.appendChild(b);
+      });
+      sec.appendChild(grid);
+      body.appendChild(sec);
+    });
+  }
+  function setFlowTab(tab, scroll) {
+    document.querySelectorAll('#bsFlowTabs .flow-tab').forEach(function (t) {
+      t.classList.toggle('sel', t.getAttribute('data-tab') === tab);
+    });
+    if (scroll) {
+      var sec = document.querySelector('#bsFlowBody .flow-sec[data-sec="' + tab + '"]');
+      var body = document.getElementById('bsFlowBody');
+      if (sec) {  // offsetParent 是 fixed 的 .bsheet，改用 rect 差算捲動量；直接改 scrollTop（穩定、不依賴 rAF）
+        var delta = sec.getBoundingClientRect().top - body.getBoundingClientRect().top;
+        body.scrollTop = Math.max(0, body.scrollTop + delta - 4);
+      }
+    }
+  }
+  document.querySelectorAll('#bsFlowTabs .flow-tab').forEach(function (t) {
+    t.addEventListener('click', function () { setFlowTab(t.getAttribute('data-tab'), true); });
+  });
+  (function () {  // 垂直 scroll-spy：滾動時高亮所在分頁
+    var body = document.getElementById('bsFlowBody');
+    body.addEventListener('scroll', function () {
+      var cur = 'daily', bodyTop = body.getBoundingClientRect().top;
+      ['daily', 'total', 'unlimited'].forEach(function (tab) {
+        var sec = body.querySelector('.flow-sec[data-sec="' + tab + '"]');
+        if (sec && sec.getBoundingClientRect().top - bodyTop <= 44) cur = tab;
+      });
+      document.querySelectorAll('#bsFlowTabs .flow-tab').forEach(function (t) {
+        t.classList.toggle('sel', t.getAttribute('data-tab') === cur);
+      });
+    });
+  })();
+  function openFlowSheet() {
+    buildFlowSheet();
+    var body = document.getElementById('bsFlowBody');
+    body.scrollTop = 0;           // 每次從頂部（每日流量）開始，避免展開動畫期間定位失準
+    setFlowTab('daily', false);   // 頂部分頁高亮，後續捲動由 scroll-spy 接管
+    openSheet(document.getElementById('bsFlow'));
+  }
 
   // 包含地區 sheet：確定 = 選定該區域（直達目的地頁）
   var regionSheetR = null;
@@ -3452,26 +3622,44 @@
     var prevScroll = conds.scrollLeft;  // 保留使用者手動滾動到的位置
     fixed.innerHTML = '';
     conds.innerHTML = '';
-    var edit = el('<button class="cond-chip sel"><span class="lb"></span><span class="ic ic-16">' + ICONS.pencil + '</span></button>');
-    edit.querySelector('.lb').textContent = state.days + '天·' + tabShort();
-    edit.addEventListener('click', function () { openCondModal(); });
-    fixed.appendChild(edit);
-    // 當前計費方式下的全部流量檔（含天數過濾邏輯，與目的地頁一致），選中項高亮
     var d0 = state.days ? +state.days : 0;
-    var opts = PLANS[state.tab].opts;
-    if (state.tab === 'total' && d0) {
-      var fit0 = opts.filter(function (o) { return o.gb >= d0 * 0.2; });
-      opts = fit0.length >= 2 ? fit0 : PLANS.total.opts.slice(-2);
-    }
-    opts.forEach(function (o) {
-      var c = el('<button class="cond-chip' + (o.t === state.plan ? ' sel' : '') + '"></button>');
-      c.textContent = o.t;
-      c.addEventListener('click', function () {
-        state.plan = o.t;
-        renderOpts(); updateCta(); renderPlans('smooth');  // 點選切換：平滑滾到中央
+    if (state.variant === 'B') {
+      // 方案 B（Figma 1202-105534）：天數下拉 chip → 天數網格 sheet；流量 chips 選中檔帶 caret → 流量分頁 sheet，其餘快速切換
+      var dayChip = el('<button class="cond-chip sel"><span class="lb"></span><span class="ic cc">' + ICONS.caretDown + '</span></button>');
+      dayChip.querySelector('.lb').textContent = state.days + '天';
+      dayChip.addEventListener('click', openDaysGrid);
+      fixed.appendChild(dayChip);
+      filteredOpts(state.tab, d0).forEach(function (o) {
+        var isSel = o.t === state.plan;
+        var c = el('<button class="cond-chip' + (isSel ? ' sel' : '') + '"><span class="lb"></span>' + (isSel ? '<span class="ic cc">' + ICONS.caretDown + '</span>' : '') + '</button>');
+        c.querySelector('.lb').textContent = o.t;
+        c.addEventListener('click', function () {
+          if (isSel) { openFlowSheet(); }
+          else { state.plan = o.t; renderOpts(); updateCta(); renderPlans('smooth'); }
+        });
+        conds.appendChild(c);
       });
-      conds.appendChild(c);
-    });
+    } else {
+      // 方案 A（現行）：組合條件 chip（→ 滾輪＋展開流量面板 modal）+ 同 tab 快速切換 chips
+      var edit = el('<button class="cond-chip sel"><span class="lb"></span><span class="ic ic-16">' + ICONS.pencil + '</span></button>');
+      edit.querySelector('.lb').textContent = state.days + '天·' + tabShort();
+      edit.addEventListener('click', function () { openCondModal(); });
+      fixed.appendChild(edit);
+      var opts = PLANS[state.tab].opts;
+      if (state.tab === 'total' && d0) {
+        var fit0 = opts.filter(function (o) { return o.gb >= d0 * 0.2; });
+        opts = fit0.length >= 2 ? fit0 : PLANS.total.opts.slice(-2);
+      }
+      opts.forEach(function (o) {
+        var c = el('<button class="cond-chip' + (o.t === state.plan ? ' sel' : '') + '"></button>');
+        c.textContent = o.t;
+        c.addEventListener('click', function () {
+          state.plan = o.t;
+          renderOpts(); updateCta(); renderPlans('smooth');  // 點選切換：平滑滾到中央
+        });
+        conds.appendChild(c);
+      });
+    }
     // centerSel='smooth'（點選切換/modal 確定）：選中項平滑滾到可視區中央；
     // centerSel='center'（進入列表頁）：選中項瞬時定位到中央（不播進場動畫）；
     // 不傳（排序等重渲染）：僅在選中項跑出可視區時拉回，不打斷使用者手動滾過的位置。
