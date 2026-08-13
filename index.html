@@ -76,6 +76,8 @@
 
   /* ---------- KKday 模擬首頁（易用性測試入口：全白背景、極簡） ---------- */
   [data-screen="kkhome"] { background: #fff; min-height: 100vh; }
+  .screen.is-active[data-screen="kkhome"] { display: flex; flex-direction: column; }  /* logo 置頂、選擇區塊在剩餘空間垂直居中 */
+  .kkh-choose { flex: 1 1 auto; display: flex; flex-direction: column; justify-content: center; padding-bottom: 10vh; }
   .kkh-top { background: #fff; padding: 12px 16px 8px; }
   .kkh-bar { display: flex; align-items: center; gap: 12px; padding: 6px 0 14px; }
   .kkh-menu { display: flex; flex-direction: column; gap: 5px; background: none; border: 0; padding: 4px 0; }
@@ -1578,10 +1580,11 @@
           <div class="kkh-logo">kkday</div>
           <span class="kkh-test">易用性測試</span>
         </div>
-        <div class="kkh-guide">選擇一種方案，開始體驗 eSIM 訂購流程</div>
-        <div class="kkh-desc">假設現在是從首頁或某個入口進入，體驗完一個方案後請刷新連結繼續體驗另一個方案。</div>
       </div>
-      <div class="kkh-body">
+      <div class="kkh-choose">
+        <div class="kkh-guide">選擇一種方案，開始體驗 eSIM 訂購流程</div>
+        <div class="kkh-desc">兩個方案的主要差異在於「選擇套餐」的互動方式。</div>
+        <div class="kkh-desc">假設現在是從首頁或某個入口進入，體驗完一個方案後請刷新連結繼續體驗另一個方案。</div>
         <div class="kkh-plans" id="kkhPlans">
           <button class="kkh-plan" data-variant="A">
             <span class="pbadge">A</span>
