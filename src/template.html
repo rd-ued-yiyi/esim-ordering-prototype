@@ -4722,11 +4722,17 @@
   // ==================================================================
   var orderP = null, flDate = null;
   // 旅客/聯絡人共用同一份人員名單（可選項一致）：每人同時含聯絡欄位(last/first/tel/app)與實名欄位(en/證件…)
+  // 演示名單＝網球王子・青春學園（青学）隊員；皆日本籍，台胞證/港澳證不適用故填「—」
   var ORD_PEOPLE = [
-    { last: '楊', first: '冪', cnLast: '楊', cnFirst: '冪', enLast: 'YANG', enFirst: 'MI', tel: '14930594039', email: '12334455', app: 'Line 284949', nation: '中國', gender: '女', birth: '1993/10/11', twId: 'A128374873', twPass: '239024778', hkMacao: 'H08123456', docNo: '239024778', docExp: '2025/10/11' },
-    { last: '徐', first: '佳瑩', cnLast: '徐', cnFirst: '佳瑩', enLast: 'HSU', enFirst: 'CHIA YING', tel: '13900001111', email: 'lala@kkday.com', app: 'WhatsApp 0912345678', nation: '台灣', gender: '女', birth: '1990/05/20', twId: 'F223456789', twPass: '—', hkMacao: '—', docNo: '312345678', docExp: '2028/03/15' },
-    { last: '張', first: '學友', cnLast: '張', cnFirst: '學友', enLast: 'CHEUNG', enFirst: 'HOK YAU', tel: '13900002222', email: 'jacky@example.com', app: 'WeChat jacky_c', nation: '香港', gender: '男', birth: '1961/07/10', twId: '—', twPass: '—', hkMacao: 'H11223344', docNo: 'K12345678', docExp: '2027/12/01' },
-    { last: '不二', first: '周助', cnLast: '不二', cnFirst: '周助', enLast: 'FUJI', enFirst: 'SYUSUKE', tel: '13900006666', email: 'ryoma@example.com', app: 'Line fuji_s', nation: '日本', gender: '男', birth: '1996/02/29', twId: '—', twPass: '—', hkMacao: '—', docNo: 'TR9876543', docExp: '2029/08/20' }
+    { last: '手塚', first: '國光', cnLast: '手塚', cnFirst: '國光', enLast: 'TEZUKA', enFirst: 'KUNIMITSU', tel: '13900001001', email: 'tezuka@seigaku.jp', app: 'Line tezuka_k', nation: '日本', gender: '男', birth: '1994/10/07', twId: '—', twPass: '—', hkMacao: '—', docNo: 'TR1007888', docExp: '2029/10/06' },
+    { last: '大石', first: '秀一郎', cnLast: '大石', cnFirst: '秀一郎', enLast: 'OISHI', enFirst: 'SHUICHIRO', tel: '13900002002', email: 'oishi@seigaku.jp', app: 'Line oishi_s', nation: '日本', gender: '男', birth: '1994/04/30', twId: '—', twPass: '—', hkMacao: '—', docNo: 'TR0430777', docExp: '2028/04/29' },
+    { last: '不二', first: '周助', cnLast: '不二', cnFirst: '周助', enLast: 'FUJI', enFirst: 'SYUSUKE', tel: '13900003003', email: 'fuji@seigaku.jp', app: 'Line fuji_s', nation: '日本', gender: '男', birth: '1994/02/29', twId: '—', twPass: '—', hkMacao: '—', docNo: 'TR0229666', docExp: '2029/08/20' },
+    { last: '菊丸', first: '英二', cnLast: '菊丸', cnFirst: '英二', enLast: 'KIKUMARU', enFirst: 'EIJI', tel: '13900004004', email: 'kikumaru@seigaku.jp', app: 'Line eiji_k', nation: '日本', gender: '男', birth: '1994/11/28', twId: '—', twPass: '—', hkMacao: '—', docNo: 'TR1128555', docExp: '2027/11/27' },
+    { last: '乾', first: '貞治', cnLast: '乾', cnFirst: '貞治', enLast: 'INUI', enFirst: 'SADAHARU', tel: '13900005005', email: 'inui@seigaku.jp', app: 'Line inui_data', nation: '日本', gender: '男', birth: '1994/06/03', twId: '—', twPass: '—', hkMacao: '—', docNo: 'TR0603444', docExp: '2030/06/02' },
+    { last: '河村', first: '隆', cnLast: '河村', cnFirst: '隆', enLast: 'KAWAMURA', enFirst: 'TAKASHI', tel: '13900006006', email: 'kawamura@seigaku.jp', app: 'Line taka_burning', nation: '日本', gender: '男', birth: '1994/11/18', twId: '—', twPass: '—', hkMacao: '—', docNo: 'TR1118333', docExp: '2028/11/17' },
+    { last: '桃城', first: '武', cnLast: '桃城', cnFirst: '武', enLast: 'MOMOSHIRO', enFirst: 'TAKESHI', tel: '13900007007', email: 'momo@seigaku.jp', app: 'Line momo_t', nation: '日本', gender: '男', birth: '1995/07/23', twId: '—', twPass: '—', hkMacao: '—', docNo: 'TR0723222', docExp: '2029/07/22' },
+    { last: '海堂', first: '薰', cnLast: '海堂', cnFirst: '薰', enLast: 'KAIDOH', enFirst: 'KAORU', tel: '13900008008', email: 'kaidoh@seigaku.jp', app: 'Line kaoru_v', nation: '日本', gender: '男', birth: '1995/05/11', twId: '—', twPass: '—', hkMacao: '—', docNo: 'TR0511111', docExp: '2030/05/10' },
+    { last: '越前', first: '龍馬', cnLast: '越前', cnFirst: '龍馬', enLast: 'ECHIZEN', enFirst: 'RYOMA', tel: '13900009009', email: 'ryoma@seigaku.jp', app: 'Line ryoma_o', nation: '日本', gender: '男', birth: '1995/12/24', twId: '—', twPass: '—', hkMacao: '—', docNo: 'TR1224000', docExp: '2030/12/23' }
   ];
   // 旅客區與聯絡人區指向同一份名單 → 兩邊可選項完全一致；任一區「新增」也會同時出現在另一區
   var ORD_CONTACTS = ORD_PEOPLE, ORD_TRAVELERS = ORD_PEOPLE;
