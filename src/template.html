@@ -635,9 +635,11 @@
     transform: translateX(-100%); background: linear-gradient(to right, rgba(255, 255, 255, 0), #fff); pointer-events: none;
   }
   .pl-cond-more .cc { display: inline-flex; align-items: center; }
-  /* 方案 B：去掉「5天」固定 chip 的右緣分割投影（Figma 1202-105549 無此陰影）＋收窄與流量 chips 的間距到 8px（＝chip 間距） */
-  :root[data-variant="B"] .pl-cond-fixed { filter: none; clip-path: none; padding-right: 0; }
-  :root[data-variant="B"] .pl-cond-scroll { padding-left: 8px; }
+  /* 方案 B：去掉「5天」固定 chip 的右緣分割投影（Figma 1202-105549 無此陰影）。
+     天數↔流量的 8px 間距留在「天數」這側（fixed padding-right，預設 8px 不動）、scroll 左內距歸零，
+     這樣捲動時流量 chips 停在天數 chip 右緣外 8px、不會疊上去。 */
+  :root[data-variant="B"] .pl-cond-fixed { filter: none; clip-path: none; }
+  :root[data-variant="B"] .pl-cond-scroll { padding-left: 0; }
   .cond-chip {
     display: inline-flex; align-items: center; gap: 4px; flex: 0 0 auto;
     background: var(--kk-surface-light); border-radius: var(--r-md);
