@@ -1181,9 +1181,9 @@
   .flow-sec-h .t { font-size: 16px; line-height: 24px; font-weight: 600; color: var(--kk-text-darker); }
   .flow-sec-h .note { font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
   .flow-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding-top: 8px; align-items: stretch; }
-  /* 長文案(無限流量)換行不溢出；grid stretch 讓同一行兩格等高 */
-  .flow-grid .opt { width: auto; white-space: normal; }
-  .flow-grid .opt .t { white-space: normal; }
+  /* 長文案(無限流量)換行不溢出；grid stretch 讓同一行兩格等高；文字置中 */
+  .flow-grid .opt { width: auto; white-space: normal; text-align: center; }
+  .flow-grid .opt .t, .flow-grid .opt .p { white-space: normal; text-align: center; }
 
   /* 天數滾輪 picker：高亮條固定在中間，選項滾動吸附（iOS wheel 風格） */
   .bs-picker { position: relative; height: 252px; overflow: hidden; }  /* 7 行 × 36px */
