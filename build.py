@@ -202,15 +202,16 @@ subs = {
     "{{IC_send}}":         inline_svg_to_img(DET_SEND),
     "{{IC_couponPicto}}":  raw_svg("coupon-picto", "detail"),  # 内联矢量，避免 iOS 下 <img> 栅格化模糊
     # 优惠横幅票券：内联矢量（切角/虚线在 iOS 下不再糊）
-    "{{IC_ticket1}}":      raw_svg("ticket1", "detail"),
-    "{{IC_ticket1dash}}":  raw_svg("ticket1-dash", "detail"),
-    "{{IC_ticket2}}":      raw_svg("ticket2", "detail"),
-    "{{IC_ticket2dash}}":  raw_svg("ticket2-dash", "detail"),
+    # 描边色改用 Figma border-critical-light #F2918A（原 #E65F50 太深；文字 <i> 仍 #E65F50）
+    "{{IC_ticket1}}":      raw_svg("ticket1", "detail", ("#E65F50", "#F2918A")),
+    "{{IC_ticket1dash}}":  raw_svg("ticket1-dash", "detail", ("#E65F50", "#F2918A")),
+    "{{IC_ticket2}}":      raw_svg("ticket2", "detail", ("#E65F50", "#F2918A")),
+    "{{IC_ticket2dash}}":  raw_svg("ticket2-dash", "detail", ("#E65F50", "#F2918A")),
     # 订单页 coupon 的票券：与详情页同图但 id 加 _o 后缀，避免两处内联 mask id 冲突（详情页在隐藏子树 → 空 mask → 订单页描边消失）
-    "{{IC_ticket1_ord}}":      uniquify_svg_ids(raw_svg("ticket1", "detail"), "_o"),
-    "{{IC_ticket1dash_ord}}":  uniquify_svg_ids(raw_svg("ticket1-dash", "detail"), "_o"),
-    "{{IC_ticket2_ord}}":      uniquify_svg_ids(raw_svg("ticket2", "detail"), "_o"),
-    "{{IC_ticket2dash_ord}}":  uniquify_svg_ids(raw_svg("ticket2-dash", "detail"), "_o"),
+    "{{IC_ticket1_ord}}":      uniquify_svg_ids(raw_svg("ticket1", "detail", ("#E65F50", "#F2918A")), "_o"),
+    "{{IC_ticket1dash_ord}}":  uniquify_svg_ids(raw_svg("ticket1-dash", "detail", ("#E65F50", "#F2918A")), "_o"),
+    "{{IC_ticket2_ord}}":      uniquify_svg_ids(raw_svg("ticket2", "detail", ("#E65F50", "#F2918A")), "_o"),
+    "{{IC_ticket2dash_ord}}":  uniquify_svg_ids(raw_svg("ticket2-dash", "detail", ("#E65F50", "#F2918A")), "_o"),
     # 详情大号政策/费用图标：内联矢量，CSS 定 20px，清晰不缩小
     "{{IP_flash}}":        raw_svg("flash"),
     "{{IP_send}}":         strip_wh(DET_SEND),
