@@ -4815,6 +4815,8 @@
   function closeOrder() {
     var m = document.getElementById('orderModal');
     if (m.classList.contains('open')) { m.classList.remove('open'); m.setAttribute('aria-hidden', 'true'); unlockBody(); }
+    // 詳情僅是列表頁上的彈層、非獨立頁面：從訂單返回應直接回到列表（若訂單是從詳情進來的，順帶關掉詳情層）
+    closeDetail();
   }
   function ordDatePresets() {
     // 外層使用日期：放 2 週（14 天），橫向滾動；起點 2026-09-01（原型固定）。
