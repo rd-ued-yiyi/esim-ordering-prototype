@@ -4512,9 +4512,9 @@
         if (c.got) return;
         c.got = true; btn.textContent = '已領取'; btn.disabled = true;
         toast('領取成功，折扣券可在付款頁使用');
-        // 全部領取 → 關閉 sheet 並隱藏橫幅
+        // 全部領取 → 關閉 sheet 並隱藏所有 coupon 橫幅（詳情頁 + 訂單頁，A/B 一致）
         if (COUPONS.every(function (x) { return x.got; })) {
-          document.getElementById('detCoupon').hidden = true;  // 用 hidden 讓 CSS 恢復 footer 分割線
+          document.querySelectorAll('.det-coupon').forEach(function (b) { b.hidden = true; });  // 用 hidden 讓 CSS 恢復 footer 分割線
           setTimeout(closeSheets, 400);
         }
       });
