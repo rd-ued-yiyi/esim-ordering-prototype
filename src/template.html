@@ -1282,8 +1282,8 @@
   .ord-price-toggle .cur, .ord-price-toggle .amt { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 20px; line-height: 20px; font-weight: 700; color: #212121; }
   .ord-price-toggle .caret { width: 20px; height: 20px; transform: rotate(180deg); }
   .ord-foot .cta { flex: 0 0 120px; width: 120px; background: var(--kk-primary-button); color: #fff; }
-  /* 訂單頁 coupon banner（Figma 1074-82361）：移入卡片流、坐落頁面灰底 → 透明底無粉色；票券+領取 對齊 16px */
-  .ord-coupon { margin: 0; border-radius: 0; background: transparent; padding: 0 4px; }
+  /* 訂單頁 coupon banner（Figma 1074-82361）：白底獨立圓角卡（與其餘 ord-card 同：白底 r12、px16、上下 6px 讓 32px picto 置中≈44 高），置於卡片流最後 */
+  .ord-coupon { margin: 0; border-radius: 12px; background: #fff; padding: 6px 16px; }
   /* 佔位以 display:contents 讓 #ordCoupon 直接成為 .ord-cards 的 flex 子項（隱藏時不占 gap） */
   .ord-coupon-slot { display: contents; }
   /* 付款頁（嚴格對齊 Figma 1074-84069） */
@@ -4588,9 +4588,9 @@
         '<div class="ord-info-line"><span class="ic">' + ICONS.mail + '</span>' + o.email + '</div>' +
         '<div class="ord-info-line"><span class="ic">' + ICONS.phone + '</span>' + o.cc + ' ' + o.phone + '</div>' +
       '</div></div>';
-    // coupon banner 佔位：置於「訂購人資料」之後、「備註」之前（Figma 1074-82361）；下方 JS 把 #ordCoupon 節點移入
-    c += '<div class="ord-coupon-slot" id="ordCouponSlot"></div>';
     c += '<div class="ord-card"><button class="ord-row-link" id="ordRemarkRow"><div class="t">備註</div><div class="r' + (st.remark ? ' filled' : '') + '"><span class="lbl">' + (st.remark || '無備註') + '</span><span class="ic">' + ICONS.chevGrey + '</span></div></button></div>';
+    // coupon banner 佔位：置於卡片流最後（「備註」之後，Figma 1074-82361）；下方 JS 把 #ordCoupon 節點移入
+    c += '<div class="ord-coupon-slot" id="ordCouponSlot"></div>';
 
     // 先把 coupon 節點抽離到 modal 根，避免下一行 innerHTML 覆蓋時把它連同監聽器一起銷毀
     var _cp = document.getElementById('ordCoupon');
