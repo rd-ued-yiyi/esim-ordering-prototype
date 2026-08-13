@@ -85,6 +85,7 @@
     padding: 1px 6px; border-radius: 9px; font-weight: 600; }  /* header 測試標記 */
   /* 易用性測試引導文字（取代搜索框） */
   .kkh-guide { text-align: center; color: #212121; font-size: 16px; line-height: 24px; font-weight: 600; padding: 8px 0 4px; }
+  .kkh-desc { text-align: center; color: var(--kk-text-medium); font-size: 12px; line-height: 18px; padding: 0 16px 2px; }
   /* A/B 對照方案入口卡（易用性測試：兩案並排放大，點卡即選定方案並進入 eSIM 流程） */
   .kkh-plans { display: flex; gap: 14px; padding: 28px 16px; }
   .kkh-plan {
@@ -1574,11 +1575,11 @@
     <section class="screen is-active" data-screen="kkhome">
       <div class="kkh-top">
         <div class="kkh-bar">
-          <button class="kkh-menu" data-action="kkh-demo" aria-label="選單"><i></i><i></i><i></i></button>
           <div class="kkh-logo">kkday</div>
           <span class="kkh-test">易用性測試</span>
         </div>
         <div class="kkh-guide">選擇一種方案，開始體驗 eSIM 訂購流程</div>
+        <div class="kkh-desc">假設現在是從首頁或某個入口進入，體驗完一個方案後請刷新連結繼續體驗另一個方案。</div>
       </div>
       <div class="kkh-body">
         <div class="kkh-plans" id="kkhPlans">
