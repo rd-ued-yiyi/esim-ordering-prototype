@@ -2881,6 +2881,34 @@
     multiSel: []
   };
 
+  // ---------- 洲際 tab 滾動錨點（scroll-spy）：捲動國家清單時自動高亮/居中對應洲 tab ----------
+  var dmGuard = 0;  // 點 tab 平滑捲動期間暫停 spy，避免與程式化捲動打架
+  function centerContTab(bar, t) {
+    if (!t || !bar.clientWidth) return;
+    var tr = t.getBoundingClientRect(), br = bar.getBoundingClientRect();
+    bar.scrollTo({ left: Math.max(0, bar.scrollLeft + (tr.left + tr.width / 2) - (br.left + br.width / 2)), behavior: 'smooth' });
+  }
+  function dmSpy() {
+    if (Date.now() < dmGuard) return;
+    var pane = dm.body.querySelector('.dm-pane.act');
+    if (!pane) return;
+    var bar = pane.querySelector('.dm-conts');
+    if (!bar) return;  // 多國區域 pane 無洲際 tab
+    var tabs = [].slice.call(bar.querySelectorAll('.dm-cont'));
+    var secs = [].slice.call(pane.querySelectorAll('.dm-group[data-sec]'));  // 洲際分組（順序＝tab 順序）
+    if (!secs.length || !tabs.length) return;
+    var act = 0;
+    if (dm.body.scrollTop + dm.body.clientHeight >= dm.body.scrollHeight - 4) {
+      act = secs.length - 1;  // 捲到底：末幾洲內容不足以頂到最上，強制高亮最後一洲
+    } else {
+      var lineY = bar.getBoundingClientRect().bottom + 8;  // 置頂 tab 條下沿：分組頂端越過此線即算當前洲
+      secs.forEach(function (s, i) { if (s.getBoundingClientRect().top <= lineY) act = i; });
+    }
+    tabs.forEach(function (t, i) { t.classList.toggle('sel', i === act); });
+    centerContTab(bar, tabs[act]);
+  }
+  dm.body.addEventListener('scroll', dmSpy, { passive: true });
+
   // ---------- 歷史（localStorage） ----------
   function histGet(key, def) {
     try { var v = JSON.parse(localStorage.getItem(key)); return Array.isArray(v) ? v : def; }
@@ -2980,6 +3008,8 @@
       t.addEventListener('click', function () {
         bar.querySelectorAll('.dm-cont').forEach(function (x) { x.classList.remove('sel'); });
         t.classList.add('sel');
+        centerContTab(bar, t);
+        dmGuard = Date.now() + 700;  // 平滑捲動期間暫停 spy
         var sec = paneEl.querySelector('[data-sec="' + prefix + i + '"]');
         if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
