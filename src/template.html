@@ -624,7 +624,7 @@
   /* ================= 套餐列表頁 ================= */
   .pl-head {
     position: sticky; top: 0; z-index: 20; background: #fff;
-    padding-top: max(8px, env(safe-area-inset-top, 0px));
+    padding-top: env(safe-area-inset-top, 0px);  /* web=0 貼頂；有瀏海的裝置仍自動避讓（A/B 一致） */
     transition: box-shadow .2s;
   }
   /* 方案 B：列表頁 header 漸層底 + 目的地文字前地點 icon（Figma 1302-122314；僅方案 B） */
@@ -633,7 +633,7 @@
   /* 漸層放在整個 header 背景，含頂部 padding（避免頂部露白邊）；#E8F8F9 由頂端淡出純白，
      白色終點剛好落在目的地列底（頂部 padding + 列高 54），與下方白色內容無縫銜接、無硬切（Figma 1302-121882） */
   :root[data-variant="B"] .pl-head {
-    background: linear-gradient(180deg, #E8F8F9 0%, #FFFFFF calc(max(8px, env(safe-area-inset-top, 0px)) + 54px));
+    background: linear-gradient(180deg, #E8F8F9 0%, #FFFFFF calc(env(safe-area-inset-top, 0px) + 54px));
   }
   :root[data-variant="B"] .pl-head.scrolled { background: #fff; }  /* 滑動置頂：維持全白，不顯示漸層 */
   .pl-head.scrolled { box-shadow: var(--el-fixed); }  /* 頁面滑動時固定頭部投影（Figma 913-43602） */
