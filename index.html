@@ -3715,7 +3715,7 @@
   // 每張卡的規格屬性＝唯一真實來源（Figma 902-41074 規格表）：卡面標籤、標題、篩選、詳情皆由此推導
   var PKG_SPECS = [
     { sim: '原生卡',    net: '本地', ip: '漫遊IP', speed: '5G/4G', act: '24小時制', topup: true,  hotspot: true,  call: true,  sms: true  },
-    { sim: '國際漫遊卡', net: '漫遊', ip: '本地IP', speed: '4G',    act: '自然日制', topup: false, hotspot: true,  call: false, sms: false },
+    { sim: '國際漫遊卡', net: '漫遊', ip: '本地IP', speed: '5G/4G', act: '自然日制', topup: false, hotspot: true,  call: false, sms: false },
     { sim: '原生卡',    net: '本地', ip: '漫遊IP', speed: '5G/4G', act: '總量制',   topup: true,  hotspot: false, call: true,  sms: true  },
     { sim: '國際漫遊卡', net: '漫遊', ip: '漫遊IP', speed: '4G',    act: '24小時制', topup: false, hotspot: true,  call: true,  sms: false },
     { sim: '原生卡',    net: '本地', ip: '本地IP', speed: '5G/4G', act: '自然日制', topup: true,  hotspot: true,  call: false, sms: false },
@@ -3723,8 +3723,10 @@
     { sim: '原生卡',    net: '本地', ip: '本地IP', speed: '5G/4G', act: '24小時制', topup: true,  hotspot: true,  call: true,  sms: true  },
     { sim: '國際漫遊卡', net: '漫遊', ip: '漫遊IP', speed: '5G/4G', act: '自然日制', topup: true,  hotspot: false, call: false, sms: false }
   ];
-  // eSIM 差異化特性（無內部「·」，避免與標題分隔符衝突）：支援哪些 App、什麼場景能連、免實體卡開通
-  var ESIM_FEATURES = ['支援 ChatGPT／Gemini', '支援 TikTok', '社群 App 暢連', '免翻牆直連', '郵輪靠岸即聯網', '落地掃碼即連', '高鐵地鐵不斷線', '免換卡開通'];
+  // eSIM 差異化特性（無內部「·」，避免與標題分隔符衝突）；順序對應 TITLE_SEG：
+  // 一行卡(2 段)落在短特性、兩行卡(4 段)落在長特性，讓標題長度參差更真實
+  var ESIM_FEATURES = ['支援 TikTok', '免翻牆直連', '支援 ChatGPT／Gemini', '落地掃碼即連', '郵輪靠岸即聯網', '免換卡開通', '高鐵地鐵不斷線', '社群 App 暢連'];
+  var TITLE_SEG = [2, 2, 4, 2, 4, 2, 4, 2];  // 約 2/3 一行(2 段) + 1/3 兩行(4 段)
   // 卡面標籤（C 端顯示值，Figma 970-50754 對照表 + 標籤排序）；通訊維持組合標籤（例：支援熱點·通話）；上限 4 個
   function specTags(s) {
     var a = [];
@@ -3742,16 +3744,19 @@
   // 不放促銷詞（新客/店長推薦）、不放流量套餐/激活方式（總量/自然日＝使用者已選）、不放插卡類（eSIM 免實體卡）；
   // 也避開已是卡面標籤的值（原生卡→本地預付卡、本地→非漫遊、漫遊IP→內建VPN、5G/4G→5G、24小時制、通訊組合）
   function specTitle(s, i, carrier) {
-    var p = [];
-    p.push(s.sim === '國際漫遊卡' ? '國際漫遊' : (carrier + '直連'));  // 原生卡→露出電信商網路
-    if (s.ip === '本地IP') p.push('本地IP低延遲');
-    if (s.speed === '4G') p.push('4G廣覆蓋');
-    if (s.topup) p.push('可加值');
-    var fi = i;  // 用 eSIM 特性補足到 4 段（依 index 錯開，避免每張雷同）
-    while (p.length < 4 && fi - i < ESIM_FEATURES.length) {
-      var f = ESIM_FEATURES[fi % ESIM_FEATURES.length];
-      if (p.indexOf(f) < 0) p.push(f);
-      fi++;
+    var lead = s.sim === '國際漫遊卡' ? '國際漫遊' : (carrier + '直連');  // 原生卡→露出電信商網路
+    var spec = [];
+    if (s.ip === '本地IP') spec.push('本地IP低延遲');
+    if (s.speed === '4G') spec.push('4G廣覆蓋');
+    if (s.topup) spec.push('可加值');
+    var target = TITLE_SEG[i % TITLE_SEG.length];
+    var p = [lead];
+    if (target >= 4) { for (var k = 0; k < spec.length && p.length < 3; k++) p.push(spec[k]); }  // 兩行卡才多塞規格段
+    var off = 0;  // eSIM 特性補足到 target；ESIM_FEATURES[i] 每張唯一（短特性落一行卡、長特性落兩行卡）
+    while (p.length < target && off < ESIM_FEATURES.length) {
+      var f = ESIM_FEATURES[(i + off) % ESIM_FEATURES.length];
+      if (p.indexOf(f) < 0 && spec.indexOf(f) < 0) p.push(f);
+      off++;
     }
     return p.join('·');
   }
