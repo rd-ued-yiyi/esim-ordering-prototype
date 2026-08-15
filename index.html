@@ -3788,6 +3788,11 @@
   }
   function tabShort() { return state.tab === 'daily' ? '每日流量' : state.tab === 'total' ? '總流量' : '無限流量'; }
 
+  // 商品需求分佈（每個目的地 8 張卡，按 index 穩定指派，混合排列不聚堆）：
+  // 約 50% 無任何特別要求（訂單頁只有訂購人+備註）／20% 需指定啟用日（訂單頁＝日期+聯絡人）／
+  // 20% 需設備+航班（訂單頁＝裝置+航班+聯絡人）／10% 需實名（訂單頁＝旅客資料+聯絡人）
+  var REQ_NONE = [], REQ_DATE = ['需指定啟用日'], REQ_DF = ['需EID/IMEI', '需提供航班'], REQ_REAL = ['需線下實名認證'];
+  var REQ_PATTERN = [REQ_NONE, REQ_DATE, REQ_DF, REQ_NONE, REQ_REAL, REQ_NONE, REQ_DATE, REQ_NONE];
   function buildPlans() {
     var dest = destRaw();
     var vendors = VENDORS[dest] || VENDORS['default'];
@@ -3823,7 +3828,7 @@
           (i % 2 === 0) ? ['checkLine', '即買即用', false]
             : ['calendarD', '最早可使用日: ' + fmtDate(2), true]
         ],
-        warns: i % 4 === 0 ? ['需線下實名認證', '需提供航班', '需EID/IMEI', '需指定啟用日'] : i % 4 === 1 ? ['需提供航班'] : i % 4 === 3 ? ['需線下實名認證', '需EID/IMEI'] : ['需指定啟用日'],
+        warns: REQ_PATTERN[i % REQ_PATTERN.length].slice(),
         vendor: v,
         rating: [4.6, 4.8, 3.0, 4.2, 4.5][i % 5],
         reviews: [234, 1024, 234, 89, 456][i % 5],
@@ -4907,7 +4912,8 @@
     var device = w.indexOf('需EID/IMEI') >= 0;     // 只有需 EID/IMEI 的商品才要填裝置資訊
     var realname = w.indexOf('需線下實名認證') >= 0;  // 需實名 → 要填聯絡人
     var needDate = w.indexOf('需指定啟用日') >= 0;   // 僅「需指定啟用日」商品才需在訂單頁選使用日期（Figma 1249-109383）
-    return { date: needDate, flight: flight, device: device, travelers: realname, contacts: flight || realname };
+    // 聯絡人：需航班 / 需實名 / 需指定啟用日 任一都要填（指定啟用日商品＝日期+聯絡人）
+    return { date: needDate, flight: flight, device: device, travelers: realname, contacts: flight || realname || needDate };
   }
   function daysNumOf(p) { var m = /(\d+)\s*天/.exec(p.title + ' ' + (p.spec || '')); return m ? +m[1] : (state.days ? +state.days : 7); }
 
@@ -5053,14 +5059,14 @@
       var maxTv = st.qty;  // 旅客數 = 購買數量（每張 eSIM 一位旅客）
       if (st.travelers.length > maxTv) st.travelers = st.travelers.slice(0, maxTv);  // qty 下調時裁掉超額
       // 數量表現＝「選擇旅客 (已選/上限)」青字比例（Figma 1074-81598：取代原「N 旅客 已選滿」）
-      c += '<div class="ord-card"><div class="ord-sec-h"><div class="t">選擇旅客 <span class="cnt">(' + st.travelers.length + '/' + maxTv + ')</span></div></div>' +
+      c += '<div class="ord-card"><div class="ord-sec-h"><div class="t">旅客資料 <span class="cnt">(' + st.travelers.length + '/' + maxTv + ')</span></div></div>' +
         '<div class="ct-area" id="tvArea"><div class="ct-chips-vp" id="tvChipsVp"><div class="ct-chips" id="tvChips"></div></div>' +
         '<button class="ct-add" id="tvAdd"><span class="ic">' + ICONS.plusCyan + '</span>新增</button></div>' +
         '<div id="tvCards"></div></div>';
     }
     if (req.contacts) {
       // 數量表現＝「選擇聯絡人 (已選/上限)」青字比例（上限 1）
-      c += '<div class="ord-card"><div class="ord-sec-h"><div class="t">選擇聯絡人 <span class="cnt">(' + st.contacts.length + '/1)</span></div></div>' +
+      c += '<div class="ord-card"><div class="ord-sec-h"><div class="t">聯絡人資料 <span class="cnt">(' + st.contacts.length + '/1)</span></div></div>' +
         '<div class="ct-area" id="ctArea"><div class="ct-chips-vp" id="ctChipsVp"><div class="ct-chips" id="ctChips"></div></div>' +
         '<button class="ct-add" id="ctAdd"><span class="ic">' + ICONS.plusCyan + '</span>新增</button></div>' +
         '<div id="ctCards"></div></div>';
