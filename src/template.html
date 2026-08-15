@@ -821,6 +821,9 @@
   .fs-sec { padding: 24px 0; border-bottom: 1px solid var(--kk-border-lighter); }
   .fs-sec:last-child { border-bottom: 0; }
   .fs-sec .fs-h { font-size: 16px; line-height: 24px; font-weight: 600; color: var(--kk-text-darker); margin: 0 0 16px; }
+  /* 該類目有選中項時，標題右上角紅點 badge（Figma 970-51170） */
+  .fs-sec .fs-h.has-sel { display: inline-block; position: relative; }
+  .fs-sec .fs-h.has-sel::after { content: ''; position: absolute; top: 0; right: -8px; width: 5px; height: 5px; border-radius: 50%; background: #E65F50; }
   .fs-opts { display: flex; flex-wrap: wrap; gap: 12px; }
   /* 篩選選項 pill（圓角膠囊，多選/單選高亮） */
   .fopt { display: inline-flex; align-items: center; gap: 4px; box-sizing: border-box;
@@ -4150,7 +4153,10 @@
     body.innerHTML = '';
     filterCats().forEach(function (cat) {
       var sec = el('<div class="fs-sec"><div class="fs-h"></div><div class="fs-opts"></div></div>');
-      sec.querySelector('.fs-h').textContent = cat.label;
+      var h = sec.querySelector('.fs-h');
+      h.textContent = cat.label;
+      var selCat = cat.single ? !!fDraft.date : (fDraft[cat.key] && fDraft[cat.key].length > 0);  // 有選中項→標題紅點
+      if (selCat) h.classList.add('has-sel');
       var opts = sec.querySelector('.fs-opts');
       cat.opts.forEach(function (o) {
         var on = cat.single ? fDraft.date === o : fDraft[cat.key].indexOf(o) >= 0;
@@ -4173,7 +4179,8 @@
       body.appendChild(sec);
     });
     // 價格區間雙滑塊
-    var ps = el('<div class="fs-sec"><div class="fs-h">價格區間 (NT$)</div><div class="fs-price-val"></div>' +
+    var priceSel = fDraft.priceMin > 0 || fDraft.priceMax < 12000;  // 價格非預設→標題紅點
+    var ps = el('<div class="fs-sec"><div class="fs-h' + (priceSel ? ' has-sel' : '') + '">價格區間 (NT$)</div><div class="fs-price-val"></div>' +
       '<div class="fs-range"><div class="track"></div><div class="fill"></div>' +
       '<input type="range" class="rmin" min="0" max="12000" step="500"><input type="range" class="rmax" min="0" max="12000" step="500"></div></div>');
     var rmin = ps.querySelector('.rmin'), rmax = ps.querySelector('.rmax'), fill = ps.querySelector('.fill'), val = ps.querySelector('.fs-price-val');
