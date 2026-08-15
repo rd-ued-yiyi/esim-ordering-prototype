@@ -636,6 +636,14 @@
     padding-top: max(8px, env(safe-area-inset-top, 0px));
     transition: box-shadow .2s;
   }
+  /* 方案 B：列表頁 header 漸層底 + 目的地文字前地點 icon（Figma 1302-122314；僅方案 B） */
+  .pl-title-pin { display: none; }  /* 方案 A 不顯示 */
+  :root[data-variant="B"] .pl-title-pin { display: inline-flex; }
+  /* 漸層 #CEF0F3→白，集中在目的地列（約 96px 內淡出白），對齊 Figma 可見青綠範圍；
+     下方晶片/篩選列的固定白底剛好落在已轉白區，不露白塊 */
+  :root[data-variant="B"] .pl-head {
+    background: linear-gradient(180deg, #CEF0F3 0%, #FFFFFF 96px);
+  }
   .pl-head.scrolled { box-shadow: var(--el-fixed); }  /* 頁面滑動時固定頭部投影（Figma 913-43602） */
   /* Figma 913-43623：返回鍵↔標題組 gap 20，標題↔數量↔箭頭 gap 8，pl-20 pr-40，高 54 */
   .pl-bar { display: flex; align-items: center; gap: 20px; height: 54px; padding: 8px 40px 8px 20px; }
@@ -1921,6 +1929,7 @@
         <div class="pl-bar">
           <button class="pl-back" data-action="back-plans" aria-label="返回"><span class="ic ic-24"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjcuOTE2NjciIGhlaWdodD0iMTQuMTY2NyIgdmlld0JveD0iMCAwIDcuOTE2NjcgMTQuMTY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciAoU3Ryb2tlKSIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik03LjY3MjU5IDAuMjQ0MDc4QzcuOTk4MDMgMC41Njk1MTUgNy45OTgwMyAxLjA5NzE1IDcuNjcyNTkgMS40MjI1OUwyLjAxMTg0IDcuMDgzMzNMNy42NzI1OSAxMi43NDQxQzcuOTk4MDMgMTMuMDY5NSA3Ljk5ODAzIDEzLjU5NzIgNy42NzI1OSAxMy45MjI2QzcuMzQ3MTUgMTQuMjQ4IDYuODE5NTEgMTQuMjQ4IDYuNDk0MDggMTMuOTIyNkwwLjI0NDA3OCA3LjY3MjU5Qy0wLjA4MTM1OTIgNy4zNDcxNSAtMC4wODEzNTkyIDYuODE5NTEgMC4yNDQwNzggNi40OTQwOEw2LjQ5NDA4IDAuMjQ0MDc4QzYuODE5NTEgLTAuMDgxMzU5MiA3LjM0NzE1IC0wLjA4MTM1OTIgNy42NzI1OSAwLjI0NDA3OFoiIGZpbGw9IiMyMTIxMjEiLz4KPC9zdmc+" width="7.92" height="14.17"></span></button>
           <button class="pl-title-wrap" data-action="change-destination">
+            <span class="ic ic-20 pl-title-pin"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE2LjUiIGhlaWdodD0iMjEiIHZpZXdCb3g9IjAgMCAxNi41IDIxIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cGF0aCBpZD0iVmVjdG9yIiBkPSJNOC4yNSAwQzYuMDYyNzYgMC4wMDI1OTUyMSAzLjk2NTg1IDAuODcyNjIyIDIuNDE5MjQgMi40MTkyNEMwLjg3MjYyMiAzLjk2NTg1IDAuMDAyNTk1MjEgNi4wNjI3NiAwIDguMjVDMCAxNS4zMDkxIDcuNSAyMC42NDExIDcuODE5MzQgMjAuODY0NUM3Ljk0NTYzIDIwLjk1MjcgOC4wOTU5NiAyMSA4LjI1IDIxQzguNDA0MDQgMjEgOC41NTQzNyAyMC45NTI3IDguNjgwNjYgMjAuODY0NUM5IDIwLjY0MTEgMTYuNSAxNS4zMDkxIDE2LjUgOC4yNUMxNi40OTc0IDYuMDYyNzYgMTUuNjI3NCAzLjk2NTg1IDE0LjA4MDggMi40MTkyNEMxMi41MzQyIDAuODcyNjIyIDEwLjQzNzIgMC4wMDI1OTQ5NiA4LjI1IDBWMFpNOC4yNTA1NSA1LjI1MDI3QzguODQzODkgNS4yNTAyNyA5LjQyMzkxIDUuNDI2MjIgOS45MTcyNiA1Ljc1NTg2QzEwLjQxMDYgNi4wODU1MSAxMC43OTUxIDYuNTU0MDQgMTEuMDIyMiA3LjEwMjIyQzExLjI0OTMgNy42NTA0IDExLjMwODcgOC4yNTM2IDExLjE5MjkgOC44MzU1NEMxMS4wNzcxIDkuNDE3NDkgMTAuNzkxNCA5Ljk1MjA0IDEwLjM3MTkgMTAuMzcxNkM5Ljk1MjMxIDEwLjc5MTIgOS40MTc3NiAxMS4wNzY5IDguODM1ODIgMTEuMTkyNkM4LjI1Mzg4IDExLjMwODQgNy42NTA2OCAxMS4yNDkgNy4xMDI1IDExLjAyMTlDNi41NTQzMiAxMC43OTQ4IDYuMDg1NzggMTAuNDEwMyA1Ljc1NjE0IDkuOTE2OThDNS40MjY1IDkuNDIzNjQgNS4yNTA1NSA4Ljg0MzYyIDUuMjUwNTUgOC4yNTAyN0M1LjI1MDU0IDcuODU2MyA1LjMyODEzIDcuNDY2MTkgNS40Nzg4OSA3LjEwMjIxQzUuNjI5NjUgNi43MzgyMyA1Ljg1MDYzIDYuNDA3NSA2LjEyOTIgNi4xMjg5M0M2LjQwNzc4IDUuODUwMzUgNi43Mzg1IDUuNjI5MzcgNy4xMDI0OSA1LjQ3ODYxQzcuNDY2NDcgNS4zMjc4NSA3Ljg1NjU4IDUuMjUwMjYgOC4yNTA1NSA1LjI1MDI3VjUuMjUwMjdaIiBmaWxsPSIjMjZCRUM5Ii8+Cjwvc3ZnPg==" width="16.50" height="21.00"></span>
             <span class="pl-title" id="plTitle">日本</span>
             <span class="pl-num" id="plTitleNum" hidden></span>
             <span class="ic ic-20"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE0LjE2NjciIGhlaWdodD0iNy45MTY2NyIgdmlld0JveD0iMCAwIDE0LjE2NjcgNy45MTY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0wLjI0NDA3OCAwLjI0NDA3OEMwLjU2OTUxNSAtMC4wODEzNTkyIDEuMDk3MTUgLTAuMDgxMzU5MiAxLjQyMjU5IDAuMjQ0MDc4TDcuMDgzMzMgNS45MDQ4MkwxMi43NDQxIDAuMjQ0MDc4QzEzLjA2OTUgLTAuMDgxMzU5MiAxMy41OTcyIC0wLjA4MTM1OTIgMTMuOTIyNiAwLjI0NDA3OEMxNC4yNDggMC41Njk1MTUgMTQuMjQ4IDEuMDk3MTUgMTMuOTIyNiAxLjQyMjU5TDcuNjcyNTkgNy42NzI1OUM3LjM0NzE1IDcuOTk4MDMgNi44MTk1MSA3Ljk5ODAzIDYuNDk0MDggNy42NzI1OUwwLjI0NDA3OCAxLjQyMjU5Qy0wLjA4MTM1OTIgMS4wOTcxNSAtMC4wODEzNTkyIDAuNTY5NTE1IDAuMjQ0MDc4IDAuMjQ0MDc4WiIgZmlsbD0iIzIxMjEyMSIvPgo8L3N2Zz4=" width="14.17" height="7.92"></span>

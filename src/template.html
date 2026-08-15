@@ -627,6 +627,14 @@
     padding-top: max(8px, env(safe-area-inset-top, 0px));
     transition: box-shadow .2s;
   }
+  /* 方案 B：列表頁 header 漸層底 + 目的地文字前地點 icon（Figma 1302-122314；僅方案 B） */
+  .pl-title-pin { display: none; }  /* 方案 A 不顯示 */
+  :root[data-variant="B"] .pl-title-pin { display: inline-flex; }
+  /* 漸層 #CEF0F3→白，集中在目的地列（約 96px 內淡出白），對齊 Figma 可見青綠範圍；
+     下方晶片/篩選列的固定白底剛好落在已轉白區，不露白塊 */
+  :root[data-variant="B"] .pl-head {
+    background: linear-gradient(180deg, #CEF0F3 0%, #FFFFFF 96px);
+  }
   .pl-head.scrolled { box-shadow: var(--el-fixed); }  /* 頁面滑動時固定頭部投影（Figma 913-43602） */
   /* Figma 913-43623：返回鍵↔標題組 gap 20，標題↔數量↔箭頭 gap 8，pl-20 pr-40，高 54 */
   .pl-bar { display: flex; align-items: center; gap: 20px; height: 54px; padding: 8px 40px 8px 20px; }
@@ -1820,6 +1828,7 @@
         <div class="pl-bar">
           <button class="pl-back" data-action="back-plans" aria-label="返回"><span class="ic ic-24">{{IC_back}}</span></button>
           <button class="pl-title-wrap" data-action="change-destination">
+            <span class="ic ic-20 pl-title-pin">{{IC_location}}</span>
             <span class="pl-title" id="plTitle">日本</span>
             <span class="pl-num" id="plTitleNum" hidden></span>
             <span class="ic ic-20">{{IC_arrowDown}}</span>
