@@ -3789,10 +3789,10 @@
   function tabShort() { return state.tab === 'daily' ? '每日流量' : state.tab === 'total' ? '總流量' : '無限流量'; }
 
   // 商品需求分佈（每個目的地 8 張卡，按 index 穩定指派，混合排列不聚堆）：
-  // 約 50% 無任何特別要求（訂單頁只有訂購人+備註）／20% 需指定啟用日（訂單頁＝日期+聯絡人）／
-  // 20% 需設備+航班（訂單頁＝裝置+航班+聯絡人）／10% 需實名（訂單頁＝旅客資料+聯絡人）
+  // 3 無任何特別要求（訂單頁只有訂購人+備註）／2 需指定啟用日（訂單頁＝日期+聯絡人）／
+  // 2 需設備+航班（訂單頁＝裝置+航班+聯絡人）／1 需實名（訂單頁＝旅客資料+聯絡人）
   var REQ_NONE = [], REQ_DATE = ['需指定啟用日'], REQ_DF = ['需EID/IMEI', '需提供航班'], REQ_REAL = ['需線下實名認證'];
-  var REQ_PATTERN = [REQ_NONE, REQ_DATE, REQ_DF, REQ_NONE, REQ_REAL, REQ_NONE, REQ_DATE, REQ_NONE];
+  var REQ_PATTERN = [REQ_NONE, REQ_DATE, REQ_DF, REQ_NONE, REQ_REAL, REQ_DF, REQ_DATE, REQ_NONE];
   function buildPlans() {
     var dest = destRaw();
     var vendors = VENDORS[dest] || VENDORS['default'];
