@@ -1279,7 +1279,7 @@
     position: fixed; left: 50%; top: 50%; transform: translate(-50%, calc(-50% + 8px));  /* 視覺中央 */
     background: rgba(33,33,33,.92); color: #fff; font-size: 14px; line-height: 20px;
     padding: 10px 16px; border-radius: var(--r-md); z-index: 60;  /* 高於 bottom sheet(51)：領取成功 toast 蓋在 sheet 之上 */
-    opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; max-width: 320px; text-align: center;
+    opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; max-width: 320px; text-align: center; white-space: pre-line;
   }
   .toast.show { opacity: 1; transform: translate(-50%, -50%); }
 
@@ -5568,7 +5568,7 @@
   document.getElementById('payBtn').addEventListener('click', function () {
     if (!payState.agree) { toast('請先勾選同意條款'); return; }
     withLoading(this, function () {
-      toast('付款成功，感謝您的體驗');
+      toast('付款成功，感謝您的體驗\n正在刷新回到首頁');
       setTimeout(function () { location.reload(); }, 2000);  // 顯示 toast 後自動刷新連結，回到模擬首頁繼續體驗另一方案
     });
   });
