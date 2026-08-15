@@ -3711,33 +3711,45 @@
     '新加坡': ['Singtel', 'StarHub', 'M1'],
     'default': ['Joytel 樂遊', 'Ubigi', '翔翼通訊', 'Telecom Square', '3HK']
   };
-  var PKG_TITLES = [
-    '5G·漫遊·原生網路·掃碼啟用',
-    '5G·本地電信·原生IP·低延遲',
-    '4G/5G·雙電信自動切換·訊號廣',
-    '4G·漫遊·落地即啟用',
-    '5G·漫遊·全程高速·不斷線',
-    '5G·原生網路·當地時區計日',
-    '4G·漫遊·輕量型·高CP值',
-    '5G·本地電信·含離島覆蓋'
+  // 每張卡的規格屬性＝唯一真實來源（Figma 902-41074 規格表）：卡面標籤、標題、篩選、詳情皆由此推導
+  var PKG_SPECS = [
+    { sim: '原生卡',    net: '本地', ip: '漫遊IP', speed: '5G/4G', act: '24小時制', topup: true,  hotspot: true,  call: true,  sms: true  },
+    { sim: '國際漫遊卡', net: '漫遊', ip: '本地IP', speed: '4G',    act: '自然日制', topup: false, hotspot: true,  call: false, sms: false },
+    { sim: '原生卡',    net: '本地', ip: '漫遊IP', speed: '5G/4G', act: '總量制',   topup: true,  hotspot: false, call: true,  sms: true  },
+    { sim: '國際漫遊卡', net: '漫遊', ip: '漫遊IP', speed: '4G',    act: '24小時制', topup: false, hotspot: true,  call: true,  sms: false },
+    { sim: '原生卡',    net: '本地', ip: '本地IP', speed: '5G/4G', act: '自然日制', topup: true,  hotspot: true,  call: false, sms: false },
+    { sim: '國際漫遊卡', net: '漫遊', ip: '漫遊IP', speed: '4G',    act: '總量制',   topup: false, hotspot: false, call: true,  sms: true  },
+    { sim: '原生卡',    net: '本地', ip: '本地IP', speed: '5G/4G', act: '24小時制', topup: true,  hotspot: true,  call: true,  sms: true  },
+    { sim: '國際漫遊卡', net: '漫遊', ip: '漫遊IP', speed: '5G/4G', act: '自然日制', topup: true,  hotspot: false, call: false, sms: false }
   ];
-  // 標籤規則：①只從「基本資訊」規格表欄位推導（Figma 902-41074）②除通訊組合標籤外一律 ≤5 字
-  // ③用詞對齊市場慣例（KKday/Klook/DJB 商品卡：低速不限量/可加值/掃碼啟用…）：
-  //   通話與簡訊三項 → 組合標籤（支援熱點 | 支援熱點·通話·簡訊 | 支援通話·簡訊，每卡一種變體）
-  //   是否加值 → 可加值；啟用方式 → 掃碼啟用；卡片有效期「2030-12-12 前有效」→ 長效期（先買囤著不作廢）；
-  //   網路詳情·電信商 → 電信商網路標籤（按目的地取 CARRIERS，插在組合標籤後，見 buildPlans）
-  //   （當地計日被否：規格不是賣點；低速不限量被否：超量結局由所選流量計費方式鎖定，屬條件維度不是卡面差異點）
-  // 大多數卡滿 4 個（含電信商標籤），組合互不相同；不與本卡方案名撞語義：卡0「掃碼啟用」/卡3「落地即啟用」不給 掃碼啟用
-  var PKG_TAGS = [
-    ['支援熱點·通話·簡訊', '可加值', '免翻牆'],
-    ['支援熱點', '可加值', '一鍵安裝'],
-    ['支援通話·簡訊', '可加值', '免翻牆'],
-    ['支援熱點', '免翻牆'],
-    ['支援熱點·通話·簡訊', '一鍵安裝', '免翻牆'],
-    ['支援通話·簡訊', '可加值', '一鍵安裝'],
-    ['支援熱點', '一鍵安裝', '免翻牆'],
-    ['支援熱點·通話·簡訊', '可加值', '一鍵安裝']
-  ];
+  var MKT_WORDS = ['高CP值', '人氣熱銷', '超值首選', '旅遊必備', '店長推薦', '輕量方案', '新客推薦', '口碑精選'];
+  // 卡面標籤（C 端顯示值，Figma 970-50754 對照表 + 標籤排序）；通訊維持組合標籤（例：支援熱點·通話）；上限 4 個
+  function specTags(s) {
+    var a = [];
+    if (s.speed === '5G/4G') a.push([1, '5G']);
+    var comm = (s.hotspot && s.call) ? '支援熱點·通話' : s.hotspot ? '支援熱點' : s.call ? '支援通話' : null;
+    if (comm) a.push([2, comm]);
+    if (s.act === '24小時制') a.push([3, '24小時制']);
+    if (s.ip === '漫遊IP') a.push([4, '內建VPN']);
+    if (s.sim === '原生卡') a.push([6, '本地預付卡']);
+    if (s.net === '本地') a.push([7, '非漫遊']);
+    a.sort(function (x, y) { return x[0] - y[0]; });
+    return a.map(function (x) { return x[1]; }).slice(0, 4);
+  }
+  // 卡片標題：只取「未成為卡面標籤」的規格資訊（避免與標籤重複），末尾加行銷詞。
+  // 標籤側值（不用於標題）：原生卡→本地預付卡、本地→非漫遊、漫遊IP→內建VPN、5G/4G→5G、24小時制、通訊組合
+  function specTitle(s, i) {
+    var p = [];
+    if (s.sim === '國際漫遊卡') p.push('國際漫遊');   // 國際漫遊卡非標籤側，可入標題
+    if (s.ip === '本地IP') p.push('本地IP·低延遲');   // 本地IP 非標籤側
+    if (s.speed === '4G') p.push('4G 廣覆蓋');        // 純 4G 非標籤側
+    if (s.act === '總量制') p.push('總量型');          // 24小時制才是標籤側
+    else if (s.act === '自然日制') p.push('自然日計');
+    if (s.topup) p.push('可加值');                     // 可加值非卡面標籤
+    var lead = p.length ? p.slice(0, 2) : ['原生方案'];
+    lead.push(MKT_WORDS[i % MKT_WORDS.length]);
+    return lead.join('·');
+  }
   // 電信商（規格表「網路詳情·電信商」）：按目的地取真實網路，未收錄目的地統一「當地電信」
   var CARRIERS = {
     '日本': ['KDDI', 'SoftBank', 'docomo'],
@@ -3810,14 +3822,12 @@
       var off = (i % 3 === 0);       // 明確折扣 → 價格上方顯示「N%OFF」實底標籤
       var special = (i % 3 === 1);   // 一般促銷 → 價格上方顯示「特別優惠」淡底標籤
       var perkSet = i % 4;
+      var spec = PKG_SPECS[i % PKG_SPECS.length];
       out.push({
-        title: PKG_TITLES[i % PKG_TITLES.length],
+        title: specTitle(spec, i),
+        spec: spec,
         carrier: carrier,
-        tags: (function (c) {
-          var t = PKG_TAGS[i % PKG_TAGS.length].slice();
-          t.splice(1, 0, c);  // 電信商網路標籤插在組合標籤後
-          return t;
-        })(carrier),
+        tags: specTags(spec),  // 卡面標籤：C 端顯示值（不含電信商，Figma 970-50754）
         // 政策三維度恆存在（Figma 848-41680）：確認速度/取消政策/可用日期；每項 [icon, text, dark]
         // 有利項 cyan（dark=false），不利項深灰（dark=true）
         // 取消政策四態均分到卡片（Figma 1029-74421）：免費 / 條件(免費或不可) / 收費 / 不可
@@ -4045,7 +4055,7 @@
   // ---------- 列表頁篩選（總篩選 970-50754 / 單類目 984-14319 / 日期 970-49610 / 按鈕態 1004-4239x） ----------
   // fState=已應用；fDraft=sheet 內暫存草稿。date:null|'今天'|'明天'|{y,m,d,label}；quick 為快篩布林
   // 空篩選工廠：初始化與「清除」共用同一份，避免欄位漏寫（如 speed）導致 renderFilterSheet 報錯
-  function emptyFilter() { return { date: null, service: [], cardType: [], speed: [], activate: [], carrier: [], priceMin: 0, priceMax: 12000, quick: {} }; }
+  function emptyFilter() { return { date: null, service: [], features: [], speed: [], activate: [], ipType: [], cardType: [], network: [], priceMin: 0, priceMax: 12000 }; }
   var fState = emptyFilter();
   var fDraft = null;
   function fClone(s) { return JSON.parse(JSON.stringify(s)); }
@@ -4057,36 +4067,35 @@
   function filterCats() {
     return [
       { key: 'date', label: '使用日期', opts: ['今天', '明天'], date: true, single: true, rect: true },
-      { key: 'service', label: '服務保障', opts: ['免費取消', '立即確定', '即買即用'] },
-      { key: 'cardType', label: '卡片型別', opts: ['原生卡', '國際漫遊卡', '虛商卡'] },
-      { key: 'speed', label: '網速', opts: ['5G', '4G', '5G/4G'] },
-      { key: 'activate', label: '啟用方式', opts: ['掃碼啟用', '一鍵啟用'] },
-      { key: 'carrier', label: '電信商', opts: carrierOpts() }
+      { key: 'service', label: '服務保障', opts: ['立即確認', '即買即用', '免費取消'] },
+      { key: 'features', label: '包含功能', opts: ['支援熱點', '含本地通話', '可以加值'] },
+      { key: 'speed', label: '傳輸規格', opts: ['5G', '5G/4G'] },
+      { key: 'activate', label: '流量激活計算方式', opts: ['24小時制', '自然日制', '總量制'] },
+      { key: 'ipType', label: 'IP類型', opts: ['本地IP', '漫遊IP'] },
+      { key: 'cardType', label: 'SIM卡類型', opts: ['原生卡', '國際漫遊卡'] },
+      { key: 'network', label: '網絡資源', opts: ['本地', '漫遊'] }
     ];
   }
   function catByKey(k) { return filterCats().filter(function (c) { return c.key === k; })[0]; }
   // 外層篩選行兩類：expand=開 sheet（帶確定 footer）；date=直接開日曆；quick=直接切換（無 sheet）
+  // 外層：日期 + IP類型(下拉) + 快捷(5G/支援熱點/立即確認/即買即用/免費取消)。
+  // 快捷＝catval：直接切換對應總篩選類目的值 → 外層與總篩選自動關聯（同一份 fState）
   function outerRow() {
     return [
       { type: 'date' },
-      { type: 'expand', cat: 'cardType' },
-      { type: 'quick', key: '立即確認' },
-      { type: 'quick', key: '即買即用' },
-      { type: 'quick', key: '免費取消' },
-      { type: 'quick', key: '一鍵啟用' },
-      { type: 'quick', key: '5G' },
-      { type: 'quick', key: '支援熱點' }
+      { type: 'expand', cat: 'ipType' },
+      { type: 'catval', cat: 'speed', val: '5G' },
+      { type: 'catval', cat: 'features', val: '支援熱點' },
+      { type: 'catval', cat: 'service', val: '立即確認' },
+      { type: 'catval', cat: 'service', val: '即買即用' },
+      { type: 'catval', cat: 'service', val: '免費取消' }
     ];
   }
-  function fActiveCount() {
-    var n = fSheetCount();
-    Object.keys(fState.quick).forEach(function (k) { if (fState.quick[k]) n += 1; });
-    return n;
-  }
-  // 僅總篩選 sheet 內的篩選項（不含快捷篩選）——決定「篩選」按鈕的選中態
+  function fActiveCount() { return fSheetCount(); }  // 外層快捷已併入總篩選類目，計數統一
+  // 總篩選內容數（決定「篩選」按鈕選中態）；外層快捷=同一份 fState 類目，天然關聯
   function fSheetCount() {
     var n = fState.date ? 1 : 0;
-    ['service', 'cardType', 'speed', 'activate', 'carrier'].forEach(function (k) { n += fState[k].length; });
+    ['service', 'features', 'speed', 'activate', 'ipType', 'cardType', 'network'].forEach(function (k) { n += fState[k].length; });
     if (fState.priceMin > 0 || fState.priceMax < 12000) n += 1;
     return n;
   }
@@ -4105,31 +4114,32 @@
   function applyFilters(list, st) {
     st = st || fState;
     return list.filter(function (p) {
-      if (st.carrier.length && st.carrier.indexOf(p.carrier) < 0) return false;
+      var s = p.spec;
       if (st.service.length) {
         var pt = p.perks.map(function (pk) { return pk[1]; });
-        var ok = st.service.every(function (s) {
-          if (s === '免費取消') return pt.some(function (t) { return t.indexOf('免費取消') >= 0; });
-          if (s === '立即確定') return pt.indexOf('立即確認') >= 0;
-          if (s === '即買即用') return pt.indexOf('即買即用') >= 0;
+        var ok = st.service.every(function (v) {
+          if (v === '免費取消') return pt.some(function (t) { return t.indexOf('免費取消') >= 0; });
+          if (v === '立即確認') return pt.indexOf('立即確認') >= 0;
+          if (v === '即買即用') return pt.indexOf('即買即用') >= 0;
           return true;
         });
         if (!ok) return false;
       }
-      if (st.cardType.length && st.cardType.indexOf(cardTypeOf(p)) < 0) return false;
-      if (st.speed.length && !st.speed.some(function (s) { return planSpeeds(p).indexOf(s) >= 0; })) return false;
-      if (st.activate.length) {
-        var oneClick = p.tags.indexOf('一鍵安裝') >= 0;  // 有「一鍵安裝」標籤＝支援一鍵啟用
-        if (!st.activate.some(function (a) { return a === '一鍵啟用' ? oneClick : true; })) return false;
+      if (st.features.length) {
+        var okf = st.features.every(function (v) {
+          if (v === '支援熱點') return !!s.hotspot;
+          if (v === '含本地通話') return !!s.call;
+          if (v === '可以加值') return !!s.topup;
+          return true;
+        });
+        if (!okf) return false;
       }
+      if (st.speed.length && !st.speed.some(function (sp) { return s.speed.indexOf(sp) >= 0; })) return false;
+      if (st.activate.length && st.activate.indexOf(s.act) < 0) return false;
+      if (st.ipType.length && st.ipType.indexOf(s.ip) < 0) return false;
+      if (st.cardType.length && st.cardType.indexOf(s.sim) < 0) return false;
+      if (st.network.length && st.network.indexOf(s.net) < 0) return false;
       if (p.now < st.priceMin || (st.priceMax < 12000 && p.now > st.priceMax)) return false;
-      var q = st.quick || {};
-      if (q['一鍵啟用'] && p.tags.indexOf('一鍵安裝') < 0) return false;
-      if (q['5G'] && p.title.indexOf('5G') < 0) return false;
-      if (q['支援熱點'] && p.tags[0].indexOf('熱點') < 0) return false;
-      if (q['免費取消'] && !p.perks.some(function (x) { return x[1].indexOf('免費取消') >= 0; })) return false;
-      if (q['立即確認'] && p.perks[0][1] !== '立即確認') return false;
-      if (q['即買即用'] && !p.perks.some(function (x) { return x[1] === '即買即用'; })) return false;
       return true;
     });
   }
@@ -4154,12 +4164,15 @@
     document.getElementById('plFilterBtn').classList.toggle('sel', fSheetCount() > 0);  // 只反映總篩選內容，不受快篩影響
     outerRow().forEach(function (it) {
       var b, sel, txt;
-      if (it.type === 'quick') {
-        sel = !!fState.quick[it.key];
+      if (it.type === 'catval') {
+        // 快捷＝直接切換總篩選某類目的值（外層↔總篩選同一份 fState，天然關聯）
+        var qarr = fState[it.cat];
+        sel = qarr.indexOf(it.val) >= 0;
         b = el('<button class="fpill fquick' + (sel ? ' sel' : '') + '"><span class="lb"></span></button>');
-        b.querySelector('.lb').textContent = it.key;
+        b.querySelector('.lb').textContent = it.val;
         b.addEventListener('click', function () {
-          fState.quick[it.key] = !fState.quick[it.key];
+          var a = fState[it.cat], qi = a.indexOf(it.val);
+          if (qi >= 0) a.splice(qi, 1); else a.push(it.val);
           renderPlans();
         });
       } else if (it.type === 'date') {
@@ -4428,23 +4441,23 @@
     document.getElementById('detProvider').append(vb, ' 提供');  // 與列表頁一致，不加電信商縮寫括號
     document.getElementById('detCancelBody').innerHTML = renderCancelPolicy(p.cancelType || 'none');
     // 基本資訊（Figma 1164-97098，動態格隨卡/條件變化）
-    var isNative = p.title.indexOf('原生') >= 0 || p.title.indexOf('本地電信') >= 0;
-    var combo = p.tags[0];
-    document.getElementById('dtSimType').textContent = isNative ? '原生卡' : '漫遊卡';
+    var sp = p.spec;
+    var isNative = sp.sim === '原生卡';
+    document.getElementById('dtSimType').textContent = sp.sim;
     document.getElementById('dtVendor').textContent = p.vendor;
     document.getElementById('dtCarrier').textContent = p.carrier;
     document.getElementById('dtMvno').textContent = isNative ? '否，電信商直營網路' : '是，接入 ' + p.carrier + ' 4G/5G 網路';
-    document.getElementById('dtNet').textContent = isNative ? '本地' : '漫遊';  // 與 SIM類型 同判準（原生卡＝本地資源）
-    document.getElementById('dtIp').textContent = p.title.indexOf('原生IP') >= 0 ? '原生 IP（當地出口）' : '動態 IP（共享出口）';
+    document.getElementById('dtNet').textContent = sp.net;  // 本地 / 漫遊
+    document.getElementById('dtIp').textContent = sp.ip === '本地IP' ? '本地 IP（當地出口）' : '漫遊 IP（內建 VPN 出口）';
     document.getElementById('dtTrans').textContent = detTransSpec();
     document.getElementById('dtActivate').textContent = '抵達' + (multi ? '目的地' : dest) + '後掃碼安裝，自動連線當地網路';
     document.getElementById('dtCalc').textContent = '首次成功連網後開始計算，以當地時間 00:00 為每日分界';
     document.getElementById('dtValid').textContent = '啟用後連續 ' + d + ' 天';
-    document.getElementById('dtTopup').textContent = p.tags.indexOf('可加值') >= 0 ? '支援，可於 KKday App 隨時加購' : '不支援加值，流量用完即止';
-    document.getElementById('dtCall').textContent = combo.indexOf('通話') >= 0 ? '含' : '不含';
-    document.getElementById('dtSms').textContent = combo.indexOf('簡訊') >= 0 ? '含' : '不含';
-    document.getElementById('dtHotspot').textContent = combo.indexOf('熱點') >= 0 ? '支援，可開啟個人熱點分享' : '不支援';
-    document.getElementById('dtCallFee').textContent = combo.indexOf('通話') >= 0 ? '含通話費用' : '無';
+    document.getElementById('dtTopup').textContent = sp.topup ? '支援，可於 KKday App 隨時加購' : '不支援加值，流量用完即止';
+    document.getElementById('dtCall').textContent = sp.call ? '含' : '不含';
+    document.getElementById('dtSms').textContent = sp.sms ? '含' : '不含';
+    document.getElementById('dtHotspot').textContent = sp.hotspot ? '支援，可開啟個人熱點分享' : '不支援';
+    document.getElementById('dtCallFee').textContent = sp.call ? '含通話費用' : '無';
     document.getElementById('dtNick').textContent = p.carrier + ' ' + (multi ? 'eSIM' : dest);
     document.getElementById('dtExtend').textContent = state.days + ' 天方案：$' + p.perDay + ' × 天數（僅限延長 1–5 日者）';
     // 評論區（資料與卡面一致）
