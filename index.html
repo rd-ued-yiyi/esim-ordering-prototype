@@ -639,10 +639,12 @@
   /* 方案 B：列表頁 header 漸層底 + 目的地文字前地點 icon（Figma 1302-122314；僅方案 B） */
   .pl-title-pin { display: none; }  /* 方案 A 不顯示 */
   :root[data-variant="B"] .pl-title-pin { display: inline-flex; }
-  /* 漸層直接放在目的地列(header)背景：0%→100% 於該列由 #E8F8F9 淡出純白，
-     底部剛好在列底達到白色，與下方白色內容無縫銜接、無硬切（對齊 Figma 1302-121882） */
-  :root[data-variant="B"] .pl-bar { background: linear-gradient(180deg, #E8F8F9 0%, #FFFFFF 100%); }
-  :root[data-variant="B"] .pl-head.scrolled .pl-bar { background: none; }  /* 滑動置頂：維持全白，不顯示漸層 */
+  /* 漸層放在整個 header 背景，含頂部 padding（避免頂部露白邊）；#E8F8F9 由頂端淡出純白，
+     白色終點剛好落在目的地列底（頂部 padding + 列高 54），與下方白色內容無縫銜接、無硬切（Figma 1302-121882） */
+  :root[data-variant="B"] .pl-head {
+    background: linear-gradient(180deg, #E8F8F9 0%, #FFFFFF calc(max(8px, env(safe-area-inset-top, 0px)) + 54px));
+  }
+  :root[data-variant="B"] .pl-head.scrolled { background: #fff; }  /* 滑動置頂：維持全白，不顯示漸層 */
   .pl-head.scrolled { box-shadow: var(--el-fixed); }  /* 頁面滑動時固定頭部投影（Figma 913-43602） */
   /* Figma 913-43623：返回鍵↔標題組 gap 20，標題↔數量↔箭頭 gap 8，pl-20 pr-40，高 54 */
   .pl-bar { display: flex; align-items: center; gap: 20px; height: 54px; padding: 8px 40px 8px 20px; }
