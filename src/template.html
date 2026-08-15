@@ -3624,7 +3624,7 @@
   ];
   // eSIM 差異化特性（無內部「·」，避免與標題分隔符衝突）；順序對應 TITLE_SEG：
   // 一行卡(2 段)落在短特性、兩行卡(4 段)落在長特性，讓標題長度參差更真實
-  var ESIM_FEATURES = ['支援 TikTok', '免翻牆直連', '支援 ChatGPT／Gemini', '落地掃碼即連', '郵輪靠岸即聯網', '手遊低延遲', '高鐵地鐵不斷線', '社群 App 暢連'];
+  var ESIM_FEATURES = ['支援 TikTok', '免翻牆直連', '支援 ChatGPT／Gemini', '支援 Netflix', '郵輪靠岸即聯網', '手遊低延遲', '高鐵地鐵不斷線', '社群 App 暢連'];
   var TITLE_SEG = [2, 2, 4, 2, 4, 2, 4, 2];  // 約 2/3 一行(2 段) + 1/3 兩行(4 段)
   // 卡面標籤（C 端顯示值，Figma 970-50754 對照表 + 標籤排序）；通訊維持組合標籤（例：支援熱點·通話）；上限 4 個
   function specTags(s) {
@@ -3717,9 +3717,12 @@
   // 2 需設備+航班（訂單頁＝裝置+航班+聯絡人）／1 需實名（訂單頁＝旅客資料+聯絡人）
   var REQ_NONE = [], REQ_DATE = ['需指定啟用日'], REQ_DF = ['需EID/IMEI', '需提供航班'], REQ_REAL = ['需線下實名認證'];
   var REQ_PATTERN = [REQ_NONE, REQ_DATE, REQ_DF, REQ_NONE, REQ_REAL, REQ_DF, REQ_DATE, REQ_NONE];
+  // 供應商補充池：把每個目的地的供應商列表補足到 ≥8，讓 8 張卡的供應商各不重複
+  var GEN_VENDORS = ['翔翼通訊', 'Joytel 樂遊', 'DJB', 'Telecom Square', 'Ubigi', 'jetfi', 'GLOBAL WiFi', '飛買家', 'SIM Local', 'WonderSIM'];
   function buildPlans() {
     var dest = destRaw();
-    var vendors = VENDORS[dest] || VENDORS['default'];
+    var vendors = (VENDORS[dest] || VENDORS['default']).slice();
+    GEN_VENDORS.forEach(function (gv) { if (vendors.indexOf(gv) < 0) vendors.push(gv); });  // 補足到 ≥8：8 張卡供應商不重複
     var base = basePrice();
     var d = state.days ? +state.days : 1;
     var out = [];
