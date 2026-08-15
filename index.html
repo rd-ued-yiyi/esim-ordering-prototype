@@ -1482,6 +1482,7 @@
   /* 彈層表單欄位 */
   .ff { margin-bottom: 16px; }
   .ff:last-child { margin-bottom: 0; }
+  .ff[hidden] { display: none; }  /* 是/否切換隱藏欄位（聯絡人電話/App） */
   .ff-label { font-size: 13px; color: var(--kk-text-darker); margin-bottom: 6px; }
   .ff-label .req { color: #EF7A70; margin-left: 2px; }
   .ff-hint { margin-top: 4px; font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }  /* 欄位下方輔助說明（如「請參考護照英文姓名」） */
@@ -2480,8 +2481,10 @@
     <div class="bs-bar"><button class="bs-close" data-bs-close aria-label="關閉"><span class="ic ic-24"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjEzLjA2NzciIGhlaWdodD0iMTMuMDY3NyIgdmlld0JveD0iMCAwIDEzLjA2NzcgMTMuMDY3NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgaWQ9IlZlY3RvciI+CjxwYXRoIGQ9Ik0xMi44NDgxIDEuMjgwMzNDMTMuMTQxIDAuOTg3NDM3IDEzLjE0MSAwLjUxMjU2MyAxMi44NDgxIDAuMjE5NjdDMTIuNTU1MiAtMC4wNzMyMjMzIDEyLjA4MDMgLTAuMDczMjIzMyAxMS43ODc0IDAuMjE5NjdMNi41MzM4NyA1LjQ3MzIxTDEuMjgwMzMgMC4yMTk2N0MwLjk4NzQzNyAtMC4wNzMyMjMzIDAuNTEyNTYzIC0wLjA3MzIyMzMgMC4yMTk2NyAwLjIxOTY3Qy0wLjA3MzIyMzMgMC41MTI1NjMgLTAuMDczMjIzMyAwLjk4NzQzNyAwLjIxOTY3IDEuMjgwMzNMNS40NzMyMSA2LjUzMzg3TDAuMjE5NjcgMTEuNzg3NEMtMC4wNzMyMjMzIDEyLjA4MDMgLTAuMDczMjIzMyAxMi41NTUyIDAuMjE5NjcgMTIuODQ4MUMwLjUxMjU2MyAxMy4xNDEgMC45ODc0MzcgMTMuMTQxIDEuMjgwMzMgMTIuODQ4MUw2LjUzMzg3IDcuNTk0NTNMMTEuNzg3NCAxMi44NDgxQzEyLjA4MDMgMTMuMTQxIDEyLjU1NTIgMTMuMTQxIDEyLjg0ODEgMTIuODQ4MUMxMy4xNDEgMTIuNTU1MiAxMy4xNDEgMTIuMDgwMyAxMi44NDgxIDExLjc4NzRMNy41OTQ1MyA2LjUzMzg3TDEyLjg0ODEgMS4yODAzM1oiIGZpbGw9ImJsYWNrIi8+CjwvZz4KPC9zdmc+" width="13.07" height="13.07"></span></button><span class="bs-title" id="contactTitle">聯絡人</span><span class="bs-spacer"></span></div>
     <div class="bs-body"><div class="fs-body" style="padding:20px 16px;">
       <div class="ff-row"><div class="ff"><div class="ff-label">聯絡人姓<span class="req">*</span></div><input class="ff-input" id="ct-last" placeholder="例：陳"></div><div class="ff"><div class="ff-label">聯絡人名<span class="req">*</span></div><input class="ff-input" id="ct-first" placeholder="例：品睿"></div></div>
-      <div class="ff"><div class="ff-label">聯絡電話<span class="req">*</span></div><div class="ff-row2"><div class="ff-selwrap cc"><select class="ff-select" id="ct-cc"><option>+886</option><option>+852</option><option>+86</option><option>+81</option></select><span class="ic chev"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE0LjE2NjciIGhlaWdodD0iNy45MTY2NyIgdmlld0JveD0iMCAwIDE0LjE2NjcgNy45MTY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0wLjI0NDA3OCAwLjI0NDA3OEMwLjU2OTUxNSAtMC4wODEzNTkyIDEuMDk3MTUgLTAuMDgxMzU5MiAxLjQyMjU5IDAuMjQ0MDc4TDcuMDgzMzMgNS45MDQ4MkwxMi43NDQxIDAuMjQ0MDc4QzEzLjA2OTUgLTAuMDgxMzU5MiAxMy41OTcyIC0wLjA4MTM1OTIgMTMuOTIyNiAwLjI0NDA3OEMxNC4yNDggMC41Njk1MTUgMTQuMjQ4IDEuMDk3MTUgMTMuOTIyNiAxLjQyMjU5TDcuNjcyNTkgNy42NzI1OUM3LjM0NzE1IDcuOTk4MDMgNi44MTk1MSA3Ljk5ODAzIDYuNDk0MDggNy42NzI1OUwwLjI0NDA3OCAxLjQyMjU5Qy0wLjA4MTM1OTIgMS4wOTcxNSAtMC4wODEzNTkyIDAuNTY5NTE1IDAuMjQ0MDc4IDAuMjQ0MDc4WiIgZmlsbD0iIzIxMjEyMSIvPgo8L3N2Zz4=" width="14.17" height="7.92"></span></div><input class="ff-input rest" id="ct-phone" inputmode="tel" placeholder="請輸入聯絡電話"></div></div>
-      <div class="ff"><div class="ff-label">App 帳號<span class="req">*</span></div><div class="ff-row2"><div class="ff-selwrap cc"><select class="ff-select" id="ct-appname"><option value="">請選擇</option><option>WhatsApp</option><option>LINE</option><option>WeChat</option><option>Telegram</option></select><span class="ic chev"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE0LjE2NjciIGhlaWdodD0iNy45MTY2NyIgdmlld0JveD0iMCAwIDE0LjE2NjcgNy45MTY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0wLjI0NDA3OCAwLjI0NDA3OEMwLjU2OTUxNSAtMC4wODEzNTkyIDEuMDk3MTUgLTAuMDgxMzU5MiAxLjQyMjU5IDAuMjQ0MDc4TDcuMDgzMzMgNS45MDQ4MkwxMi43NDQxIDAuMjQ0MDc4QzEzLjA2OTUgLTAuMDgxMzU5MiAxMy41OTcyIC0wLjA4MTM1OTIgMTMuOTIyNiAwLjI0NDA3OEMxNC4yNDggMC41Njk1MTUgMTQuMjQ4IDEuMDk3MTUgMTMuOTIyNiAxLjQyMjU5TDcuNjcyNTkgNy42NzI1OUM3LjM0NzE1IDcuOTk4MDMgNi44MTk1MSA3Ljk5ODAzIDYuNDk0MDggNy42NzI1OUwwLjI0NDA3OCAxLjQyMjU5Qy0wLjA4MTM1OTIgMS4wOTcxNSAtMC4wODEzNTkyIDAuNTY5NTE1IDAuMjQ0MDc4IDAuMjQ0MDc4WiIgZmlsbD0iIzIxMjEyMSIvPgo8L3N2Zz4=" width="14.17" height="7.92"></span></div><input class="ff-input rest" id="ct-appid" placeholder="請輸入 App 帳號"></div></div>
+      <div class="ff"><div class="ff-label">旅遊期間聯絡電話<span class="req">*</span></div><div class="ff-radio"><label><input type="radio" name="ct-hasphone" value="1"><span class="radio"></span>是</label><label><input type="radio" name="ct-hasphone" value="0"><span class="radio"></span>否</label></div></div>
+      <div class="ff" id="ctPhoneField"><div class="ff-label">聯絡電話<span class="req">*</span></div><div class="ff-row2"><div class="ff-selwrap cc"><select class="ff-select" id="ct-cc"><option>+886</option><option>+852</option><option>+86</option><option>+81</option></select><span class="ic chev"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE0LjE2NjciIGhlaWdodD0iNy45MTY2NyIgdmlld0JveD0iMCAwIDE0LjE2NjcgNy45MTY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0wLjI0NDA3OCAwLjI0NDA3OEMwLjU2OTUxNSAtMC4wODEzNTkyIDEuMDk3MTUgLTAuMDgxMzU5MiAxLjQyMjU5IDAuMjQ0MDc4TDcuMDgzMzMgNS45MDQ4MkwxMi43NDQxIDAuMjQ0MDc4QzEzLjA2OTUgLTAuMDgxMzU5MiAxMy41OTcyIC0wLjA4MTM1OTIgMTMuOTIyNiAwLjI0NDA3OEMxNC4yNDggMC41Njk1MTUgMTQuMjQ4IDEuMDk3MTUgMTMuOTIyNiAxLjQyMjU5TDcuNjcyNTkgNy42NzI1OUM3LjM0NzE1IDcuOTk4MDMgNi44MTk1MSA3Ljk5ODAzIDYuNDk0MDggNy42NzI1OUwwLjI0NDA3OCAxLjQyMjU5Qy0wLjA4MTM1OTIgMS4wOTcxNSAtMC4wODEzNTkyIDAuNTY5NTE1IDAuMjQ0MDc4IDAuMjQ0MDc4WiIgZmlsbD0iIzIxMjEyMSIvPgo8L3N2Zz4=" width="14.17" height="7.92"></span></div><input class="ff-input rest" id="ct-phone" inputmode="tel" placeholder="請輸入聯絡電話"></div></div>
+      <div class="ff"><div class="ff-label">APP 聯絡方式<span class="req">*</span></div><div class="ff-radio"><label><input type="radio" name="ct-hasapp" value="1"><span class="radio"></span>是</label><label><input type="radio" name="ct-hasapp" value="0"><span class="radio"></span>否</label></div></div>
+      <div class="ff" id="ctAppField"><div class="ff-label">App 帳號<span class="req">*</span></div><div class="ff-row2"><div class="ff-selwrap cc"><select class="ff-select" id="ct-appname"><option value="">請選擇</option><option>WhatsApp</option><option>LINE</option><option>WeChat</option><option>Telegram</option></select><span class="ic chev"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE0LjE2NjciIGhlaWdodD0iNy45MTY2NyIgdmlld0JveD0iMCAwIDE0LjE2NjcgNy45MTY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0wLjI0NDA3OCAwLjI0NDA3OEMwLjU2OTUxNSAtMC4wODEzNTkyIDEuMDk3MTUgLTAuMDgxMzU5MiAxLjQyMjU5IDAuMjQ0MDc4TDcuMDgzMzMgNS45MDQ4MkwxMi43NDQxIDAuMjQ0MDc4QzEzLjA2OTUgLTAuMDgxMzU5MiAxMy41OTcyIC0wLjA4MTM1OTIgMTMuOTIyNiAwLjI0NDA3OEMxNC4yNDggMC41Njk1MTUgMTQuMjQ4IDEuMDk3MTUgMTMuOTIyNiAxLjQyMjU5TDcuNjcyNTkgNy42NzI1OUM3LjM0NzE1IDcuOTk4MDMgNi44MTk1MSA3Ljk5ODAzIDYuNDk0MDggNy42NzI1OUwwLjI0NDA3OCAxLjQyMjU5Qy0wLjA4MTM1OTIgMS4wOTcxNSAtMC4wODEzNTkyIDAuNTY5NTE1IDAuMjQ0MDc4IDAuMjQ0MDc4WiIgZmlsbD0iIzIxMjEyMSIvPgo8L3N2Zz4=" width="14.17" height="7.92"></span></div><input class="ff-input rest" id="ct-appid" placeholder="請輸入 App 帳號"></div></div>
       <p class="ct-note">為方便您下次快速預訂，系統已保存旅客資訊。您擁有完全的控制權，可隨時前往「會員資料」或「常用旅客」刪除或編輯資料。</p>
     </div></div>
     <div class="fs-foot"><button class="cta" id="contactConfirm">確定</button></div>
@@ -5195,7 +5198,7 @@
         '<div class="ct-card-h"><div class="nm">' + c.last + c.first + '</div>' +
         '<div class="act"><button class="edit"><span class="ic">' + ICONS.editLine + '</span></button></div></div>' +
         '<div class="ct-card-body">' +
-          '<div class="ord-kv"><div><div class="k">旅遊期間聯絡電話</div><div class="v">' + c.tel + '</div></div><div><div class="k">APP 聯絡方式</div><div class="v">' + (c.app || '—') + '</div></div></div>' +
+          '<div class="ord-kv"><div><div class="k">旅遊期間聯絡電話</div><div class="v">' + (c.tel || '無') + '</div></div><div><div class="k">APP 聯絡方式</div><div class="v">' + (c.app || '無') + '</div></div></div>' +
         '</div></div>');
       card.querySelector('.edit').onclick = function () { editContactIdx = i; openContact(); };
       cards.appendChild(card);
@@ -5279,7 +5282,7 @@
   var editContactIdx = null;
   var CT_APPS = ['WhatsApp', 'LINE', 'WeChat', 'Telegram'];
   function openContact() {
-    document.getElementById('contactTitle').textContent = '聯絡人';  // Figma 1080-85231
+    document.getElementById('contactTitle').textContent = editContactIdx === null ? '新增聯絡人' : '編輯聯絡人';  // Figma 1080-85231
     var c = editContactIdx === null ? { last: '', first: '', cc: '+886', phone: '', app: '' } : ORD_CONTACTS[editContactIdx];
     document.getElementById('ct-last').value = c.last || '';
     document.getElementById('ct-first').value = c.first || '';
@@ -5291,8 +5294,21 @@
     document.getElementById('ct-appname').value = matched;
     document.getElementById('ct-appid').value = matched ? parts.slice(1).join(' ') : (c.app || '');
     syncSelPh(document.getElementById('ct-appname'));  // 程式化設值後同步暗文狀態
+    // 旅遊期間聯絡電話 / APP 聯絡方式：新增預設「是」；編輯依既有資料（有值＝是，無＝否）
+    setRadio('ct-hasphone', (editContactIdx === null || c.tel) ? '1' : '0');
+    setRadio('ct-hasapp', (editContactIdx === null || c.app) ? '1' : '0');
+    syncCtFields();
     openSheet(document.getElementById('contactSheet'));
   }
+  function setRadio(name, val) { document.querySelectorAll('input[name=' + name + ']').forEach(function (r) { r.checked = r.value === val; }); }
+  // 兩個是/否切換：選「否」則隱藏對應輸入欄（Figma 1080-85231）
+  function syncCtFields() {
+    var p = (document.querySelector('input[name=ct-hasphone]:checked') || {}).value === '1';
+    var a = (document.querySelector('input[name=ct-hasapp]:checked') || {}).value === '1';
+    document.getElementById('ctPhoneField').hidden = !p;
+    document.getElementById('ctAppField').hidden = !a;
+  }
+  document.querySelectorAll('input[name=ct-hasphone], input[name=ct-hasapp]').forEach(function (r) { r.addEventListener('change', syncCtFields); });
   // 下拉未選（value 為空）時顯示暗文占位色；選定後恢復深色
   function syncSelPh(s) { if (s) s.classList.toggle('is-empty', !s.value); }
   document.querySelectorAll('.ff-select').forEach(function (s) {
@@ -5304,16 +5320,21 @@
   function rndDigits(n) { var s = ''; for (var i = 0; i < n; i++) s += Math.floor(Math.random() * 10); return s; }
   document.getElementById('contactConfirm').addEventListener('click', function () {
     var last = document.getElementById('ct-last').value, first = document.getElementById('ct-first').value;
-    var tel = document.getElementById('ct-phone').value;
+    var telIn = document.getElementById('ct-phone').value;
     var appName = document.getElementById('ct-appname').value, appId = document.getElementById('ct-appid').value;
-    var app = (appName ? appName + ' ' : '') + appId;
+    var appIn = (appName ? appName + ' ' : '') + appId;
+    var hasPhone = (document.querySelector('input[name=ct-hasphone]:checked') || {}).value === '1';
+    var hasApp = (document.querySelector('input[name=ct-hasapp]:checked') || {}).value === '1';
     if (editContactIdx === null) {
       var cl = last || rnd(['陳', '林', '黃', '張', '李', '吳']), cf = first || rnd(['家豪', '雅婷', '志明', '怡君', '冠宇', '品睿']);
+      // 是＝填值(未填則隨機補全)；否＝空字串，外層卡顯示「無」
+      var telV = hasPhone ? (telIn || '09' + rndDigits(8)) : '';
+      var appV = hasApp ? (appIn.trim() || rnd(CT_APPS) + ' ' + rndDigits(8)) : '';
       // 新增＝加入共用名單，補上實名欄位讓此人在旅客區也完整可用
       ORD_PEOPLE.push({
         last: cl, first: cf, cnLast: cl, cnFirst: cf,
         enLast: rnd(['CHEN', 'LIN', 'HUANG', 'CHANG']), enFirst: rnd(['CHIA HAO', 'YA TING', 'KUAN YU']),
-        tel: tel || '09' + rndDigits(8), email: '—', app: app || rnd(CT_APPS) + ' ' + rndDigits(8),
+        tel: telV, email: '—', app: appV,
         nation: rnd(['中國', '台灣', '香港', '日本']), gender: rnd(['男', '女']),
         birth: (1980 + Math.floor(Math.random() * 20)) + '/0' + (1 + Math.floor(Math.random() * 9)) + '/1' + Math.floor(Math.random() * 9),
         twId: rnd(['A', 'B', 'F']) + rndDigits(9), twPass: rndDigits(9), hkMacao: 'H' + rndDigits(8),
@@ -5323,8 +5344,8 @@
     } else {
       var c = ORD_PEOPLE[editContactIdx];
       if (last) { c.last = last; c.cnLast = last; } if (first) { c.first = first; c.cnFirst = first; }  // 同步 cn 名（旅客區用）
-      if (tel) c.tel = tel;
-      if (appName || appId) c.app = app;
+      c.tel = hasPhone ? (telIn || c.tel || '09' + rndDigits(8)) : '';    // 否 → 清空 → 卡顯示「無」
+      c.app = hasApp ? (appIn.trim() || c.app || rnd(CT_APPS) + ' ' + rndDigits(8)) : '';
     }
     closeSheets(); renderOrder();
   });
