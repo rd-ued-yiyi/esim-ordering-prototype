@@ -5668,7 +5668,10 @@
   document.getElementById('payPriceToggle').addEventListener('click', function () { togglePricePanel('payPricePanel', 'payPriceToggle'); });
   document.getElementById('payBtn').addEventListener('click', function () {
     if (!payState.agree) { toast('請先勾選同意條款'); return; }
-    withLoading(this, function () { toast('付款成功（原型演示）'); });
+    withLoading(this, function () {
+      toast('付款成功，感謝您的體驗');
+      setTimeout(function () { location.reload(); }, 2000);  // 顯示 toast 後自動刷新連結，回到模擬首頁繼續體驗另一方案
+    });
   });
 })();
 </script>
