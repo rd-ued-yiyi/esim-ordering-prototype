@@ -2723,8 +2723,8 @@
   }
   function renderOpts() {
     var d = state.days ? +state.days : 0;
-    // 方案 B 預設(未手動選過)：選中＝推薦(80%)檔，值同步顯示該檔
-    if (state.variant === 'B' && !state.planTouched) state.plan = badgeFor();
+    // A/B 預設(未手動選過)：選中＝推薦(80%選擇)檔，確保預設流量落在帶標籤的選項上（B 另同步顯示該值）
+    if (!state.planTouched) state.plan = badgeFor();
     if (!state.plan || !filteredOpts(state.tab, d).some(function (o) { return o.t === state.plan; })) {
       state.plan = filteredOpts(state.tab, d)[0].t;
     }
@@ -2738,7 +2738,8 @@
         b.classList.toggle('sel', on);
         if (on) selEl = b;
       });
-      if (state.variant === 'B') { state.planTouched = true; updateFlowValue(); }
+      state.planTouched = true;  // A/B 手動選過即鎖定，之後不再被推薦檔覆蓋
+      if (state.variant === 'B') updateFlowValue();
       else setTabsActive(document.getElementById('dataTabs'), document.getElementById('dataNote'), tab);
       centerOpt(scrollEl, selEl);  // 點選選中項自動居中
       updateCta();
