@@ -734,7 +734,8 @@
 
   .pkg-card { background: #fff; border-radius: var(--r-lg); padding: 16px; margin-bottom: 16px; }
   .pkg-head { display: flex; align-items: flex-start; gap: 4px; width: 100%; text-align: left; }
-  .pkg-title { flex: 1 1 0; min-width: 0; font-size: 18px; line-height: 26px; font-weight: 600; color: var(--kk-text-darker); }
+  .pkg-title { flex: 1 1 0; min-width: 0; font-size: 18px; line-height: 26px; font-weight: 600; color: var(--kk-text-darker);
+    display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; text-align: left; }  /* 標題可換行，超過 2 行尾部省略 */
   .pkg-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
   .pkg-tag { background: var(--kk-surface-light); border-radius: var(--r-sm); padding: 2px 4px;
     font-size: 12px; line-height: 16px; color: var(--kk-text-darker); }
@@ -3621,7 +3622,8 @@
     { sim: '原生卡',    net: '本地', ip: '本地IP', speed: '5G/4G', act: '24小時制', topup: true,  hotspot: true,  call: true,  sms: true  },
     { sim: '國際漫遊卡', net: '漫遊', ip: '漫遊IP', speed: '5G/4G', act: '自然日制', topup: true,  hotspot: false, call: false, sms: false }
   ];
-  var MKT_WORDS = ['高CP值', '人氣熱銷', '超值首選', '旅遊必備', '店長推薦', '輕量方案', '新客推薦', '口碑精選'];
+  // eSIM 差異化特性（無內部「·」，避免與標題分隔符衝突）：支援哪些 App、什麼場景能連、免實體卡開通
+  var ESIM_FEATURES = ['支援 ChatGPT／Gemini', '支援 TikTok', '社群 App 暢連', '免翻牆直連', '郵輪靠岸即聯網', '落地掃碼即連', '高鐵地鐵不斷線', '免換卡開通'];
   // 卡面標籤（C 端顯示值，Figma 970-50754 對照表 + 標籤排序）；通訊維持組合標籤（例：支援熱點·通話）；上限 4 個
   function specTags(s) {
     var a = [];
@@ -3635,19 +3637,22 @@
     a.sort(function (x, y) { return x[0] - y[0]; });
     return a.map(function (x) { return x[1]; }).slice(0, 4);
   }
-  // 卡片標題：只取「未成為卡面標籤」的規格資訊（避免與標籤重複），末尾加行銷詞。
-  // 標籤側值（不用於標題）：原生卡→本地預付卡、本地→非漫遊、漫遊IP→內建VPN、5G/4G→5G、24小時制、通訊組合
-  function specTitle(s, i) {
+  // 卡片標題＝卡本身特性組合（3-4 段）：網路/電信商 + 卡固有規格 + eSIM 特性。
+  // 不放促銷詞（新客/店長推薦）、不放流量套餐/激活方式（總量/自然日＝使用者已選）、不放插卡類（eSIM 免實體卡）；
+  // 也避開已是卡面標籤的值（原生卡→本地預付卡、本地→非漫遊、漫遊IP→內建VPN、5G/4G→5G、24小時制、通訊組合）
+  function specTitle(s, i, carrier) {
     var p = [];
-    if (s.sim === '國際漫遊卡') p.push('國際漫遊');   // 國際漫遊卡非標籤側，可入標題
-    if (s.ip === '本地IP') p.push('本地IP·低延遲');   // 本地IP 非標籤側
-    if (s.speed === '4G') p.push('4G 廣覆蓋');        // 純 4G 非標籤側
-    if (s.act === '總量制') p.push('總量型');          // 24小時制才是標籤側
-    else if (s.act === '自然日制') p.push('自然日計');
-    if (s.topup) p.push('可加值');                     // 可加值非卡面標籤
-    var lead = p.length ? p.slice(0, 2) : ['原生方案'];
-    lead.push(MKT_WORDS[i % MKT_WORDS.length]);
-    return lead.join('·');
+    p.push(s.sim === '國際漫遊卡' ? '國際漫遊' : (carrier + '直連'));  // 原生卡→露出電信商網路
+    if (s.ip === '本地IP') p.push('本地IP低延遲');
+    if (s.speed === '4G') p.push('4G廣覆蓋');
+    if (s.topup) p.push('可加值');
+    var fi = i;  // 用 eSIM 特性補足到 4 段（依 index 錯開，避免每張雷同）
+    while (p.length < 4 && fi - i < ESIM_FEATURES.length) {
+      var f = ESIM_FEATURES[fi % ESIM_FEATURES.length];
+      if (p.indexOf(f) < 0) p.push(f);
+      fi++;
+    }
+    return p.join('·');
   }
   // 電信商（規格表「網路詳情·電信商」）：按目的地取真實網路，未收錄目的地統一「當地電信」
   var CARRIERS = {
@@ -3723,7 +3728,7 @@
       var perkSet = i % 4;
       var spec = PKG_SPECS[i % PKG_SPECS.length];
       out.push({
-        title: specTitle(spec, i),
+        title: specTitle(spec, i, carrier),
         spec: spec,
         carrier: carrier,
         tags: specTags(spec),  // 卡面標籤：C 端顯示值（不含電信商，Figma 970-50754）
