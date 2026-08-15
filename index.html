@@ -4291,6 +4291,7 @@
       fill.style.left = (lo / 12000 * 100) + '%';
       fill.style.right = (100 - hi / 12000 * 100) + '%';
       val.textContent = 'NT$' + lo.toLocaleString() + ' – NT$' + (hi >= 12000 ? '12,000+' : hi.toLocaleString());
+      ps.querySelector('.fs-h').classList.toggle('has-sel', lo > 0 || hi < 12000);  // 拖動即時更新標題紅點；還原預設則移除
     }
     rmin.addEventListener('input', function () {
       fDraft.priceMin = Math.min(+rmin.value, fDraft.priceMax - 500); rmin.value = fDraft.priceMin; upd(); setApplyBtn(document.getElementById('fsApply'), fDraft);
