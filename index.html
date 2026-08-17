@@ -743,6 +743,19 @@
   /* 下拉箭頭按 Figma ic_arrowDown_line 16 框內向量實際佔位（≈9.4×5.2），
      資產是裸向量（14.2×7.9），原尺寸渲染會顯得過大過粗 */
   .fpill .chev-sm img { width: 9.4px; height: 5.2px; }
+  /* ===== 方案 A：篩選列改為描邊圓角 chip（對齊 Figma 795-35698：Border/#D5D6DB、radius-pill 999、chip 間距 8） ===== */
+  :root[data-variant="A"] .fpill {
+    height: 32px; box-sizing: border-box;
+    background: #fff; border: 1px solid var(--kk-border-light); border-radius: var(--r-circle);
+    padding: 0 12px; gap: 4px;
+  }
+  :root[data-variant="A"] .fdiv { display: none; }              /* 描邊 chip 間不需要分隔線 */
+  :root[data-variant="A"] .pl-filter-scroll { gap: 8px; }        /* chip 間距 8px（對齊 Figma） */
+  /* 選中：DS 描邊 chip 選中＝青底淡色 + 青邊 + 青字（取代純文字紅點回饋） */
+  :root[data-variant="A"] .fpill.sel {
+    background: var(--kk-primary-lighter); border-color: var(--kk-primary-medium); color: #13A3B6; font-weight: 600;
+  }
+  :root[data-variant="A"] .fpill.sel .lb::after { display: none; }  /* 已用底色表達選中，隱藏紅點 */
 
   .pl-body { padding: 12px 16px 24px; }
   .pl-note { display: flex; align-items: center; gap: 4px; font-size: 12px; line-height: 16px; color: var(--kk-primary-medium); }
