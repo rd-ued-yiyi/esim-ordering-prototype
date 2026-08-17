@@ -369,7 +369,7 @@
   .field-note { font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
 
   /* 搜尋卡內部分組間距：區塊間 20px、區塊內行間 8px（對齊 Figma 871:75442/75443/78764） */
-  .group-20 { display: flex; flex-direction: column; gap: 20px; width: 100%; }
+  .group-24 { display: flex; flex-direction: column; gap: 24px; width: 100%; }  /* 用卡天數 group ↔ 流量 group（Figma 1268-110020：spacing-300 24px） */
   .group-12 { display: flex; flex-direction: column; gap: 12px; width: 100%; }
   .group-8  { display: flex; flex-direction: column; gap: 8px;  width: 100%; }
 
@@ -1839,7 +1839,7 @@
               <span>此裝置支援使用 eSIM</span>
             </div>
 
-            <div class="group-20">
+            <div class="group-24">
               <!-- 用卡天數 -->
               <div class="group-12">
                 <button class="field-head" id="daysRow">
