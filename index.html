@@ -5672,10 +5672,22 @@
   document.getElementById('payBtn').addEventListener('click', function () {
     if (!payState.agree) { toast('請先勾選同意條款'); return; }
     withLoading(this, function () {
-      toast('付款成功，感謝您的體驗\n正在刷新回到首頁');
-      setTimeout(function () { location.reload(); }, 2000);  // 顯示 toast 後自動刷新連結，回到模擬首頁繼續體驗另一方案
+      toast('付款成功，感謝您的體驗');
+      setTimeout(function () {
+        try { sessionStorage.setItem('esim_refreshed', '1'); } catch (e) {}  // reload 會清空 JS 狀態，用旗標讓刷新後的頁面補顯示「刷新成功」
+        toast('正在刷新…');
+        setTimeout(function () { location.reload(); }, 800);  // 刷新連結回到模擬首頁繼續體驗另一方案
+      }, 1500);
     });
   });
+
+  // 刷新回到首頁後補一個「刷新成功」toast（付款流程設旗標，reload 後消費一次）
+  try {
+    if (sessionStorage.getItem('esim_refreshed')) {
+      sessionStorage.removeItem('esim_refreshed');
+      setTimeout(function () { toast('刷新成功'); }, 400);
+    }
+  } catch (e) {}
 })();
 </script>
 
