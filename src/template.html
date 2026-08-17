@@ -320,6 +320,7 @@
   .field-head .placeholder { flex: 0 0 auto; min-width: 0; font-size: 18px; line-height: 26px; font-weight: 600; color: var(--kk-text-light); }
   .field-head .placeholder.has-value { color: var(--kk-text-darker); }  /* 手動選過天數後：值改為與標題同深色 #212121（強調已選）；未選時維持淺灰 placeholder */
   /* 箭頭緊跟值後（Figma 1268-110020：用卡天數 5天 › / 流量 5G/天 › 左對齊成組，箭頭不再推到最右）；A 天數、B 天數+流量皆適用 */
+  #daysRow, #flowRow { gap: 12px; }  /* 標題↔值↔箭頭皆 12px（Figma 1268-110020：spacing-150），覆蓋 .field-head 的 8px */
   /* 方案 B：目的地頁流量區塊＝「流量 值 ›」選框 + 快捷卡 + 橙色「不知道怎麼選」；方案 A 維持原本 tab+選項 */
   :root[data-variant="B"] .flow-head-a, :root[data-variant="B"] #dataTabs, :root[data-variant="B"] #dataNote { display: none; }
   :root[data-variant="A"] .flow-row-b, :root[data-variant="A"] .howto-b { display: none; }
