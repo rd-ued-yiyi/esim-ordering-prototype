@@ -5584,10 +5584,7 @@
     var _isReload = _nav ? _nav.type === 'reload'
                          : (performance.navigation && performance.navigation.type === 1);
     if (_isReload) {
-      setTimeout(function () {
-        toast('正在刷新…');
-        setTimeout(function () { toast('刷新成功'); }, 900);
-      }, 300);
+      setTimeout(function () { toast('刷新成功'); }, 300);
     }
   } catch (e) {}
 })();
