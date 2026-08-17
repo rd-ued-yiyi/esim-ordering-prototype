@@ -734,17 +734,24 @@
   /* 下拉箭頭按 Figma ic_arrowDown_line 16 框內向量實際佔位（≈9.4×5.2），
      資產是裸向量（14.2×7.9），原尺寸渲染會顯得過大過粗 */
   .fpill .chev-sm img { width: 9.4px; height: 5.2px; }
-  /* ===== 方案 A：篩選列改為描邊圓角 chip（對齊 Figma 795-35698：Border/#D5D6DB、radius-pill 999、chip 間距 8） ===== */
+  /* ===== 方案 A：篩選列改為描邊圓角 chip（對齊 Figma 795-35698：Border/#D5D6DB、radius-pill 999、chip 間距 8、icon/文字非對稱內距 8/12） ===== */
   :root[data-variant="A"] .fpill {
     height: 32px; box-sizing: border-box;
     background: #fff; border: 1px solid var(--kk-border-light); border-radius: var(--r-circle);
     padding: 0 12px; gap: 4px;
   }
-  :root[data-variant="A"] .fdiv { display: none; }              /* 描邊 chip 間不需要分隔線 */
-  :root[data-variant="A"] .pl-filter-scroll { gap: 8px; }        /* chip 間距 8px（對齊 Figma） */
-  /* 選中：DS 描邊 chip 選中＝青底淡色 + 青邊 + 青字（取代純文字紅點回饋） */
+  :root[data-variant="A"] .fpill.ficon { padding-left: 8px; }                    /* 左側 icon：icon 側 8、文字側 12 */
+  :root[data-variant="A"] .fpill:not(.fquick):not(.ficon) { padding-right: 8px; } /* 右側 chevron：文字側 12、chevron 側 8 */
+  :root[data-variant="A"] .fdiv { display: none; }               /* 描邊 chip 間不需要分隔線 */
+  :root[data-variant="A"] .pl-filter-fixed { padding-right: 4px; } /* 篩選↔第一顆 chip = 4+4 = 8px（對齊 Figma） */
+  :root[data-variant="A"] .pl-filter-scroll { gap: 8px; padding-left: 4px; }
+  /* 方案 A 篩選 icon 用 DS #212121（取代純黑 ic-off），與 chevron/文字同色；方案 B 不受影響 */
+  .fpill .ic-fa { display: none; }
+  :root[data-variant="A"] .fpill.ficon .ic-off { display: none; }
+  :root[data-variant="A"] .fpill.ficon .ic-fa { display: inline-flex; }
+  /* 選中：DS 描邊 chip 選中＝青底淡色 + 青邊 + 青字（primary-medium #26BEC9），取代純文字紅點回饋 */
   :root[data-variant="A"] .fpill.sel {
-    background: var(--kk-primary-lighter); border-color: var(--kk-primary-medium); color: #13A3B6; font-weight: 600;
+    background: var(--kk-primary-lighter); border-color: var(--kk-primary-medium); color: var(--kk-primary-medium); font-weight: 600;
   }
   :root[data-variant="A"] .fpill.sel .lb::after { display: none; }  /* 已用底色表達選中，隱藏紅點 */
 
@@ -1854,7 +1861,7 @@
         <div class="pl-conds"><div class="pl-cond-fixed" id="plCondFixed"></div><div class="pl-cond-scroll" id="plCondScroll"></div><button class="pl-cond-more" id="plCondMore" aria-label="更多流量" hidden></button></div>
         <div class="pl-filters">
           <div class="pl-filter-fixed">
-            <button class="fpill ficon" id="plFilterBtn"><span class="ic ic-16 ic-off">{{IC_filter}}</span><span class="ic ic-16 ic-on">{{IC_filterCyan}}</span><span class="lb">篩選</span></button>
+            <button class="fpill ficon" id="plFilterBtn"><span class="ic ic-16 ic-off">{{IC_filter}}</span><span class="ic ic-16 ic-on">{{IC_filterCyan}}</span><span class="ic ic-16 ic-fa">{{IC_filterDark}}</span><span class="lb">篩選</span></button>
           </div>
           <div class="pl-filter-scroll" id="plFilterScroll"></div>
         </div>

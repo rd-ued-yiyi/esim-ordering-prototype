@@ -180,6 +180,7 @@ subs = {
     "{{IC_swapVertical}}": svg("swapVertical"),
     "{{IC_pencil}}":       svg("pencil"),
     "{{IC_filter}}":       svg("filter"),
+    "{{IC_filterDark}}":   svg("filter", recolor=("black", "#212121")),  # 方案 A 篩選 chip：icon 用 DS Text & Icon #212121（原 filter.svg 為純黑，比 chevron/文字重）
     "{{IC_apple}}":        strip_wh(GUIDE_APPLE),
     "{{IC_android}}":      strip_wh(GUIDE_ANDROID),
     "{{IC_share}}":        strip_wh(GUIDE_SHARE),
