@@ -5673,19 +5673,22 @@
     if (!payState.agree) { toast('請先勾選同意條款'); return; }
     withLoading(this, function () {
       toast('付款成功，感謝您的體驗');
-      setTimeout(function () {
-        try { sessionStorage.setItem('esim_refreshed', '1'); } catch (e) {}  // reload 會清空 JS 狀態，用旗標讓刷新後的頁面補顯示「刷新成功」
-        toast('正在刷新…');
-        setTimeout(function () { location.reload(); }, 800);  // 刷新連結回到模擬首頁繼續體驗另一方案
-      }, 1500);
+      setTimeout(function () { location.reload(); }, 1500);  // 自動刷新連結回到模擬首頁；刷新提示統一由下方載入時偵測處理
     });
   });
 
-  // 刷新回到首頁後補一個「刷新成功」toast（付款流程設旗標，reload 後消費一次）
+  // 只要頁面是「刷新」進入的（受測者手動刷新，或付款後自動刷新）就提示，讓受測者知道連結已刷新。
+  // 瀏覽器無法在手動刷新「之前」渲染 toast（頁面正被銷毀），故改在刷新後的載入時補上「正在刷新…→刷新成功」。
+  // 首次訪問/點連結進入為 navigate、上一頁/下一頁為 back_forward，皆不誤彈；僅 reload 觸發。
   try {
-    if (sessionStorage.getItem('esim_refreshed')) {
-      sessionStorage.removeItem('esim_refreshed');
-      setTimeout(function () { toast('刷新成功'); }, 400);
+    var _nav = (performance.getEntriesByType && performance.getEntriesByType('navigation')[0]) || null;
+    var _isReload = _nav ? _nav.type === 'reload'
+                         : (performance.navigation && performance.navigation.type === 1);
+    if (_isReload) {
+      setTimeout(function () {
+        toast('正在刷新…');
+        setTimeout(function () { toast('刷新成功'); }, 900);
+      }, 300);
     }
   } catch (e) {}
 })();
