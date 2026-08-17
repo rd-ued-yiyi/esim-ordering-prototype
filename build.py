@@ -225,7 +225,7 @@ subs = {
     "{{IP_location}}":     raw_svg("locationLine", recolor=("#26BEC9", "#212121")),  # 目的地行改用地点 pin（深色）
     # 筛选 pill 选中态 cyan 图标变体
     "{{IC_arrowDownCyan}}": svg("arrowDown", recolor=("#212121", "#13A3B6")),
-    "{{IC_filterCyan}}":   svg("filter", recolor=("black", "#13A3B6")),  # filter.svg 用 fill="black"，须匹配黑色才能变 cyan
+    "{{IC_filterCyan}}":   svg("filter", recolor=("black", "#26BEC9")),  # 方案 A 篩選選中態 icon：DS primary-medium #26BEC9（filter.svg 用 fill="black" 须匹配黑色）
     "{{IC_arrowSmRight}}": svg("arrow-sm", "detail"),
     "{{SHOTS_JSON}}":      "[" + ",".join('"' + svg_datauri(s) + '"' for s in SHOTS) + "]",
     "{{IMG_GUIDE1}}":      png_datauri("detail/guide1.png"),

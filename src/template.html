@@ -749,6 +749,9 @@
   .fpill .ic-fa { display: none; }
   :root[data-variant="A"] .fpill.ficon .ic-off { display: none; }
   :root[data-variant="A"] .fpill.ficon .ic-fa { display: inline-flex; }
+  /* 篩選選中：icon 同步變青（#26BEC9），與青字/青邊一致 */
+  :root[data-variant="A"] .fpill.ficon.sel .ic-fa { display: none; }
+  :root[data-variant="A"] .fpill.ficon.sel .ic-on { display: inline-flex; }
   /* 選中：DS 描邊 chip 選中＝青底淡色 + 青邊 + 青字（primary-medium #26BEC9），取代純文字紅點回饋 */
   :root[data-variant="A"] .fpill.sel {
     background: var(--kk-primary-lighter); border-color: var(--kk-primary-medium); color: var(--kk-primary-medium); font-weight: 600;
