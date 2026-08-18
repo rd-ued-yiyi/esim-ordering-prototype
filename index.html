@@ -794,18 +794,21 @@
   .pkg-warns { display: flex; align-items: center; gap: 8px; margin-top: 6px;
     font-size: 12px; line-height: 16px; color: #E78F37; }
   .pkg-warns .wdiv { width: 1px; height: 12px; background: var(--kk-border-lighter); }
-  .pkg-vendor { margin-top: 12px; font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }  /* Figma 調整後：警示→供應商 12 */
-  .pkg-rating { display: flex; align-items: center; gap: 4px; margin-top: 2px; }
+  /* 供應商+評分 一欄（左），已購貼右底；無評分時移除評分行、已購與供應商同行不留白（Figma 1302-122326） */
+  .pkg-social { display: flex; align-items: flex-end; gap: 6px; margin-top: 12px; }
+  .pkg-social-col { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 2px; align-items: flex-start; }
+  .pkg-vendor { font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
+  .pkg-rating { display: flex; align-items: center; gap: 4px; }
   .pkg-rating .score { font-size: 14px; line-height: 20px; font-weight: 600; color: #13A3B6; }
   .pkg-rating .rcount { font-size: 12px; line-height: 16px; color: var(--kk-text-darker); text-decoration: underline; }  /* Figma 863-73998：評論數帶下劃線 */
   /* 評分等級詞（Figma 863-73997：Medium 12/16、text-darker；4.6–5.0「非常好」、4.0–4.5「很好」，<4.0 不顯示評分） */
   .pkg-rating .grade { font-size: 12px; line-height: 16px; font-weight: 500; color: var(--kk-text-darker); flex: 0 0 auto; }
   .ic-14 { width: 14px; height: 14px; }
-  .pkg-rating .bought { margin-left: auto; display: inline-flex; align-items: center; gap: 4px; flex: 0 0 auto;
+  .pkg-social .bought { display: inline-flex; align-items: center; gap: 4px; flex: 0 0 auto;
     font-size: 12px; line-height: 16px; color: var(--kk-text-dark); }
   /* hot 已購（Figma 795-35558 新版）：線框火苗 16 + 數字 Semibold 14 + 「已購」12，臨界色 */
-  .pkg-rating .bought.hot { color: var(--kk-text-critical); }
-  .pkg-rating .bought .bn { font-size: 14px; line-height: 20px; font-weight: 600; }
+  .pkg-social .bought.hot { color: var(--kk-text-critical); }
+  .pkg-social .bought .bn { font-size: 14px; line-height: 20px; font-weight: 600; }
   .pkg-hr { border: 0; border-top: 1px solid var(--kk-border-lighter); margin: 12px 0 16px; }  /* Figma 863-74100 調整後：評分→線 12，線→價格 16 */
   .pkg-buy { display: flex; align-items: center; gap: 8px; }
   .pkg-price { flex: 1 1 0; min-width: 0; }
@@ -4039,7 +4042,7 @@
       var card = el('<div class="pkg-card">' +
         '<button class="pkg-head"><span class="pkg-title"></span><span class="ic ic-24 chev-r"></span></button>' +
         '<div class="pkg-tags"></div><div class="pkg-perks"></div>' +
-        '<div class="pkg-vendor"></div><div class="pkg-rating"></div><hr class="pkg-hr">' +
+        '<div class="pkg-social"><div class="pkg-social-col"><div class="pkg-vendor"></div><div class="pkg-rating"></div></div></div><hr class="pkg-hr">' +
         '<div class="pkg-buy"><div class="pkg-price"></div><button class="pkg-cta">訂購</button></div></div>');
       card.querySelector('.chev-r').innerHTML = '<span class="rot90 ic">' + ICONS.chevDark + '</span>';
       card.querySelector('.pkg-title').textContent = p.title;
@@ -4056,21 +4059,22 @@
         perks.appendChild(e);
       });
       card.querySelector('.pkg-vendor').textContent = p.vendor;
-      // 評分行：★分數＋等級詞＋(評論數)＋右側已購（Figma 1202-105544：4.6–5.0「非常好」/4.0–4.5「很好」，<4.0 不顯示評分）
+      // 評分：★分數＋等級詞＋(評論數)（Figma 1202-105544：4.6–5.0「非常好」/4.0–4.5「很好」，<4.0 不顯示評分）
       var rating = card.querySelector('.pkg-rating');
+      var grade = p.rating >= 4.6 ? '非常好' : (p.rating >= 4.0 ? '很好' : '');
+      if (grade) {
+        rating.innerHTML = '<span class="ic ic-16">' + ICONS.star + '</span>' +
+          '<span class="score"></span><span class="grade">' + grade + '</span><span class="rcount"></span>';
+        rating.querySelector('.score').textContent = p.rating.toFixed(1);
+        rating.querySelector('.rcount').textContent = '(' + p.reviews + ')';
+      } else {
+        rating.remove();  // <4.0：不顯示評分，移除空行避免留白（已購改與供應商同行，Figma 1302-122326）
+      }
+      // 已購貼右底：有評分時與評分同行、無評分時與供應商同行
       var boughtHtml = p.hot
         ? '<span class="bought hot"><span class="ic ic-16">' + ICONS.fireLine + '</span><span class="bn">' + p.bought.replace(/\s*已購$/, '') + '</span><span class="bt">已購</span></span>'
         : '<span class="bought"><span class="bt">' + p.bought + '</span></span>';
-      var grade = p.rating >= 4.6 ? '非常好' : (p.rating >= 4.0 ? '很好' : '');
-      var ratingHtml = grade
-        ? '<span class="ic ic-16">' + ICONS.star + '</span>' +
-          '<span class="score"></span><span class="grade">' + grade + '</span><span class="rcount"></span>'
-        : '';  // <4.0：評分整組不顯示
-      rating.innerHTML = ratingHtml + boughtHtml;
-      if (grade) {
-        rating.querySelector('.score').textContent = p.rating.toFixed(1);
-        rating.querySelector('.rcount').textContent = '(' + p.reviews + ')';
-      }
+      card.querySelector('.pkg-social').insertAdjacentHTML('beforeend', boughtHtml);
       var price = card.querySelector('.pkg-price');
       // 1 天時每日≈價格與總價相同，冗餘 → 不顯示
       var showPer = (+state.days !== 1);
