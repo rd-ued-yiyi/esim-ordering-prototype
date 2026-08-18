@@ -746,7 +746,9 @@
   :root[data-variant="A"] .fdiv { display: none; }               /* 描邊 chip 間不需要分隔線 */
   :root[data-variant="A"] .pl-filter-fixed { padding-right: 4px; } /* 篩選↔第一顆 chip = 4+4 = 8px（對齊 Figma） */
   :root[data-variant="A"] .pl-filter-scroll { gap: 8px; padding-left: 4px; }
-  :root[data-variant="A"] .pl-filters { padding-top: 0; padding-bottom: 0; }  /* 篩選列總高 48px（Figma 795-35698：僅內層 py-8 + chip 32），去掉外層重複的 8px 垂直留白 */
+  /* 篩選列總高 56px（Figma 795-35698：py-12 + chip 32）：去掉外層重複 padding，內層垂直改 12 */
+  :root[data-variant="A"] .pl-filters { padding-top: 0; padding-bottom: 0; }
+  :root[data-variant="A"] .pl-filter-fixed, :root[data-variant="A"] .pl-filter-scroll { padding-top: 12px; padding-bottom: 12px; }
   /* 方案 A 篩選 icon 用 DS #212121（取代純黑 ic-off），與 chevron/文字同色；方案 B 不受影響 */
   .fpill .ic-fa { display: none; }
   :root[data-variant="A"] .fpill.ficon .ic-off { display: none; }
