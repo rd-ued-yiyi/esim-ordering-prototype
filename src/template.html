@@ -2990,6 +2990,8 @@
     checkSm: '{{IC_checkSm}}',            // 規格總覽「✓當前」badge 的對勾
     arrowDownSm: '{{IC_arrowDown}}',      // 篩選 pill 下拉箭頭
     arrowDownCyan: '{{IC_arrowDownCyan}}',// 篩選 pill 選中態 cyan 箭頭
+    arrowDownCyanMed: '{{IC_arrowDownCyanMed}}', // 方案 A 篩選下拉 chip 選中態箭頭 #26BEC9
+
     send: '{{IC_send}}',                  // 24小時內回覆確認（非有利，深色）
     smile: '{{IC_smile}}', neutral: '{{IC_neutral}}',  // 評論關鍵詞表情
     starGrey: '{{IC_starGrey}}', thumb: '{{IC_thumb}}', // 評論頁：灰星 / 有幫助
@@ -4128,6 +4130,9 @@
     if (!box) return;
     box.innerHTML = '';
     document.getElementById('plFilterBtn').classList.toggle('sel', fSheetCount() > 0);  // 只反映總篩選內容，不受快篩影響
+    // 方案 A 選中態 chip = 青底青字青邊，下拉箭頭同步青（#26BEC9）；方案 B 選中態是紅點深字，箭頭維持深色
+    var chevCyanA = document.documentElement.getAttribute('data-variant') === 'A';
+    function chevSm(sel) { return '<span class="ic ic-16 chev-sm">' + ((sel && chevCyanA) ? ICONS.arrowDownCyanMed : ICONS.arrowDownSm) + '</span>'; }
     outerRow().forEach(function (it) {
       var b, sel, txt;
       if (it.type === 'catval') {
@@ -4143,13 +4148,13 @@
         });
       } else if (it.type === 'date') {
         sel = !!fState.date; txt = sel ? dateLabel() : '使用日期';
-        b = el('<button class="fpill' + (sel ? ' sel' : '') + '"><span class="lb"></span><span class="ic ic-16 chev-sm">' + ICONS.arrowDownSm + '</span></button>');
+        b = el('<button class="fpill' + (sel ? ' sel' : '') + '"><span class="lb"></span>' + chevSm(sel) + '</button>');
         b.querySelector('.lb').textContent = txt;
         b.addEventListener('click', function () { fDraft = fClone(fState); dateReturn = 'outer'; openDateSheet(); });
       } else {
         var cat = catByKey(it.cat), arr = fState[it.cat];
         sel = arr.length > 0; txt = sel ? (arr.length === 1 ? arr[0] : cat.label + '·' + arr.length) : cat.label;
-        b = el('<button class="fpill' + (sel ? ' sel' : '') + '"><span class="lb"></span><span class="ic ic-16 chev-sm">' + ICONS.arrowDownSm + '</span></button>');
+        b = el('<button class="fpill' + (sel ? ' sel' : '') + '"><span class="lb"></span>' + chevSm(sel) + '</button>');
         b.querySelector('.lb').textContent = txt;
         b.addEventListener('click', function () { openCatSheet(it.cat); });
       }
