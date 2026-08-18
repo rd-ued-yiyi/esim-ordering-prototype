@@ -957,6 +957,10 @@
   .det-hero .det-cond { margin-bottom: 0; }
   .det-hero .det-title { margin: 0; }
   .det-hero .pkg-tags { margin-top: 0; }
+  /* 方案 B 詳情首屏：方案規格+標題+標籤 包成白色描邊卡（Figma 1164-97683：border 2px #E6E9ED、radius 12、padding 16），去掉下方分割線，供應商用 #727272 */
+  :root[data-variant="B"] .det-hero { border: 2px solid var(--kk-border-lighter); border-radius: var(--r-lg); padding: 16px; }
+  :root[data-variant="B"] .det-top-hr { display: none; }
+  :root[data-variant="B"] .det-provider { color: var(--kk-text-dark); }
   /* 標籤 → 政策 之間的分割線（Figma 1249-109981 Line 19），上下各 20px */
   .det-top-hr { border: 0; border-top: 1px solid var(--kk-border-lighter); margin: 20px 0 0; }
   .det-cond { display: flex; align-items: center; gap: 6px;
