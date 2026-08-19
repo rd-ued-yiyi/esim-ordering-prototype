@@ -1207,9 +1207,9 @@
 
   /* 包含地區 sheet */
   .bs-region-title { font-size: 16px; line-height: 24px; font-weight: 600; color: var(--kk-text-darker); padding: 24px 24px 8px; }  /* Figma 936-48814：body p-24、標題到列表 gap-8 */
-  .bs-country-list { list-style: none; padding: 0 24px 8px; }
+  .bs-country-list { list-style: none; padding: 0 24px 8px; columns: 2; column-gap: 24px; }  /* 兩欄（Figma 686-33817）；多欄由上而下分欄填充 */
   .bs-country-list li {
-    position: relative; padding: 8px 0 8px 16px;
+    position: relative; padding: 8px 0 8px 16px; break-inside: avoid;
     font-size: 14px; line-height: 20px; color: var(--kk-text-darker);
   }
   .bs-country-list li::before {
