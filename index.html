@@ -987,7 +987,8 @@
   .det-cond { display: flex; align-items: center; gap: 6px;
     font-size: 14px; line-height: 20px; font-weight: 600; color: #13A3B6; }
   .det-cond .ic { width: 20px; height: 20px; }
-  .det-title { font-size: 22px; line-height: 28px; font-weight: 600; color: var(--kk-text-darker); }
+  .det-title { font-size: 22px; line-height: 28px; font-weight: 600; color: var(--kk-text-darker);
+    display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 1; overflow: hidden; }  /* 標題一律 1 行，超出尾部省略（避免換行留白） */
   .det-sec .pkg-hr { margin: 24px 0; }
   /* 首屏政策 icon+text：20px 圖示 + 6px gap（Figma 902-41283，調整後）；距上方方案卡 20px（Figma 1009-43085） */
   /* 詳情頁政策行文字全深色（Figma 1249-109383：不按狀況高亮，僅「立即確認」icon 保留青色，見 DET_PERK_ICONS） */
@@ -4628,7 +4629,7 @@
     lockBody();
     // rAF 等 modal 可見後：先對超行的規格值做展開/收起夾取（會改變高度），再算錨點 offsetTop
     requestAnimationFrame(function () {
-      clampEl(document.getElementById('detIntro'), 2);  // 描述夾 2 行、行尾內聯「展開」於最後一行尾端（Figma 1009-43103）
+      clampEl(document.getElementById('detIntro'), 1);  // 描述最多夾 1 行、行尾內聯「展開」
       var top = 0;
       if (anchor) { var sec = detBody.querySelector('.det-sec[data-sec="' + anchor + '"]'); if (sec) top = sec.offsetTop; }
       detBody.scrollTop = top;
