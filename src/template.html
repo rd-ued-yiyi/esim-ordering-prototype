@@ -698,7 +698,9 @@
      「篩選」固定在左（白底遮住滾動內容），其餘可橫向滾動；A/B 共用 */
   /* 垂直 padding 放在內層兩個容器（而非 .pl-filters），讓紅點有空間不被 overflow 裁切；
      .pl-filter-scroll 因 overflow-x:auto 會連帶裁切上下溢出，故靠上下 8px padding 留白 */
-  .pl-filters { display: flex; align-items: center; padding: 8px 0; overflow: hidden; }
+  .pl-filters { display: flex; align-items: center; padding: 8px 0; overflow: hidden; position: relative; }
+  /* 篩選列右側漸變蒙層：chips 滑到右緣時淡出白色（Figma 1494-131060） */
+  .pl-filters::after { content: ''; position: absolute; top: 0; bottom: 0; right: 0; width: 50px; background: linear-gradient(to right, rgba(255, 255, 255, 0), #fff); pointer-events: none; z-index: 2; }
   .pl-filter-fixed {
     flex: 0 0 auto; background: #fff; padding: 8px 8px 8px 16px;
     position: relative; z-index: 1;
@@ -743,7 +745,7 @@
   }
   :root[data-variant="A"] .fpill.ficon { padding-left: 8px; }                    /* 左側 icon：icon 側 8、文字側 12 */
   :root[data-variant="A"] .fpill:not(.fquick):not(.ficon) { padding-right: 8px; } /* 右側 chevron：文字側 12、chevron 側 8 */
-  :root[data-variant="A"] .fdiv { display: none; }               /* 描邊 chip 間不需要分隔線 */
+  :root[data-variant="A"] .pl-filter-scroll .fdiv { display: none; }  /* 篩選描邊 chip 間不需要分隔線（僅限篩選列，卡片評分行的分隔線保留） */
   :root[data-variant="A"] .pl-filter-fixed { padding-right: 4px; } /* 篩選↔第一顆 chip = 4+4 = 8px（對齊 Figma） */
   :root[data-variant="A"] .pl-filter-scroll { gap: 8px; padding-left: 4px; }
   /* 篩選列總高 56px（Figma 795-35698：py-12 + chip 32）：去掉外層重複 padding，內層垂直改 12 */
@@ -763,13 +765,11 @@
   :root[data-variant="A"] .fpill.sel .lb::after { display: none; }  /* 已用底色表達選中，隱藏紅點 */
 
   .pl-body { padding: 12px 16px 24px; }
-  .pl-note { display: flex; align-items: center; gap: 4px; font-size: 12px; line-height: 16px; color: var(--kk-primary-medium); }
+  /* 此設備支援 eSIM 提示（Figma 1459-130499）：青勾 icon 20 + 深字 14/20（原為青字 12） */
+  .pl-note { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; font-size: 14px; line-height: 20px; color: var(--kk-text-darker); }
+  .pl-note .ic img { width: 20px; height: 20px; }
   /* checkCircle 資產是 24 框裸向量（19.5px），16 框內實際佔位 13×13（inset 9.38%，Figma 821-38628） */
-  .pl-note .ic img, .inline-note .ic img { width: 13px; height: 13px; }
-  .pl-meta { display: flex; align-items: center; margin: 8px 0 16px; }  /* Figma 833-39796：提示行→計數 8，計數→卡片 16 */
-  .pl-meta .cnt { flex: 1 1 0; font-size: 14px; line-height: 20px; color: var(--kk-text-dark); }
-  .pl-meta .sort { display: inline-flex; align-items: center; gap: 2px; font-size: 14px; line-height: 20px; color: var(--kk-text-dark); }
-  /* 排序 icon：Figma ic_swapVertical_line 為 11px 字形居中於 16 框（795-35558），按 intrinsic 渲染即可 */
+  .inline-note .ic img { width: 13px; height: 13px; }
 
   .pkg-card { background: #fff; border-radius: var(--r-lg); padding: 16px; margin-bottom: 16px; }
   .pkg-head { display: flex; align-items: flex-start; gap: 4px; width: 100%; text-align: left; }
@@ -810,7 +810,7 @@
   .pkg-card--a .pkg-a-top { display: flex; flex-direction: column; gap: 8px; }
   .pkg-card--a .pkg-a-hg { display: flex; flex-direction: column; gap: 4px; }   /* 標題 ↔ 規格 = 4 */
   .pkg-card--a .pkg-tags { margin-top: 0; }
-  .pkg-card--a .pkg-perks { flex-direction: column; align-items: flex-start; gap: 4px; margin-top: 0; color: var(--kk-text-dark); }  /* 政策豎排、灰字 #727272 */
+  .pkg-card--a .pkg-perks { flex-direction: column; align-items: flex-start; gap: 4px; margin-top: 0; color: var(--kk-text-dark); font-size: 14px; line-height: 20px; }  /* 政策豎排、灰字 #727272、文字 14/20（Figma 1202-105545） */
   .pkg-card--a .pkg-social { margin-top: 0; align-items: center; gap: 8px; }    /* 評分·已購·供應商同一行 */
   .pkg-card--a .pkg-social .fdiv { height: 10px; }
   .pkg-card--a .pkg-social .pkg-rating { flex: 0 0 auto; }
@@ -1870,11 +1870,7 @@
         </div>
       </div>
       <div class="pl-body">
-        <div class="pl-note"><span class="ic ic-16">{{IC_checkCircle}}</span>此裝置支援使用 eSIM</div>
-        <div class="pl-meta">
-          <span class="cnt" id="plCount">34 項結果</span>
-          <button class="sort" id="plSort">排序<span class="ic ic-16 sort-ic">{{IC_swapVertical}}</span></button>
-        </div>
+        <div class="pl-note"><span class="ic ic-20">{{IC_checkCircle}}</span>此裝置支援使用 eSIM</div>
         <div id="plList"></div>
       </div>
     </section>
@@ -2994,6 +2990,7 @@
     chevGrey: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9C9DA0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>',
     caretDown: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>',  // 方案 B 下拉箭頭：16px＝Figma ic_arrowDown_line_semibold_lg（隨字色）
     arrowDownCircle: '{{IC_arrowDownCircle}}',  // 方案 B 列表页流量 chips 尾端展开按钮：环形下拉箭头（Figma 1202-105534）
+    sortAmount: '{{IC_sortAmountDown}}',  // 篩選列「排序」chip icon（Figma 1494-131060）
     // 付款頁
     payApple: '{{PAY_applepay}}', payCard: '{{PAY_creditcard}}', payPayme: '{{PAY_payme}}',
     payAlipayhk: '{{PAY_alipayhk}}', payAlipay: '{{PAY_alipay}}', hsbc: '{{PAY_hsbc}}',
@@ -3602,8 +3599,7 @@
     });
   }
   wheel.addEventListener('scroll', updateWheel, { passive: true });
-  document.getElementById('daysRow').addEventListener('click', function () {
-    if (state.variant === 'B') { openDaysGrid(); return; }  // 方案 B：與列表頁一致的天數網格 sheet
+  function openDaysWheel() {  // 天數滾輪 picker（目的地頁 + 列表頁條件區共用，合併後統一滾動式）
     var v = state.days || '4';
     var idx = Math.max(0, DAYS_ALL.indexOf(v));
     openSheet(document.getElementById('bsDays'));
@@ -3611,7 +3607,8 @@
       wheel.scrollTop = idx * DAY_H;
       updateWheel();
     });
-  });
+  }
+  document.getElementById('daysRow').addEventListener('click', openDaysWheel);
   // 方案 B：點「流量 值 ›」選框 → 與列表頁一致的流量分頁 sheet；橙色「不知道怎麼選」→ 選擇建議 sheet
   document.getElementById('flowRow').addEventListener('click', openFlowSheet);
   document.getElementById('howtoHintB').addEventListener('click', function () {
@@ -3857,7 +3854,7 @@
     {
       var dayChip = el('<button class="cond-chip sel"><span class="lb"></span><span class="ic cc">' + ICONS.caretDown + '</span></button>');
       dayChip.querySelector('.lb').textContent = state.days + '天';
-      dayChip.addEventListener('click', openDaysGrid);
+      dayChip.addEventListener('click', openDaysWheel);  // 列表頁天數也用滾輪 picker
       fixed.appendChild(dayChip);
       allOpts.forEach(function (it) {
         var isSel = it.tab === state.tab && it.o.t === state.plan;
@@ -3898,11 +3895,7 @@
     if (sortMode === 1) list.sort(function (a, b) { return a.now - b.now; });
     if (sortMode === 2) list.sort(function (a, b) { return b.rating - a.rating; });
     if (sortMode === 3) list.sort(function (a, b) { return boughtNum(b) - boughtNum(a); });
-    // 有篩選時按實際結果數，否則用模擬總數
-    var anyFilter = fActiveCount() > 0;
-    document.getElementById('plCount').textContent = (anyFilter ? list.length : 26 + list.length) + ' 項結果';
-    renderFilterPills();
-    document.getElementById('plSort').childNodes[0].textContent = SORT_NAMES[sortMode];
+    renderFilterPills();  // 結果數 + 排序行已移除；排序移入篩選列
 
     var box = document.getElementById('plList');
     box.innerHTML = '';
@@ -4029,10 +4022,7 @@
       box.appendChild(it);
     });
   }
-  document.getElementById('plSort').addEventListener('click', function () {
-    renderSortList();
-    openSheet(document.getElementById('bsSort'));
-  });
+  // 排序入口已移到篩選列的「排序」chip（見 renderFilterPills 的 sort 分支）
 
   // ---------- 列表頁篩選（總篩選 970-50754 / 單類目 984-14319 / 日期 970-49610 / 按鈕態 1004-4239x） ----------
   // fState=已應用；fDraft=sheet 內暫存草稿。date:null|'今天'|'明天'|{y,m,d,label}；quick 為快篩布林
@@ -4064,7 +4054,7 @@
   // 快捷＝catval：直接切換對應總篩選類目的值 → 外層與總篩選自動關聯（同一份 fState）
   function outerRow() {
     return [
-      { type: 'date' },
+      { type: 'sort' },
       { type: 'expand', cat: 'ipType' },
       { type: 'catval', cat: 'speed', val: '5G' },
       { type: 'catval', cat: 'features', val: '支援熱點' },
@@ -4160,11 +4150,11 @@
           if (qi >= 0) a.splice(qi, 1); else a.push(it.val);
           renderPlans();
         });
-      } else if (it.type === 'date') {
-        sel = !!fState.date; txt = sel ? dateLabel() : '使用日期';
-        b = el('<button class="fpill' + (sel ? ' sel' : '') + '"><span class="lb"></span>' + chevSm(sel) + '</button>');
-        b.querySelector('.lb').textContent = txt;
-        b.addEventListener('click', function () { fDraft = fClone(fState); dateReturn = 'outer'; openDateSheet(); });
+      } else if (it.type === 'sort') {
+        // 排序 chip（Figma 1494-131060）：icon 左 + 文字，點開排序 sheet；選非預設排序時顯示選中態
+        sel = sortMode !== 0;
+        b = el('<button class="fpill ficon' + (sel ? ' sel' : '') + '"><span class="ic ic-16">' + ICONS.sortAmount + '</span><span class="lb">排序</span></button>');
+        b.addEventListener('click', function () { renderSortList(); openSheet(document.getElementById('bsSort')); });
       } else {
         var cat = catByKey(it.cat), arr = fState[it.cat];
         sel = arr.length > 0; txt = sel ? (arr.length === 1 ? arr[0] : cat.label + '·' + arr.length) : cat.label;

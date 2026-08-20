@@ -186,6 +186,7 @@ subs = {
     "{{IC_fireLineGrey}}": svg("fireLine", recolor=("#EF7A70", "#727272")),
     "{{IC_crossCircleLine}}": svg("crossCircleLine"),
     "{{IC_swapVertical}}": svg("swapVertical"),
+    "{{IC_sortAmountDown}}": svg("sortAmountDown"),  # 篩選列「排序」chip icon ic_sortAmountDown_line（Figma 1494-131060）
     "{{IC_pencil}}":       svg("pencil"),
     "{{IC_filter}}":       svg("filter"),
     "{{IC_filterDark}}":   svg("filter", recolor=("black", "#212121")),  # 方案 A 篩選 chip：icon 用 DS Text & Icon #212121（原 filter.svg 為純黑，比 chevron/文字重）
