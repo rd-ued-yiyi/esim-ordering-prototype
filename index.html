@@ -562,13 +562,13 @@
   .dm-row .rd .desc { flex: 1 1 0; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .dm-row .rd .cnt { display: inline-flex; align-items: center; gap: 4px; flex: 0 0 auto; }
 
-  /* 方案 B：選擇目的地 modal 內國家 chips / 區域行 預設態改為描邊樣式（僅樣式、僅 modal 內、僅未選中；
-     選中態沿用 .sel 的 cyan 樣式。用 inset box-shadow 當邊框，避免與選中態尺寸跳動） */
-  :root[data-variant="B"] .dest-modal .chip:not(.sel) {
+  /* 選擇目的地 modal 內國家 chips / 區域行 預設態＝描邊樣式（僅 modal 內、僅未選中；選中態沿用 .sel 的 cyan；
+     用 inset box-shadow 當邊框，避免與選中態尺寸跳動）。合併後固定採用此版（原方案 B） */
+  .dest-modal .chip:not(.sel) {
     background: #fff;
     box-shadow: inset 0 0 0 1px var(--kk-border-lighter);
   }
-  :root[data-variant="B"] .dest-modal .dm-row:not(.sel) {
+  .dest-modal .dm-row:not(.sel) {
     background: #fff;
     box-shadow: inset 0 0 0 1px var(--kk-border-lighter);
   }
@@ -687,8 +687,8 @@
   /* 方案 B：去掉「5天」固定 chip 的右緣分割投影（Figma 1202-105549 無此陰影）。
      天數↔流量的 8px 間距留在「天數」這側（fixed padding-right，預設 8px 不動）、scroll 左內距歸零，
      這樣捲動時流量 chips 停在天數 chip 右緣外 8px、不會疊上去。 */
-  :root[data-variant="B"] .pl-cond-fixed { filter: none; clip-path: none; }
-  :root[data-variant="B"] .pl-cond-scroll { padding-left: 0; }
+  .pl-cond-fixed { filter: none; clip-path: none; }
+  .pl-cond-scroll { padding-left: 0; }
   .cond-chip {
     display: inline-flex; align-items: center; gap: 4px; flex: 0 0 auto;
     background: var(--kk-surface-light); border-radius: var(--r-md);
@@ -973,9 +973,9 @@
   .det-hero .det-title { margin: 0; }
   .det-hero .pkg-tags { margin-top: 0; }
   /* 方案 B 詳情首屏：方案規格+標題+標籤 包成白色描邊卡（Figma 1164-97683：border 2px #E6E9ED、radius 12、padding 16），去掉下方分割線，供應商用 #727272 */
-  :root[data-variant="B"] .det-hero { border: 2px solid var(--kk-border-lighter); border-radius: var(--r-lg); padding: 16px; }
-  :root[data-variant="B"] .det-top-hr { display: none; }
-  :root[data-variant="B"] .det-provider { color: var(--kk-text-dark); }
+  /* 詳情首屏：方案規格+標題+標籤 包成白色描邊卡（合併後固定採用，原方案 B；Figma 1164-97682） */
+  .det-hero { border: 2px solid var(--kk-border-lighter); border-radius: var(--r-lg); padding: 16px; }
+  .det-top-hr { display: none; }
   /* 標籤 → 政策 之間的分割線（Figma 1249-109981 Line 19），上下各 20px */
   .det-top-hr { border: 0; border-top: 1px solid var(--kk-border-lighter); margin: 20px 0 0; }
   .det-cond { display: flex; align-items: center; gap: 6px;
@@ -1000,7 +1000,7 @@
   .det-policies .perk.cover .cnt { flex: 0 0 auto; text-decoration: underline; text-underline-offset: 2px; }
   /* 描述：移到「基本資訊」標題下、表格上（Figma 1009-43085）；收合夾 2 行、行尾內聯「展開/收起」（clampEl 處理） */
   .det-intro { margin: 0 0 20px; font-size: 14px; line-height: 20px; color: var(--kk-text-darker); }
-  .det-provider { margin-top: 6px; font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
+  .det-provider { margin-top: 6px; font-size: 12px; line-height: 16px; color: var(--kk-text-dark); }  /* 服務由 XXX 提供：#727272（合併後固定，Figma 1164-97682） */
   .det-sec .pkg-warns { margin-top: 20px; flex-wrap: wrap; row-gap: 4px; }  /* 提醒標籤距政策行 20；多項換行（Figma 1249-109400） */
   .det-h2 { font-size: 18px; line-height: 26px; font-weight: 600; color: var(--kk-text-darker); margin: 0 0 20px; }
   .det-h5 { font-size: 22px; line-height: 28px; font-weight: 600; color: var(--kk-text-darker); margin: 0 0 20px; }  /* 標題下距 20（Figma 1009-43085） */
@@ -1683,37 +1683,8 @@
 <path id="wifi__Ellipse 7" d="M13.8504 7.53933C12.2261 5.91501 9.59256 5.91501 7.96824 7.53933" stroke="#26BEC9" stroke-width="1.22066" stroke-linecap="round"/>
 </g></svg></g><g transform="translate(310.650 103.590) rotate(68.05) translate(-310.650 -103.590)"><svg x="306.150" y="99.090" width="9.000" height="9.000" viewBox="0 0 9.0 9.0" overflow="visible" fill="none"><path id="star1__Vector" d="M3.94211 0.369952C4.15049 -0.123318 4.84951 -0.123317 5.05789 0.369953L6.02308 2.65471C6.08444 2.79997 6.20003 2.91556 6.34529 2.97692L8.63005 3.94211C9.12332 4.15049 9.12332 4.84952 8.63005 5.05789L6.34529 6.02308C6.20003 6.08444 6.08444 6.20004 6.02308 6.34529L5.05789 8.63005C4.84951 9.12332 4.15049 9.12332 3.94211 8.63005L2.97692 6.34529C2.91556 6.20003 2.79997 6.08444 2.65471 6.02308L0.369952 5.05789C-0.123318 4.84952 -0.123317 4.15049 0.369953 3.94211L2.65471 2.97692C2.79997 2.91556 2.91556 2.79997 2.97692 2.65471L3.94211 0.369952Z" fill="#FFDD4A"/></svg></g><g transform="translate(352.080 175.690) rotate(68.05) translate(-352.080 -175.690)"><svg x="347.588" y="171.198" width="8.983" height="8.983" viewBox="0 0 8.98337 8.98337" overflow="visible" fill="none"><path id="star2__Vector" d="M3.93482 0.369268C4.14282 -0.12309 4.84055 -0.123089 5.04854 0.369269L6.01194 2.6498C6.07319 2.79479 6.18857 2.91017 6.33356 2.97142L8.6141 3.93482C9.10646 4.14282 9.10645 4.84055 8.6141 5.04855L6.33356 6.01195C6.18857 6.07319 6.07319 6.18858 6.01194 6.33356L5.04854 8.6141C4.84055 9.10646 4.14281 9.10646 3.93482 8.6141L2.97142 6.33356C2.91017 6.18858 2.79479 6.07319 2.6498 6.01195L0.369268 5.04855C-0.12309 4.84055 -0.123089 4.14282 0.369269 3.93482L2.6498 2.97142C2.79479 2.91017 2.91017 2.79479 2.97142 2.6498L3.93482 0.369268Z" fill="#FFDD4A"/></svg></g><g transform="translate(293.375 93.895) rotate(11.11) translate(-293.375 -93.895)"><svg x="285.337" y="85.857" width="16.077" height="16.077" viewBox="0 0 16.0767 16.0767" overflow="visible" fill="none"><path id="star3__Vector" d="M7.0418 0.660847C7.41403 -0.220283 8.66271 -0.220282 9.03494 0.660848L10.759 4.74212C10.8687 5.00159 11.0751 5.20808 11.3346 5.31769L15.4159 7.04181C16.297 7.41403 16.297 8.66271 15.4159 9.03494L11.3346 10.759C11.0751 10.8687 10.8687 11.0752 10.759 11.3346L9.03493 15.4159C8.66271 16.297 7.41403 16.297 7.0418 15.4159L5.31769 11.3346C5.20808 11.0751 5.00159 10.8687 4.74212 10.759L0.660846 9.03494C-0.220283 8.66271 -0.220282 7.41403 0.660848 7.04181L4.74212 5.31769C5.00159 5.20808 5.20808 5.00159 5.31769 4.74212L7.0418 0.660847Z" fill="#FFDD4A"/></svg></g><rect x="0" y="72.309" width="375" height="227.691" fill="url(#heroCyanFade)"/><rect x="0" y="140" width="375" height="160" fill="url(#heroPageFade)"/></svg>
 
-    <!-- ============ SCREEN: 主題落地頁 ============ -->
-    <!-- ============ KKday 模擬首頁（參考 kkday.com/zh-hk）============ -->
-    <section class="screen is-active" data-screen="kkhome">
-      <div class="kkh-top">
-        <div class="kkh-bar">
-          <div class="kkh-logo">kkday</div>
-          <span class="kkh-test">易用性測試</span>
-        </div>
-      </div>
-      <div class="kkh-choose">
-        <div class="kkh-title">
-          <div class="kkh-guide">請先預設一個出遊計畫，<br>你要去哪裡？<br>要去幾天？<br>為你這次旅程訂購 eSIM</div>
-        </div>
-        <div class="kkh-desc">體驗順序請看你的員工工號末位<br>是單數：先A後B，是雙數（含0）：先B後A<span class="kkh-think">操作的同時，請放聲思考，<br>把你的任何想法和感受都毫無保留地說出來。</span><span class="kkh-remind">開始請確保手機錄屏&麥克風已開啟哦</span></div>
-        <div class="kkh-plans" id="kkhPlans">
-          <button class="kkh-plan" data-variant="A">
-            <span class="pbadge">A</span>
-            <span class="ptit">方案 A</span>
-            <span class="pcta">進入體驗<span class="parr">→</span></span>
-          </button>
-          <button class="kkh-plan" data-variant="B">
-            <span class="pbadge">B</span>
-            <span class="ptit">方案 B</span>
-            <span class="pcta">進入體驗<span class="parr">→</span></span>
-          </button>
-        </div>
-        <a class="kkh-survey" href="https://docs.google.com/forms/d/e/1FAIpQLSfekZuUgfBX9jsfxzVa-YCbgmjJkx31rKGWHhj_MMAvP6pr4w/viewform" target="_blank" rel="noopener">2個方案體驗結束後記得上傳錄屏填寫問卷</a>
-      </div>
-    </section>
-
-    <section class="screen" data-screen="home">
+    <!-- ============ SCREEN: eSIM 主頁（合併後的起始頁；模擬首頁已移除）============ -->
+    <section class="screen is-active" data-screen="home">
 
       <!-- header -->
       <div class="mheader">
@@ -2671,7 +2642,7 @@
   }
 
   // ---------- 螢幕路由 ----------
-  var current = 'kkhome';  // 初始＝KKday 模擬首頁，經 eSIM 入口進入 eSIM 主頁
+  var current = 'home';  // 初始＝eSIM 主頁（模擬首頁已移除）
   function go(name) {
     current = name;
     document.querySelectorAll('.screen').forEach(function (s) {
@@ -2696,20 +2667,10 @@
   // ---------- A/B 對照方案 ----------
   // 僅「列表頁條件切換區」與「天數/流量選擇 UI」兩處分歧；其餘全部共用同一份程式碼（改動自動同步兩案）。
   // A = 現行（組合條件 chip → 滾輪＋展開流量面板）；B = Figma 新設計（下拉 chip → 天數網格 / 流量分頁 sheet）
-  state.variant = (function () {
-    var q = (new URLSearchParams(location.search).get('v') || '').toLowerCase();
-    if (q === 'a' || q === 'b') return q.toUpperCase();
-    try { var s = localStorage.getItem('esim_variant'); if (s === 'A' || s === 'B') return s; } catch (e) {}
-    return 'A';
-  })();
+  // 已合併為單一版本（不再有 A/B 切換）：固定 A 為基底；B 的部分（選擇目的地彈窗描邊、列表流量條件區、詳情首屏卡）已就地固化為無條件生效
+  state.variant = 'A';
   function syncVariantUI() {
     document.documentElement.setAttribute('data-variant', state.variant);
-  }
-  function setVariant(v) {
-    if (v !== 'A' && v !== 'B') return;
-    state.variant = v;
-    try { localStorage.setItem('esim_variant', v); } catch (e) {}
-    syncVariantUI();
   }
 
   // 模擬價格模型（NT$）：每日固定/無限流量按天計價（長天數有折扣），總流量一口價
@@ -3539,19 +3500,14 @@
       else if (a === 'change-destination') openModal(lastType()); // 再次開啟預設進入上次所選類目
       else if (a === 'guide') toast('安裝指南：' + el.getAttribute('data-guide') + '（開發中）');
       else if (a === 'faq-more') toast('常見問題列表（開發中）');
-      else if (a === 'back') { if (current === 'destination') go('home'); else if (current === 'plans') go('destination'); else if (current === 'home') go('kkhome'); else toast('返回上一頁'); }
+      else if (a === 'back') { if (current === 'destination') go('home'); else if (current === 'plans') go('destination'); else toast('返回上一頁'); }
       else if (a === 'back-plans') go('destination');
       else if (a === 'enter-esim') go('home');            // 首頁 eSIM 入口 → eSIM 主頁
       else if (a === 'kkh-demo') toast('原型僅提供 eSIM 訂購流程');
     });
   });
 
-  // A/B 方案入口卡：點卡＝選定方案並進入 eSIM 流程
-  document.querySelectorAll('#kkhPlans .kkh-plan').forEach(function (b) {
-    b.addEventListener('click', function () { setVariant(b.getAttribute('data-variant')); go('home'); });
-  });
-  syncVariantUI();
-  document.querySelector('.esim-root').classList.add('kkh-lock');  // 初始＝模擬首頁：鎖高不可滾動（go() 之後會依畫面切換）
+  syncVariantUI();  // 固定 data-variant=A（單一版本）
 
   // 首頁目的地 chip → 進入目的地頁（亞洲通/東南亞/北歐地區等區域按區域型別處理）
   function regionByName(name) {
@@ -3994,8 +3950,8 @@
         renderOpts(); updateCta(); renderPlans('smooth');
       });
     }
-    if (state.variant === 'B') {
-      // 方案 B：天數下拉 chip → 天數網格 sheet；流量 chips 無箭頭、點按即快速切換；尾端「∨」→ 流量分頁 sheet
+    // 列表頁流量條件區＝固定採用原方案 B：天數下拉 chip → 天數網格 sheet；流量 chips 點按即切換；尾端環形箭頭 → 流量分頁 sheet
+    {
       var dayChip = el('<button class="cond-chip sel"><span class="lb"></span><span class="ic cc">' + ICONS.caretDown + '</span></button>');
       dayChip.querySelector('.lb').textContent = state.days + '天';
       dayChip.addEventListener('click', openDaysGrid);
@@ -4011,20 +3967,6 @@
       more.innerHTML = '<span class="ic ic-20 cc">' + ICONS.arrowDownCircle + '</span>';
       more.hidden = false;
       more.onclick = openFlowSheet;
-    } else {
-      // 方案 A：組合條件 chip（→ 滾輪＋展開流量面板 modal），計費方式文字＝選中項所屬方式（點跨方式檔位即更新）
-      var edit = el('<button class="cond-chip sel"><span class="lb"></span><span class="ic ic-16">' + ICONS.pencil + '</span></button>');
-      edit.querySelector('.lb').textContent = state.days + '天·' + tabShort();
-      edit.addEventListener('click', function () { openCondModal(); });
-      fixed.appendChild(edit);
-      allOpts.forEach(function (it) {
-        var isSel = it.tab === state.tab && it.o.t === state.plan;
-        var c = el('<button class="cond-chip' + (isSel ? ' sel' : '') + '"></button>');
-        c.textContent = it.o.t;
-        bindCondChip(c, it);
-        conds.appendChild(c);
-      });
-      document.getElementById('plCondMore').hidden = true;  // A 案無尾端「∨」
     }
     // centerSel='smooth'（點選切換/modal 確定）：選中項平滑滾到可視區中央；
     // centerSel='center'（進入列表頁）：選中項瞬時定位到中央（不播進場動畫）；
