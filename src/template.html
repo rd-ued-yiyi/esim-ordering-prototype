@@ -802,6 +802,12 @@
   .pkg-social .bought .bn { font-size: 14px; line-height: 20px; font-weight: 600; }
   .pkg-hr { border: 0; border-top: 1px solid var(--kk-border-lighter); margin: 12px 0 16px; }  /* Figma 863-74100 調整後：評分→線 12，線→價格 16 */
   .pkg-buy { display: flex; align-items: center; gap: 8px; }
+  /* 方案 A 搜尋結果卡（Figma 1515-134296 Variant3）：供應商+評分置頂 → 標題/規格/政策包進描邊子卡 → 價格CTA 置底 */
+  .pkg-card--a .pkg-social { margin-top: 0; }
+  .pkg-card--a .pkg-mid { margin-top: 12px; border: 2px solid var(--kk-border-lighter); border-radius: var(--r-md); padding: 12px; }
+  .pkg-card--a .pkg-mid .pkg-hr { margin: 12px 0; }          /* 子卡內分割線：上下各 12（Figma subcard gap 12） */
+  .pkg-card--a .pkg-mid .pkg-perks { margin-top: 0; }        /* 間距由上方 hr 的 margin 提供 */
+  .pkg-card--a .pkg-buy { margin-top: 16px; }                /* 子卡 ↔ 價格 = 16（Figma card gap 16） */
   .pkg-price { flex: 1 1 0; min-width: 0; }
   /* 價格上方促銷標籤，兩種擇一（Figma 863-74100 / 863-74187）：
      實底 %OFF（solid）與 淡底「特別優惠」（subtle） */
@@ -3944,11 +3950,21 @@
     list.forEach(function (p) {
       // 卡片結構（Figma 795-35558 新版）：標題 / 規格灰標 / 政策行（全青）/ 供應商 /
       // 評分行（★分數＋評論數＋連續好評文字＋右側已購）/ 分割線 / 價格＋CTA
-      var card = el('<div class="pkg-card">' +
-        '<button class="pkg-head"><span class="pkg-title"></span><span class="ic ic-24 chev-r"></span></button>' +
-        '<div class="pkg-tags"></div><div class="pkg-perks"></div>' +
-        '<div class="pkg-social"><div class="pkg-social-col"><div class="pkg-vendor"></div><div class="pkg-rating"></div></div></div><hr class="pkg-hr">' +
-        '<div class="pkg-buy"><div class="pkg-price"></div><button class="pkg-cta">訂購</button></div></div>');
+      // 方案 A：Variant3（Figma 1515-134296）供應商+評分置頂 → 標題/規格/政策描邊子卡 → 價格CTA；方案 B 維持原結構
+      var isA = document.documentElement.getAttribute('data-variant') === 'A';
+      var card = isA
+        ? el('<div class="pkg-card pkg-card--a">' +
+            '<div class="pkg-social"><div class="pkg-social-col"><div class="pkg-vendor"></div><div class="pkg-rating"></div></div></div>' +
+            '<div class="pkg-mid">' +
+              '<button class="pkg-head"><span class="pkg-title"></span><span class="ic ic-24 chev-r"></span></button>' +
+              '<div class="pkg-tags"></div><hr class="pkg-hr"><div class="pkg-perks"></div>' +
+            '</div>' +
+            '<div class="pkg-buy"><div class="pkg-price"></div><button class="pkg-cta">訂購</button></div></div>')
+        : el('<div class="pkg-card">' +
+            '<button class="pkg-head"><span class="pkg-title"></span><span class="ic ic-24 chev-r"></span></button>' +
+            '<div class="pkg-tags"></div><div class="pkg-perks"></div>' +
+            '<div class="pkg-social"><div class="pkg-social-col"><div class="pkg-vendor"></div><div class="pkg-rating"></div></div></div><hr class="pkg-hr">' +
+            '<div class="pkg-buy"><div class="pkg-price"></div><button class="pkg-cta">訂購</button></div></div>');
       card.querySelector('.chev-r').innerHTML = '<span class="rot90 ic">' + ICONS.chevDark + '</span>';
       card.querySelector('.pkg-title').textContent = p.title;
       var tags = card.querySelector('.pkg-tags');
