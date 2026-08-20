@@ -1371,6 +1371,16 @@
   /* 區塊標題（H6 semibold 18）+ 編輯 */
   .ord-sec-h { display: flex; align-items: center; justify-content: space-between; }
   .ord-card .ord-sec-h + * { margin-top: 16px; }
+  /* 訂單區塊：藍底資訊提示（設備）+ 標題下方說明行（旅客/聯絡方式）（Figma 1569-146436） */
+  .ord-tip { display: flex; align-items: flex-start; gap: 6px; background: #F2FAFF; border-radius: 8px; padding: 8px 12px; font-size: 12px; line-height: 16px; color: var(--kk-text-dark); }
+  .ord-tip .ic { flex: 0 0 auto; }
+  .ord-card .ord-sec-h + .ord-tip { margin-top: 12px; }
+  .ord-tip + .ord-databox { margin-top: 12px; }
+  .ord-subhint { font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
+  .ord-card .ord-sec-h + .ord-subhint { margin-top: 8px; }
+  .ord-subhint .req { color: #E65F50; }
+  .ord-subhint b { color: #13A3B6; font-weight: 400; }
+  .ord-subhint + .ct-area { margin-top: 12px; }
   .ord-sec-h .t { font-size: 18px; line-height: 26px; font-weight: 600; color: #212121; }
   .ord-sec-h .t .cnt { color: #13A3B6; }
   .ord-sec-h .t .hint { color: var(--kk-text-medium); font-size: 12px; font-weight: 400; margin-left: 8px; }
@@ -2472,16 +2482,16 @@
   <!-- 裝置資訊 sheet -->
   <div class="bsheet tall" id="deviceSheet">
     <div class="bs-handle"></div>
-    <div class="bs-bar"><button class="bs-close" data-bs-close aria-label="關閉"><span class="ic ic-24">{{IC_cross}}</span></button><span class="bs-title">裝置資訊</span><span class="bs-spacer"></span></div>
+    <div class="bs-bar"><button class="bs-close" data-bs-close aria-label="關閉"><span class="ic ic-24">{{IC_cross}}</span></button><span class="bs-title">設備資訊</span><span class="bs-spacer"></span></div>
     <div class="bs-body"><div class="fs-body" style="padding:8px 24px 24px;">
       <div class="inline-note inline-note--info" style="margin-bottom:16px">
         <span class="ic ic-16">{{IC_infoFill}}</span>
-        <span>在手機撥號鍵盤輸入「＊＃０６＃」可顯示 EID／IMID／IMID2 序號</span>
+        <span>在手機撥號鍵盤輸入「＊＃０６＃」可顯示 EID／IMEI／IMEI2 序號</span>
       </div>
       <div class="ff"><div class="ff-label">手機型號<span class="req">*</span></div><input class="ff-input" id="dv-model" placeholder="請輸入"></div>
       <div class="ff"><div class="ff-label">EID<span class="req">*</span></div><input class="ff-input" id="dv-eid" placeholder="請輸入"></div>
-      <div class="ff"><div class="ff-label">IMID<span class="req">*</span></div><input class="ff-input" id="dv-imid" placeholder="請輸入"></div>
-      <div class="ff"><div class="ff-label">IMID2<span class="req">*</span></div><input class="ff-input" id="dv-imid2" placeholder="請輸入"></div>
+      <div class="ff"><div class="ff-label">IMEI<span class="req">*</span></div><input class="ff-input" id="dv-imid" placeholder="請輸入"></div>
+      <div class="ff"><div class="ff-label">IMEI2<span class="req">*</span></div><input class="ff-input" id="dv-imid2" placeholder="請輸入"></div>
     </div></div>
     <div class="fs-foot"><button class="cta" id="deviceConfirm">確定</button></div>
   </div>
@@ -5042,33 +5052,35 @@
     // ── 獨立圓角卡區：coupon banner（最上）＋ [航班][裝置][聯絡人] 訂購人 備註 ──
     // coupon banner 佔位：置於卡片流最上面（Figma 1074-82361）；下方 JS 把 #ordCoupon 節點移入。A/B 兩案一致。
     var c = '<div class="ord-coupon-slot" id="ordCouponSlot"></div>';
+    // 順序（Figma 1569-146436）：設備資訊 → 抵達航班資訊 → 旅客資料 → 旅遊期間聯絡方式
+    if (req.device) {
+      c += '<div class="ord-card"><div class="ord-sec-h"><div class="t">設備資訊</div>' +
+        '<button class="ord-edit' + (st.device ? '' : ' empty') + '" id="ordDeviceEdit">' + (st.device ? '' : '請填寫') + '<span class="ic">' + ICONS.editLine + '</span></button></div>' +
+        '<div class="ord-tip"><span class="ic ic-16">' + ICONS.infoCyan + '</span><span>在手機撥號鍵盤輸入「＊＃０６＃」可顯示 EID／IMEI2</span></div>' +
+        (st.device ? '<div class="ord-databox"><div class="ord-kv">' +
+          '<div><div class="k">手機型號</div><div class="v">' + st.device.model + '</div></div>' +
+          '<div><div class="k">EID</div><div class="v">' + st.device.eid + '</div></div>' +
+          '<div><div class="k">IMEI</div><div class="v">' + st.device.imid + '</div></div>' +
+          '<div><div class="k">IMEI2</div><div class="v">' + st.device.imid2 + '</div></div>' +
+        '</div></div>' : '') + '</div>';
+    }
     if (req.flight) {
       c += '<div class="ord-card"><div class="ord-sec-h"><div class="t">抵達航班資訊</div>' +
         '<button class="ord-edit' + (st.flight ? '' : ' empty') + '" id="ordFlightEdit">' + (st.flight ? '' : '請填寫') + '<span class="ic">' + ICONS.editLine + '</span></button></div>' +
         (st.flight ? '<div class="ord-databox">' + flightKvHtml(st.flight) + '</div>' : '') + '</div>';
     }
-    if (req.device) {
-      c += '<div class="ord-card"><div class="ord-sec-h"><div class="t">裝置資訊</div>' +
-        '<button class="ord-edit' + (st.device ? '' : ' empty') + '" id="ordDeviceEdit">' + (st.device ? '' : '請填寫') + '<span class="ic">' + ICONS.editLine + '</span></button></div>' +
-        (st.device ? '<div class="ord-databox"><div class="ord-kv">' +
-          '<div><div class="k">手機型號</div><div class="v">' + st.device.model + '</div></div>' +
-          '<div><div class="k">EID</div><div class="v">' + st.device.eid + '</div></div>' +
-          '<div><div class="k">IMID</div><div class="v">' + st.device.imid + '</div></div>' +
-          '<div><div class="k">IMID2</div><div class="v">' + st.device.imid2 + '</div></div>' +
-        '</div></div>' : '') + '</div>';
-    }
     if (req.travelers) {
       var maxTv = st.qty;  // 旅客數 = 購買數量（每張 eSIM 一位旅客）
       if (st.travelers.length > maxTv) st.travelers = st.travelers.slice(0, maxTv);  // qty 下調時裁掉超額
-      // 數量表現＝「選擇旅客 (已選/上限)」青字比例（Figma 1074-81598：取代原「N 旅客 已選滿」）
-      c += '<div class="ord-card"><div class="ord-sec-h"><div class="t">旅客資料 <span class="cnt">(' + st.travelers.length + '/' + maxTv + ')</span></div></div>' +
+      c += '<div class="ord-card"><div class="ord-sec-h"><div class="t">旅客資料</div></div>' +
+        '<div class="ord-subhint">選擇 <b>' + maxTv + '</b> 位旅客代表人<span class="req">*</span></div>' +
         '<div class="ct-area" id="tvArea"><div class="ct-chips-vp" id="tvChipsVp"><div class="ct-chips" id="tvChips"></div></div>' +
         '<button class="ct-add" id="tvAdd"><span class="ic">' + ICONS.plusCyan + '</span>新增</button></div>' +
         '<div id="tvCards"></div></div>';
     }
     if (req.contacts) {
-      // 數量表現＝「選擇聯絡人 (已選/上限)」青字比例（上限 1）
-      c += '<div class="ord-card"><div class="ord-sec-h"><div class="t">聯絡人資料 <span class="cnt">(' + st.contacts.length + '/1)</span></div></div>' +
+      c += '<div class="ord-card"><div class="ord-sec-h"><div class="t">旅遊期間聯絡方式</div></div>' +
+        '<div class="ord-subhint">電話與 App 建議擇一填寫，以便旅途中與您聯繫</div>' +
         '<div class="ct-area" id="ctArea"><div class="ct-chips-vp" id="ctChipsVp"><div class="ct-chips" id="ctChips"></div></div>' +
         '<button class="ct-add" id="ctAdd"><span class="ic">' + ICONS.plusCyan + '</span>新增</button></div>' +
         '<div id="ctCards"></div></div>';
