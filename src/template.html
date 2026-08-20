@@ -967,6 +967,8 @@
   .det-hero .det-cond { margin-bottom: 0; }
   .det-hero .det-title { margin: 0; }
   .det-hero .pkg-tags { margin-top: 0; }
+  /* 提醒 + 供應商移入首屏卡內（Figma 1249-109383）：間距交由卡片 gap 8 控制 */
+  .det-hero .pkg-warns, .det-hero .det-provider { margin-top: 0; }
   /* 方案 B 詳情首屏：方案規格+標題+標籤 包成白色描邊卡（Figma 1164-97683：border 2px #E6E9ED、radius 12、padding 16），去掉下方分割線，供應商用 #727272 */
   /* 詳情首屏：方案規格+標題+標籤 包成白色描邊卡（合併後固定採用，原方案 B；Figma 1164-97682） */
   .det-hero { border: 2px solid var(--kk-border-lighter); border-radius: var(--r-lg); padding: 16px; }
@@ -2060,6 +2062,7 @@
         <button class="det-tab" data-sec="howto">如何使用</button>
         <button class="det-tab" data-sec="cancel">取消政策</button>
         <button class="det-tab" data-sec="review" id="detTabReview">評論</button>
+        <button class="det-tab" data-sec="fee">費用資訊</button>
         <button class="det-tab" data-sec="notice">購買須知</button>
         <button class="det-tab" data-sec="imgs">圖文詳情</button>
       </div>
@@ -2070,12 +2073,10 @@
         <div class="det-hero">
           <div class="det-cond"><span class="ic ic-20">{{IC_file}}</span><span id="detCond"></span></div>
           <h2 class="det-title" id="detTitle"></h2>
-          <div class="pkg-tags" id="detTags"></div>
+          <div class="pkg-warns" id="detWarns"></div>
+          <div class="det-provider" id="detProvider"></div>
         </div>
-        <hr class="det-top-hr">
         <div class="det-policies" id="detPolicies"></div>
-        <div class="pkg-warns" id="detWarns"></div>
-        <div class="det-provider" id="detProvider"></div>
         <hr class="pkg-hr">
         <h3 class="det-h2">基本資訊</h3>
         <!-- 商品描述移到「基本資訊」標題下、表格上（Figma 1009-43085） -->
@@ -2191,13 +2192,10 @@
         <button class="det-morebtn" id="detMoreReviews">檢視更多評論</button>
       </section>
 
-      <section class="det-sec" data-sec="notice">
-        <h2 class="det-h5">購買須知</h2>
-        <ul class="det-list">
-          <li>網路速度將隨地形、氣候、建物遮蔽、使用人數及地點等因素改變，收訊不穩定時，請務必與技術客服聯絡。</li>
-          <li>為維護網路連線品質及公平使用原則，世界各國的電信公司有時會針對短時間內使用極大網路流量的顧客進行流量管制，故可能導致無法上網或降低網速，為確保可正常使用，請儘量避免長時間觀看影片或更新軟體等需大量消耗流量的工具。</li>
-        </ul>
-        <h3 class="det-sub">費用包含</h3>
+      <!-- 費用資訊：從購買須知拆出的獨立板塊（Figma 1249-109383） -->
+      <section class="det-sec" data-sec="fee">
+        <h2 class="det-h5">費用資訊</h2>
+        <h3 class="det-sub" style="margin-top:0">費用包含</h3>
         <div class="det-inc"><span class="ic">{{IP_checkLine}}</span>eSIM費用</div>
         <div class="det-inc"><span class="ic">{{IP_checkLine}}</span>eSIM其他費用</div>
         <h3 class="det-sub">費用不包含</h3>
@@ -2211,6 +2209,14 @@
         <ul class="det-list">
           <li>加購流量：NT$99 / GB，用完可隨時於 KKday App 加購</li>
           <li>實體寄送：eSIM 為電子憑證，無實體運費</li>
+        </ul>
+      </section>
+
+      <section class="det-sec" data-sec="notice">
+        <h2 class="det-h5">購買須知</h2>
+        <ul class="det-list">
+          <li>網路速度將隨地形、氣候、建物遮蔽、使用人數及地點等因素改變，收訊不穩定時，請務必與技術客服聯絡。</li>
+          <li>為維護網路連線品質及公平使用原則，世界各國的電信公司有時會針對短時間內使用極大網路流量的顧客進行流量管制，故可能導致無法上網或降低網速，為確保可正常使用，請儘量避免長時間觀看影片或更新軟體等需大量消耗流量的工具。</li>
         </ul>
         <div style="margin-top:24px;background:#FFF8E1;border-radius:8px;padding:16px;">
           <div style="display:flex;align-items:center;gap:8px;font-size:14px;line-height:20px;font-weight:600;color:#212121;">
@@ -4384,8 +4390,7 @@
     var multi = !document.getElementById('destNum').hidden;
     document.getElementById('detCond').textContent = state.days + '天·' + tabFull(state.tab) + '·' + state.plan;
     document.getElementById('detTitle').textContent = p.title;
-    var tags = document.getElementById('detTags'); tags.innerHTML = '';
-    p.tags.forEach(function (t) { var e = el('<span class="pkg-tag"></span>'); e.textContent = t; tags.appendChild(e); });
+    // 詳情首屏已移除灰色規格標籤（Figma 1249-109383）
     var warns = document.getElementById('detWarns'); warns.innerHTML = '';
     warns.style.display = p.warns.length ? '' : 'none';
     p.warns.forEach(function (w, i) {

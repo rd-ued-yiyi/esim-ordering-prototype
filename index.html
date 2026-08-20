@@ -976,6 +976,8 @@
   .det-hero .det-cond { margin-bottom: 0; }
   .det-hero .det-title { margin: 0; }
   .det-hero .pkg-tags { margin-top: 0; }
+  /* 提醒 + 供應商移入首屏卡內（Figma 1249-109383）：間距交由卡片 gap 8 控制 */
+  .det-hero .pkg-warns, .det-hero .det-provider { margin-top: 0; }
   /* 方案 B 詳情首屏：方案規格+標題+標籤 包成白色描邊卡（Figma 1164-97683：border 2px #E6E9ED、radius 12、padding 16），去掉下方分割線，供應商用 #727272 */
   /* 詳情首屏：方案規格+標題+標籤 包成白色描邊卡（合併後固定採用，原方案 B；Figma 1164-97682） */
   .det-hero { border: 2px solid var(--kk-border-lighter); border-radius: var(--r-lg); padding: 16px; }
@@ -2161,6 +2163,7 @@
         <button class="det-tab" data-sec="howto">如何使用</button>
         <button class="det-tab" data-sec="cancel">取消政策</button>
         <button class="det-tab" data-sec="review" id="detTabReview">評論</button>
+        <button class="det-tab" data-sec="fee">費用資訊</button>
         <button class="det-tab" data-sec="notice">購買須知</button>
         <button class="det-tab" data-sec="imgs">圖文詳情</button>
       </div>
@@ -2171,12 +2174,10 @@
         <div class="det-hero">
           <div class="det-cond"><span class="ic ic-20"><img alt="" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMy43NSIgaGVpZ2h0PSIxNi4yNSIgdmlld0JveD0iMCAwIDEzLjc1IDE2LjI1IiBmaWxsPSJub25lIj48cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTguNzUgMS45NTM1NWUtMDdDOC44MzIwNyAtNi40MzM2N2UtMDUgOC45MTM0MSAwLjAxNTg1OTMgOC45ODkyNiAwLjA0NzIwMDdDOS4wNjUxMyAwLjA3ODU2ODIgOS4xMzM4MSAwLjEyNTA4NCA5LjE5MTg5IDAuMTgzMTA2TDEzLjU2NjkgNC41NTgxMUMxMy42MjQ5IDQuNjE2MTkgMTMuNjcxNCA0LjY4NDg3IDEzLjcwMjggNC43NjA3NEMxMy43MzQxIDQuODM2NTkgMTMuNzUwMSA0LjkxNzkzIDEzLjc1IDVWMTVDMTMuNzUgMTUuMzMxNSAxMy42MTgyIDE1LjY0OTQgMTMuMzgzOCAxNS44ODM4QzEzLjE0OTQgMTYuMTE4MiAxMi44MzE1IDE2LjI1IDEyLjUgMTYuMjVIMS4yNUMwLjkxODQ3OSAxNi4yNSAwLjYwMDYzMSAxNi4xMTgyIDAuMzY2MjExIDE1Ljg4MzhDMC4xMzE3OSAxNS42NDk0IDAgMTUuMzMxNSAwIDE1VjEuMjVDOS4yMDgwOGUtMDggMC45MTg0OCAwLjEzMTc5MSAwLjYwMDYzMSAwLjM2NjIxMSAwLjM2NjIxMUMwLjYwMDYzMSAwLjEzMTc5MSAwLjkxODQ3OSAxLjk1MzU1ZS0wNyAxLjI1IDEuOTUzNTVlLTA3SDguNzVaTTEwLjEyOTQgNy42ODMxMUM5Ljg4NTMyIDcuNDM5MDMgOS40ODk2OCA3LjQzOTAzIDkuMjQ1NjEgNy42ODMxMUw1LjkzNzUgMTAuOTkxMkw0LjUwNDM5IDkuNTU4MTFDNC4yNjAzMiA5LjMxNDAzIDMuODY0NjggOS4zMTQwMyAzLjYyMDYxIDkuNTU4MTFDMy4zNzY1MyA5LjgwMjE4IDMuMzc2NTMgMTAuMTk3OCAzLjYyMDYxIDEwLjQ0MTlMNS40OTU2MSAxMi4zMTY5QzUuNzM5NjkgMTIuNTYwOSA2LjEzNTMzIDEyLjU2MSA2LjM3OTM5IDEyLjMxNjlMMTAuMTI5NCA4LjU2Njg5QzEwLjM3MzUgOC4zMjI4MyAxMC4zNzM0IDcuOTI3MTkgMTAuMTI5NCA3LjY4MzExWk04Ljc1IDVIMTIuMTg3NUw4Ljc1IDEuNTYyNVY1WiIgZmlsbD0iIzEzQTNCNiIvPjwvc3ZnPg==" width="13.75" height="16.25"></span><span id="detCond"></span></div>
           <h2 class="det-title" id="detTitle"></h2>
-          <div class="pkg-tags" id="detTags"></div>
+          <div class="pkg-warns" id="detWarns"></div>
+          <div class="det-provider" id="detProvider"></div>
         </div>
-        <hr class="det-top-hr">
         <div class="det-policies" id="detPolicies"></div>
-        <div class="pkg-warns" id="detWarns"></div>
-        <div class="det-provider" id="detProvider"></div>
         <hr class="pkg-hr">
         <h3 class="det-h2">基本資訊</h3>
         <!-- 商品描述移到「基本資訊」標題下、表格上（Figma 1009-43085） -->
@@ -2292,13 +2293,10 @@
         <button class="det-morebtn" id="detMoreReviews">檢視更多評論</button>
       </section>
 
-      <section class="det-sec" data-sec="notice">
-        <h2 class="det-h5">購買須知</h2>
-        <ul class="det-list">
-          <li>網路速度將隨地形、氣候、建物遮蔽、使用人數及地點等因素改變，收訊不穩定時，請務必與技術客服聯絡。</li>
-          <li>為維護網路連線品質及公平使用原則，世界各國的電信公司有時會針對短時間內使用極大網路流量的顧客進行流量管制，故可能導致無法上網或降低網速，為確保可正常使用，請儘量避免長時間觀看影片或更新軟體等需大量消耗流量的工具。</li>
-        </ul>
-        <h3 class="det-sub">費用包含</h3>
+      <!-- 費用資訊：從購買須知拆出的獨立板塊（Figma 1249-109383） -->
+      <section class="det-sec" data-sec="fee">
+        <h2 class="det-h5">費用資訊</h2>
+        <h3 class="det-sub" style="margin-top:0">費用包含</h3>
         <div class="det-inc"><span class="ic"><svg style="display: block;" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg"> <g id="Vector"> <path fill-rule="evenodd" clip-rule="evenodd" d="M9.61168 4.65476C9.80235 4.85451 9.79499 5.17101 9.59524 5.36168L5.92855 8.86168C5.73534 9.04611 5.43128 9.04611 5.23807 8.86168L3.40476 7.11168C3.20501 6.92101 3.19765 6.60451 3.38832 6.40476C3.57899 6.20501 3.89549 6.19765 4.09524 6.38832L5.58332 7.80878L8.90476 4.63832C9.10451 4.44765 9.42101 4.45501 9.61168 4.65476Z" fill="#13A3B6"/> <path fill-rule="evenodd" clip-rule="evenodd" d="M6.5 1C3.46243 1 1 3.46243 1 6.5C1 9.53757 3.46243 12 6.5 12C9.53757 12 12 9.53757 12 6.5C12 3.46243 9.53757 1 6.5 1ZM0 6.5C0 2.91015 2.91015 0 6.5 0C10.0899 0 13 2.91015 13 6.5C13 10.0899 10.0899 13 6.5 13C2.91015 13 0 10.0899 0 6.5Z" fill="#13A3B6"/> </g> </svg></span>eSIM費用</div>
         <div class="det-inc"><span class="ic"><svg style="display: block;" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg"> <g id="Vector"> <path fill-rule="evenodd" clip-rule="evenodd" d="M9.61168 4.65476C9.80235 4.85451 9.79499 5.17101 9.59524 5.36168L5.92855 8.86168C5.73534 9.04611 5.43128 9.04611 5.23807 8.86168L3.40476 7.11168C3.20501 6.92101 3.19765 6.60451 3.38832 6.40476C3.57899 6.20501 3.89549 6.19765 4.09524 6.38832L5.58332 7.80878L8.90476 4.63832C9.10451 4.44765 9.42101 4.45501 9.61168 4.65476Z" fill="#13A3B6"/> <path fill-rule="evenodd" clip-rule="evenodd" d="M6.5 1C3.46243 1 1 3.46243 1 6.5C1 9.53757 3.46243 12 6.5 12C9.53757 12 12 9.53757 12 6.5C12 3.46243 9.53757 1 6.5 1ZM0 6.5C0 2.91015 2.91015 0 6.5 0C10.0899 0 13 2.91015 13 6.5C13 10.0899 10.0899 13 6.5 13C2.91015 13 0 10.0899 0 6.5Z" fill="#13A3B6"/> </g> </svg></span>eSIM其他費用</div>
         <h3 class="det-sub">費用不包含</h3>
@@ -2312,6 +2310,14 @@
         <ul class="det-list">
           <li>加購流量：NT$99 / GB，用完可隨時於 KKday App 加購</li>
           <li>實體寄送：eSIM 為電子憑證，無實體運費</li>
+        </ul>
+      </section>
+
+      <section class="det-sec" data-sec="notice">
+        <h2 class="det-h5">購買須知</h2>
+        <ul class="det-list">
+          <li>網路速度將隨地形、氣候、建物遮蔽、使用人數及地點等因素改變，收訊不穩定時，請務必與技術客服聯絡。</li>
+          <li>為維護網路連線品質及公平使用原則，世界各國的電信公司有時會針對短時間內使用極大網路流量的顧客進行流量管制，故可能導致無法上網或降低網速，為確保可正常使用，請儘量避免長時間觀看影片或更新軟體等需大量消耗流量的工具。</li>
         </ul>
         <div style="margin-top:24px;background:#FFF8E1;border-radius:8px;padding:16px;">
           <div style="display:flex;align-items:center;gap:8px;font-size:14px;line-height:20px;font-weight:600;color:#212121;">
@@ -4485,8 +4491,7 @@
     var multi = !document.getElementById('destNum').hidden;
     document.getElementById('detCond').textContent = state.days + '天·' + tabFull(state.tab) + '·' + state.plan;
     document.getElementById('detTitle').textContent = p.title;
-    var tags = document.getElementById('detTags'); tags.innerHTML = '';
-    p.tags.forEach(function (t) { var e = el('<span class="pkg-tag"></span>'); e.textContent = t; tags.appendChild(e); });
+    // 詳情首屏已移除灰色規格標籤（Figma 1249-109383）
     var warns = document.getElementById('detWarns'); warns.innerHTML = '';
     warns.style.display = p.warns.length ? '' : 'none';
     p.warns.forEach(function (w, i) {
