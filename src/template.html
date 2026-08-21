@@ -967,8 +967,9 @@
   .det-hero .det-cond { margin-bottom: 0; }
   .det-hero .det-title { margin: 0; }
   .det-hero .pkg-tags { margin-top: 0; }
-  /* 提醒 + 供應商移入首屏卡內（Figma 1249-109383）：間距交由卡片 gap 8 控制 */
-  .det-hero .pkg-warns, .det-hero .det-provider { margin-top: 0; }
+  /* 提醒 + 供應商移入首屏卡內（Figma 1249-109383）：間距交由卡片 gap 8 控制。
+     需提高權重蓋過後面的 .det-sec .pkg-warns（margin-top:20），否則標題↔提醒之間會多出 20px 空白 */
+  .det-sec .det-hero .pkg-warns, .det-sec .det-hero .det-provider { margin-top: 0; }
   /* 方案 B 詳情首屏：方案規格+標題+標籤 包成白色描邊卡（Figma 1164-97683：border 2px #E6E9ED、radius 12、padding 16），去掉下方分割線，供應商用 #727272 */
   /* 詳情首屏：方案規格+標題+標籤 包成白色描邊卡（合併後固定採用，原方案 B；Figma 1164-97682） */
   .det-hero { border: 2px solid var(--kk-border-lighter); border-radius: var(--r-lg); padding: 16px; }
