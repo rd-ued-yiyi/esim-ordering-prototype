@@ -1385,6 +1385,9 @@
   .ord-tip .ic { flex: 0 0 auto; }
   .ord-card .ord-sec-h + .ord-tip { margin-top: 12px; }
   .ord-tip + .ord-databox { margin-top: 12px; }
+  /* 內聯表單（設備／航班直接在卡內填寫，Figma 1569-146436）：欄位間距沿用 .ff margin-bottom 16 */
+  .ord-card .ord-sec-h + .ord-form { margin-top: 16px; }
+  .ord-tip + .ord-form { margin-top: 12px; }
   .ord-subhint { font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }
   .ord-card .ord-sec-h + .ord-subhint { margin-top: 8px; }
   .ord-subhint .req { color: #E65F50; }
@@ -1393,6 +1396,8 @@
   .ord-sec-h .t { font-size: 18px; line-height: 26px; font-weight: 600; color: #212121; }
   .ord-sec-h .t .cnt { color: #13A3B6; }
   .ord-sec-h .t .hint { color: var(--kk-text-medium); font-size: 12px; font-weight: 400; margin-left: 8px; }
+  .ord-sec-title { display: flex; align-items: center; gap: 4px; }  /* 標題 + info 圖標並排（啟用日期，Figma 1569-146436） */
+  .ord-sec-info { opacity: .85; }
   .ord-edit { display: inline-flex; align-items: center; gap: 4px; color: #727272; font-size: 14px; }
   .ord-edit.empty { color: var(--kk-text-medium); }
   .ord-edit .ic { width: 20px; height: 20px; }
@@ -2563,39 +2568,7 @@
     <div class="fs-foot"><button class="cta" id="travelerConfirm">確定</button></div>
   </div>
 
-  <!-- 航班資訊 sheet（Figma 1074-82959） -->
-  <div class="bsheet tall" id="flightSheet">
-    <div class="bs-handle"></div>
-    <div class="bs-bar"><button class="bs-close" data-bs-close aria-label="關閉"><span class="ic ic-24"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjEzLjA2NzciIGhlaWdodD0iMTMuMDY3NyIgdmlld0JveD0iMCAwIDEzLjA2NzcgMTMuMDY3NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgaWQ9IlZlY3RvciI+CjxwYXRoIGQ9Ik0xMi44NDgxIDEuMjgwMzNDMTMuMTQxIDAuOTg3NDM3IDEzLjE0MSAwLjUxMjU2MyAxMi44NDgxIDAuMjE5NjdDMTIuNTU1MiAtMC4wNzMyMjMzIDEyLjA4MDMgLTAuMDczMjIzMyAxMS43ODc0IDAuMjE5NjdMNi41MzM4NyA1LjQ3MzIxTDEuMjgwMzMgMC4yMTk2N0MwLjk4NzQzNyAtMC4wNzMyMjMzIDAuNTEyNTYzIC0wLjA3MzIyMzMgMC4yMTk2NyAwLjIxOTY3Qy0wLjA3MzIyMzMgMC41MTI1NjMgLTAuMDczMjIzMyAwLjk4NzQzNyAwLjIxOTY3IDEuMjgwMzNMNS40NzMyMSA2LjUzMzg3TDAuMjE5NjcgMTEuNzg3NEMtMC4wNzMyMjMzIDEyLjA4MDMgLTAuMDczMjIzMyAxMi41NTUyIDAuMjE5NjcgMTIuODQ4MUMwLjUxMjU2MyAxMy4xNDEgMC45ODc0MzcgMTMuMTQxIDEuMjgwMzMgMTIuODQ4MUw2LjUzMzg3IDcuNTk0NTNMMTEuNzg3NCAxMi44NDgxQzEyLjA4MDMgMTMuMTQxIDEyLjU1NTIgMTMuMTQxIDEyLjg0ODEgMTIuODQ4MUMxMy4xNDEgMTIuNTU1MiAxMy4xNDEgMTIuMDgwMyAxMi44NDgxIDExLjc4NzRMNy41OTQ1MyA2LjUzMzg3TDEyLjg0ODEgMS4yODAzM1oiIGZpbGw9ImJsYWNrIi8+CjwvZz4KPC9zdmc+" width="13.07" height="13.07"></span></button><span class="bs-title">航班資訊</span><span class="bs-spacer"></span></div>
-    <div class="bs-body"><div class="fs-body" style="padding:8px 24px 24px;">
-      <div class="ff"><div class="ff-label">航班類別<span class="req">*</span></div><div class="ff-radio"><label><input type="radio" name="fl-type" value="國內線"><span class="radio"></span>國內線</label><label><input type="radio" name="fl-type" value="國際線"><span class="radio"></span>國際線</label></div></div>
-      <div class="ff"><div class="ff-label">抵達機場<span class="req">*</span></div><div class="ff-selwrap"><select class="ff-select" id="fl-airport"><option value="">請選擇</option><option>桃園機場 TPE</option><option>成田機場 NRT</option><option>羽田機場 HND</option><option>仁川機場 ICN</option><option>樟宜機場 SIN</option></select><span class="ic chev"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE0LjE2NjciIGhlaWdodD0iNy45MTY2NyIgdmlld0JveD0iMCAwIDE0LjE2NjcgNy45MTY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0wLjI0NDA3OCAwLjI0NDA3OEMwLjU2OTUxNSAtMC4wODEzNTkyIDEuMDk3MTUgLTAuMDgxMzU5MiAxLjQyMjU5IDAuMjQ0MDc4TDcuMDgzMzMgNS45MDQ4MkwxMi43NDQxIDAuMjQ0MDc4QzEzLjA2OTUgLTAuMDgxMzU5MiAxMy41OTcyIC0wLjA4MTM1OTIgMTMuOTIyNiAwLjI0NDA3OEMxNC4yNDggMC41Njk1MTUgMTQuMjQ4IDEuMDk3MTUgMTMuOTIyNiAxLjQyMjU5TDcuNjcyNTkgNy42NzI1OUM3LjM0NzE1IDcuOTk4MDMgNi44MTk1MSA3Ljk5ODAzIDYuNDk0MDggNy42NzI1OUwwLjI0NDA3OCAxLjQyMjU5Qy0wLjA4MTM1OTIgMS4wOTcxNSAtMC4wODEzNTkyIDAuNTY5NTE1IDAuMjQ0MDc4IDAuMjQ0MDc4WiIgZmlsbD0iIzIxMjEyMSIvPgo8L3N2Zz4=" width="14.17" height="7.92"></span></div></div>
-      <div class="ff"><div class="ff-label">航廈<span class="req">*</span></div><input class="ff-input" id="fl-terminal" placeholder="請輸入航廈（例：2 航廈）"></div>
-      <div class="ff"><div class="ff-label">航空公司名稱<span class="req">*</span></div><input class="ff-input" id="fl-airline" placeholder="請輸入航空公司名稱"></div>
-      <div class="ff"><div class="ff-label">航班編號<span class="req">*</span></div><input class="ff-input" id="fl-no" placeholder="請輸入航班編號（例：CI104）"></div>
-      <div class="ff"><div class="ff-label">抵達日期<span class="req">*</span></div><div class="ff-selwrap"><input class="ff-input" id="fl-date" readonly placeholder="請選擇"><span class="ic chev"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE0LjE2NjciIGhlaWdodD0iNy45MTY2NyIgdmlld0JveD0iMCAwIDE0LjE2NjcgNy45MTY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0wLjI0NDA3OCAwLjI0NDA3OEMwLjU2OTUxNSAtMC4wODEzNTkyIDEuMDk3MTUgLTAuMDgxMzU5MiAxLjQyMjU5IDAuMjQ0MDc4TDcuMDgzMzMgNS45MDQ4MkwxMi43NDQxIDAuMjQ0MDc4QzEzLjA2OTUgLTAuMDgxMzU5MiAxMy41OTcyIC0wLjA4MTM1OTIgMTMuOTIyNiAwLjI0NDA3OEMxNC4yNDggMC41Njk1MTUgMTQuMjQ4IDEuMDk3MTUgMTMuOTIyNiAxLjQyMjU5TDcuNjcyNTkgNy42NzI1OUM3LjM0NzE1IDcuOTk4MDMgNi44MTk1MSA3Ljk5ODAzIDYuNDk0MDggNy42NzI1OUwwLjI0NDA3OCAxLjQyMjU5Qy0wLjA4MTM1OTIgMS4wOTcxNSAtMC4wODEzNTkyIDAuNTY5NTE1IDAuMjQ0MDc4IDAuMjQ0MDc4WiIgZmlsbD0iIzIxMjEyMSIvPgo8L3N2Zz4=" width="14.17" height="7.92"></span></div></div>
-      <div class="ff"><div class="ff-label">抵達時間<span class="req">*</span></div><div class="ff-selwrap"><select class="ff-select" id="fl-time"><option value="">請選擇</option><option>08:00</option><option>10:00</option><option>12:00</option><option>14:00</option><option>18:00</option><option>22:00</option></select><span class="ic chev"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE0LjE2NjciIGhlaWdodD0iNy45MTY2NyIgdmlld0JveD0iMCAwIDE0LjE2NjcgNy45MTY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0wLjI0NDA3OCAwLjI0NDA3OEMwLjU2OTUxNSAtMC4wODEzNTkyIDEuMDk3MTUgLTAuMDgxMzU5MiAxLjQyMjU5IDAuMjQ0MDc4TDcuMDgzMzMgNS45MDQ4MkwxMi43NDQxIDAuMjQ0MDc4QzEzLjA2OTUgLTAuMDgxMzU5MiAxMy41OTcyIC0wLjA4MTM1OTIgMTMuOTIyNiAwLjI0NDA3OEMxNC4yNDggMC41Njk1MTUgMTQuMjQ4IDEuMDk3MTUgMTMuOTIyNiAxLjQyMjU5TDcuNjcyNTkgNy42NzI1OUM3LjM0NzE1IDcuOTk4MDMgNi44MTk1MSA3Ljk5ODAzIDYuNDk0MDggNy42NzI1OUwwLjI0NDA3OCAxLjQyMjU5Qy0wLjA4MTM1OTIgMS4wOTcxNSAtMC4wODEzNTkyIDAuNTY5NTE1IDAuMjQ0MDc4IDAuMjQ0MDc4WiIgZmlsbD0iIzIxMjEyMSIvPgo8L3N2Zz4=" width="14.17" height="7.92"></span></div></div>
-      <div class="ff"><div class="ff-label">是否辦理落地簽證<span class="req">*</span></div><div class="ff-radio"><label><input type="radio" name="fl-visa" value="1"><span class="radio"></span>是</label><label><input type="radio" name="fl-visa" value="0"><span class="radio"></span>否</label></div></div>
-    </div></div>
-    <div class="fs-foot"><button class="cta" id="flightConfirm">確定</button></div>
-  </div>
-
-  <!-- 裝置資訊 sheet -->
-  <div class="bsheet tall" id="deviceSheet">
-    <div class="bs-handle"></div>
-    <div class="bs-bar"><button class="bs-close" data-bs-close aria-label="關閉"><span class="ic ic-24"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjEzLjA2NzciIGhlaWdodD0iMTMuMDY3NyIgdmlld0JveD0iMCAwIDEzLjA2NzcgMTMuMDY3NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgaWQ9IlZlY3RvciI+CjxwYXRoIGQ9Ik0xMi44NDgxIDEuMjgwMzNDMTMuMTQxIDAuOTg3NDM3IDEzLjE0MSAwLjUxMjU2MyAxMi44NDgxIDAuMjE5NjdDMTIuNTU1MiAtMC4wNzMyMjMzIDEyLjA4MDMgLTAuMDczMjIzMyAxMS43ODc0IDAuMjE5NjdMNi41MzM4NyA1LjQ3MzIxTDEuMjgwMzMgMC4yMTk2N0MwLjk4NzQzNyAtMC4wNzMyMjMzIDAuNTEyNTYzIC0wLjA3MzIyMzMgMC4yMTk2NyAwLjIxOTY3Qy0wLjA3MzIyMzMgMC41MTI1NjMgLTAuMDczMjIzMyAwLjk4NzQzNyAwLjIxOTY3IDEuMjgwMzNMNS40NzMyMSA2LjUzMzg3TDAuMjE5NjcgMTEuNzg3NEMtMC4wNzMyMjMzIDEyLjA4MDMgLTAuMDczMjIzMyAxMi41NTUyIDAuMjE5NjcgMTIuODQ4MUMwLjUxMjU2MyAxMy4xNDEgMC45ODc0MzcgMTMuMTQxIDEuMjgwMzMgMTIuODQ4MUw2LjUzMzg3IDcuNTk0NTNMMTEuNzg3NCAxMi44NDgxQzEyLjA4MDMgMTMuMTQxIDEyLjU1NTIgMTMuMTQxIDEyLjg0ODEgMTIuODQ4MUMxMy4xNDEgMTIuNTU1MiAxMy4xNDEgMTIuMDgwMyAxMi44NDgxIDExLjc4NzRMNy41OTQ1MyA2LjUzMzg3TDEyLjg0ODEgMS4yODAzM1oiIGZpbGw9ImJsYWNrIi8+CjwvZz4KPC9zdmc+" width="13.07" height="13.07"></span></button><span class="bs-title">設備資訊</span><span class="bs-spacer"></span></div>
-    <div class="bs-body"><div class="fs-body" style="padding:8px 24px 24px;">
-      <div class="inline-note inline-note--info" style="margin-bottom:16px">
-        <span class="ic ic-16"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjEzIiBoZWlnaHQ9IjEzIiB2aWV3Qm94PSIwIDAgMTMgMTMiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGlkPSJWZWN0b3IiIGQ9Ik02LjUgMEM1LjIxNDQyIDAgMy45NTc3MiAwLjM4MTIxOCAyLjg4ODggMS4wOTU0NUMxLjgxOTg4IDEuODA5NjggMC45ODY3NTYgMi44MjQ4NCAwLjQ5NDc4NiA0LjAxMjU2QzAuMDAyODE2MzIgNS4yMDAyOCAtMC4xMjU5MDUgNi41MDcyMSAwLjEyNDg5OSA3Ljc2ODA5QzAuMzc1NzAzIDkuMDI4OTYgMC45OTQ3NjggMTAuMTg3MiAxLjkwMzgxIDExLjA5NjJDMi44MTI4NSAxMi4wMDUyIDMuOTcxMDQgMTIuNjI0MyA1LjIzMTkyIDEyLjg3NTFDNi40OTI3OSAxMy4xMjU5IDcuNzk5NzMgMTIuOTk3MiA4Ljk4NzQ0IDEyLjUwNTJDMTAuMTc1MiAxMi4wMTMyIDExLjE5MDMgMTEuMTgwMSAxMS45MDQ2IDEwLjExMTJDMTIuNjE4OCA5LjA0MjI5IDEzIDcuNzg1NTggMTMgNi41QzEyLjk5ODEgNC43NzY2OSAxMi4zMTI2IDMuMTI0NTIgMTEuMDk0IDEuOTA1OTZDOS44NzU0OCAwLjY4NzM5NiA4LjIyMzMxIDAuMDAxOTUwNDkgNi41IDBWMFpNNi4zNzUwNCAzLjAwMDAyQzYuNTIzMzcgMy4wMDAwMiA2LjY2ODM4IDMuMDQ0MDEgNi43OTE3MSAzLjEyNjQyQzYuOTE1MDUgMy4yMDg4MyA3LjAxMTE4IDMuMzI1OTcgNy4wNjc5NSAzLjQ2MzAxQzcuMTI0NzEgMy42MDAwNiA3LjEzOTU2IDMuNzUwODYgNy4xMTA2MyAzLjg5NjM0QzcuMDgxNjkgNC4wNDE4MyA3LjAxMDI2IDQuMTc1NDYgNi45MDUzNyA0LjI4MDM1QzYuODAwNDggNC4zODUyNCA2LjY2Njg0IDQuNDU2NjcgNi41MjEzNSA0LjQ4NTYxQzYuMzc1ODcgNC41MTQ1NSA2LjIyNTA3IDQuNDk5NyA2LjA4ODAyIDQuNDQyOTNDNS45NTA5OCA0LjM4NjE3IDUuODMzODUgNC4yOTAwNCA1Ljc1MTQ0IDQuMTY2N0M1LjY2OTAyIDQuMDQzMzYgNS42MjUwNCAzLjg5ODM2IDUuNjI1MDQgMy43NTAwMkM1LjYyNTA0IDMuNTUxMTEgNS43MDQwNSAzLjM2MDM1IDUuODQ0NzEgMy4yMTk2OUM1Ljk4NTM2IDMuMDc5MDQgNi4xNzYxMiAzLjAwMDAyIDYuMzc1MDQgMy4wMDAwMlYzLjAwMDAyWk03LjAwMDAxIDEwSDYuNTAwMDFDNi4zNjc0IDkuOTk5OTkgNi4yNDAyMyA5Ljk0NzMxIDYuMTQ2NDYgOS44NTM1NUM2LjA1MjY5IDkuNzU5NzggNi4wMDAwMSA5LjYzMjYxIDYuMDAwMDEgOS41VjYuNUM1Ljg2NzQgNi41IDUuNzQwMjIgNi40NDczMiA1LjY0NjQ1IDYuMzUzNTVDNS41NTI2OCA2LjI1OTc5IDUuNTAwMDEgNi4xMzI2MSA1LjUwMDAxIDZDNS41MDAwMSA1Ljg2NzM5IDUuNTUyNjggNS43NDAyMSA1LjY0NjQ1IDUuNjQ2NDVDNS43NDAyMiA1LjU1MjY4IDUuODY3NCA1LjUgNi4wMDAwMSA1LjVINi41MDAwMUM2LjYzMjYxIDUuNTAwMDEgNi43NTk3OSA1LjU1MjY5IDYuODUzNTUgNS42NDY0NUM2Ljk0NzMyIDUuNzQwMjIgNyA1Ljg2NzM5IDcuMDAwMDEgNlY5QzcuMTMyNjEgOSA3LjI1OTc5IDkuMDUyNjggNy4zNTM1NiA5LjE0NjQ1QzcuNDQ3MzMgOS4yNDAyMSA3LjUwMDAxIDkuMzY3MzkgNy41MDAwMSA5LjVDNy41MDAwMSA5LjYzMjYxIDcuNDQ3MzMgOS43NTk3OCA3LjM1MzU2IDkuODUzNTVDNy4yNTk3OSA5Ljk0NzMyIDcuMTMyNjEgMTAgNy4wMDAwMSAxMFoiIGZpbGw9IiMyRDg0RDYiLz4KPC9zdmc+" width="13.00" height="13.00"></span>
-        <span>在手機撥號鍵盤輸入「＊＃０６＃」可顯示 EID／IMEI／IMEI2 序號</span>
-      </div>
-      <div class="ff"><div class="ff-label">手機型號<span class="req">*</span></div><input class="ff-input" id="dv-model" placeholder="請輸入"></div>
-      <div class="ff"><div class="ff-label">EID<span class="req">*</span></div><input class="ff-input" id="dv-eid" placeholder="請輸入"></div>
-      <div class="ff"><div class="ff-label">IMEI<span class="req">*</span></div><input class="ff-input" id="dv-imid" placeholder="請輸入"></div>
-      <div class="ff"><div class="ff-label">IMEI2<span class="req">*</span></div><input class="ff-input" id="dv-imid2" placeholder="請輸入"></div>
-    </div></div>
-    <div class="fs-foot"><button class="cta" id="deviceConfirm">確定</button></div>
-  </div>
+  <!-- 航班／設備資訊：已改為訂單頁內聯表單（Figma 1569-146436），不再使用底部 sheet -->
 
   <!-- 備註 sheet（Figma 1074-82976） -->
   <div class="bsheet" id="remarkSheet">
@@ -4439,7 +4412,12 @@
     if (dateReturn === 'filter') { fDraft.date = pick; renderFilterSheet(); setApplyBtn(document.getElementById('fsApply'), fDraft); }
     else if (dateReturn === 'cat') { fDraft.date = pick; renderCatOpts(); setApplyBtn(document.getElementById('catApply'), fDraft); }
     else if (dateReturn === 'orderUse') { orderState.useDate = pick; closeSheets(); renderOrder(); }  // 訂單頁使用日期：日曆直接從訂單頁開，關掉遮罩、重新整理
-    else if (dateReturn === 'flight') { flDate = pick; document.getElementById('fl-date').value = pick.label; }  // 航班抵達日期：回填輸入、留在航班 sheet
+    else if (dateReturn === 'flight') {  // 航班抵達日期：回填內聯輸入 + orderState.flight，關閉日曆遮罩
+      flDate = pick;
+      var fd = document.getElementById('fl-date'); if (fd) fd.value = pick.label;
+      orderState.flight = orderState.flight || {}; orderState.flight.date = pick.label; orderState.flight._date = pick;
+      closeSheets();
+    }
     else { fState.date = pick; closeSheets(); renderPlans(); window.scrollTo(0, 0); }
   }
 
@@ -5122,6 +5100,56 @@
   }
   function sameDate(a, b) { return a && b && a.y === b.y && a.m === b.m && a.d === b.d; }
 
+  // ── 訂單頁內聯表單欄位產生器（設備／航班；Figma 1569-146436 直接在卡內填寫）──
+  function ffEsc(s) { return (s == null ? '' : String(s)).replace(/&/g, '&amp;').replace(/"/g, '&quot;'); }
+  function ffText(label, id, ph, val) {
+    return '<div class="ff"><div class="ff-label">' + label + '<span class="req">*</span></div>' +
+      '<input class="ff-input" id="' + id + '" placeholder="' + ph + '" value="' + ffEsc(val) + '"></div>';
+  }
+  function ffSelect(label, id, opts, val, ph) {
+    var o = '<option value="">' + ph + '</option>';
+    opts.forEach(function (x) { o += '<option' + (x === val ? ' selected' : '') + '>' + x + '</option>'; });
+    return '<div class="ff"><div class="ff-label">' + label + '<span class="req">*</span></div>' +
+      '<div class="ff-selwrap"><select class="ff-select" id="' + id + '">' + o + '</select><span class="ic chev">' + ICONS.caretDown + '</span></div></div>';
+  }
+  function ffDate(label, id, ph, val) {
+    return '<div class="ff"><div class="ff-label">' + label + '<span class="req">*</span></div>' +
+      '<div class="ff-selwrap"><input class="ff-input" id="' + id + '" readonly placeholder="' + ph + '" value="' + ffEsc(val) + '"><span class="ic chev">' + ICONS.caretDown + '</span></div></div>';
+  }
+  function ffRadio(label, name, opts, val) {
+    var r = '';
+    opts.forEach(function (x) { r += '<label><input type="radio" name="' + name + '" value="' + x[0] + '"' + (x[0] === val ? ' checked' : '') + '><span class="radio"></span>' + x[1] + '</label>'; });
+    return '<div class="ff"><div class="ff-label">' + label + '<span class="req">*</span></div><div class="ff-radio">' + r + '</div></div>';
+  }
+  // 內聯欄位 → orderState.device / .flight 即時同步（不重繪，保留輸入焦點）
+  function bindDeviceInline() {
+    var map = { model: 'dv-model', eid: 'dv-eid', imid: 'dv-imid', imid2: 'dv-imid2' };
+    Object.keys(map).forEach(function (k) {
+      var e = document.getElementById(map[k]); if (!e) return;
+      e.addEventListener('input', function () { orderState.device = orderState.device || {}; orderState.device[k] = e.value; });
+    });
+  }
+  function bindFlightInline() {
+    var txt = { terminal: 'fl-terminal', airline: 'fl-airline', no: 'fl-no' };
+    Object.keys(txt).forEach(function (k) {
+      var e = document.getElementById(txt[k]); if (!e) return;
+      e.addEventListener('input', function () { orderState.flight = orderState.flight || {}; orderState.flight[k] = e.value; });
+    });
+    ['fl-airport', 'fl-time'].forEach(function (id) {
+      var s = document.getElementById(id); if (!s) return;
+      syncSelPh(s);
+      s.addEventListener('change', function () { syncSelPh(s); orderState.flight = orderState.flight || {}; orderState.flight[id === 'fl-airport' ? 'airport' : 'time'] = s.value; });
+    });
+    document.querySelectorAll('input[name=fl-type]').forEach(function (r) {
+      r.addEventListener('change', function () { orderState.flight = orderState.flight || {}; orderState.flight.type = r.value; });
+    });
+    document.querySelectorAll('input[name=fl-visa]').forEach(function (r) {
+      r.addEventListener('change', function () { orderState.flight = orderState.flight || {}; orderState.flight.visa = r.value === '1'; });
+    });
+    var dt = document.getElementById('fl-date');
+    if (dt) dt.addEventListener('click', function () { dateReturn = 'flight'; openDateSheet(); });
+  }
+
   function renderOrder() {
     var p = orderP, st = orderState, req = orderReq(p);
     // ── 頂部整塊白底：商品卡 + [使用日期] + 購買數量 ──
@@ -5139,7 +5167,7 @@
     // 使用日期 + 購買數量 收進內層容器（額外 px-16，兩側邊距比商品卡更大，Figma 1074-82674）
     var dq = '';
     if (req.date) {
-      dq += '<div class="ord-date-sec"><div class="ord-sec-h"><div class="t">使用日期</div></div>' +
+      dq += '<div class="ord-date-sec"><div class="ord-sec-h"><div class="ord-sec-title"><div class="t">啟用日期</div><span class="ic ic-16 ord-sec-info">' + ICONS.infoCyan + '</span></div></div>' +
         '<div class="ord-date-wrap" style="margin-top:16px"><div class="ord-date-chips" id="ordDateChips"></div>' +
         '<button class="ord-dmore" id="ordDateMore"><span class="ic">' + ICONS.calendar + '</span><span class="w">更多</span></button></div></div>' +
         '<div class="ord-hr"></div>';
@@ -5155,20 +5183,30 @@
     var c = '<div class="ord-coupon-slot" id="ordCouponSlot"></div>';
     // 順序（Figma 1569-146436）：設備資訊 → 抵達航班資訊 → 旅客資料 → 旅遊期間聯絡方式
     if (req.device) {
-      c += '<div class="ord-card"><div class="ord-sec-h"><div class="t">設備資訊</div>' +
-        '<button class="ord-edit' + (st.device ? '' : ' empty') + '" id="ordDeviceEdit">' + (st.device ? '' : '請填寫') + '<span class="ic">' + ICONS.editLine + '</span></button></div>' +
+      var d = st.device || {};
+      c += '<div class="ord-card" id="ordDeviceCard"><div class="ord-sec-h"><div class="t">設備資訊</div></div>' +
         '<div class="ord-tip"><span class="ic ic-16">' + ICONS.infoCyan + '</span><span>在手機撥號鍵盤輸入「＊＃０６＃」可顯示 EID／IMEI2</span></div>' +
-        (st.device ? '<div class="ord-databox"><div class="ord-kv">' +
-          '<div><div class="k">手機型號</div><div class="v">' + st.device.model + '</div></div>' +
-          '<div><div class="k">EID</div><div class="v">' + st.device.eid + '</div></div>' +
-          '<div><div class="k">IMEI</div><div class="v">' + st.device.imid + '</div></div>' +
-          '<div><div class="k">IMEI2</div><div class="v">' + st.device.imid2 + '</div></div>' +
-        '</div></div>' : '') + '</div>';
+        '<div class="ord-form">' +
+          ffText('手機型號', 'dv-model', '請輸入', d.model) +
+          ffText('EID', 'dv-eid', '請輸入', d.eid) +
+          ffText('IMEI', 'dv-imid', '請輸入', d.imid) +
+          ffText('IMEI2', 'dv-imid2', '請輸入', d.imid2) +
+        '</div></div>';
     }
     if (req.flight) {
-      c += '<div class="ord-card"><div class="ord-sec-h"><div class="t">抵達航班資訊</div>' +
-        '<button class="ord-edit' + (st.flight ? '' : ' empty') + '" id="ordFlightEdit">' + (st.flight ? '' : '請填寫') + '<span class="ic">' + ICONS.editLine + '</span></button></div>' +
-        (st.flight ? '<div class="ord-databox">' + flightKvHtml(st.flight) + '</div>' : '') + '</div>';
+      var f = st.flight || {};
+      var flVisa = (f.visa === true) ? '1' : (f.visa === false ? '0' : '');
+      c += '<div class="ord-card" id="ordFlightCard"><div class="ord-sec-h"><div class="t">抵達航班資訊</div></div>' +
+        '<div class="ord-form">' +
+          ffRadio('航班類別', 'fl-type', [['國內線', '國內線'], ['國際線', '國際線']], f.type) +
+          ffSelect('抵達機場', 'fl-airport', ['桃園機場 TPE', '成田機場 NRT', '羽田機場 HND', '仁川機場 ICN', '樟宜機場 SIN'], f.airport, '請選擇') +
+          ffText('航廈', 'fl-terminal', '請輸入航廈（例：2 航廈）', f.terminal) +
+          ffText('航空公司名稱', 'fl-airline', '請輸入航空公司名稱', f.airline) +
+          ffText('航班編號', 'fl-no', '請輸入航班編號（例：CI104）', f.no) +
+          ffDate('抵達日期', 'fl-date', '請選擇', f.date) +
+          ffSelect('抵達時間', 'fl-time', ['08:00', '10:00', '12:00', '14:00', '18:00', '22:00'], f.time, '請選擇') +
+          ffRadio('是否辦理落地簽證', 'fl-visa', [['1', '是'], ['0', '否']], flVisa) +
+        '</div></div>';
     }
     if (req.travelers) {
       var maxTv = st.qty;  // 旅客數 = 購買數量（每張 eSIM 一位旅客）
@@ -5212,26 +5250,13 @@
     if (mi) mi.onclick = function () { if (st.qty > 1) { st.qty--; renderOrder(); } };
     if (pl) pl.onclick = function () { if (st.qty < 5) { st.qty++; renderOrder(); } };  // 最多 5
     if (byId('ordOrdererEdit')) byId('ordOrdererEdit').onclick = openOrderer;
-    if (byId('ordFlightEdit')) byId('ordFlightEdit').onclick = openFlight;
-    if (byId('ordDeviceEdit')) byId('ordDeviceEdit').onclick = openDevice;
+    if (req.flight) bindFlightInline();
+    if (req.device) bindDeviceInline();
     if (byId('ordRemarkRow')) byId('ordRemarkRow').onclick = openRemark;
     if (byId('ordDateMore')) byId('ordDateMore').onclick = function () { dateReturn = 'orderUse'; openDateSheet(); };
     if (req.date) renderOrdDateChips();
     if (req.travelers) renderTravelers();
     if (req.contacts) renderContacts();
-  }
-  // 已填航班：兩欄逐列（航班類別｜航班編號 / 抵達機場｜抵達日期 / 航廈｜抵達時間 / 航空公司名稱｜落地簽證），Figma 1146-95005
-  function flightKvHtml(f) {
-    return '<div class="ord-kv">' +
-      '<div><div class="k">航班類別</div><div class="v">' + f.type + '</div></div>' +
-      '<div><div class="k">航班編號</div><div class="v">' + f.no + '</div></div>' +
-      '<div><div class="k">抵達機場</div><div class="v">' + f.airport + '</div></div>' +
-      '<div><div class="k">抵達日期</div><div class="v">' + f.date + '</div></div>' +
-      '<div><div class="k">航廈</div><div class="v">' + f.terminal + '</div></div>' +
-      '<div><div class="k">抵達時間</div><div class="v">' + f.time + '</div></div>' +
-      '<div><div class="k">航空公司名稱</div><div class="v">' + f.airline + '</div></div>' +
-      '<div><div class="k">是否辦理落地簽證</div><div class="v">' + (f.visa ? '是' : '否') + '</div></div>' +
-      '</div>';
   }
   function renderOrdDateChips() {
     var box = document.getElementById('ordDateChips'); if (!box) return;
@@ -5511,57 +5536,36 @@
     closeSheets(); renderOrder();
   });
 
-  // ---- 航班 sheet ----
-  function openFlight() {
-    var f = orderState.flight;
-    flDate = f ? f._date : null;
-    document.getElementById('fl-date').value = f ? f.date : '';
-    document.getElementById('fl-terminal').value = f ? f.terminal : '';
-    document.getElementById('fl-airline').value = f ? f.airline : '';
-    document.getElementById('fl-no').value = f ? f.no : '';
-    // 航班類別 / 落地籤：預設不選中；編輯已存航班時回填對應選項
-    document.querySelectorAll('input[name=fl-type]').forEach(function (r) { r.checked = !!f && f.type === r.value; });
-    document.querySelectorAll('input[name=fl-visa]').forEach(function (r) { r.checked = !!f && f.visa === (r.value === '1'); });
-    openSheet(document.getElementById('flightSheet'));
+  // ---- 航班 / 設備：內聯表單（Figma 1569-146436）；下一步時把空欄位以假資料補全（演示用）----
+  // 讀取內聯輸入判斷是否「已開始填寫」（用於下一步 gate）；g() 讀 trim 後的字串
+  function ordFieldVal(id) { var e = document.getElementById(id); return e ? e.value.trim() : ''; }
+  function deviceTouched() { return !!(ordFieldVal('dv-model') || ordFieldVal('dv-eid') || ordFieldVal('dv-imid') || ordFieldVal('dv-imid2')); }
+  function flightTouched() {
+    return !!(ordFieldVal('fl-terminal') || ordFieldVal('fl-airline') || ordFieldVal('fl-no') || ordFieldVal('fl-airport') || ordFieldVal('fl-time') || ordFieldVal('fl-date') ||
+      document.querySelector('input[name=fl-type]:checked') || document.querySelector('input[name=fl-visa]:checked'));
   }
-  document.getElementById('flightConfirm').addEventListener('click', function () {
-    var g = function (id) { return document.getElementById(id); };
+  function normalizeDevice() {  // 補全空欄位並寫回 orderState.device
+    orderState.device = {
+      model: ordFieldVal('dv-model') || rnd(['iPhone 17', 'iPhone 17 Pro', 'iPhone 16', 'Galaxy S25', 'Pixel 10']),
+      eid: ordFieldVal('dv-eid') || '89' + rndDigits(30),
+      imid: ordFieldVal('dv-imid') || '35' + rndDigits(13),
+      imid2: ordFieldVal('dv-imid2') || '35' + rndDigits(13)
+    };
+  }
+  function normalizeFlight() {  // 補全空欄位並寫回 orderState.flight
     var type = (document.querySelector('input[name=fl-type]:checked') || {}).value || '國內線';
-    var apEl = g('fl-airport');
-    // 未填欄位隨機補全（演示用假資料，避免出現「—」）
     orderState.flight = {
       type: type,
-      airport: apEl.value || '桃園機場 TPE',
-      terminal: g('fl-terminal').value || rnd(['1 航廈', '2 航廈']),
-      airline: g('fl-airline').value || rnd(['長榮航空', '中華航空', '星宇航空', '台灣虎航']),
-      no: g('fl-no').value || rnd(['BR', 'CI', 'JX', 'IT']) + (100 + Math.floor(Math.random() * 800)),
-      date: g('fl-date').value || (orderState.useDate ? orderState.useDate.m + '月' + orderState.useDate.d + '日' : '9月' + (1 + Math.floor(Math.random() * 28)) + '日'),
-      time: g('fl-time').value || rnd(['08:00', '10:00', '12:00', '14:00', '18:00', '22:00']),
+      airport: ordFieldVal('fl-airport') || '桃園機場 TPE',
+      terminal: ordFieldVal('fl-terminal') || rnd(['1 航廈', '2 航廈']),
+      airline: ordFieldVal('fl-airline') || rnd(['長榮航空', '中華航空', '星宇航空', '台灣虎航']),
+      no: ordFieldVal('fl-no') || rnd(['BR', 'CI', 'JX', 'IT']) + (100 + Math.floor(Math.random() * 800)),
+      date: ordFieldVal('fl-date') || (orderState.useDate ? orderState.useDate.m + '月' + orderState.useDate.d + '日' : '9月' + (1 + Math.floor(Math.random() * 28)) + '日'),
+      time: ordFieldVal('fl-time') || rnd(['08:00', '10:00', '12:00', '14:00', '18:00', '22:00']),
       visa: (document.querySelector('input[name=fl-visa]:checked') || {}).value === '1',
       _date: flDate
     };
-    closeSheets(); renderOrder();
-  });
-
-  // ---- 裝置 sheet ----
-  function openDevice() {
-    var d = orderState.device;
-    document.getElementById('dv-model').value = d ? d.model : '';
-    document.getElementById('dv-eid').value = d ? d.eid : '';
-    document.getElementById('dv-imid').value = d ? d.imid : '';
-    document.getElementById('dv-imid2').value = d ? d.imid2 : '';
-    openSheet(document.getElementById('deviceSheet'));
   }
-  document.getElementById('deviceConfirm').addEventListener('click', function () {
-    // 未填欄位隨機補全（演示用假資料，避免出現「—」）
-    orderState.device = {
-      model: document.getElementById('dv-model').value || rnd(['iPhone 17', 'iPhone 17 Pro', 'iPhone 16', 'Galaxy S25', 'Pixel 10']),
-      eid: document.getElementById('dv-eid').value || '89' + rndDigits(30),
-      imid: document.getElementById('dv-imid').value || '35' + rndDigits(13),
-      imid2: document.getElementById('dv-imid2').value || '35' + rndDigits(13)
-    };
-    closeSheets(); renderOrder();
-  });
 
   // ---- 備註 sheet ----
   function openRemark() {
@@ -5620,9 +5624,9 @@
     var req = orderReq(orderP), st = orderState, msg = null, target = null;
     var byId = function (id) { return document.getElementById(id); };
     var cardOf = function (el) { return el ? (el.closest('.ord-card') || el) : null; };
-    if (req.date && !st.useDate) { msg = '請選擇使用日期'; target = document.querySelector('.ord-date-sec'); }
-    else if (req.flight && !st.flight) { msg = '請填寫航班資訊'; target = cardOf(byId('ordFlightEdit')); }
-    else if (req.device && !st.device) { msg = '請填寫裝置資訊'; target = cardOf(byId('ordDeviceEdit')); }
+    if (req.date && !st.useDate) { msg = '請選擇啟用日期'; target = document.querySelector('.ord-date-sec'); }
+    else if (req.flight && !flightTouched()) { msg = '請填寫航班資訊'; target = byId('ordFlightCard'); }
+    else if (req.device && !deviceTouched()) { msg = '請填寫設備資訊'; target = byId('ordDeviceCard'); }
     else if (req.travelers && (!st.travelers || st.travelers.length < st.qty)) { msg = '請選擇 ' + st.qty + ' 位旅客'; target = cardOf(byId('tvArea')); }
     else if (req.contacts && (!st.contacts || !st.contacts.length)) { msg = '請選擇聯絡人'; target = cardOf(byId('ctArea')); }
     if (msg) {
@@ -5635,6 +5639,8 @@
       }
       return;
     }
+    if (req.flight) normalizeFlight();   // 空欄位補全（演示用假資料），寫回 orderState 供付款頁摘要
+    if (req.device) normalizeDevice();
     withLoading(this, openPay);
   });
 
