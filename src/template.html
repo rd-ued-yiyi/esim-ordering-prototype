@@ -1140,6 +1140,11 @@
   .det-coupon .claim .car { display: inline-flex; }
   .det-coupon .claim .car img { width: 9.3px; height: 5.3px; transform: rotate(90deg); }
   /* 折扣券 sheet 卡片 */
+  /* 折扣券 sheet 頂部提示（Figma 1466-130645）：info-lighter 底 + 實心 info 圖標 + 說明文字 */
+  .cpn-note { display: flex; align-items: flex-start; gap: 8px; margin: 16px 24px; padding: 12px;
+    background: #F2FAFF; border-radius: var(--r-md); font-size: 14px; line-height: 20px; color: var(--kk-text-darker); }
+  .cpn-note .ic { flex: 0 0 auto; }
+  .cpn-note + .cpn-list { padding-top: 0; }  /* 提示已提供 16px 間距，列表頂部不再重複 */
   .cpn-list { padding: 4px 24px 24px; display: flex; flex-direction: column; gap: 12px; }
   .cpn-card { border: 1px solid var(--kk-border-lighter); border-radius: var(--r-md); padding: 16px; }
   .cpn-top { display: flex; align-items: flex-start; gap: 12px; }
@@ -2356,7 +2361,11 @@
       <span class="bs-title">折扣券</span>
       <span class="bs-spacer"></span>
     </div>
-    <div class="bs-body"><div class="cpn-list" id="cpnList"></div></div>
+    <div class="bs-body">
+      <!-- 提示（Figma 1466-130645 annotation：在原本基礎上新增一個提示） -->
+      <div class="cpn-note"><span class="ic ic-20">{{IC_infoFill}}</span><span>領取成功後可以在付款時選擇抵扣使用</span></div>
+      <div class="cpn-list" id="cpnList"></div>
+    </div>
   </div>
 
   <!-- 方案描述 bottom sheet（基本資訊描述「更多」→ 展開全文，Figma 1515-135291） -->
