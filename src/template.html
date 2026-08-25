@@ -1128,6 +1128,9 @@
   .det-coupon .tkt i { position: relative; font-style: normal;
     font-size: 12px; line-height: 16px; font-weight: 600; color: #E65F50; white-space: nowrap; }  /* 折扣文字加粗（Figma 1138-91780） */
   .det-coupon { border: 0; text-align: left; cursor: pointer; width: 100%; }
+  /* 首屏內聯優惠券（Figma 1249-109383）：圓角卡、與首屏卡/政策各留 20px */
+  .det-coupon--inline { border-radius: var(--r-lg); margin-top: 20px; padding: 6px 8px; }
+  .det-coupon--inline[hidden] { display: none; }
   /* footer 上方有 coupon banner 時不顯示 footer 分割線；橫幅隱藏（全部領取）後恢復 */
   .det-coupon + .det-foot, .det-coupon + .ord-foot { border-top: 0; }
   .det-coupon[hidden] { display: none; }
@@ -2098,6 +2101,15 @@
           <div class="pkg-warns" id="detWarns"></div>
           <div class="det-provider" id="detProvider"></div>
         </div>
+        <!-- 優惠券 banner：首屏卡下、政策標籤上（Figma 1249-109383 简要资讯）；CTA=折扣券 -->
+        <button class="det-coupon det-coupon--inline" id="detCoupon">
+          <span class="cp-pic">{{IC_couponPicto}}</span>
+          <span class="tks">
+            <span class="tkt tkt1">{{IC_ticket1}}<span class="dash">{{IC_ticket1dash}}</span><i>95 折</i></span>
+            <span class="tkt tkt2">{{IC_ticket2}}<span class="dash">{{IC_ticket2dash}}</span><i>TWD 100</i></span>
+          </span>
+          <span class="claim">折扣券<span class="car">{{IC_arrowSmRight}}</span></span>
+        </button>
         <div class="det-policies" id="detPolicies"></div>
         <hr class="pkg-hr">
         <h3 class="det-h2">基本資訊</h3>
@@ -2281,14 +2293,6 @@
       <div class="det-pid">產品編號： 123456</div>
     </div>
 
-    <button class="det-coupon" id="detCoupon">
-      <span class="cp-pic">{{IC_couponPicto}}</span>
-      <span class="tks">
-        <span class="tkt tkt1">{{IC_ticket1}}<span class="dash">{{IC_ticket1dash}}</span><i>95 折</i></span>
-        <span class="tkt tkt2">{{IC_ticket2}}<span class="dash">{{IC_ticket2dash}}</span><i>TWD 100</i></span>
-      </span>
-      <span class="claim">領取<span class="car">{{IC_arrowSmRight}}</span></span>
-    </button>
     <div class="det-foot">
       <div class="pkg-buy">
         <div class="pkg-price" id="detPrice"></div>
