@@ -1499,9 +1499,6 @@
   .ord-price-toggle .caret { width: 20px; height: 20px; transform: rotate(180deg); }
   .ord-foot .cta { flex: 0 0 120px; width: 120px; background: var(--kk-primary-button); color: #fff; }
   /* 訂單頁 coupon banner（Figma 1074-82361）：白底獨立圓角卡（與其餘 ord-card 同：白底 r12、px16、上下 6px 讓 32px picto 置中≈44 高），置於卡片流最後 */
-  .ord-coupon { margin: 0; border-radius: 12px; background: #fff; padding: 8px 16px; }  /* 高 48px＝Figma 1074-82361 coupon banner（8+32 picto+8） */
-  /* 佔位以 display:contents 讓 #ordCoupon 直接成為 .ord-cards 的 flex 子項（隱藏時不占 gap） */
-  .ord-coupon-slot { display: contents; }
   /* 付款頁（嚴格對齊 Figma 1074-84069） */
   .pay-subh { display: flex; align-items: center; gap: 4px; font-size: 16px; line-height: 24px; font-weight: 600; color: #212121; }
   .pay-subh .ic { width: 20px; height: 20px; }
@@ -2415,14 +2412,6 @@
       </div>
     </div>
     <div class="ord-body" id="ordBody"></div>
-    <button class="det-coupon ord-coupon" id="ordCoupon">
-      <span class="cp-pic">{{IC_couponPicto}}</span>
-      <span class="tks">
-        <span class="tkt tkt1">{{IC_ticket1_ord}}<span class="dash">{{IC_ticket1dash_ord}}</span><i>95 折</i></span>
-        <span class="tkt tkt2">{{IC_ticket2_ord}}<span class="dash">{{IC_ticket2dash_ord}}</span><i>TWD 100</i></span>
-      </span>
-      <span class="claim">領取<span class="car">{{IC_arrowSmRight}}</span></span>
-    </button>
     <div class="pp-mask" data-panel="ordPricePanel" data-toggle="ordPriceToggle"></div>
     <div class="ord-foot">
       <div class="ord-price-panel" id="ordPricePanel"></div>
@@ -5136,9 +5125,8 @@
       '<button class="qty-btn qplus" id="qtyPlus"' + (st.qty >= 5 ? ' disabled' : '') + '></button></div></div>';
     w += '<div class="ord-dq">' + dq + '</div>';
 
-    // ── 獨立圓角卡區：coupon banner（最上）＋ [航班][裝置][聯絡人] 訂購人 備註 ──
-    // coupon banner 佔位：置於卡片流最上面（Figma 1074-82361）；下方 JS 把 #ordCoupon 節點移入。A/B 兩案一致。
-    var c = '<div class="ord-coupon-slot" id="ordCouponSlot"></div>';
+    // ── 獨立圓角卡區：[裝置][航班][旅客][聯絡人] 訂購人 備註（優惠券 banner 已移除）──
+    var c = '';
     // 順序（Figma 1569-146436）：設備資訊 → 抵達航班資訊 → 旅客資料 → 旅遊期間聯絡方式
     if (req.device) {
       var d = st.device || {};
@@ -5192,12 +5180,7 @@
       '</div></div>';
     c += '<div class="ord-card"><button class="ord-row-link" id="ordRemarkRow"><div class="t">備註</div><div class="r' + (st.remark ? ' filled' : '') + '"><span class="lbl">' + (st.remark || '無備註') + '</span><span class="ic">' + ICONS.chevGrey + '</span></div></button></div>';
 
-    // 先把 coupon 節點抽離到 modal 根，避免下一行 innerHTML 覆蓋時把它連同監聽器一起銷毀
-    var _cp = document.getElementById('ordCoupon');
-    if (_cp) document.getElementById('orderModal').appendChild(_cp);
     document.getElementById('ordBody').innerHTML = '<div class="ord-wsec">' + w + '</div><div class="ord-cards">' + c + '</div>';
-    var _slot = document.getElementById('ordCouponSlot');
-    if (_cp && _slot) _slot.appendChild(_cp);
     document.getElementById('ordFootAmt').textContent = ordTotal().toLocaleString();
 
     // 繫結
@@ -5569,7 +5552,6 @@
   document.getElementById('ordPriceToggle').addEventListener('click', function () { togglePricePanel('ordPricePanel', 'ordPriceToggle'); });
 
   // ---- coupon（複用折扣券 sheet）----
-  document.getElementById('ordCoupon').addEventListener('click', function () { renderCoupons(); openSheet(document.getElementById('couponSheet')); });
   // 訂單/付款頁「亞洲通·N 個國家/地區」點選 → 複用詳情頁「包含地區」資訊態 sheet
   function openOrdScope() {
     openScopeSheet('', destCoverageList());  // 与外层「支援N个国家/地区」同源，保证内外一致
