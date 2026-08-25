@@ -178,7 +178,8 @@ subs = {
     "{{IC_calendar}}":     svg("calendar"),
     "{{IC_calendarCyan}}": svg("calendar", recolor=("#212121", "#13A3B6")),  # 列表卡政策行全青（Figma 795-35558 新版）
     "{{IC_fireLine}}":     svg("fireLine"),  # 已购 hot 线框火苗 16px（Figma 795-35558 新版，#EF7A70）
-    "{{IC_fireHot}}":      svg("fireLine", recolor=("#EF7A70", "#E65F50")),  # HOT 标签火苗 #E65F50（Figma 1202-105544）
+    "{{IC_fireHot}}":      svg("fire", recolor=("#EF7A70", "#E65F50")),  # HOT 标签火苗：实心 ic_fire_fill #E65F50（Figma 1202-105544）
+    "{{IC_flashCyan}}":    svg("flash", recolor=("#13A3B6", "#26BEC9")),  # 立即确认：实心 ic_flash_fill 青色 #26BEC9（Figma 1202-105544）
     # 方案 A 列表卡（Figma 1202-105544）：政策/已购图标改灰 #727272
     "{{IC_flashGrey}}":    svg("flash", recolor=("#13A3B6", "#727272")),
     "{{IC_currencyReloadGrey}}": svg("currencyReload", recolor=("#13A3B6", "#727272")),
@@ -187,7 +188,8 @@ subs = {
     "{{IC_fireLineGrey}}": svg("fireLine", recolor=("#EF7A70", "#727272")),
     "{{IC_crossCircleLine}}": svg("crossCircleLine"),
     "{{IC_swapVertical}}": svg("swapVertical"),
-    "{{IC_sortAmountDown}}": svg("sortAmountDown"),  # 篩選列「排序」chip icon ic_sortAmountDown_line（Figma 1494-131060）
+    "{{IC_sortAmountDown}}": svg("sortAmountDown"),  # 篩選列「排序」chip icon ic_sortAmountDown_line #212121（Figma 1494-131060）
+    "{{IC_sortAmountCyan}}": svg("sortAmountDown", recolor=("#212121", "#26BEC9")),  # 排序 chip 選中態 icon 青色 #26BEC9
     "{{IC_pencil}}":       svg("pencil"),
     "{{IC_filter}}":       svg("filter"),
     "{{IC_filterDark}}":   svg("filter", recolor=("black", "#212121")),  # 方案 A 篩選 chip：icon 用 DS Text & Icon #212121（原 filter.svg 為純黑，比 chevron/文字重）

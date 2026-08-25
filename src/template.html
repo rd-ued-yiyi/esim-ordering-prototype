@@ -778,9 +778,9 @@
   .pkg-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
   .pkg-tag { background: var(--kk-surface-light); border-radius: var(--r-sm); padding: 2px 4px;
     font-size: 12px; line-height: 16px; color: var(--kk-text-darker); }
-  /* HOT 標籤（銷量前三，Figma 1202-105544）：淡紅底 #FCE0DD + 火苗 #E65F50 + 深字 */
-  .pkg-tag--hot { display: inline-flex; align-items: center; gap: 2px; background: #FCE0DD; padding: 2px 6px 2px 4px; }
-  .pkg-tag--hot .ic { width: 14px; height: 14px; }
+  /* HOT 標籤（銷量前三，Figma 1202-105544）：critical-lighter 底 #FFF2F2 + 實心火苗 #E65F50 16px + 深字 #212121 */
+  .pkg-tag--hot { display: inline-flex; align-items: center; gap: 4px; background: #FFF2F2; padding: 2px 4px; }
+  .pkg-tag--hot .ic { width: 16px; height: 16px; }
   .pkg-perks { display: flex; flex-wrap: wrap; gap: 4px 8px; margin-top: 12px;  /* 掉行行距 4px（Figma 970-49432）；標籤→政策 12 */
     font-size: 12px; line-height: 16px; color: #13A3B6; }  /* 政策文字全青（Figma 795-35558 新版，含最早可使用日/取消政策） */
   .pkg-perks .perk { display: inline-flex; align-items: center; gap: 4px; }
@@ -816,11 +816,11 @@
   .pkg-card--a .pkg-perks { flex-direction: column; align-items: flex-start; gap: 4px; margin-top: 0; color: var(--kk-text-dark); font-size: 14px; line-height: 20px; }  /* 政策豎排、灰字 #727272、文字 14/20（Figma 1202-105545） */
   .pkg-card--a .pkg-social { margin-top: 0; align-items: center; gap: 8px; }    /* 評分·已購·供應商同一行 */
   .pkg-card--a .pkg-social .fdiv { height: 10px; }
-  .pkg-card--a .pkg-social .pkg-dot { color: var(--kk-text-medium); font-size: 12px; line-height: 16px; flex: 0 0 auto; }  /* 中點分隔（Figma 1202-105544） */
+  .pkg-card--a .pkg-social .pkg-dot { color: var(--kk-text-dark); font-size: 12px; line-height: 16px; flex: 0 0 auto; }  /* 中點分隔 #727272（Figma 1202-105544） */
   .pkg-card--a .pkg-social .pkg-rating { flex: 0 0 auto; }
-  .pkg-card--a .pkg-social .pkg-rating .score { font-size: 16px; line-height: 24px; }  /* 分數 16（Figma） */
+  .pkg-card--a .pkg-social .pkg-rating .score { font-size: 14px; line-height: 20px; color: var(--kk-text-darker); }  /* 分數 14 Semibold #212121（Figma 1202-105544） */
   .pkg-card--a .pkg-social .bought, .pkg-card--a .pkg-social .bought.hot { color: var(--kk-text-dark); }  /* 已購灰 #727272（非紅） */
-  .pkg-card--a .pkg-vendor { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .pkg-card--a .pkg-vendor { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--kk-text-dark); }  /* 供應商 #727272（Figma 1202-105544） */
   .pkg-card--a .pkg-hr { margin: 0; }                        /* 間距由 pkg-a-top gap 8 控制 */
   .pkg-card--a .pkg-now { font-size: 18px; line-height: 18px; }  /* 價格加大（Figma price-bold-xl 18） */
   .pkg-card--a .pkg-now .cur { font-weight: 700; }
@@ -2958,7 +2958,7 @@
     thumbsUp: '{{IC_thumbsUp}}',  // 列表卡「連續N則好評」標籤（雙色點讚，Figma 795-35558）
     flash: '{{IC_flash}}', reload: '{{IC_currencyReload}}', reloadDark: '{{IC_currencyReloadDark}}',
     checkLine: '{{IC_checkCircleLine}}', calendar: '{{IC_calendar}}', crossLine: '{{IC_crossCircleLine}}',
-    calendarCyan: '{{IC_calendarCyan}}', fireLine: '{{IC_fireLine}}', fireHot: '{{IC_fireHot}}',  // 列表卡新版（Figma 795-35558）：青色日曆＋線框火苗；fireHot=HOT標籤火苗 #E65F50
+    calendarCyan: '{{IC_calendarCyan}}', fireLine: '{{IC_fireLine}}', fireHot: '{{IC_fireHot}}', flashCyan: '{{IC_flashCyan}}',  // fireHot=HOT實心火苗 #E65F50；flashCyan=立即確認實心閃電 #26BEC9（Figma 1202-105544）
     flashGrey: '{{IC_flashGrey}}', reloadGrey: '{{IC_currencyReloadGrey}}', checkLineGrey: '{{IC_checkCircleLineGrey}}', calendarGrey: '{{IC_calendarGrey}}', fireLineGrey: '{{IC_fireLineGrey}}',  // 方案 A 卡片灰色政策/已購（Figma 1202-105544）
     pencil: '{{IC_pencil}}', star: '{{IC_star}}', fire2: '{{IC_fire}}', chevDark: '{{IC_arrowRightGrey}}',
     locSearch: '{{IC_locationSearch}}',  // 搜尋結果·國家行（Figma 848-41868：深色 location_line 20px）
@@ -2985,7 +2985,7 @@
     chevGrey: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9C9DA0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>',
     caretDown: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>',  // 方案 B 下拉箭頭：16px＝Figma ic_arrowDown_line_semibold_lg（隨字色）
     arrowDownCircle: '{{IC_arrowDownCircle}}',  // 方案 B 列表页流量 chips 尾端展开按钮：环形下拉箭头（Figma 1202-105534）
-    sortAmount: '{{IC_sortAmountDown}}',  // 篩選列「排序」chip icon（Figma 1494-131060）
+    sortAmount: '{{IC_sortAmountDown}}', sortAmountCyan: '{{IC_sortAmountCyan}}',  // 篩選列「排序」chip icon：預設深色/選中青色（Figma 1494-131060）
     // 付款頁
     payApple: '{{PAY_applepay}}', payCard: '{{PAY_creditcard}}', payPayme: '{{PAY_payme}}',
     payAlipayhk: '{{PAY_alipayhk}}', payAlipay: '{{PAY_alipay}}', hsbc: '{{PAY_hsbc}}',
@@ -3801,7 +3801,8 @@
   var CARD_PERK_ICONS = { flash: 'flash', reload: 'reload', checkLine: 'checkLine',
                           reloadD: 'reload', calendarD: 'calendarCyan' };
   // 方案 A 列表卡（Figma 1202-105544）：政策圖示全灰 #727272
-  var CARD_PERK_ICONS_A = { flash: 'flashGrey', reload: 'reloadGrey', checkLine: 'checkLineGrey',
+  // Figma 1202-105544：立即確認 flash 用實心青色 #26BEC9 高亮，其餘政策圖示灰色 #727272
+  var CARD_PERK_ICONS_A = { flash: 'flashCyan', reload: 'reloadGrey', checkLine: 'checkLineGrey',
                             reloadD: 'reloadGrey', calendarD: 'calendarGrey' };
   // 詳情頁政策行（Figma 1249-109383）：文字全深、圖示全深，僅「立即確認」flash 保留青色高亮
   var DET_PERK_ICONS = { flash: 'flash', send: 'send', reload: 'reloadDark', checkLine: 'checkLineDark',
@@ -3951,7 +3952,7 @@
       // 評分：★分數＋等級詞＋(評論數)（4.6–5.0「非常好」/4.0–4.5「很好」，<4.0 不顯示評分）
       var grade = p.rating >= 4.6 ? '非常好' : (p.rating >= 4.0 ? '很好' : '');
       var ratingHtml = grade
-        ? '<span class="ic ' + (isA ? 'ic-20' : 'ic-16') + '">' + ICONS.star + '</span>' +
+        ? '<span class="ic ic-16">' + ICONS.star + '</span>' +
           '<span class="score"></span><span class="grade">' + grade + '</span><span class="rcount"></span>'
         : '';
       // 已購銷量：純文字灰色、不加粗、無火苗（Figma 1202-105544）；火苗改用於下方 HOT 標籤
@@ -4151,7 +4152,7 @@
       } else if (it.type === 'sort') {
         // 排序 chip（Figma 1494-131060）：icon 左 + 文字，點開排序 sheet；選非預設排序時顯示選中態
         sel = sortMode !== 0;
-        b = el('<button class="fpill ficon' + (sel ? ' sel' : '') + '"><span class="ic ic-16">' + ICONS.sortAmount + '</span><span class="lb">排序</span></button>');
+        b = el('<button class="fpill ficon' + (sel ? ' sel' : '') + '"><span class="ic ic-16 ic-fa">' + ICONS.sortAmount + '</span><span class="ic ic-16 ic-on">' + ICONS.sortAmountCyan + '</span><span class="lb">排序</span></button>');
         b.addEventListener('click', function () { renderSortList(); openSheet(document.getElementById('bsSort')); });
       } else {
         var cat = catByKey(it.cat), arr = fState[it.cat];
