@@ -1012,7 +1012,8 @@
   .det-policies .perk.cover .cnt { flex: 0 0 auto; text-decoration: underline; text-underline-offset: 2px; }
   /* 描述：移到「基本資訊」標題下、表格上（Figma 1009-43085）；收合夾 2 行、行尾內聯「展開/收起」（clampEl 處理） */
   .det-intro { margin: 0 0 20px; font-size: 14px; line-height: 20px; color: var(--kk-text-darker); }
-  .det-provider { margin-top: 6px; font-size: 12px; line-height: 16px; color: var(--kk-text-dark); }  /* 服務由 XXX 提供：#727272（合併後固定，Figma 1164-97682） */
+  .desc-sheet-text { margin: 0; padding: 16px 24px 24px; font-size: 14px; line-height: 22px; color: var(--kk-text-darker); white-space: pre-wrap; }  /* 方案描述 sheet 全文（Figma 1515-135291） */
+  .det-provider { margin-top: 0; font-size: 12px; line-height: 16px; color: var(--kk-text-medium); }  /* 「XXX 提供服務」：text-medium #9C9DA0、首屏卡 8px gap（Figma 1713:172920） */
   .det-sec .pkg-warns { margin-top: 20px; flex-wrap: wrap; row-gap: 4px; }  /* 提醒標籤距政策行 20；多項換行（Figma 1249-109400） */
   .det-h2 { font-size: 18px; line-height: 26px; font-weight: 600; color: var(--kk-text-darker); margin: 0 0 20px; }
   .det-h5 { font-size: 22px; line-height: 28px; font-weight: 600; color: var(--kk-text-darker); margin: 0 0 20px; }  /* 標題下距 20（Figma 1009-43085） */
@@ -2453,6 +2454,17 @@
       <span class="bs-spacer"></span>
     </div>
     <div class="bs-body"><div class="cpn-list" id="cpnList"></div></div>
+  </div>
+
+  <!-- 方案描述 bottom sheet（基本資訊描述「更多」→ 展開全文，Figma 1515-135291） -->
+  <div class="bsheet" id="descSheet">
+    <div class="bs-handle"></div>
+    <div class="bs-bar">
+      <button class="bs-close" data-bs-close aria-label="關閉"><span class="ic ic-24"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjEzLjA2NzciIGhlaWdodD0iMTMuMDY3NyIgdmlld0JveD0iMCAwIDEzLjA2NzcgMTMuMDY3NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgaWQ9IlZlY3RvciI+CjxwYXRoIGQ9Ik0xMi44NDgxIDEuMjgwMzNDMTMuMTQxIDAuOTg3NDM3IDEzLjE0MSAwLjUxMjU2MyAxMi44NDgxIDAuMjE5NjdDMTIuNTU1MiAtMC4wNzMyMjMzIDEyLjA4MDMgLTAuMDczMjIzMyAxMS43ODc0IDAuMjE5NjdMNi41MzM4NyA1LjQ3MzIxTDEuMjgwMzMgMC4yMTk2N0MwLjk4NzQzNyAtMC4wNzMyMjMzIDAuNTEyNTYzIC0wLjA3MzIyMzMgMC4yMTk2NyAwLjIxOTY3Qy0wLjA3MzIyMzMgMC41MTI1NjMgLTAuMDczMjIzMyAwLjk4NzQzNyAwLjIxOTY3IDEuMjgwMzNMNS40NzMyMSA2LjUzMzg3TDAuMjE5NjcgMTEuNzg3NEMtMC4wNzMyMjMzIDEyLjA4MDMgLTAuMDczMjIzMyAxMi41NTUyIDAuMjE5NjcgMTIuODQ4MUMwLjUxMjU2MyAxMy4xNDEgMC45ODc0MzcgMTMuMTQxIDEuMjgwMzMgMTIuODQ4MUw2LjUzMzg3IDcuNTk0NTNMMTEuNzg3NCAxMi44NDgxQzEyLjA4MDMgMTMuMTQxIDEyLjU1NTIgMTMuMTQxIDEyLjg0ODEgMTIuODQ4MUMxMy4xNDEgMTIuNTU1MiAxMy4xNDEgMTIuMDgwMyAxMi44NDgxIDExLjc4NzRMNy41OTQ1MyA2LjUzMzg3TDEyLjg0ODEgMS4yODAzM1oiIGZpbGw9ImJsYWNrIi8+CjwvZz4KPC9zdmc+" width="13.07" height="13.07"></span></button>
+      <span class="bs-title">方案描述</span>
+      <span class="bs-spacer"></span>
+    </div>
+    <div class="bs-body"><p class="desc-sheet-text" id="descSheetText"></p></div>
   </div>
 
   <!-- 評論 Full-screen 頁（更多評價 → 進入） -->
@@ -4496,8 +4508,7 @@
       if (i) warns.appendChild(el('<span class="wdiv"></span>'));
       var e = el('<span></span>'); e.textContent = w; warns.appendChild(e);
     });
-    // 服務商行間距（Figma 1009-43085）：有提醒時距提醒 6px，無提醒時直接距政策行 20px
-    document.getElementById('detProvider').style.marginTop = p.warns.length ? '6px' : '20px';
+    // 首屏卡各行統一 8px（.det-hero gap，Figma 1713:172920）：不再對服務商行加額外 margin
     // 政策行：沿用卡面 perks 語義（詳情版文案更完整）+ 覆蓋範圍行（Figma 913-43597 帶下劃線）
     var pol = document.getElementById('detPolicies'); pol.innerHTML = '';
     // 政策順序與卡片一致：確認速度 → 可用日期 → 取消政策（取消政策放最後，適用範圍仍在其後）
@@ -4519,10 +4530,8 @@
     var introEl = document.getElementById('detIntro');
     if (!introEl.dataset.full) introEl.dataset.full = introEl.textContent;
     introEl.textContent = introEl.dataset.full;
-    document.getElementById('detProvider').innerHTML = '';
-    document.getElementById('detProvider').append('服務由 ');
-    var vb = document.createElement('b'); vb.style.fontWeight = '600'; vb.textContent = p.vendor;
-    document.getElementById('detProvider').append(vb, ' 提供');  // 與列表頁一致，不加電信商縮寫括號
+    // 服務商行（Figma 1713:172920）：「{供應商} 提供服務」、text-medium #9C9DA0、不加粗、不加「服務由」
+    document.getElementById('detProvider').textContent = p.vendor + ' 提供服務';
     document.getElementById('detCancelBody').innerHTML = renderCancelPolicy(p.cancelType || 'none');
     // 基本資訊（Figma 1164-97098，動態格隨卡/條件變化）
     var sp = p.spec;
@@ -4587,6 +4596,30 @@
     td.appendChild(inner);
   }
   // 文字塊超過 maxLines 行 → 夾取並在行尾內聯「展開/收起」（二分求最大可容納字數）
+  // 基本資訊描述：夾 1 行、行尾「更多」→ 點開 bottom sheet 看全文（Figma 1249-109383 / 1515-135291）
+  function openDescSheet(text) {
+    document.getElementById('descSheetText').textContent = text;
+    openSheet(document.getElementById('descSheet'));
+  }
+  function clampIntroSheet(elm) {
+    if (!elm) return;
+    var full = elm.dataset.full || elm.textContent;
+    var MAXH = 20 + 2;  // 1 行
+    elm.textContent = full;
+    if (elm.scrollHeight <= MAXH) return;  // 本就 1 行內：不顯示「更多」
+    var lo = 0, hi = full.length;
+    while (lo < hi) {
+      var mid = Math.ceil((lo + hi) / 2);
+      elm.textContent = full.slice(0, mid) + '… 更多';
+      if (elm.scrollHeight <= MAXH) lo = mid; else hi = mid - 1;
+    }
+    elm.innerHTML = '';
+    elm.appendChild(document.createTextNode(full.slice(0, lo).replace(/[、\s]+$/, '') + '… '));
+    var b = document.createElement('button');
+    b.className = 'clamp-toggle'; b.textContent = '更多';
+    b.addEventListener('click', function () { openDescSheet(full); });
+    elm.appendChild(b);
+  }
   function clampEl(elm, maxLines) {
     if (!elm) return;
     var full = elm.textContent;
@@ -4626,7 +4659,7 @@
     lockBody();
     // rAF 等 modal 可見後：先對超行的規格值做展開/收起夾取（會改變高度），再算錨點 offsetTop
     requestAnimationFrame(function () {
-      clampEl(document.getElementById('detIntro'), 1);  // 描述最多夾 1 行、行尾內聯「展開」
+      clampIntroSheet(document.getElementById('detIntro'));  // 描述夾 1 行、行尾「更多」→ 開 bottom sheet 看全文（Figma 1515-135291）
       var top = 0;
       if (anchor) { var sec = detBody.querySelector('.det-sec[data-sec="' + anchor + '"]'); if (sec) top = sec.offsetTop; }
       detBody.scrollTop = top;
