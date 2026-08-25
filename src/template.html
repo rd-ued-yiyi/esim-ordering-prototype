@@ -778,6 +778,9 @@
   .pkg-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
   .pkg-tag { background: var(--kk-surface-light); border-radius: var(--r-sm); padding: 2px 4px;
     font-size: 12px; line-height: 16px; color: var(--kk-text-darker); }
+  /* HOT 標籤（銷量前三，Figma 1202-105544）：淡紅底 #FCE0DD + 火苗 #E65F50 + 深字 */
+  .pkg-tag--hot { display: inline-flex; align-items: center; gap: 2px; background: #FCE0DD; padding: 2px 6px 2px 4px; }
+  .pkg-tag--hot .ic { width: 14px; height: 14px; }
   .pkg-perks { display: flex; flex-wrap: wrap; gap: 4px 8px; margin-top: 12px;  /* 掉行行距 4px（Figma 970-49432）；標籤→政策 12 */
     font-size: 12px; line-height: 16px; color: #13A3B6; }  /* 政策文字全青（Figma 795-35558 新版，含最早可使用日/取消政策） */
   .pkg-perks .perk { display: inline-flex; align-items: center; gap: 4px; }
@@ -813,6 +816,7 @@
   .pkg-card--a .pkg-perks { flex-direction: column; align-items: flex-start; gap: 4px; margin-top: 0; color: var(--kk-text-dark); font-size: 14px; line-height: 20px; }  /* 政策豎排、灰字 #727272、文字 14/20（Figma 1202-105545） */
   .pkg-card--a .pkg-social { margin-top: 0; align-items: center; gap: 8px; }    /* 評分·已購·供應商同一行 */
   .pkg-card--a .pkg-social .fdiv { height: 10px; }
+  .pkg-card--a .pkg-social .pkg-dot { color: var(--kk-text-medium); font-size: 12px; line-height: 16px; flex: 0 0 auto; }  /* 中點分隔（Figma 1202-105544） */
   .pkg-card--a .pkg-social .pkg-rating { flex: 0 0 auto; }
   .pkg-card--a .pkg-social .pkg-rating .score { font-size: 16px; line-height: 24px; }  /* 分數 16（Figma） */
   .pkg-card--a .pkg-social .bought, .pkg-card--a .pkg-social .bought.hot { color: var(--kk-text-dark); }  /* 已購灰 #727272（非紅） */
@@ -2954,7 +2958,7 @@
     thumbsUp: '{{IC_thumbsUp}}',  // 列表卡「連續N則好評」標籤（雙色點讚，Figma 795-35558）
     flash: '{{IC_flash}}', reload: '{{IC_currencyReload}}', reloadDark: '{{IC_currencyReloadDark}}',
     checkLine: '{{IC_checkCircleLine}}', calendar: '{{IC_calendar}}', crossLine: '{{IC_crossCircleLine}}',
-    calendarCyan: '{{IC_calendarCyan}}', fireLine: '{{IC_fireLine}}',  // 列表卡新版（Figma 795-35558）：青色日曆＋線框火苗
+    calendarCyan: '{{IC_calendarCyan}}', fireLine: '{{IC_fireLine}}', fireHot: '{{IC_fireHot}}',  // 列表卡新版（Figma 795-35558）：青色日曆＋線框火苗；fireHot=HOT標籤火苗 #E65F50
     flashGrey: '{{IC_flashGrey}}', reloadGrey: '{{IC_currencyReloadGrey}}', checkLineGrey: '{{IC_checkCircleLineGrey}}', calendarGrey: '{{IC_calendarGrey}}', fireLineGrey: '{{IC_fireLineGrey}}',  // 方案 A 卡片灰色政策/已購（Figma 1202-105544）
     pencil: '{{IC_pencil}}', star: '{{IC_star}}', fire2: '{{IC_fire}}', chevDark: '{{IC_arrowRightGrey}}',
     locSearch: '{{IC_locationSearch}}',  // 搜尋結果·國家行（Figma 848-41868：深色 location_line 20px）
@@ -3890,6 +3894,8 @@
 
     var box = document.getElementById('plList');
     box.innerHTML = '';
+    // 銷量前三的卡片顯示 HOT 標籤（Figma 1202-105544）
+    var hotTop = list.slice().sort(function (a, b) { return boughtNum(b) - boughtNum(a); }).slice(0, 3);
     list.forEach(function (p) {
       // 卡片結構（Figma 795-35558 新版）：標題 / 規格灰標 / 政策行（全青）/ 供應商 /
       // 評分行（★分數＋評論數＋連續好評文字＋右側已購）/ 分割線 / 價格＋CTA
@@ -3928,6 +3934,8 @@
         } else { twEl.remove(); }
       }
       var tags = card.querySelector('.pkg-tags');
+      // 銷量前三：HOT 標籤置於標籤列最前（淡紅底 + 火苗 + HOT，Figma 1202-105544）
+      if (hotTop.indexOf(p) >= 0) tags.appendChild(el('<span class="pkg-tag pkg-tag--hot"><span class="ic ic-16">' + ICONS.fireHot + '</span>HOT</span>'));
       p.tags.forEach(function (t) { var e = el('<span class="pkg-tag"></span>'); e.textContent = t; tags.appendChild(e); });
       var perks = card.querySelector('.pkg-perks');
       var perkMap = isA ? CARD_PERK_ICONS_A : CARD_PERK_ICONS;  // 方案 A：政策圖示灰色（Figma 1202-105544）
@@ -3946,22 +3954,21 @@
         ? '<span class="ic ' + (isA ? 'ic-20' : 'ic-16') + '">' + ICONS.star + '</span>' +
           '<span class="score"></span><span class="grade">' + grade + '</span><span class="rcount"></span>'
         : '';
-      var boughtHtml = p.hot
-        ? '<span class="bought hot"><span class="ic ic-16">' + ICONS.fireLine + '</span><span class="bn">' + p.bought.replace(/\s*已購$/, '') + '</span><span class="bt">已購</span></span>'
-        : '<span class="bought"><span class="bt">' + p.bought + '</span></span>';
+      // 已購銷量：純文字灰色、不加粗、無火苗（Figma 1202-105544）；火苗改用於下方 HOT 標籤
+      var boughtHtml = '<span class="bought"><span class="bt">' + p.bought + '</span></span>';
       var social = card.querySelector('.pkg-social');
       if (isA) {
-        // 1202-105544：評分 │ 已購 │ 供應商 同一行（分隔線）；<4.0 無評分則 已購 │ 供應商
+        // 1202-105544：評分 · 已購 · 供應商 同一行（中點分隔）；<4.0 無評分則 已購 · 供應商
         var parts = [];
         if (grade) parts.push('<span class="pkg-rating">' + ratingHtml + '</span>');
         parts.push(boughtHtml);
         parts.push('<span class="pkg-vendor"></span>');
-        social.innerHTML = parts.join('<span class="fdiv"></span>');
+        social.innerHTML = parts.join('<span class="pkg-dot">·</span>');
         if (grade) {
           social.querySelector('.score').textContent = p.rating.toFixed(1);
           social.querySelector('.rcount').textContent = '(' + p.reviews + ')';
         }
-        social.querySelector('.pkg-vendor').textContent = p.vendor;
+        social.querySelector('.pkg-vendor').textContent = p.vendor + ' 提供服務';  // Figma 1202-105544：供應商帶「提供服務」後綴
       } else {
         card.querySelector('.pkg-vendor').textContent = p.vendor;
         var rating = card.querySelector('.pkg-rating');

@@ -178,6 +178,7 @@ subs = {
     "{{IC_calendar}}":     svg("calendar"),
     "{{IC_calendarCyan}}": svg("calendar", recolor=("#212121", "#13A3B6")),  # 列表卡政策行全青（Figma 795-35558 新版）
     "{{IC_fireLine}}":     svg("fireLine"),  # 已购 hot 线框火苗 16px（Figma 795-35558 新版，#EF7A70）
+    "{{IC_fireHot}}":      svg("fireLine", recolor=("#EF7A70", "#E65F50")),  # HOT 标签火苗 #E65F50（Figma 1202-105544）
     # 方案 A 列表卡（Figma 1202-105544）：政策/已购图标改灰 #727272
     "{{IC_flashGrey}}":    svg("flash", recolor=("#13A3B6", "#727272")),
     "{{IC_currencyReloadGrey}}": svg("currencyReload", recolor=("#13A3B6", "#727272")),
