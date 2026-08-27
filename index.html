@@ -897,6 +897,10 @@
   /* 該類目有選中項時，標題右上角紅點 badge（Figma 970-51170） */
   .fs-sec .fs-h.has-sel { display: inline-block; position: relative; }
   .fs-sec .fs-h.has-sel::after { content: ''; position: absolute; top: 0; right: -8px; width: 5px; height: 5px; border-radius: 50%; background: #E65F50; }
+  /* 帶 ⓘ 的板塊標題（點 標題+icon 展開規格詳情表格，Figma 1515-135054） */
+  .fs-sec .fs-h--tip { display: inline-flex; align-items: center; gap: 4px; cursor: pointer; }
+  .fs-sec .fs-h--tip .fs-info { width: 16px; height: 16px; flex: 0 0 auto; }
+  .fs-sec .fs-h--tip .fs-info img { width: 16px; height: 16px; }
   .fs-opts { display: flex; flex-wrap: wrap; gap: 12px; }
   /* 篩選選項 pill（圓角膠囊，多選/單選高亮） */
   .fopt { display: inline-flex; align-items: center; gap: 4px; box-sizing: border-box;
@@ -1038,6 +1042,16 @@
   .tip-body { padding: 16px 24px 24px; }
   .tip-h { font-size: 16px; line-height: 24px; font-weight: 600; color: var(--kk-text-darker); margin-bottom: 12px; }
   .tip-p { margin: 0; font-size: 14px; line-height: 22px; color: var(--kk-text-dark); white-space: pre-wrap; }
+  /* 篩選 ⓘ 規格詳情表格（Figma 1515-135054） */
+  .cattip-body { padding: 16px 24px 24px; }
+  .cattip-body .tip-h { font-size: 16px; line-height: 24px; font-weight: 600; color: var(--kk-text-darker); margin-bottom: 12px; }
+  .cattip-table { border: 1px solid var(--kk-border-lighter); border-radius: var(--r-md); overflow: hidden; }
+  .cattip-row { display: flex; align-items: stretch; border-bottom: 1px solid var(--kk-border-lighter); }
+  .cattip-row:last-child { border-bottom: 0; }
+  .cattip-row.cattip-head { background: var(--kk-surface-lighter); }
+  .cattip-row.cattip-head .c1, .cattip-row.cattip-head .c2 { font-weight: 600; color: var(--kk-text-darker); }
+  .cattip-row .c1 { flex: 0 0 100px; padding: 12px 16px; font-size: 14px; line-height: 20px; color: var(--kk-text-darker); box-sizing: border-box; }
+  .cattip-row .c2 { flex: 1 1 0; min-width: 0; padding: 12px 16px; font-size: 14px; line-height: 20px; color: var(--kk-text-dark); }
   /* 規格總覽：當前選擇高亮（Figma 998-42155）——首行 cyan 粗體值 + 「✓當前」pill，下方列其餘檔位 */
   .det-table .spec-cur { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
   .det-table .cur-val { font-size: 14px; line-height: 20px; font-weight: 600; color: #13A3B6; }
@@ -2489,6 +2503,17 @@
       <span class="bs-spacer"></span>
     </div>
     <div class="bs-body"><div class="tip-body"><div class="tip-h" id="tipH"></div><p class="tip-p" id="tipP"></p></div></div>
+  </div>
+
+  <!-- 篩選板塊 ⓘ tooltip：規格詳情表格 sheet（選項規格 | 含義，Figma 1515-135054） -->
+  <div class="bsheet tall" id="catTipSheet">
+    <div class="bs-handle"></div>
+    <div class="bs-bar">
+      <button class="bs-close" data-bs-close aria-label="關閉"><span class="ic ic-24"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjEzLjA2NzciIGhlaWdodD0iMTMuMDY3NyIgdmlld0JveD0iMCAwIDEzLjA2NzcgMTMuMDY3NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgaWQ9IlZlY3RvciI+CjxwYXRoIGQ9Ik0xMi44NDgxIDEuMjgwMzNDMTMuMTQxIDAuOTg3NDM3IDEzLjE0MSAwLjUxMjU2MyAxMi44NDgxIDAuMjE5NjdDMTIuNTU1MiAtMC4wNzMyMjMzIDEyLjA4MDMgLTAuMDczMjIzMyAxMS43ODc0IDAuMjE5NjdMNi41MzM4NyA1LjQ3MzIxTDEuMjgwMzMgMC4yMTk2N0MwLjk4NzQzNyAtMC4wNzMyMjMzIDAuNTEyNTYzIC0wLjA3MzIyMzMgMC4yMTk2NyAwLjIxOTY3Qy0wLjA3MzIyMzMgMC41MTI1NjMgLTAuMDczMjIzMyAwLjk4NzQzNyAwLjIxOTY3IDEuMjgwMzNMNS40NzMyMSA2LjUzMzg3TDAuMjE5NjcgMTEuNzg3NEMtMC4wNzMyMjMzIDEyLjA4MDMgLTAuMDczMjIzMyAxMi41NTUyIDAuMjE5NjcgMTIuODQ4MUMwLjUxMjU2MyAxMy4xNDEgMC45ODc0MzcgMTMuMTQxIDEuMjgwMzMgMTIuODQ4MUw2LjUzMzg3IDcuNTk0NTNMMTEuNzg3NCAxMi44NDgxQzEyLjA4MDMgMTMuMTQxIDEyLjU1NTIgMTMuMTQxIDEyLjg0ODEgMTIuODQ4MUMxMy4xNDEgMTIuNTU1MiAxMy4xNDEgMTIuMDgwMyAxMi44NDgxIDExLjc4NzRMNy41OTQ1MyA2LjUzMzg3TDEyLjg0ODEgMS4yODAzM1oiIGZpbGw9ImJsYWNrIi8+CjwvZz4KPC9zdmc+" width="13.07" height="13.07"></span></button>
+      <span class="bs-title">規格詳情</span>
+      <span class="bs-spacer"></span>
+    </div>
+    <div class="bs-body"><div class="cattip-body"><div class="tip-h" id="catTipH"></div><div class="cattip-table" id="catTipTable"></div></div></div>
   </div>
 
   <!-- 方案描述 bottom sheet（基本資訊描述「更多」→ 展開全文，Figma 1515-135291） -->
@@ -4191,11 +4216,11 @@
   function filterCats() {
     return [
       { key: 'features', label: '包含功能', opts: ['支援熱點', '含本地通話', '可以加值'] },
-      { key: 'cardType', label: 'SIM卡類型', opts: ['原生卡', '國際漫遊卡'] },
-      { key: 'ipType', label: 'IP類型', opts: ['本地IP', '漫遊IP'] },
-      { key: 'network', label: '網絡資源', opts: ['本地', '漫遊'] },
-      { key: 'speed', label: '傳輸規格', opts: ['5G', '5G/4G'] },
-      { key: 'activate', label: '流量激活計算方式', opts: ['24小時制', '自然日制', '總量制'] },
+      { key: 'cardType', label: 'SIM卡類型', opts: ['原生卡', '國際漫遊卡'], tip: true },
+      { key: 'ipType', label: 'IP類型', opts: ['本地IP', '漫遊IP'], tip: true },
+      { key: 'network', label: '網絡資源', opts: ['本地', '漫遊'], tip: true },
+      { key: 'speed', label: '傳輸規格', opts: ['5G', '5G/4G'], tip: true },
+      { key: 'activate', label: '流量激活計算方式', opts: ['24小時制', '自然日制', '總量制'], tip: true },
       { key: 'service', label: '服務保障', opts: ['立即確認', '即買即用', '免費取消'] },
       { key: 'date', label: '使用日期', opts: ['今天', '明天'], date: true, single: true, rect: true }
     ];
@@ -4209,6 +4234,7 @@
     return [
       { type: 'sort' },
       { type: 'expand', cat: 'cardType' },
+      { type: 'catval', cat: 'speed', val: '5G' },
       { type: 'catval', cat: 'features', val: '支援熱點' },
       { type: 'catval', cat: 'service', val: '立即確認' },
       { type: 'catval', cat: 'service', val: '即買即用' },
@@ -4363,7 +4389,14 @@
     filterCats().forEach(function (cat) {
       var sec = el('<div class="fs-sec"><div class="fs-h"></div><div class="fs-opts"></div></div>');
       var h = sec.querySelector('.fs-h');
-      h.textContent = cat.label;
+      if (cat.tip) {  // 帶 ⓘ 的板塊：標題+icon 可點，展開「規格詳情」表格 sheet（Figma 1515-135054）
+        h.classList.add('fs-h--tip');
+        var ht = document.createElement('span'); ht.textContent = cat.label; h.appendChild(ht);
+        h.appendChild(el('<span class="ic ic-16 fs-info">' + ICONS.info + '</span>'));
+        (function (k) { h.addEventListener('click', function () { openCatTipSheet(k); }); })(cat.key);
+      } else {
+        h.textContent = cat.label;
+      }
       var selCat = cat.single ? !!fDraft.date : (fDraft[cat.key] && fDraft[cat.key].length > 0);  // 有選中項→標題紅點
       if (selCat) h.classList.add('has-sel');
       var opts = sec.querySelector('.fs-opts');
@@ -4656,6 +4689,22 @@
   document.querySelectorAll('.td-v--tip').forEach(function (c) {
     c.addEventListener('click', function () { openTipSheet(c); });
   });
+  // 篩選板塊 ⓘ：規格詳情表格（選項規格 | 含義，Figma 1515-135054）
+  var CAT_TIPS = {
+    cardType: { title: 'SIM卡類型', rows: [['原生卡', '直接接入當地電信商本地網路，與當地用戶共用資源，訊號穩定、延遲低'], ['國際漫遊卡', '透過漫遊方式接入，覆蓋範圍更廣，速度可能略降']] },
+    ipType: { title: 'IP類型', rows: [['本地IP', '分配當地 IP，適合觀看當地串流、使用在地服務'], ['漫遊IP', '經母國或第三地出口，部分當地服務可能受限']] },
+    network: { title: '網絡資源', rows: [['本地', '使用當地電信商的網路資源'], ['漫遊', '經漫遊合作夥伴網路連線']] },
+    speed: { title: '傳輸規格', rows: [['5G', '支援 5G，於覆蓋區內享高速上網'], ['5G/4G', '5G 覆蓋區走 5G，其餘自動回落 4G']] },
+    activate: { title: '流量激活計算方式', rows: [['24小時制', '自啟用起，每滿 24 小時計為一日'], ['自然日制', '以當地時間 00:00 為每日分界'], ['總量制', '總流量共用，用完即止、不分日']] }
+  };
+  function openCatTipSheet(key) {
+    var t = CAT_TIPS[key]; if (!t) return;
+    document.getElementById('catTipH').textContent = t.title;
+    var html = '<div class="cattip-row cattip-head"><div class="c1">選項規格</div><div class="c2">含義</div></div>';
+    t.rows.forEach(function (r) { html += '<div class="cattip-row"><div class="c1">' + r[0] + '</div><div class="c2">' + r[1] + '</div></div>'; });
+    document.getElementById('catTipTable').innerHTML = html;
+    openSheet(document.getElementById('catTipSheet'));
+  }
   function clampIntroSheet(elm) {
     if (!elm) return;
     var full = elm.dataset.full || elm.textContent;
