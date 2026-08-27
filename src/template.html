@@ -1248,6 +1248,9 @@
     transition: transform .3s ease, visibility .3s;
   }
   .bsheet.open { transform: translateY(0); visibility: visible; }
+  /* 第二層（子）bottom sheet：遮罩疊在第一層 sheet 之上、子 sheet 再疊其上；關子 sheet 不影響母 sheet */
+  .bs-mask--2 { z-index: 52; }
+  .bsheet.bs-sub { z-index: 53; }
   .bs-handle { width: 36px; height: 4px; border-radius: 2px; background: var(--kk-border-light); margin: 8px auto 0; flex: 0 0 auto; }
   .bs-bar {
     display: flex; align-items: center; height: 44px; padding: 4px 24px; flex: 0 0 auto;
@@ -1989,6 +1992,7 @@
 
   <!-- bottom sheets -->
   <div class="bs-mask" id="bsMask"></div>
+  <div class="bs-mask bs-mask--2" id="bsMask2"></div><!-- 第二層 sheet 遮罩 -->
 
   <div class="bsheet" id="bsRegion">
     <div class="bs-handle"></div>
@@ -2404,11 +2408,11 @@
     <div class="bs-body"><div class="tip-body"><div class="tip-h" id="tipH"></div><p class="tip-p" id="tipP"></p></div></div>
   </div>
 
-  <!-- 篩選板塊 ⓘ tooltip：規格詳情表格 sheet（選項規格 | 含義，Figma 1515-135054） -->
-  <div class="bsheet tall" id="catTipSheet">
+  <!-- 篩選板塊 ⓘ tooltip：規格詳情表格 sheet（選項規格 | 含義，Figma 1515-135054）；第二層 sheet -->
+  <div class="bsheet tall bs-sub" id="catTipSheet">
     <div class="bs-handle"></div>
     <div class="bs-bar">
-      <button class="bs-close" data-bs-close aria-label="關閉"><span class="ic ic-24">{{IC_cross}}</span></button>
+      <button class="bs-close" id="catTipClose" aria-label="關閉"><span class="ic ic-24">{{IC_cross}}</span></button>
       <span class="bs-title">規格詳情</span>
       <span class="bs-spacer"></span>
     </div>
@@ -3499,6 +3503,7 @@
 
   // ================= bottom sheets =================
   var bsMask = document.getElementById('bsMask');
+  var bsMask2 = document.getElementById('bsMask2');
   function openSheet(el) {
     bsMask.classList.add('open');
     el.classList.add('open');
@@ -3509,10 +3514,16 @@
     // 總篩選/單類目內再開啟日曆會疊兩層鎖(計數2)，只解一次會讓 body 卡在 fixed 點不動。
     var openCount = document.querySelectorAll('.bsheet.open').length;
     bsMask.classList.remove('open');
+    bsMask2.classList.remove('open');
     document.querySelectorAll('.bsheet').forEach(function (s) { s.classList.remove('open'); });
     for (var i = 0; i < openCount; i++) unlockBody();  // 計數式鎖：modal 若還開著會保持鎖定
   }
+  // 第二層 sheet：自帶更高遮罩、只開/關自己，母 sheet 不受影響
+  function openSubSheet(el) { bsMask2.classList.add('open'); el.classList.add('open'); lockBody(); }
+  function closeSubSheet(el) { bsMask2.classList.remove('open'); el.classList.remove('open'); unlockBody(); }
   bsMask.addEventListener('click', closeSheets);
+  bsMask2.addEventListener('click', function () { closeSubSheet(document.getElementById('catTipSheet')); });
+  document.getElementById('catTipClose').addEventListener('click', function () { closeSubSheet(document.getElementById('catTipSheet')); });
   document.querySelectorAll('[data-bs-close]').forEach(function (b) {
     b.addEventListener('click', closeSheets);
   });
@@ -4602,7 +4613,7 @@
     var html = '<div class="cattip-row cattip-head"><div class="c1">選項規格</div><div class="c2">含義</div></div>';
     t.rows.forEach(function (r) { html += '<div class="cattip-row"><div class="c1">' + r[0] + '</div><div class="c2">' + r[1] + '</div></div>'; });
     document.getElementById('catTipTable').innerHTML = html;
-    openSheet(document.getElementById('catTipSheet'));
+    openSubSheet(document.getElementById('catTipSheet'));  // 第二層：自帶遮罩，關閉不影響篩選 sheet
   }
   function clampIntroSheet(elm) {
     if (!elm) return;
