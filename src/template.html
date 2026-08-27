@@ -4070,11 +4070,11 @@
   // 外層篩選行兩類：expand=開 sheet（帶確定 footer）；date=直接開日曆；quick=直接切換（無 sheet）
   // 外層：日期 + IP類型(下拉) + 快捷(5G/支援熱點/立即確認/即買即用/免費取消)。
   // 快捷＝catval：直接切換對應總篩選類目的值 → 外層與總篩選自動關聯（同一份 fState）
+  // 橫向篩選 chips 順序對齊 Figma 1494-131060：篩選(固定) · 排序 · SIM卡類型▾ · 支援熱點 · 立即確認 · 即買即用 · 免費取消
   function outerRow() {
     return [
       { type: 'sort' },
-      { type: 'expand', cat: 'ipType' },
-      { type: 'catval', cat: 'speed', val: '5G' },
+      { type: 'expand', cat: 'cardType' },
       { type: 'catval', cat: 'features', val: '支援熱點' },
       { type: 'catval', cat: 'service', val: '立即確認' },
       { type: 'catval', cat: 'service', val: '即買即用' },
