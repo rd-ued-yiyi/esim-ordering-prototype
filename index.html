@@ -1029,6 +1029,15 @@
   .det-table .td-k { flex: 0 0 120px; padding: 16px; font-size: 14px; line-height: 20px; color: var(--kk-text-dark); box-sizing: border-box; }
   .det-table .td-v { flex: 1 1 0; min-width: 0; padding: 16px 16px 16px 16px; font-size: 14px; line-height: 20px; color: var(--kk-text-darker); }
   .det-table .td-v .v-inner { font-size: 14px; line-height: 20px; }
+  /* 帶 tooltip 的值格：整格(文字+icon)可點，展開規格詳情 sheet（Figma 1515-135366） */
+  .det-table .td-v--tip { cursor: pointer; }
+  .det-table .td-v--tip .td-info { display: inline-flex; vertical-align: -3px; margin-left: 4px; width: 16px; height: 16px; }
+  .det-table .td-v--tip .td-info img { width: 16px; height: 16px; }
+  .det-table .td-v--tip:active { opacity: .6; }
+  /* 規格詳情 sheet 內容 */
+  .tip-body { padding: 16px 24px 24px; }
+  .tip-h { font-size: 16px; line-height: 24px; font-weight: 600; color: var(--kk-text-darker); margin-bottom: 12px; }
+  .tip-p { margin: 0; font-size: 14px; line-height: 22px; color: var(--kk-text-dark); white-space: pre-wrap; }
   /* 規格總覽：當前選擇高亮（Figma 998-42155）——首行 cyan 粗體值 + 「✓當前」pill，下方列其餘檔位 */
   .det-table .spec-cur { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
   .det-table .cur-val { font-size: 14px; line-height: 20px; font-weight: 600; color: #13A3B6; }
@@ -2218,31 +2227,32 @@
         <h3 class="det-h2">基本資訊</h3>
         <!-- 商品描述移到「基本資訊」標題下、表格上（Figma 1009-43085） -->
         <p class="det-intro" id="detIntro">依據購買天數，可額外享有 3GB~30GB 的熱點分享流量。由連續兩年榮獲 Opensignal 網路可靠性全球大獎的電信網路提供連線，訊號覆蓋率高，市區、離島與山區都能穩定上網；搭配 KKday App 可隨時查詢剩餘流量，客服 24 小時線上協助安裝與連線問題。</p>
-        <!-- 順序按 Figma 1164-97098：卡片規格 / 網路詳情 / 通話與簡訊 / 啟用設定 / 加值與限制 / 商品規格總覽 -->
+        <!-- 分組順序對齊 Figma 1249-109383：卡片規格 → 通話與簡訊 → 啟用設定 → 加值與限制 → 網路詳情。
+             部分值後帶 ⓘ（點文字+icon 展開「規格詳情」bottom sheet，Figma 1515-135366） -->
         <div class="det-table">
           <div class="th">卡片規格</div>
           <div class="tr"><div class="td-k">SIM 卡片規格</div><div class="td-v">eSIM</div></div>
-          <div class="tr"><div class="td-k">SIM類型</div><div class="td-v" id="dtSimType"></div></div>
-          <div class="tr"><div class="td-k">卡片有效期</div><div class="td-v">2030-12-12 前有效</div></div>
+          <div class="tr"><div class="td-k">SIM類型</div><div class="td-v td-v--tip" data-tip="simType"><span id="dtSimType"></span><span class="ic ic-16 td-info"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjEzIiBoZWlnaHQ9IjEzIiB2aWV3Qm94PSIwIDAgMTMgMTMiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJWZWN0b3IiPgo8cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTYuNSAxQzMuNDYyNDMgMSAxIDMuNDYyNDMgMSA2LjVDMSA5LjUzNzU3IDMuNDYyNDMgMTIgNi41IDEyQzkuNTM3NTcgMTIgMTIgOS41Mzc1NyAxMiA2LjVDMTIgMy40NjI0MyA5LjUzNzU3IDEgNi41IDFaTTAgNi41QzAgMi45MTAxNSAyLjkxMDE1IDAgNi41IDBDMTAuMDg5OSAwIDEzIDIuOTEwMTUgMTMgNi41QzEzIDEwLjA4OTkgMTAuMDg5OSAxMyA2LjUgMTNDMi45MTAxNSAxMyAwIDEwLjA4OTkgMCA2LjVaIiBmaWxsPSIjNzI3MjcyIi8+CjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNNS41IDZDNS41IDUuNzIzODYgNS43MjM4NiA1LjUgNiA1LjVINi41QzYuNzc2MTQgNS41IDcgNS43MjM4NiA3IDZWOUM3LjI3NjE0IDkgNy41IDkuMjIzODYgNy41IDkuNUM3LjUgOS43NzYxNCA3LjI3NjE0IDEwIDcgMTBINi41QzYuMjIzODYgMTAgNiA5Ljc3NjE0IDYgOS41VjYuNUM1LjcyMzg2IDYuNSA1LjUgNi4yNzYxNCA1LjUgNloiIGZpbGw9IiM3MjcyNzIiLz4KPHBhdGggZD0iTTYuMzc1IDQuNUM2Ljc4OTIxIDQuNSA3LjEyNSA0LjE2NDIxIDcuMTI1IDMuNzVDNy4xMjUgMy4zMzU3OSA2Ljc4OTIxIDMgNi4zNzUgM0M1Ljk2MDc5IDMgNS42MjUgMy4zMzU3OSA1LjYyNSAzLjc1QzUuNjI1IDQuMTY0MjEgNS45NjA3OSA0LjUgNi4zNzUgNC41WiIgZmlsbD0iIzcyNzI3MiIvPgo8L2c+Cjwvc3ZnPg==" width="13.00" height="13.00"></span></div></div>
+          <div class="tr"><div class="td-k">卡片有效期</div><div class="td-v td-v--tip" data-tip="validCard"><span>2030-12-12 前有效</span><span class="ic ic-16 td-info"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjEzIiBoZWlnaHQ9IjEzIiB2aWV3Qm94PSIwIDAgMTMgMTMiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJWZWN0b3IiPgo8cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTYuNSAxQzMuNDYyNDMgMSAxIDMuNDYyNDMgMSA2LjVDMSA5LjUzNzU3IDMuNDYyNDMgMTIgNi41IDEyQzkuNTM3NTcgMTIgMTIgOS41Mzc1NyAxMiA2LjVDMTIgMy40NjI0MyA5LjUzNzU3IDEgNi41IDFaTTAgNi41QzAgMi45MTAxNSAyLjkxMDE1IDAgNi41IDBDMTAuMDg5OSAwIDEzIDIuOTEwMTUgMTMgNi41QzEzIDEwLjA4OTkgMTAuMDg5OSAxMyA2LjUgMTNDMi45MTAxNSAxMyAwIDEwLjA4OTkgMCA2LjVaIiBmaWxsPSIjNzI3MjcyIi8+CjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNNS41IDZDNS41IDUuNzIzODYgNS43MjM4NiA1LjUgNiA1LjVINi41QzYuNzc2MTQgNS41IDcgNS43MjM4NiA3IDZWOUM3LjI3NjE0IDkgNy41IDkuMjIzODYgNy41IDkuNUM3LjUgOS43NzYxNCA3LjI3NjE0IDEwIDcgMTBINi41QzYuMjIzODYgMTAgNiA5Ljc3NjE0IDYgOS41VjYuNUM1LjcyMzg2IDYuNSA1LjUgNi4yNzYxNCA1LjUgNloiIGZpbGw9IiM3MjcyNzIiLz4KPHBhdGggZD0iTTYuMzc1IDQuNUM2Ljc4OTIxIDQuNSA3LjEyNSA0LjE2NDIxIDcuMTI1IDMuNzVDNy4xMjUgMy4zMzU3OSA2Ljc4OTIxIDMgNi4zNzUgM0M1Ljk2MDc5IDMgNS42MjUgMy4zMzU3OSA1LjYyNSAzLjc1QzUuNjI1IDQuMTY0MjEgNS45NjA3OSA0LjUgNi4zNzUgNC41WiIgZmlsbD0iIzcyNzI3MiIvPgo8L2c+Cjwvc3ZnPg==" width="13.00" height="13.00"></span></div></div>
           <div class="tr"><div class="td-k">卡片供應商</div><div class="td-v" id="dtVendor"></div></div>
-          <div class="th">網路詳情</div>
-          <div class="tr"><div class="td-k">電信商</div><div class="td-v" id="dtCarrier"></div></div>
-          <div class="tr"><div class="td-k">虛擬運營商MVNO</div><div class="td-v" id="dtMvno"></div></div>
-          <div class="tr"><div class="td-k">網路資源</div><div class="td-v" id="dtNet"></div></div>
-          <div class="tr"><div class="td-k">IP型別</div><div class="td-v" id="dtIp"></div></div>
-          <div class="tr"><div class="td-k">傳輸規格</div><div class="td-v" id="dtTrans"></div></div>
           <div class="th">通話與簡訊</div>
           <div class="tr"><div class="td-k">是否含通話</div><div class="td-v" id="dtCall"></div></div>
           <div class="tr"><div class="td-k">是否含簡訊</div><div class="td-v" id="dtSms"></div></div>
           <div class="tr"><div class="td-k">支援熱點</div><div class="td-v" id="dtHotspot"></div></div>
           <div class="tr"><div class="td-k">其他</div><div class="td-v" id="dtCallFee"></div></div>
           <div class="th">啟用設定</div>
-          <div class="tr"><div class="td-k">啟用方式</div><div class="td-v" id="dtActivate"></div></div>
-          <div class="tr"><div class="td-k">流量啟用計算方式</div><div class="td-v" id="dtCalc"></div></div>
+          <div class="tr"><div class="td-k">啟用方式</div><div class="td-v td-v--tip" data-tip="activate"><span id="dtActivate"></span><span class="ic ic-16 td-info"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjEzIiBoZWlnaHQ9IjEzIiB2aWV3Qm94PSIwIDAgMTMgMTMiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJWZWN0b3IiPgo8cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTYuNSAxQzMuNDYyNDMgMSAxIDMuNDYyNDMgMSA2LjVDMSA5LjUzNzU3IDMuNDYyNDMgMTIgNi41IDEyQzkuNTM3NTcgMTIgMTIgOS41Mzc1NyAxMiA2LjVDMTIgMy40NjI0MyA5LjUzNzU3IDEgNi41IDFaTTAgNi41QzAgMi45MTAxNSAyLjkxMDE1IDAgNi41IDBDMTAuMDg5OSAwIDEzIDIuOTEwMTUgMTMgNi41QzEzIDEwLjA4OTkgMTAuMDg5OSAxMyA2LjUgMTNDMi45MTAxNSAxMyAwIDEwLjA4OTkgMCA2LjVaIiBmaWxsPSIjNzI3MjcyIi8+CjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNNS41IDZDNS41IDUuNzIzODYgNS43MjM4NiA1LjUgNiA1LjVINi41QzYuNzc2MTQgNS41IDcgNS43MjM4NiA3IDZWOUM3LjI3NjE0IDkgNy41IDkuMjIzODYgNy41IDkuNUM3LjUgOS43NzYxNCA3LjI3NjE0IDEwIDcgMTBINi41QzYuMjIzODYgMTAgNiA5Ljc3NjE0IDYgOS41VjYuNUM1LjcyMzg2IDYuNSA1LjUgNi4yNzYxNCA1LjUgNloiIGZpbGw9IiM3MjcyNzIiLz4KPHBhdGggZD0iTTYuMzc1IDQuNUM2Ljc4OTIxIDQuNSA3LjEyNSA0LjE2NDIxIDcuMTI1IDMuNzVDNy4xMjUgMy4zMzU3OSA2Ljc4OTIxIDMgNi4zNzUgM0M1Ljk2MDc5IDMgNS42MjUgMy4zMzU3OSA1LjYyNSAzLjc1QzUuNjI1IDQuMTY0MjEgNS45NjA3OSA0LjUgNi4zNzUgNC41WiIgZmlsbD0iIzcyNzI3MiIvPgo8L2c+Cjwvc3ZnPg==" width="13.00" height="13.00"></span></div></div>
+          <div class="tr"><div class="td-k">流量啟用計算方式</div><div class="td-v td-v--tip" data-tip="calc"><span id="dtCalc"></span><span class="ic ic-16 td-info"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjEzIiBoZWlnaHQ9IjEzIiB2aWV3Qm94PSIwIDAgMTMgMTMiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJWZWN0b3IiPgo8cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTYuNSAxQzMuNDYyNDMgMSAxIDMuNDYyNDMgMSA2LjVDMSA5LjUzNzU3IDMuNDYyNDMgMTIgNi41IDEyQzkuNTM3NTcgMTIgMTIgOS41Mzc1NyAxMiA2LjVDMTIgMy40NjI0MyA5LjUzNzU3IDEgNi41IDFaTTAgNi41QzAgMi45MTAxNSAyLjkxMDE1IDAgNi41IDBDMTAuMDg5OSAwIDEzIDIuOTEwMTUgMTMgNi41QzEzIDEwLjA4OTkgMTAuMDg5OSAxMyA2LjUgMTNDMi45MTAxNSAxMyAwIDEwLjA4OTkgMCA2LjVaIiBmaWxsPSIjNzI3MjcyIi8+CjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNNS41IDZDNS41IDUuNzIzODYgNS43MjM4NiA1LjUgNiA1LjVINi41QzYuNzc2MTQgNS41IDcgNS43MjM4NiA3IDZWOUM3LjI3NjE0IDkgNy41IDkuMjIzODYgNy41IDkuNUM3LjUgOS43NzYxNCA3LjI3NjE0IDEwIDcgMTBINi41QzYuMjIzODYgMTAgNiA5Ljc3NjE0IDYgOS41VjYuNUM1LjcyMzg2IDYuNSA1LjUgNi4yNzYxNCA1LjUgNloiIGZpbGw9IiM3MjcyNzIiLz4KPHBhdGggZD0iTTYuMzc1IDQuNUM2Ljc4OTIxIDQuNSA3LjEyNSA0LjE2NDIxIDcuMTI1IDMuNzVDNy4xMjUgMy4zMzU3OSA2Ljc4OTIxIDMgNi4zNzUgM0M1Ljk2MDc5IDMgNS42MjUgMy4zMzU3OSA1LjYyNSAzLjc1QzUuNjI1IDQuMTY0MjEgNS45NjA3OSA0LjUgNi4zNzUgNC41WiIgZmlsbD0iIzcyNzI3MiIvPgo8L2c+Cjwvc3ZnPg==" width="13.00" height="13.00"></span></div></div>
           <div class="tr"><div class="td-k">套餐有效期</div><div class="td-v" id="dtValid"></div></div>
           <div class="th">加值與限制</div>
           <div class="tr"><div class="td-k">是否加值</div><div class="td-v" id="dtTopup"></div></div>
           <div class="tr"><div class="td-k">不支援裝置</div><div class="td-v">非全網通/鎖網機型，以及不支援 eSIM 的部分舊款裝置</div></div>
+          <div class="th">網路詳情</div>
+          <div class="tr"><div class="td-k">電信商</div><div class="td-v" id="dtCarrier"></div></div>
+          <div class="tr"><div class="td-k">虛擬運營商MVNO</div><div class="td-v" id="dtMvno"></div></div>
+          <div class="tr"><div class="td-k">網路資源</div><div class="td-v" id="dtNet"></div></div>
+          <div class="tr"><div class="td-k">IP型別</div><div class="td-v" id="dtIp"></div></div>
+          <div class="tr"><div class="td-k">傳輸規格</div><div class="td-v" id="dtTrans"></div></div>
         </div>
       </section>
 
@@ -2468,6 +2478,17 @@
       <div class="cpn-note"><span class="ic ic-20"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjEzIiBoZWlnaHQ9IjEzIiB2aWV3Qm94PSIwIDAgMTMgMTMiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGlkPSJWZWN0b3IiIGQ9Ik02LjUgMEM1LjIxNDQyIDAgMy45NTc3MiAwLjM4MTIxOCAyLjg4ODggMS4wOTU0NUMxLjgxOTg4IDEuODA5NjggMC45ODY3NTYgMi44MjQ4NCAwLjQ5NDc4NiA0LjAxMjU2QzAuMDAyODE2MzIgNS4yMDAyOCAtMC4xMjU5MDUgNi41MDcyMSAwLjEyNDg5OSA3Ljc2ODA5QzAuMzc1NzAzIDkuMDI4OTYgMC45OTQ3NjggMTAuMTg3MiAxLjkwMzgxIDExLjA5NjJDMi44MTI4NSAxMi4wMDUyIDMuOTcxMDQgMTIuNjI0MyA1LjIzMTkyIDEyLjg3NTFDNi40OTI3OSAxMy4xMjU5IDcuNzk5NzMgMTIuOTk3MiA4Ljk4NzQ0IDEyLjUwNTJDMTAuMTc1MiAxMi4wMTMyIDExLjE5MDMgMTEuMTgwMSAxMS45MDQ2IDEwLjExMTJDMTIuNjE4OCA5LjA0MjI5IDEzIDcuNzg1NTggMTMgNi41QzEyLjk5ODEgNC43NzY2OSAxMi4zMTI2IDMuMTI0NTIgMTEuMDk0IDEuOTA1OTZDOS44NzU0OCAwLjY4NzM5NiA4LjIyMzMxIDAuMDAxOTUwNDkgNi41IDBWMFpNNi4zNzUwNCAzLjAwMDAyQzYuNTIzMzcgMy4wMDAwMiA2LjY2ODM4IDMuMDQ0MDEgNi43OTE3MSAzLjEyNjQyQzYuOTE1MDUgMy4yMDg4MyA3LjAxMTE4IDMuMzI1OTcgNy4wNjc5NSAzLjQ2MzAxQzcuMTI0NzEgMy42MDAwNiA3LjEzOTU2IDMuNzUwODYgNy4xMTA2MyAzLjg5NjM0QzcuMDgxNjkgNC4wNDE4MyA3LjAxMDI2IDQuMTc1NDYgNi45MDUzNyA0LjI4MDM1QzYuODAwNDggNC4zODUyNCA2LjY2Njg0IDQuNDU2NjcgNi41MjEzNSA0LjQ4NTYxQzYuMzc1ODcgNC41MTQ1NSA2LjIyNTA3IDQuNDk5NyA2LjA4ODAyIDQuNDQyOTNDNS45NTA5OCA0LjM4NjE3IDUuODMzODUgNC4yOTAwNCA1Ljc1MTQ0IDQuMTY2N0M1LjY2OTAyIDQuMDQzMzYgNS42MjUwNCAzLjg5ODM2IDUuNjI1MDQgMy43NTAwMkM1LjYyNTA0IDMuNTUxMTEgNS43MDQwNSAzLjM2MDM1IDUuODQ0NzEgMy4yMTk2OUM1Ljk4NTM2IDMuMDc5MDQgNi4xNzYxMiAzLjAwMDAyIDYuMzc1MDQgMy4wMDAwMlYzLjAwMDAyWk03LjAwMDAxIDEwSDYuNTAwMDFDNi4zNjc0IDkuOTk5OTkgNi4yNDAyMyA5Ljk0NzMxIDYuMTQ2NDYgOS44NTM1NUM2LjA1MjY5IDkuNzU5NzggNi4wMDAwMSA5LjYzMjYxIDYuMDAwMDEgOS41VjYuNUM1Ljg2NzQgNi41IDUuNzQwMjIgNi40NDczMiA1LjY0NjQ1IDYuMzUzNTVDNS41NTI2OCA2LjI1OTc5IDUuNTAwMDEgNi4xMzI2MSA1LjUwMDAxIDZDNS41MDAwMSA1Ljg2NzM5IDUuNTUyNjggNS43NDAyMSA1LjY0NjQ1IDUuNjQ2NDVDNS43NDAyMiA1LjU1MjY4IDUuODY3NCA1LjUgNi4wMDAwMSA1LjVINi41MDAwMUM2LjYzMjYxIDUuNTAwMDEgNi43NTk3OSA1LjU1MjY5IDYuODUzNTUgNS42NDY0NUM2Ljk0NzMyIDUuNzQwMjIgNyA1Ljg2NzM5IDcuMDAwMDEgNlY5QzcuMTMyNjEgOSA3LjI1OTc5IDkuMDUyNjggNy4zNTM1NiA5LjE0NjQ1QzcuNDQ3MzMgOS4yNDAyMSA3LjUwMDAxIDkuMzY3MzkgNy41MDAwMSA5LjVDNy41MDAwMSA5LjYzMjYxIDcuNDQ3MzMgOS43NTk3OCA3LjM1MzU2IDkuODUzNTVDNy4yNTk3OSA5Ljk0NzMyIDcuMTMyNjEgMTAgNy4wMDAwMSAxMFoiIGZpbGw9IiMyRDg0RDYiLz4KPC9zdmc+" width="13.00" height="13.00"></span><span>領取成功後可以在付款時選擇抵扣使用</span></div>
       <div class="cpn-list" id="cpnList"></div>
     </div>
+  </div>
+
+  <!-- 規格詳情 tooltip bottom sheet（基本資訊 ⓘ → 展開說明，Figma 1515-135366） -->
+  <div class="bsheet" id="tipSheet">
+    <div class="bs-handle"></div>
+    <div class="bs-bar">
+      <button class="bs-close" data-bs-close aria-label="關閉"><span class="ic ic-24"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjEzLjA2NzciIGhlaWdodD0iMTMuMDY3NyIgdmlld0JveD0iMCAwIDEzLjA2NzcgMTMuMDY3NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgaWQ9IlZlY3RvciI+CjxwYXRoIGQ9Ik0xMi44NDgxIDEuMjgwMzNDMTMuMTQxIDAuOTg3NDM3IDEzLjE0MSAwLjUxMjU2MyAxMi44NDgxIDAuMjE5NjdDMTIuNTU1MiAtMC4wNzMyMjMzIDEyLjA4MDMgLTAuMDczMjIzMyAxMS43ODc0IDAuMjE5NjdMNi41MzM4NyA1LjQ3MzIxTDEuMjgwMzMgMC4yMTk2N0MwLjk4NzQzNyAtMC4wNzMyMjMzIDAuNTEyNTYzIC0wLjA3MzIyMzMgMC4yMTk2NyAwLjIxOTY3Qy0wLjA3MzIyMzMgMC41MTI1NjMgLTAuMDczMjIzMyAwLjk4NzQzNyAwLjIxOTY3IDEuMjgwMzNMNS40NzMyMSA2LjUzMzg3TDAuMjE5NjcgMTEuNzg3NEMtMC4wNzMyMjMzIDEyLjA4MDMgLTAuMDczMjIzMyAxMi41NTUyIDAuMjE5NjcgMTIuODQ4MUMwLjUxMjU2MyAxMy4xNDEgMC45ODc0MzcgMTMuMTQxIDEuMjgwMzMgMTIuODQ4MUw2LjUzMzg3IDcuNTk0NTNMMTEuNzg3NCAxMi44NDgxQzEyLjA4MDMgMTMuMTQxIDEyLjU1NTIgMTMuMTQxIDEyLjg0ODEgMTIuODQ4MUMxMy4xNDEgMTIuNTU1MiAxMy4xNDEgMTIuMDgwMyAxMi44NDgxIDExLjc4NzRMNy41OTQ1MyA2LjUzMzg3TDEyLjg0ODEgMS4yODAzM1oiIGZpbGw9ImJsYWNrIi8+CjwvZz4KPC9zdmc+" width="13.07" height="13.07"></span></button>
+      <span class="bs-title">規格詳情</span>
+      <span class="bs-spacer"></span>
+    </div>
+    <div class="bs-body"><div class="tip-body"><div class="tip-h" id="tipH"></div><p class="tip-p" id="tipP"></p></div></div>
   </div>
 
   <!-- 方案描述 bottom sheet（基本資訊描述「更多」→ 展開全文，Figma 1515-135291） -->
@@ -4620,6 +4641,21 @@
     document.getElementById('descSheetText').textContent = text;
     openSheet(document.getElementById('descSheet'));
   }
+  // 基本資訊 ⓘ tooltip：點值格(文字+icon)→ 開「規格詳情」sheet（標題用值文字，Figma 1515-135366）
+  var SPEC_TIPS = {
+    simType: '原生卡直接接入當地電信商的本地網路，與當地用戶共用相同網路資源，訊號穩定、延遲低；國際漫遊卡則透過漫遊接入，覆蓋範圍更廣但速度可能略降。',
+    validCard: '卡片有效期指此 eSIM 需在該日期前完成啟用，逾期未啟用即失效。啟用後的可用天數另依「套餐有效期」計算。',
+    activate: '抵達目的地後掃描憑證中的 QR Code 安裝 eSIM，裝置會自動連接當地合作電信商網路，無需手動設定 APN。',
+    calc: '流量自「首次成功連上網路」起算，之後每日以當地時間 00:00 為分界重置每日高速流量額度。'
+  };
+  function openTipSheet(cell) {
+    document.getElementById('tipH').textContent = (cell.querySelector('span') || {}).textContent || '';
+    document.getElementById('tipP').textContent = SPEC_TIPS[cell.getAttribute('data-tip')] || '';
+    openSheet(document.getElementById('tipSheet'));
+  }
+  document.querySelectorAll('.td-v--tip').forEach(function (c) {
+    c.addEventListener('click', function () { openTipSheet(c); });
+  });
   function clampIntroSheet(elm) {
     if (!elm) return;
     var full = elm.dataset.full || elm.textContent;
