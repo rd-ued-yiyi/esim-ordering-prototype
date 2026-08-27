@@ -776,7 +776,7 @@
   .pl-body { padding: 12px 16px 24px; }
   /* 此設備支援 eSIM 提示（Figma 1459-130499）：青勾 icon 20 + 深字 14/20（原為青字 12） */
   .pl-note { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; font-size: 14px; line-height: 20px; color: var(--kk-text-darker); }
-  .pl-note .ic img { width: 20px; height: 20px; }
+  .pl-note .ic img { width: 16px; height: 16px; }  /* 提醒 icon 縮小為 16（原 20 偏大）*/
   /* checkCircle 資產是 24 框裸向量（19.5px），16 框內實際佔位 13×13（inset 9.38%，Figma 821-38628） */
   .inline-note .ic img { width: 13px; height: 13px; }
 
@@ -784,9 +784,9 @@
   .pkg-head { display: flex; align-items: flex-start; gap: 4px; width: 100%; text-align: left; }
   .pkg-title { flex: 1 1 0; min-width: 0; font-size: 18px; line-height: 26px; font-weight: 600; color: var(--kk-text-darker);
     display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 1; overflow: hidden; text-align: left; }  /* 標題一律 1 行，超出尾部省略 */
-  .pkg-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
-  .pkg-tag { background: var(--kk-surface-light); border-radius: var(--r-sm); padding: 2px 4px;
-    font-size: 12px; line-height: 16px; color: var(--kk-text-darker); }
+  .pkg-tags { display: flex; flex-wrap: nowrap; overflow: hidden; gap: 6px; margin-top: 6px; }  /* 標籤限單行；溢出的由 JS fitTagsRow 移除（不換行、不裁半個） */
+  .pkg-tag { flex: 0 0 auto; white-space: nowrap; background: var(--kk-surface-light); border-radius: var(--r-sm); padding: 2px 4px;
+    font-size: 12px; line-height: 16px; color: var(--kk-text-darker); }  /* 不縮不換：整顆保持原寬，溢出交由 fitTagsRow 整顆移除 */
   /* HOT 標籤（銷量前三，Figma 1202-105544）：critical-lighter 底 #FFF2F2 + 實心火苗 #E65F50 16px + 深字 #212121 */
   .pkg-tag--hot { display: inline-flex; align-items: center; gap: 4px; background: #FFF2F2; padding: 2px 4px; }
   .pkg-tag--hot .ic { width: 16px; height: 16px; }
@@ -2000,7 +2000,7 @@
         </div>
       </div>
       <div class="pl-body">
-        <div class="pl-note"><span class="ic ic-20"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE5LjUiIGhlaWdodD0iMTkuNSIgdmlld0JveD0iMCAwIDE5LjUgMTkuNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZD0iTTkuNzUgMEM3LjgyMTY0IDAgNS45MzY1NyAwLjU3MTgyOCA0LjMzMzE5IDEuNjQzMTdDMi43Mjk4MiAyLjcxNDUyIDEuNDgwMTMgNC4yMzcyNiAwLjc0MjE3OSA2LjAxODg0QzAuMDA0MjI0NDkgNy44MDA0MiAtMC4xODg4NTggOS43NjA4MiAwLjE4NzM0OCAxMS42NTIxQzAuNTYzNTU0IDEzLjU0MzQgMS40OTIxNSAxNS4yODA3IDIuODU1NzEgMTYuNjQ0M0M0LjIxOTI4IDE4LjAwNzkgNS45NTY1NiAxOC45MzY1IDcuODQ3ODcgMTkuMzEyN0M5LjczOTE5IDE5LjY4ODkgMTEuNjk5NiAxOS40OTU4IDEzLjQ4MTIgMTguNzU3OEMxNS4yNjI3IDE4LjAxOTkgMTYuNzg1NSAxNi43NzAyIDE3Ljg1NjggMTUuMTY2OEMxOC45MjgyIDEzLjU2MzQgMTkuNSAxMS42Nzg0IDE5LjUgOS43NUMxOS40OTcgNy4xNjUwNiAxOC40Njg4IDQuNjg2ODQgMTYuNjQxIDIuODU5MDFDMTQuODEzMiAxLjAzMTE4IDEyLjMzNDkgMC4wMDI5ODc2MyA5Ljc1IDBWMFpNMTQuMzkzNiA4LjA0MjcyTDguODkzMDcgMTMuMjkyN0M4Ljc1MzIyIDEzLjQyNTggOC41Njc1NiAxMy41IDguMzc0NTIgMTMuNUM4LjE4MTQ3IDEzLjUgNy45OTU4MiAxMy40MjU4IDcuODU1OTYgMTMuMjkyN0w1LjEwNjQ1IDEwLjY2NzdDNC45NjI4IDEwLjUzMDEgNC44Nzk2NSAxMC4zNDExIDQuODc1MjQgMTAuMTQyM0M0Ljg3MDg0IDkuOTQzNDEgNC45NDU1NSA5Ljc1MDkyIDUuMDgyOTcgOS42MDcxQzUuMjIwMzggOS40NjMyOCA1LjQwOTI3IDkuMzc5ODkgNS42MDgxMyA5LjM3NTIzQzUuODA2OTkgOS4zNzA1OCA1Ljk5OTU2IDkuNDQ1MDQgNi4xNDM1NiA5LjU4MjI4TDguMzc0NTIgMTEuNzEyOUwxMy4zNTY0IDYuOTU3MjhDMTMuNTAwNCA2LjgyMDA0IDEzLjY5MyA2Ljc0NTU4IDEzLjg5MTkgNi43NTAyM0MxNC4wOTA3IDYuNzU0ODkgMTQuMjc5NiA2LjgzODI4IDE0LjQxNyA2Ljk4MjFDMTQuNTU0NSA3LjEyNTkyIDE0LjYyOTIgNy4zMTg0MSAxNC42MjQ4IDcuNTE3MjdDMTQuNjIwNCA3LjcxNjE0IDE0LjUzNzIgNy45MDUxMyAxNC4zOTM2IDguMDQyNzJWOC4wNDI3MloiIGZpbGw9IiMyNkJFQzkiLz4KPC9zdmc+" width="19.50" height="19.50"></span>此裝置支援使用 eSIM</div>
+        <div class="pl-note"><span class="ic ic-16"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE5LjUiIGhlaWdodD0iMTkuNSIgdmlld0JveD0iMCAwIDE5LjUgMTkuNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZD0iTTkuNzUgMEM3LjgyMTY0IDAgNS45MzY1NyAwLjU3MTgyOCA0LjMzMzE5IDEuNjQzMTdDMi43Mjk4MiAyLjcxNDUyIDEuNDgwMTMgNC4yMzcyNiAwLjc0MjE3OSA2LjAxODg0QzAuMDA0MjI0NDkgNy44MDA0MiAtMC4xODg4NTggOS43NjA4MiAwLjE4NzM0OCAxMS42NTIxQzAuNTYzNTU0IDEzLjU0MzQgMS40OTIxNSAxNS4yODA3IDIuODU1NzEgMTYuNjQ0M0M0LjIxOTI4IDE4LjAwNzkgNS45NTY1NiAxOC45MzY1IDcuODQ3ODcgMTkuMzEyN0M5LjczOTE5IDE5LjY4ODkgMTEuNjk5NiAxOS40OTU4IDEzLjQ4MTIgMTguNzU3OEMxNS4yNjI3IDE4LjAxOTkgMTYuNzg1NSAxNi43NzAyIDE3Ljg1NjggMTUuMTY2OEMxOC45MjgyIDEzLjU2MzQgMTkuNSAxMS42Nzg0IDE5LjUgOS43NUMxOS40OTcgNy4xNjUwNiAxOC40Njg4IDQuNjg2ODQgMTYuNjQxIDIuODU5MDFDMTQuODEzMiAxLjAzMTE4IDEyLjMzNDkgMC4wMDI5ODc2MyA5Ljc1IDBWMFpNMTQuMzkzNiA4LjA0MjcyTDguODkzMDcgMTMuMjkyN0M4Ljc1MzIyIDEzLjQyNTggOC41Njc1NiAxMy41IDguMzc0NTIgMTMuNUM4LjE4MTQ3IDEzLjUgNy45OTU4MiAxMy40MjU4IDcuODU1OTYgMTMuMjkyN0w1LjEwNjQ1IDEwLjY2NzdDNC45NjI4IDEwLjUzMDEgNC44Nzk2NSAxMC4zNDExIDQuODc1MjQgMTAuMTQyM0M0Ljg3MDg0IDkuOTQzNDEgNC45NDU1NSA5Ljc1MDkyIDUuMDgyOTcgOS42MDcxQzUuMjIwMzggOS40NjMyOCA1LjQwOTI3IDkuMzc5ODkgNS42MDgxMyA5LjM3NTIzQzUuODA2OTkgOS4zNzA1OCA1Ljk5OTU2IDkuNDQ1MDQgNi4xNDM1NiA5LjU4MjI4TDguMzc0NTIgMTEuNzEyOUwxMy4zNTY0IDYuOTU3MjhDMTMuNTAwNCA2LjgyMDA0IDEzLjY5MyA2Ljc0NTU4IDEzLjg5MTkgNi43NTAyM0MxNC4wOTA3IDYuNzU0ODkgMTQuMjc5NiA2LjgzODI4IDE0LjQxNyA2Ljk4MjFDMTQuNTU0NSA3LjEyNTkyIDE0LjYyOTIgNy4zMTg0MSAxNC42MjQ4IDcuNTE3MjdDMTQuNjIwNCA3LjcxNjE0IDE0LjUzNzIgNy45MDUxMyAxNC4zOTM2IDguMDQyNzJWOC4wNDI3MloiIGZpbGw9IiMyNkJFQzkiLz4KPC9zdmc+" width="19.50" height="19.50"></span>此裝置支援使用 eSIM</div>
         <div id="plList"></div>
       </div>
     </section>
@@ -2672,6 +2672,8 @@
       if (state.daysTouched) revealOpt(document.getElementById('dayChips'), false, '.chip.sel');
       else document.getElementById('dayChips').scrollLeft = 0;
     }
+    // 列表頁可見後才能量寬度：裁切各卡標籤到單行（進頁時 renderPlans 先於 go、量測為 0）
+    if (name === 'plans') requestAnimationFrame(fitAllCardTags);
   }
 
   // ---------- 目的地頁狀態 ----------
@@ -2929,6 +2931,7 @@
     dv.classList.toggle('has-value', state.daysTouched);  // 預設(未手動點選)＝淺灰；手動點選後＝深色(與標題同色 #212121)
     renderOpts();  // 天數變化聯動流量檔：起價重算、檔位過濾、推薦 badge 調整；內部 revealOpt 已把選中檔位滾回可視區
     updateCta();
+    if (current === 'plans') renderPlans('smooth');  // 列表頁改天數：重繪條件區(天數 chip 標籤)+卡片列表，否則點了沒反應
   }
   document.querySelectorAll('#dayChips .chip').forEach(function (el) {
     el.addEventListener('click', function () {
@@ -4123,6 +4126,15 @@
       });
       box.appendChild(card);
     });
+    requestAnimationFrame(fitAllCardTags);  // 卡片標籤限單行，溢出的整顆移除（需在可視、有寬度時量測）
+  }
+  // 標籤單行裁切：從尾端逐顆移除，直到不再溢出一行（保留至少 1 顆、HOT 在最前不動）
+  function fitTagsRow(el) {
+    if (!el || !el.clientWidth) return;  // 隱藏態無寬度：略過，待可視時再裁
+    while (el.children.length > 1 && el.scrollWidth > el.clientWidth) el.removeChild(el.lastElementChild);
+  }
+  function fitAllCardTags() {
+    document.querySelectorAll('#plList .pkg-tags').forEach(fitTagsRow);
   }
   // 排序 bottom sheet（Figma 902-41325）：點選即應用
   function renderSortList() {
