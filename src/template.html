@@ -4052,17 +4052,18 @@
     var dest = destRaw().split(' ')[0];
     return (CARRIERS[dest] || CARRIERS['default']).slice();
   }
-  // 全篩選分割槽（總篩選 sheet 用）
+  // 全篩選分割槽（總篩選 sheet 用）；板塊順序對齊 Figma 970-50754：
+  // 包含功能 → SIM卡類型 → IP類型 → 網絡資源 → 傳輸規格 → 流量激活計算方式 → 服務保障 → 使用日期
   function filterCats() {
     return [
-      { key: 'date', label: '使用日期', opts: ['今天', '明天'], date: true, single: true, rect: true },
-      { key: 'service', label: '服務保障', opts: ['立即確認', '即買即用', '免費取消'] },
       { key: 'features', label: '包含功能', opts: ['支援熱點', '含本地通話', '可以加值'] },
+      { key: 'cardType', label: 'SIM卡類型', opts: ['原生卡', '國際漫遊卡'] },
+      { key: 'ipType', label: 'IP類型', opts: ['本地IP', '漫遊IP'] },
+      { key: 'network', label: '網絡資源', opts: ['本地', '漫遊'] },
       { key: 'speed', label: '傳輸規格', opts: ['5G', '5G/4G'] },
       { key: 'activate', label: '流量激活計算方式', opts: ['24小時制', '自然日制', '總量制'] },
-      { key: 'ipType', label: 'IP類型', opts: ['本地IP', '漫遊IP'] },
-      { key: 'cardType', label: 'SIM卡類型', opts: ['原生卡', '國際漫遊卡'] },
-      { key: 'network', label: '網絡資源', opts: ['本地', '漫遊'] }
+      { key: 'service', label: '服務保障', opts: ['立即確認', '即買即用', '免費取消'] },
+      { key: 'date', label: '使用日期', opts: ['今天', '明天'], date: true, single: true, rect: true }
     ];
   }
   function catByKey(k) { return filterCats().filter(function (c) { return c.key === k; })[0]; }
