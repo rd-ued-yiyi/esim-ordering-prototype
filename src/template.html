@@ -4002,10 +4002,10 @@
             '<div class="pkg-buy"><div class="pkg-price"></div><button class="pkg-cta">訂購</button></div></div>');
       card.querySelector('.chev-r').innerHTML = '<span class="rot90 ic">' + ICONS.chevDark + '</span>';
       card.querySelector('.pkg-title').textContent = p.title;
-      // 標題上方黃色提醒：顯示「需航班信息 / 需設備信息 / 需指定啟用日」；無此類則不顯示
+      // 標題上方黃色提醒：只顯示「需航班信息 / 需設備信息」（Figma 1202-105545）；無此類則不顯示
       var twEl = card.querySelector('.pkg-warns--title');
       if (twEl) {
-        var tw = (p.warns || []).filter(function (w) { return w === '需航班信息' || w === '需設備信息' || w === '需指定啟用日'; });
+        var tw = (p.warns || []).filter(function (w) { return w === '需航班信息' || w === '需設備信息'; });
         if (tw.length) {
           tw.forEach(function (w, wi) {
             if (wi) twEl.appendChild(el('<span class="wdiv"></span>'));
