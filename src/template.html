@@ -3815,7 +3815,8 @@
   // 3 無任何特別要求（訂單頁只有訂購人+備註）／2 需指定啟用日（訂單頁＝日期+聯絡人）／
   // 2 需設備+航班（訂單頁＝裝置+航班+聯絡人）／1 需實名（訂單頁＝旅客資料+聯絡人）
   var REQ_NONE = [], REQ_DATE = ['需指定啟用日'], REQ_DF = ['需航班信息', '需設備信息'], REQ_REAL = ['需線下實名認證'];  // 對齊 Figma 用語（需航班信息/需設備信息）
-  var REQ_PATTERN = [REQ_NONE, REQ_DATE, REQ_DF, REQ_NONE, REQ_REAL, REQ_DF, REQ_DATE, REQ_NONE];
+  var REQ_FLIGHT_DATE = ['需航班信息', '需指定啟用日'];  // 同時需航班資訊 + 需指定啟用日（訂單頁＝啟用日期+航班+聯絡人）
+  var REQ_PATTERN = [REQ_NONE, REQ_DATE, REQ_DF, REQ_FLIGHT_DATE, REQ_REAL, REQ_DF, REQ_DATE, REQ_NONE];
   // 供應商補充池：把每個目的地的供應商列表補足到 ≥8，讓 8 張卡的供應商各不重複
   var GEN_VENDORS = ['翔翼通訊', 'Joytel 樂遊', 'DJB', 'Telecom Square', 'Ubigi', 'jetfi', 'GLOBAL WiFi', '飛買家', 'SIM Local', 'WonderSIM'];
   // 電信商補足池：目的地電信商 < 4 家時補足，讓 4 張原生卡標題各接不同網、電信商不重複
@@ -4001,10 +4002,10 @@
             '<div class="pkg-buy"><div class="pkg-price"></div><button class="pkg-cta">訂購</button></div></div>');
       card.querySelector('.chev-r').innerHTML = '<span class="rot90 ic">' + ICONS.chevDark + '</span>';
       card.querySelector('.pkg-title').textContent = p.title;
-      // 標題上方黃色提醒：只顯示「需航班信息 / 需設備信息」（Figma 1202-105545）；無此類則不顯示
+      // 標題上方黃色提醒：顯示「需航班信息 / 需設備信息 / 需指定啟用日」；無此類則不顯示
       var twEl = card.querySelector('.pkg-warns--title');
       if (twEl) {
-        var tw = (p.warns || []).filter(function (w) { return w === '需航班信息' || w === '需設備信息'; });
+        var tw = (p.warns || []).filter(function (w) { return w === '需航班信息' || w === '需設備信息' || w === '需指定啟用日'; });
         if (tw.length) {
           tw.forEach(function (w, wi) {
             if (wi) twEl.appendChild(el('<span class="wdiv"></span>'));
