@@ -789,7 +789,8 @@
     font-size: 12px; line-height: 16px; color: #E78F37; }
   .pkg-warns .wdiv { width: 1px; height: 12px; background: var(--kk-border-lighter); }
   /* 標題上方提醒（Figma 1202-105545）：間距交由 .pkg-a-hg gap 4 控制、分隔線 10px、可換行 */
-  .pkg-warns--title { margin-top: 0; flex-wrap: wrap; row-gap: 2px; }
+  .pkg-warns--title { margin-top: 0; flex-wrap: nowrap; overflow: hidden; }  /* 限單行；溢出的整顆由 fitWarnsRow 移除 */
+  .pkg-warns--title > span { flex: 0 0 auto; white-space: nowrap; }  /* 標籤不縮不折，溢出才整顆去掉 */
   .pkg-warns--title .wdiv { height: 10px; }
   /* 供應商+評分 一欄（左），已購貼右底；無評分時移除評分行、已購與供應商同行不留白（Figma 1302-122326） */
   .pkg-social { display: flex; align-items: flex-end; gap: 6px; margin-top: 12px; }
@@ -4002,10 +4003,10 @@
             '<div class="pkg-buy"><div class="pkg-price"></div><button class="pkg-cta">訂購</button></div></div>');
       card.querySelector('.chev-r').innerHTML = '<span class="rot90 ic">' + ICONS.chevDark + '</span>';
       card.querySelector('.pkg-title').textContent = p.title;
-      // 標題上方黃色提醒：只顯示「需航班信息 / 需設備信息」（Figma 1202-105545）；無此類則不顯示
+      // 標題上方黃色提醒：顯示商品所有黃色標籤，限單行，溢出由 fitWarnsRow 整顆移除（Figma 1202-105534）
       var twEl = card.querySelector('.pkg-warns--title');
       if (twEl) {
-        var tw = (p.warns || []).filter(function (w) { return w === '需航班信息' || w === '需設備信息'; });
+        var tw = (p.warns || []).slice();
         if (tw.length) {
           tw.forEach(function (w, wi) {
             if (wi) twEl.appendChild(el('<span class="wdiv"></span>'));
@@ -4090,8 +4091,17 @@
     if (!el || !el.clientWidth) return;  // 隱藏態無寬度：略過，待可視時再裁
     while (el.children.length > 1 && el.scrollWidth > el.clientWidth) el.removeChild(el.lastElementChild);
   }
+  // 黃色提醒單行裁切：從尾端移除「標籤+其前的分隔線」，保留至少 1 顆
+  function fitWarnsRow(el) {
+    if (!el || !el.clientWidth) return;
+    while (el.scrollWidth > el.clientWidth && el.querySelectorAll('span:not(.wdiv)').length > 1) {
+      el.removeChild(el.lastElementChild);  // 末顆標籤
+      if (el.lastElementChild && el.lastElementChild.classList.contains('wdiv')) el.removeChild(el.lastElementChild);  // 其前分隔線
+    }
+  }
   function fitAllCardTags() {
     document.querySelectorAll('#plList .pkg-tags').forEach(fitTagsRow);
+    document.querySelectorAll('#plList .pkg-warns--title').forEach(fitWarnsRow);
   }
   // 排序 bottom sheet（Figma 902-41325）：點選即應用
   function renderSortList() {
