@@ -1226,11 +1226,17 @@
   }
   .page-header.show { opacity: 1; pointer-events: auto; box-shadow: var(--el-fixed); }
   .page-header .ph-back { display: flex; align-items: center; }
+  /* 標題＝選擇框（目的地頁：日本 ▾ 可重選，與列表頁一致）；主頁：純文字「eSIM」不可點 */
+  .page-header .ph-title-wrap {
+    flex: 1 1 0; min-width: 0; display: inline-flex; align-items: center; justify-content: center; gap: 4px;
+    background: none; border: 0; padding: 0 20px; cursor: pointer;
+  }
+  .page-header .ph-title-wrap:not(.is-sel) { pointer-events: none; cursor: default; }
   .page-header .ph-title {
-    flex: 1 1 0; min-width: 0; text-align: center; padding: 0 20px;
-    font-size: 16px; line-height: 24px; font-weight: 600; color: var(--kk-text-darker);
+    min-width: 0; font-size: 16px; line-height: 24px; font-weight: 600; color: var(--kk-text-darker);
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
+  .page-header .ph-title-wrap:active { transform: scale(.97); }
   .page-header .ph-spacer { width: 24px; }
 
   /* ================= bottom sheet 通用 ================= */
@@ -1987,7 +1993,10 @@
   <!-- 滾動置頂 header -->
   <div class="page-header" id="pageHeader">
     <button class="ph-back" data-action="back" aria-label="返回"><span class="ic ic-24">{{IC_back}}</span></button>
-    <span class="ph-title">eSIM</span>
+    <button class="ph-title-wrap" data-action="change-destination">
+      <span class="ph-title">eSIM</span>
+      <span class="ic ic-20 ph-chev" hidden>{{IC_arrowDown}}</span>
+    </button>
     <span class="ph-spacer"></span>
   </div>
 
@@ -3495,7 +3504,15 @@
   // ================= 滾動置頂 header =================
   function onPageScroll() {
     var y = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
-    document.getElementById('pageHeader').classList.toggle('show', y > 120 && current !== 'plans');
+    var showPh = y > 120 && current !== 'plans';
+    if (showPh) {  // 吸頂標題：目的地頁＝已選目的地選擇框（日本 ▾，點開重選，與列表頁一致）；主頁＝純文字「eSIM」
+      var dn = document.getElementById('destName');
+      var isDest = current === 'destination' && dn && dn.textContent.trim();
+      document.querySelector('#pageHeader .ph-title').textContent = isDest ? dn.textContent.trim() : 'eSIM';
+      document.querySelector('#pageHeader .ph-chev').hidden = !isDest;
+      document.querySelector('#pageHeader .ph-title-wrap').classList.toggle('is-sel', !!isDest);
+    }
+    document.getElementById('pageHeader').classList.toggle('show', showPh);
     var ph = document.querySelector('.pl-head');
     if (ph) ph.classList.toggle('scrolled', y > 4 && current === 'plans');
   }
