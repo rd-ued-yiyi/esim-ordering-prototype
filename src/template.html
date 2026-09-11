@@ -325,6 +325,9 @@
   .field-head .placeholder.has-value { color: var(--kk-text-darker); }  /* 手動選過天數後：值改為與標題同深色 #212121（強調已選）；未選時維持淺灰 placeholder */
   /* 箭頭緊跟值後（Figma 1268-110020：用卡天數 5天 › / 流量 5G/天 › 左對齊成組，箭頭不再推到最右）；A 天數、B 天數+流量皆適用 */
   #daysRow, #flowRow { gap: 12px; }  /* 標題↔值↔箭頭皆 12px（Figma 1268-110020：spacing-150），覆蓋 .field-head 的 8px */
+  /* 目的地頁「流量 ›」：標題+箭頭可點，開啟選擇流量 sheet */
+  .flow-sel-a { display: inline-flex; align-items: center; gap: 4px; flex: 0 0 auto; background: none; border: 0; padding: 0; cursor: pointer; }
+  .flow-sel-a:active { transform: scale(.97); }
   /* 方案 B：目的地頁流量區塊＝「流量 值 ›」選框 + 快捷卡 + 橙色「不知道怎麼選」；方案 A 維持原本 tab+選項 */
   :root[data-variant="B"] .flow-head-a, :root[data-variant="B"] #dataTabs, :root[data-variant="B"] #dataNote { display: none; }
   :root[data-variant="A"] .flow-row-b, :root[data-variant="A"] .howto-b { display: none; }
@@ -1819,9 +1822,12 @@
 
               <!-- 流量 -->
               <div class="group-8">
-                <!-- 方案 A：流量標題 + inline 不知道怎麼選 -->
+                <!-- 方案 A：流量標題(帶箭頭，點開選擇流量 sheet) + inline 不知道怎麼選 -->
                 <div class="field-head flow-head-a">
-                  <span class="label-lg" style="flex:0 0 auto">流量</span>
+                  <button class="flow-sel-a" id="flowSelA">
+                    <span class="label-lg">流量</span>
+                    <span class="ic ic-24"><span class="rot90 ic">{{IC_arrowRightDark}}</span></span>
+                  </button>
                   <button class="hint" id="howtoHint">不知道怎麼選<span class="ic ic-16">{{IC_question}}</span></button>
                 </div>
                 <!-- 方案 B：流量 選框（標題 + 值 + 箭頭）→ 點擊開啟流量分頁 sheet -->
@@ -3710,6 +3716,8 @@
   document.getElementById('daysRow').addEventListener('click', openDaysWheel);
   // 方案 B：點「流量 值 ›」選框 → 與列表頁一致的流量分頁 sheet；橙色「不知道怎麼選」→ 選擇建議 sheet
   document.getElementById('flowRow').addEventListener('click', openFlowSheet);
+  // 目的地頁「流量 ›」標題箭頭 → 開啟選擇流量 sheet（與外層 inline 選項同一份 state，天然聯動）
+  document.getElementById('flowSelA').addEventListener('click', openFlowSheet);
   document.getElementById('howtoHintB').addEventListener('click', function () {
     document.querySelector('#bsHowto .bs-body').scrollTop = 0;
     openSheet(document.getElementById('bsHowto'));
