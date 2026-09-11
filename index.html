@@ -271,30 +271,37 @@
   .guide-tabs { display: flex; gap: 8px; }
   .guide-tab {
     flex: 1 1 0; min-width: 0;
-    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+    display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 8px;  /* Figma 2326 GuideCard：icon + 文字同行 */
     padding: 16px 12px 12px;
     border: 1px solid var(--kk-border-lighter); border-radius: var(--r-lg);
     background: #fff; cursor: pointer;
   }
   .guide-tab .lbl { color: var(--kk-text-darker); }
-  .guide-tab .ic { width: 32px; height: 32px; }  /* 安裝指南 tile 圖示按設計稿放大 */
-  .guide-tab .ic svg { width: 32px; height: 32px; display: block; }
+  .guide-tab .ic { width: 24px; height: 24px; }
+  .guide-tab .ic svg { width: 24px; height: 24px; display: block; }
 
   /* ---------- faq card ---------- */
   .faq-head { display: flex; align-items: center; gap: 20px; }
   .faq-head .ttl { flex: 1 1 0; min-width: 0; }
   .faq-more { color: var(--kk-text-darker); cursor: pointer; white-space: nowrap; }
-  .faq-list { display: flex; flex-direction: column; }
-  .faq-item { border-bottom: 1px solid var(--kk-border-lighter); }
-  .faq-item:last-child { border-bottom: 0; }
+  .faq-list { display: flex; flex-direction: column; gap: 8px; }  /* Figma 2538-30543：項目 py12、項間分隔線、末項無底線 */
+  .faq-item + .faq-item { border-top: 1px solid var(--kk-border-lighter); padding-top: 8px; }
+  .faq-list.compact .faq-item.extra { display: none; }  /* 預設只顯示前 2 條 */
+  /* 展開列：貫穿整卡的頁脚條（全出血 343、高 52、上方全寬分隔線、下方無留白，Figma 2543:35168） */
+  .faq-expand { display: flex; align-items: center; justify-content: center; gap: 4px;
+    margin: 0 -16px -20px; padding: 16px 0; border-top: 1px solid var(--kk-border-lighter);
+    font-size: 14px; line-height: 20px; font-weight: 600; color: var(--kk-text-darker); }
+  .faq-expand .chev { transition: transform .2s ease; }
+  .faq-expand .chev img { width: 16px; height: 16px; }
+  .faq-list:not(.compact) .faq-expand .chev { transform: rotate(180deg); }
   .faq-q {
     display: flex; align-items: center; gap: 16px;
-    padding: 20px 0; cursor: pointer; width: 100%; background: none; border: 0; text-align: left;  /* Figma 行節奏 64（20+24+20） */
+    padding: 12px 0; cursor: pointer; width: 100%; background: none; border: 0; text-align: left;  /* Figma 2326-111089：py12 */
   }
   .faq-q .qtext { flex: 1 1 0; min-width: 0; color: var(--kk-text-darker); }
   .faq-q .chev { transition: transform .2s ease; }
   .faq-item.open .faq-q .chev { transform: rotate(180deg); }
-  .faq-a { display: none; padding: 0 0 20px; color: var(--kk-text-darker); }
+  .faq-a { display: none; padding: 0 0 12px; color: var(--kk-text-darker); }
   .faq-item.open .faq-a { display: block; }
 
   /* ================= 目的地頁 ================= */
@@ -303,9 +310,9 @@
   [data-screen="destination"] .page { padding-top: 16px; }
   .dest-bar {
     display: flex; align-items: center; gap: 8px;
-    height: 48px; max-width: 240px;
-    background: rgba(255,255,255,.88);  /* Figma 871-75700：淡薄荷磨砂（疊青底＝#E4F7F8），非純白 */
-    border: 0; border-radius: var(--r-lg);
+    box-sizing: border-box; height: 44px; max-width: 240px;  /* Figma 2538-30569：總高 44（p12 + 內容 20） */
+    background: rgba(255,255,255,.88);
+    border: 1.5px solid #fff; border-radius: var(--r-lg);
     box-shadow: 0 2px 8px rgba(17,25,40,.06);
     padding: 0 12px; cursor: pointer;
     color: var(--kk-text-darker);  /* 不繼承 .title-block 的白色 */
@@ -827,7 +834,7 @@
   .pkg-buy { display: flex; align-items: center; gap: 8px; }
   /* 方案 A 搜尋結果卡（Figma 1202-105544）：標題→規格→政策(灰色豎排)→評分·已購·供應商同行→分割線→價格CTA */
   .pkg-card--a { display: flex; flex-direction: column; gap: 16px; }
-  .pkg-card--a .pkg-a-top { display: flex; flex-direction: column; gap: 8px; }
+  .pkg-card--a .pkg-a-top { display: flex; flex-direction: column; gap: 12px; }  /* 標題群 ↔ 政策 ↔ 評分 ↔ 分隔線 = 12（Figma 1202-105544 spacing-150） */
   .pkg-card--a .pkg-a-hg { display: flex; flex-direction: column; gap: 4px; }   /* 標題 ↔ 規格 = 4 */
   .pkg-card--a .pkg-tags { margin-top: 0; }
   .pkg-card--a .pkg-perks { flex-direction: column; align-items: flex-start; gap: 4px; margin-top: 0; color: var(--kk-text-dark); font-size: 14px; line-height: 20px; }  /* 政策豎排、灰字 #727272、文字 14/20（Figma 1202-105545） */
@@ -884,15 +891,13 @@
   .cond-sum { font-size: 16px; line-height: 24px; font-weight: 600; color: var(--kk-text-darker); margin-bottom: 12px; }
   .cond-foot .cta { background: var(--kk-primary-button); color: #fff; }
 
-  .sort-list { padding: 4px 0 16px; }
-  .sort-item { display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px 24px; text-align: left; }
-  .sort-item .sname { flex: 1 1 0; font-size: 14px; line-height: 20px; color: var(--kk-text-darker); }
-  .sradio { width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid var(--kk-border-light); position: relative; flex: 0 0 auto; }
-  .sradio.on { background: var(--kk-primary-medium); border-color: var(--kk-primary-medium); }
-  .sradio.on::after {
-    content: ''; position: absolute; left: 5.5px; top: 2.5px;
-    width: 5px; height: 9px; border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(45deg);
-  }
+  /* 排序 sheet（Figma 2551-117887）：item px24 py12 gap16、文字 body-lg 16/24、
+     選中＝24px ic_checkCircle_fill，未選＝24px 空心圓 */
+  .sort-list { padding: 24px 0; }
+  .sort-item { display: flex; align-items: center; gap: 16px; width: 100%; padding: 12px 24px; text-align: left; }
+  .sort-item .sname { flex: 1 1 0; font-size: 16px; line-height: 24px; color: var(--kk-text-darker); }
+  .sradio { width: 24px; height: 24px; border-radius: 50%; border: 1.5px solid var(--kk-border-light); flex: 0 0 auto; box-sizing: border-box; }
+  .sort-item .sradio-on { flex: 0 0 auto; }
 
   /* ================= 篩選 sheet（總篩選 970-50754 / 單類目 984-14319 / 日期 970-49610） ================= */
   .bsheet.tall { max-height: 88vh; }
@@ -911,11 +916,12 @@
   .fs-sec .fs-h--tip .fs-info img { width: 16px; height: 16px; }
   .fs-opts { display: flex; flex-wrap: wrap; gap: 12px; }
   /* 篩選選項 pill（圓角膠囊，多選/單選高亮） */
+  /* Figma Chip 組件（2551-62556 內同款）：py8 px12＋內層 px4 → 高 38、文字內距 16 */
   .fopt { display: inline-flex; align-items: center; gap: 4px; box-sizing: border-box;
-    min-height: 40px; padding: 8px 16px; border-radius: 999px;
+    padding: 8px 16px; border-radius: 999px;
     border: 1px solid var(--kk-border-light); background: #fff;
     font-size: 14px; line-height: 20px; color: var(--kk-text-darker); white-space: nowrap; cursor: pointer; }
-  .fopt.sel { background: var(--kk-primary-lighter); border-color: var(--kk-primary-medium); color: #13A3B6; }  /* 選中態不加粗 */
+  .fopt.sel { background: var(--kk-primary-lighter); border-color: var(--kk-primary-medium); color: var(--kk-primary-medium); }  /* 選中態不加粗（Figma 2551-117509：#26BEC9） */
   .fopt.rect { border-radius: var(--r-md); }  /* 日期 chips 非全圓角（Figma） */
   .fopt .chev-sm img { width: 9.4px; height: 5.2px; }
   /* 價格區間雙滑塊 */
@@ -931,7 +937,7 @@
   .fs-range input[type=range]::-moz-range-thumb { pointer-events: auto;
     width: 24px; height: 24px; border-radius: 50%; background: #fff; border: 1px solid var(--kk-border-light);
     box-shadow: 0 1px 4px rgba(38,50,56,.2); cursor: pointer; }
-  .fs-foot { flex: 0 0 auto; padding: 12px 24px calc(12px + env(safe-area-inset-bottom, 0px));
+  .fs-foot { flex: 0 0 auto; padding: 16px 24px calc(16px + env(safe-area-inset-bottom, 0px));
     border-top: 1px solid var(--kk-border-lighter); }
   .fs-foot .cta { background: var(--kk-primary-button); color: #fff; }
   .fs-foot .cta:disabled { background: rgba(26,182,193,.4); color: rgba(255,255,255,.6); }  /* 0 結果禁用（Figma 1004-42393） */
@@ -1004,8 +1010,7 @@
   .det-cond { display: flex; align-items: center; gap: 6px;
     font-size: 14px; line-height: 20px; font-weight: 600; color: #13A3B6; }
   .det-cond .ic { width: 20px; height: 20px; }
-  .det-title { font-size: 22px; line-height: 28px; font-weight: 600; color: var(--kk-text-darker);
-    display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 1; overflow: hidden; }  /* 標題一律 1 行，超出尾部省略（避免換行留白） */
+  .det-title { font-size: 22px; line-height: 28px; font-weight: 600; color: var(--kk-text-darker); word-break: break-word; }  /* 標題完整顯示、可換行（不再夾 1 行） */
   .det-sec .pkg-hr { margin: 24px 0; }
   /* 首屏政策 icon+text：20px 圖示 + 6px gap（Figma 902-41283，調整後）；距上方方案卡 20px（Figma 1009-43085） */
   /* 詳情頁政策行文字全深色（Figma 1249-109383：不按狀況高亮，僅「立即確認」icon 保留青色，見 DET_PERK_ICONS） */
@@ -1231,34 +1236,33 @@
     padding: 12px 24px calc(12px + env(safe-area-inset-bottom, 0px)); }
 
   /* ================= 滾動置頂 header ================= */
+  /* 置頂 header（Figma 2357-114814 Mweb header）：高 56、px16 py12、標題 18/26 */
   .page-header {
     position: fixed; top: 0; left: 0; right: 0; z-index: 30;
     max-width: 430px; margin: 0 auto;
-    height: calc(44px + env(safe-area-inset-top, 0px));
-    padding: env(safe-area-inset-top, 0px) 24px 0;
+    height: calc(56px + env(safe-area-inset-top, 0px));
+    padding: env(safe-area-inset-top, 0px) 16px 0;
     background: #fff;
     display: flex; align-items: center;
     opacity: 0; pointer-events: none; transition: opacity .2s;
   }
   .page-header.show { opacity: 1; pointer-events: auto; box-shadow: var(--el-fixed); }
   .page-header .ph-back { display: flex; align-items: center; }
-  /* 標題＝選擇框（目的地頁：日本 ▾ 可重選，與列表頁一致）；主頁：純文字「eSIM」不可點 */
+  /* 置頂 header（Figma 2357-114814）：高 56、px16、標題 18/26；標題純文字（目的地頁＝目的地名、主頁＝eSIM） */
   .page-header .ph-title-wrap {
     flex: 1 1 0; min-width: 0; display: inline-flex; align-items: center; justify-content: center; gap: 4px;
-    background: none; border: 0; padding: 0 20px; cursor: pointer;
+    background: none; border: 0; padding: 0 20px;
   }
-  .page-header .ph-title-wrap:not(.is-sel) { pointer-events: none; cursor: default; }
   .page-header .ph-title {
-    min-width: 0; font-size: 16px; line-height: 24px; font-weight: 600; color: var(--kk-text-darker);
+    min-width: 0; font-size: 18px; line-height: 26px; font-weight: 600; color: var(--kk-text-darker);
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
-  .page-header .ph-title-wrap:active { transform: scale(.97); }
   .page-header .ph-spacer { width: 24px; }
 
   /* ================= bottom sheet 通用 ================= */
   .bs-mask {
     position: fixed; inset: 0; z-index: 50;
-    background: rgba(33,33,33,.6);
+    background: rgba(0,0,0,.4);  /* Figma KKBottomSheet 遮罩 */
     opacity: 0; visibility: hidden; transition: opacity .25s, visibility .25s;
   }
   .bs-mask.open { opacity: 1; visibility: visible; }
@@ -1274,17 +1278,20 @@
   /* 第二層（子）bottom sheet：遮罩疊在第一層 sheet 之上、子 sheet 再疊其上；關子 sheet 不影響母 sheet */
   .bs-mask--2 { z-index: 52; }
   .bsheet.bs-sub { z-index: 53; }
-  .bs-handle { width: 36px; height: 4px; border-radius: 2px; background: var(--kk-border-light); margin: 8px auto 0; flex: 0 0 auto; }
+  /* Header Reigon 共 68px：grabber 區 20（py-8 + 4）+ wrapper 48（px-24, gap-8）。
+     左 icon 槽與右 actions 槽同寬 64px，讓標題光學居中（Figma 5883:2824）。 */
+  .bs-handle { width: 40px; height: 4px; border-radius: 2px; background: var(--kk-border-light); margin: 8px auto; flex: 0 0 auto; }
   .bs-bar {
-    display: flex; align-items: center; height: 44px; padding: 4px 24px; flex: 0 0 auto;
+    display: flex; align-items: center; gap: 8px; height: 48px; padding: 0 24px; flex: 0 0 auto;
   }
-  .bs-bar .bs-close { display: flex; align-items: center; }
+  .bs-bar .bs-close { display: flex; align-items: center; width: 64px; height: 24px; flex: 0 0 auto; }
   .bs-bar .bs-title {
-    flex: 1 1 0; min-width: 0; text-align: center; padding: 0 20px;
+    flex: 1 1 0; min-width: 0; text-align: center; padding: 0;
     font-size: 16px; line-height: 24px; font-weight: 600; color: var(--kk-text-darker);
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
-  .bs-bar .bs-spacer { width: 24px; }
+  .bs-bar .bs-spacer { width: 64px; flex: 0 0 auto; }
+  .bs-bar .fs-clear { width: 64px; flex: 0 0 auto; text-align: right; }
   .bs-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
   .bs-foot { flex: 0 0 auto; padding: 16px 24px calc(16px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--kk-border-lighter); }
   #bsRegion.info .bs-foot { display: none; }  /* 詳情頁適用範圍＝資訊態，無確定按鈕 */
@@ -1988,34 +1995,35 @@
             </div>
           </div>
 
-          <!-- 常見問題 -->
+          <!-- 常見問題（Figma 2326-111089 FAQ Card）：預設顯示 2 條，「展開更多」展開全部；每條可展開答案 -->
           <div class="card card--pad-v">
             <div class="stack-20">
               <div class="faq-head">
                 <span class="ttl t-h6 card-title">常見問題</span>
-                <span class="faq-more t-link-md" data-action="faq-more">檢視更多</span>
+                <span class="faq-more t-link-md" data-action="faq-more">查看更多</span>
               </div>
-              <div class="faq-list">
+              <div class="faq-list compact">
                 <div class="faq-item">
-                  <button class="faq-q"><span class="qtext t-subtitle-lg">如何確認我的手機支援 eSIM？</span><span class="ic ic-20 chev"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE0LjE2NjciIGhlaWdodD0iNy45MTY2NyIgdmlld0JveD0iMCAwIDE0LjE2NjcgNy45MTY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0wLjI0NDA3OCAwLjI0NDA3OEMwLjU2OTUxNSAtMC4wODEzNTkyIDEuMDk3MTUgLTAuMDgxMzU5MiAxLjQyMjU5IDAuMjQ0MDc4TDcuMDgzMzMgNS45MDQ4MkwxMi43NDQxIDAuMjQ0MDc4QzEzLjA2OTUgLTAuMDgxMzU5MiAxMy41OTcyIC0wLjA4MTM1OTIgMTMuOTIyNiAwLjI0NDA3OEMxNC4yNDggMC41Njk1MTUgMTQuMjQ4IDEuMDk3MTUgMTMuOTIyNiAxLjQyMjU5TDcuNjcyNTkgNy42NzI1OUM3LjM0NzE1IDcuOTk4MDMgNi44MTk1MSA3Ljk5ODAzIDYuNDk0MDggNy42NzI1OUwwLjI0NDA3OCAxLjQyMjU5Qy0wLjA4MTM1OTIgMS4wOTcxNSAtMC4wODEzNTkyIDAuNTY5NTE1IDAuMjQ0MDc4IDAuMjQ0MDc4WiIgZmlsbD0iIzIxMjEyMSIvPgo8L3N2Zz4=" width="14.17" height="7.92"></span></button>
+                  <button class="faq-q"><span class="qtext t-subtitle-lg">如何確認我的手機支援 eSIM？</span><span class="ic ic-20 chev"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiB2aWV3Qm94PSIwIDAgMjAgMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJpY19hcnJvd0Rvd25fbGluZV9zZW1pYm9sZF9sZyI+CjxwYXRoIGlkPSJWZWN0b3IiIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNMy4xNjA3NCA3LjAyODk1QzMuNDg2MTggNi43MDM1MSA0LjAxMzgyIDYuNzAzNTEgNC4zMzkyNiA3LjAyODk1TDEwIDEyLjY4OTdMMTUuNjYwNyA3LjAyODk1QzE1Ljk4NjIgNi43MDM1MSAxNi41MTM4IDYuNzAzNTEgMTYuODM5MyA3LjAyODk1QzE3LjE2NDcgNy4zNTQzOSAxNy4xNjQ3IDcuODgyMDIgMTYuODM5MyA4LjIwNzQ2TDEwLjU4OTMgMTQuNDU3NUMxMC4yNjM4IDE0Ljc4MjkgOS43MzYxOCAxNC43ODI5IDkuNDEwNzQgMTQuNDU3NUwzLjE2MDc0IDguMjA3NDZDMi44MzUzMSA3Ljg4MjAyIDIuODM1MzEgNy4zNTQzOSAzLjE2MDc0IDcuMDI4OTVaIiBmaWxsPSIjMjEyMTIxIi8+CjwvZz4KPC9zdmc+" width="20.00" height="20.00"></span></button>
                   <div class="faq-a t-body-md">在撥號介面輸入 *#06#，出現 EID 序號即代表支援 eSIM；也可在「設定 > 行動服務」檢視是否有「加入 eSIM」選項。購買前請確認手機未繫結電信商合約鎖。</div>
                 </div>
                 <div class="faq-item">
-                  <button class="faq-q"><span class="qtext t-subtitle-lg">天數如何計算、什麼時候開始生效？</span><span class="ic ic-20 chev"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE0LjE2NjciIGhlaWdodD0iNy45MTY2NyIgdmlld0JveD0iMCAwIDE0LjE2NjcgNy45MTY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0wLjI0NDA3OCAwLjI0NDA3OEMwLjU2OTUxNSAtMC4wODEzNTkyIDEuMDk3MTUgLTAuMDgxMzU5MiAxLjQyMjU5IDAuMjQ0MDc4TDcuMDgzMzMgNS45MDQ4MkwxMi43NDQxIDAuMjQ0MDc4QzEzLjA2OTUgLTAuMDgxMzU5MiAxMy41OTcyIC0wLjA4MTM1OTIgMTMuOTIyNiAwLjI0NDA3OEMxNC4yNDggMC41Njk1MTUgMTQuMjQ4IDEuMDk3MTUgMTMuOTIyNiAxLjQyMjU5TDcuNjcyNTkgNy42NzI1OUM3LjM0NzE1IDcuOTk4MDMgNi44MTk1MSA3Ljk5ODAzIDYuNDk0MDggNy42NzI1OUwwLjI0NDA3OCAxLjQyMjU5Qy0wLjA4MTM1OTIgMS4wOTcxNSAtMC4wODEzNTkyIDAuNTY5NTE1IDAuMjQ0MDc4IDAuMjQ0MDc4WiIgZmlsbD0iIzIxMjEyMSIvPgo8L3N2Zz4=" width="14.17" height="7.92"></span></button>
+                  <button class="faq-q"><span class="qtext t-subtitle-lg">天數如何計算、什麼時候開始生效？</span><span class="ic ic-20 chev"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiB2aWV3Qm94PSIwIDAgMjAgMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJpY19hcnJvd0Rvd25fbGluZV9zZW1pYm9sZF9sZyI+CjxwYXRoIGlkPSJWZWN0b3IiIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNMy4xNjA3NCA3LjAyODk1QzMuNDg2MTggNi43MDM1MSA0LjAxMzgyIDYuNzAzNTEgNC4zMzkyNiA3LjAyODk1TDEwIDEyLjY4OTdMMTUuNjYwNyA3LjAyODk1QzE1Ljk4NjIgNi43MDM1MSAxNi41MTM4IDYuNzAzNTEgMTYuODM5MyA3LjAyODk1QzE3LjE2NDcgNy4zNTQzOSAxNy4xNjQ3IDcuODgyMDIgMTYuODM5MyA4LjIwNzQ2TDEwLjU4OTMgMTQuNDU3NUMxMC4yNjM4IDE0Ljc4MjkgOS43MzYxOCAxNC43ODI5IDkuNDEwNzQgMTQuNDU3NUwzLjE2MDc0IDguMjA3NDZDMi44MzUzMSA3Ljg4MjAyIDIuODM1MzEgNy4zNTQzOSAzLjE2MDc0IDcuMDI4OTVaIiBmaWxsPSIjMjEyMTIxIi8+CjwvZz4KPC9zdmc+" width="20.00" height="20.00"></span></button>
                   <div class="faq-a t-body-md">抵達目的地並首次連上當地網路才開始計算，按每 24 小時為一天。提前安裝不會啟用，可放心在出發前完成設定。</div>
                 </div>
-                <div class="faq-item">
-                  <button class="faq-q"><span class="qtext t-subtitle-lg">可以開熱點分享給其他裝置嗎？</span><span class="ic ic-20 chev"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE0LjE2NjciIGhlaWdodD0iNy45MTY2NyIgdmlld0JveD0iMCAwIDE0LjE2NjcgNy45MTY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0wLjI0NDA3OCAwLjI0NDA3OEMwLjU2OTUxNSAtMC4wODEzNTkyIDEuMDk3MTUgLTAuMDgxMzU5MiAxLjQyMjU5IDAuMjQ0MDc4TDcuMDgzMzMgNS45MDQ4MkwxMi43NDQxIDAuMjQ0MDc4QzEzLjA2OTUgLTAuMDgxMzU5MiAxMy41OTcyIC0wLjA4MTM1OTIgMTMuOTIyNiAwLjI0NDA3OEMxNC4yNDggMC41Njk1MTUgMTQuMjQ4IDEuMDk3MTUgMTMuOTIyNiAxLjQyMjU5TDcuNjcyNTkgNy42NzI1OUM3LjM0NzE1IDcuOTk4MDMgNi44MTk1MSA3Ljk5ODAzIDYuNDk0MDggNy42NzI1OUwwLjI0NDA3OCAxLjQyMjU5Qy0wLjA4MTM1OTIgMS4wOTcxNSAtMC4wODEzNTkyIDAuNTY5NTE1IDAuMjQ0MDc4IDAuMjQ0MDc4WiIgZmlsbD0iIzIxMjEyMSIvPgo8L3N2Zz4=" width="14.17" height="7.92"></span></button>
+                <div class="faq-item extra">
+                  <button class="faq-q"><span class="qtext t-subtitle-lg">可以開熱點分享給其他裝置嗎？</span><span class="ic ic-20 chev"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiB2aWV3Qm94PSIwIDAgMjAgMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJpY19hcnJvd0Rvd25fbGluZV9zZW1pYm9sZF9sZyI+CjxwYXRoIGlkPSJWZWN0b3IiIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNMy4xNjA3NCA3LjAyODk1QzMuNDg2MTggNi43MDM1MSA0LjAxMzgyIDYuNzAzNTEgNC4zMzkyNiA3LjAyODk1TDEwIDEyLjY4OTdMMTUuNjYwNyA3LjAyODk1QzE1Ljk4NjIgNi43MDM1MSAxNi41MTM4IDYuNzAzNTEgMTYuODM5MyA3LjAyODk1QzE3LjE2NDcgNy4zNTQzOSAxNy4xNjQ3IDcuODgyMDIgMTYuODM5MyA4LjIwNzQ2TDEwLjU4OTMgMTQuNDU3NUMxMC4yNjM4IDE0Ljc4MjkgOS43MzYxOCAxNC43ODI5IDkuNDEwNzQgMTQuNDU3NUwzLjE2MDc0IDguMjA3NDZDMi44MzUzMSA3Ljg4MjAyIDIuODM1MzEgNy4zNTQzOSAzLjE2MDc0IDcuMDI4OTVaIiBmaWxsPSIjMjEyMTIxIi8+CjwvZz4KPC9zdmc+" width="20.00" height="20.00"></span></button>
                   <div class="faq-a t-body-md">可以，所有方案均支援個人熱點，流量與主裝置共用；無限流量方案依公平使用原則提供高速流量。</div>
                 </div>
-                <div class="faq-item">
-                  <button class="faq-q"><span class="qtext t-subtitle-lg">安裝後無法上網怎麼辦？</span><span class="ic ic-20 chev"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE0LjE2NjciIGhlaWdodD0iNy45MTY2NyIgdmlld0JveD0iMCAwIDE0LjE2NjcgNy45MTY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0wLjI0NDA3OCAwLjI0NDA3OEMwLjU2OTUxNSAtMC4wODEzNTkyIDEuMDk3MTUgLTAuMDgxMzU5MiAxLjQyMjU5IDAuMjQ0MDc4TDcuMDgzMzMgNS45MDQ4MkwxMi43NDQxIDAuMjQ0MDc4QzEzLjA2OTUgLTAuMDgxMzU5MiAxMy41OTcyIC0wLjA4MTM1OTIgMTMuOTIyNiAwLjI0NDA3OEMxNC4yNDggMC41Njk1MTUgMTQuMjQ4IDEuMDk3MTUgMTMuOTIyNiAxLjQyMjU5TDcuNjcyNTkgNy42NzI1OUM3LjM0NzE1IDcuOTk4MDMgNi44MTk1MSA3Ljk5ODAzIDYuNDk0MDggNy42NzI1OUwwLjI0NDA3OCAxLjQyMjU5Qy0wLjA4MTM1OTIgMS4wOTcxNSAtMC4wODEzNTkyIDAuNTY5NTE1IDAuMjQ0MDc4IDAuMjQ0MDc4WiIgZmlsbD0iIzIxMjEyMSIvPgo8L3N2Zz4=" width="14.17" height="7.92"></span></button>
+                <div class="faq-item extra">
+                  <button class="faq-q"><span class="qtext t-subtitle-lg">安裝後無法上網怎麼辦？</span><span class="ic ic-20 chev"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiB2aWV3Qm94PSIwIDAgMjAgMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJpY19hcnJvd0Rvd25fbGluZV9zZW1pYm9sZF9sZyI+CjxwYXRoIGlkPSJWZWN0b3IiIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNMy4xNjA3NCA3LjAyODk1QzMuNDg2MTggNi43MDM1MSA0LjAxMzgyIDYuNzAzNTEgNC4zMzkyNiA3LjAyODk1TDEwIDEyLjY4OTdMMTUuNjYwNyA3LjAyODk1QzE1Ljk4NjIgNi43MDM1MSAxNi41MTM4IDYuNzAzNTEgMTYuODM5MyA3LjAyODk1QzE3LjE2NDcgNy4zNTQzOSAxNy4xNjQ3IDcuODgyMDIgMTYuODM5MyA4LjIwNzQ2TDEwLjU4OTMgMTQuNDU3NUMxMC4yNjM4IDE0Ljc4MjkgOS43MzYxOCAxNC43ODI5IDkuNDEwNzQgMTQuNDU3NUwzLjE2MDc0IDguMjA3NDZDMi44MzUzMSA3Ljg4MjAyIDIuODM1MzEgNy4zNTQzOSAzLjE2MDc0IDcuMDI4OTVaIiBmaWxsPSIjMjEyMTIxIi8+CjwvZz4KPC9zdmc+" width="20.00" height="20.00"></span></button>
                   <div class="faq-a t-body-md">請確認已開啟「資料漫遊」，並將 eSIM 設為行動資料線路；若仍無法連線，可透過 KKday APP 聯絡 24 小時線上客服。</div>
                 </div>
-                <div class="faq-item">
-                  <button class="faq-q"><span class="qtext t-subtitle-lg">一台手機可以同時安裝多張 eSIM 嗎？</span><span class="ic ic-20 chev"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE0LjE2NjciIGhlaWdodD0iNy45MTY2NyIgdmlld0JveD0iMCAwIDE0LjE2NjcgNy45MTY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0wLjI0NDA3OCAwLjI0NDA3OEMwLjU2OTUxNSAtMC4wODEzNTkyIDEuMDk3MTUgLTAuMDgxMzU5MiAxLjQyMjU5IDAuMjQ0MDc4TDcuMDgzMzMgNS45MDQ4MkwxMi43NDQxIDAuMjQ0MDc4QzEzLjA2OTUgLTAuMDgxMzU5MiAxMy41OTcyIC0wLjA4MTM1OTIgMTMuOTIyNiAwLjI0NDA3OEMxNC4yNDggMC41Njk1MTUgMTQuMjQ4IDEuMDk3MTUgMTMuOTIyNiAxLjQyMjU5TDcuNjcyNTkgNy42NzI1OUM3LjM0NzE1IDcuOTk4MDMgNi44MTk1MSA3Ljk5ODAzIDYuNDk0MDggNy42NzI1OUwwLjI0NDA3OCAxLjQyMjU5Qy0wLjA4MTM1OTIgMS4wOTcxNSAtMC4wODEzNTkyIDAuNTY5NTE1IDAuMjQ0MDc4IDAuMjQ0MDc4WiIgZmlsbD0iIzIxMjEyMSIvPgo8L3N2Zz4=" width="14.17" height="7.92"></span></button>
+                <div class="faq-item extra">
+                  <button class="faq-q"><span class="qtext t-subtitle-lg">一台手機可以同時安裝多張 eSIM 嗎？</span><span class="ic ic-20 chev"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiB2aWV3Qm94PSIwIDAgMjAgMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJpY19hcnJvd0Rvd25fbGluZV9zZW1pYm9sZF9sZyI+CjxwYXRoIGlkPSJWZWN0b3IiIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNMy4xNjA3NCA3LjAyODk1QzMuNDg2MTggNi43MDM1MSA0LjAxMzgyIDYuNzAzNTEgNC4zMzkyNiA3LjAyODk1TDEwIDEyLjY4OTdMMTUuNjYwNyA3LjAyODk1QzE1Ljk4NjIgNi43MDM1MSAxNi41MTM4IDYuNzAzNTEgMTYuODM5MyA3LjAyODk1QzE3LjE2NDcgNy4zNTQzOSAxNy4xNjQ3IDcuODgyMDIgMTYuODM5MyA4LjIwNzQ2TDEwLjU4OTMgMTQuNDU3NUMxMC4yNjM4IDE0Ljc4MjkgOS43MzYxOCAxNC43ODI5IDkuNDEwNzQgMTQuNDU3NUwzLjE2MDc0IDguMjA3NDZDMi44MzUzMSA3Ljg4MjAyIDIuODM1MzEgNy4zNTQzOSAzLjE2MDc0IDcuMDI4OTVaIiBmaWxsPSIjMjEyMTIxIi8+CjwvZz4KPC9zdmc+" width="20.00" height="20.00"></span></button>
                   <div class="faq-a t-body-md">可以，iPhone 可儲存 8 張以上 eSIM 並同時啟用兩張，多國行程可提前裝好備用。</div>
                 </div>
+                <button class="faq-expand"><span class="lb">展開</span><span class="ic ic-16 chev"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE0IiBoZWlnaHQ9IjE0IiB2aWV3Qm94PSIwIDAgMTQgMTQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJpY19hcnJvd0Rvd25fbGluZV9zZW1pYm9sZCI+CjxwYXRoIGlkPSJWZWN0b3IgKFN0cm9rZSkiIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNNy40MTI0OCA5LjE2MzE5QzcuMTg0NjcgOS4zOTEgNi44MTUzMyA5LjM5MSA2LjU4NzUyIDkuMTYzMTlMMy4wODc1MiA1LjY2MzE5QzIuODU5NzEgNS40MzUzOSAyLjg1OTcxIDUuMDY2MDQgMy4wODc1MiA0LjgzODIzQzMuMzE1MzMgNC42MTA0MyAzLjY4NDY3IDQuNjEwNDMgMy45MTI0OCA0LjgzODIzTDcgNy45MjU3NUwxMC4wODc1IDQuODM4MjNDMTAuMzE1MyA0LjYxMDQzIDEwLjY4NDcgNC42MTA0MyAxMC45MTI1IDQuODM4MjNDMTEuMTQwMyA1LjA2NjA0IDExLjE0MDMgNS40MzUzOSAxMC45MTI1IDUuNjYzMTlMNy40MTI0OCA5LjE2MzE5WiIgZmlsbD0iYmxhY2siLz4KPC9nPgo8L3N2Zz4=" width="14.00" height="14.00"></span></button>
               </div>
             </div>
           </div>
@@ -2046,7 +2054,8 @@
         </div>
       </div>
       <div class="pl-body">
-        <div class="pl-note"><span class="ic ic-16"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE5LjUiIGhlaWdodD0iMTkuNSIgdmlld0JveD0iMCAwIDE5LjUgMTkuNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZD0iTTkuNzUgMEM3LjgyMTY0IDAgNS45MzY1NyAwLjU3MTgyOCA0LjMzMzE5IDEuNjQzMTdDMi43Mjk4MiAyLjcxNDUyIDEuNDgwMTMgNC4yMzcyNiAwLjc0MjE3OSA2LjAxODg0QzAuMDA0MjI0NDkgNy44MDA0MiAtMC4xODg4NTggOS43NjA4MiAwLjE4NzM0OCAxMS42NTIxQzAuNTYzNTU0IDEzLjU0MzQgMS40OTIxNSAxNS4yODA3IDIuODU1NzEgMTYuNjQ0M0M0LjIxOTI4IDE4LjAwNzkgNS45NTY1NiAxOC45MzY1IDcuODQ3ODcgMTkuMzEyN0M5LjczOTE5IDE5LjY4ODkgMTEuNjk5NiAxOS40OTU4IDEzLjQ4MTIgMTguNzU3OEMxNS4yNjI3IDE4LjAxOTkgMTYuNzg1NSAxNi43NzAyIDE3Ljg1NjggMTUuMTY2OEMxOC45MjgyIDEzLjU2MzQgMTkuNSAxMS42Nzg0IDE5LjUgOS43NUMxOS40OTcgNy4xNjUwNiAxOC40Njg4IDQuNjg2ODQgMTYuNjQxIDIuODU5MDFDMTQuODEzMiAxLjAzMTE4IDEyLjMzNDkgMC4wMDI5ODc2MyA5Ljc1IDBWMFpNMTQuMzkzNiA4LjA0MjcyTDguODkzMDcgMTMuMjkyN0M4Ljc1MzIyIDEzLjQyNTggOC41Njc1NiAxMy41IDguMzc0NTIgMTMuNUM4LjE4MTQ3IDEzLjUgNy45OTU4MiAxMy40MjU4IDcuODU1OTYgMTMuMjkyN0w1LjEwNjQ1IDEwLjY2NzdDNC45NjI4IDEwLjUzMDEgNC44Nzk2NSAxMC4zNDExIDQuODc1MjQgMTAuMTQyM0M0Ljg3MDg0IDkuOTQzNDEgNC45NDU1NSA5Ljc1MDkyIDUuMDgyOTcgOS42MDcxQzUuMjIwMzggOS40NjMyOCA1LjQwOTI3IDkuMzc5ODkgNS42MDgxMyA5LjM3NTIzQzUuODA2OTkgOS4zNzA1OCA1Ljk5OTU2IDkuNDQ1MDQgNi4xNDM1NiA5LjU4MjI4TDguMzc0NTIgMTEuNzEyOUwxMy4zNTY0IDYuOTU3MjhDMTMuNTAwNCA2LjgyMDA0IDEzLjY5MyA2Ljc0NTU4IDEzLjg5MTkgNi43NTAyM0MxNC4wOTA3IDYuNzU0ODkgMTQuMjc5NiA2LjgzODI4IDE0LjQxNyA2Ljk4MjFDMTQuNTU0NSA3LjEyNTkyIDE0LjYyOTIgNy4zMTg0MSAxNC42MjQ4IDcuNTE3MjdDMTQuNjIwNCA3LjcxNjE0IDE0LjUzNzIgNy45MDUxMyAxNC4zOTM2IDguMDQyNzJWOC4wNDI3MloiIGZpbGw9IiMyNkJFQzkiLz4KPC9zdmc+" width="19.50" height="19.50"></span>此裝置支援使用 eSIM</div>
+        <!-- 列表頁裝置提示：沿用原行內樣式，改為資訊態 info icon + 提醒文案（不帶連結） -->
+        <div class="pl-note"><span class="ic ic-16"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjEzIiBoZWlnaHQ9IjEzIiB2aWV3Qm94PSIwIDAgMTMgMTMiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGlkPSJWZWN0b3IiIGQ9Ik02LjUgMEM1LjIxNDQyIDAgMy45NTc3MiAwLjM4MTIxOCAyLjg4ODggMS4wOTU0NUMxLjgxOTg4IDEuODA5NjggMC45ODY3NTYgMi44MjQ4NCAwLjQ5NDc4NiA0LjAxMjU2QzAuMDAyODE2MzIgNS4yMDAyOCAtMC4xMjU5MDUgNi41MDcyMSAwLjEyNDg5OSA3Ljc2ODA5QzAuMzc1NzAzIDkuMDI4OTYgMC45OTQ3NjggMTAuMTg3MiAxLjkwMzgxIDExLjA5NjJDMi44MTI4NSAxMi4wMDUyIDMuOTcxMDQgMTIuNjI0MyA1LjIzMTkyIDEyLjg3NTFDNi40OTI3OSAxMy4xMjU5IDcuNzk5NzMgMTIuOTk3MiA4Ljk4NzQ0IDEyLjUwNTJDMTAuMTc1MiAxMi4wMTMyIDExLjE5MDMgMTEuMTgwMSAxMS45MDQ2IDEwLjExMTJDMTIuNjE4OCA5LjA0MjI5IDEzIDcuNzg1NTggMTMgNi41QzEyLjk5ODEgNC43NzY2OSAxMi4zMTI2IDMuMTI0NTIgMTEuMDk0IDEuOTA1OTZDOS44NzU0OCAwLjY4NzM5NiA4LjIyMzMxIDAuMDAxOTUwNDkgNi41IDBWMFpNNi4zNzUwNCAzLjAwMDAyQzYuNTIzMzcgMy4wMDAwMiA2LjY2ODM4IDMuMDQ0MDEgNi43OTE3MSAzLjEyNjQyQzYuOTE1MDUgMy4yMDg4MyA3LjAxMTE4IDMuMzI1OTcgNy4wNjc5NSAzLjQ2MzAxQzcuMTI0NzEgMy42MDAwNiA3LjEzOTU2IDMuNzUwODYgNy4xMTA2MyAzLjg5NjM0QzcuMDgxNjkgNC4wNDE4MyA3LjAxMDI2IDQuMTc1NDYgNi45MDUzNyA0LjI4MDM1QzYuODAwNDggNC4zODUyNCA2LjY2Njg0IDQuNDU2NjcgNi41MjEzNSA0LjQ4NTYxQzYuMzc1ODcgNC41MTQ1NSA2LjIyNTA3IDQuNDk5NyA2LjA4ODAyIDQuNDQyOTNDNS45NTA5OCA0LjM4NjE3IDUuODMzODUgNC4yOTAwNCA1Ljc1MTQ0IDQuMTY2N0M1LjY2OTAyIDQuMDQzMzYgNS42MjUwNCAzLjg5ODM2IDUuNjI1MDQgMy43NTAwMkM1LjYyNTA0IDMuNTUxMTEgNS43MDQwNSAzLjM2MDM1IDUuODQ0NzEgMy4yMTk2OUM1Ljk4NTM2IDMuMDc5MDQgNi4xNzYxMiAzLjAwMDAyIDYuMzc1MDQgMy4wMDAwMlYzLjAwMDAyWk03LjAwMDAxIDEwSDYuNTAwMDFDNi4zNjc0IDkuOTk5OTkgNi4yNDAyMyA5Ljk0NzMxIDYuMTQ2NDYgOS44NTM1NUM2LjA1MjY5IDkuNzU5NzggNi4wMDAwMSA5LjYzMjYxIDYuMDAwMDEgOS41VjYuNUM1Ljg2NzQgNi41IDUuNzQwMjIgNi40NDczMiA1LjY0NjQ1IDYuMzUzNTVDNS41NTI2OCA2LjI1OTc5IDUuNTAwMDEgNi4xMzI2MSA1LjUwMDAxIDZDNS41MDAwMSA1Ljg2NzM5IDUuNTUyNjggNS43NDAyMSA1LjY0NjQ1IDUuNjQ2NDVDNS43NDAyMiA1LjU1MjY4IDUuODY3NCA1LjUgNi4wMDAwMSA1LjVINi41MDAwMUM2LjYzMjYxIDUuNTAwMDEgNi43NTk3OSA1LjU1MjY5IDYuODUzNTUgNS42NDY0NUM2Ljk0NzMyIDUuNzQwMjIgNyA1Ljg2NzM5IDcuMDAwMDEgNlY5QzcuMTMyNjEgOSA3LjI1OTc5IDkuMDUyNjggNy4zNTM1NiA5LjE0NjQ1QzcuNDQ3MzMgOS4yNDAyMSA3LjUwMDAxIDkuMzY3MzkgNy41MDAwMSA5LjVDNy41MDAwMSA5LjYzMjYxIDcuNDQ3MzMgOS43NTk3OCA3LjM1MzU2IDkuODUzNTVDNy4yNTk3OSA5Ljk0NzMyIDcuMTMyNjEgMTAgNy4wMDAwMSAxMFoiIGZpbGw9IiMyRDg0RDYiLz4KPC9zdmc+" width="13.00" height="13.00"></span>購買前請確認你的裝置是否支援 eSIM</div>
         <div id="plList"></div>
       </div>
     </section>
@@ -2107,10 +2116,8 @@
   <!-- 滾動置頂 header -->
   <div class="page-header" id="pageHeader">
     <button class="ph-back" data-action="back" aria-label="返回"><span class="ic ic-24"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjcuOTE2NjciIGhlaWdodD0iMTQuMTY2NyIgdmlld0JveD0iMCAwIDcuOTE2NjcgMTQuMTY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciAoU3Ryb2tlKSIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik03LjY3MjU5IDAuMjQ0MDc4QzcuOTk4MDMgMC41Njk1MTUgNy45OTgwMyAxLjA5NzE1IDcuNjcyNTkgMS40MjI1OUwyLjAxMTg0IDcuMDgzMzNMNy42NzI1OSAxMi43NDQxQzcuOTk4MDMgMTMuMDY5NSA3Ljk5ODAzIDEzLjU5NzIgNy42NzI1OSAxMy45MjI2QzcuMzQ3MTUgMTQuMjQ4IDYuODE5NTEgMTQuMjQ4IDYuNDk0MDggMTMuOTIyNkwwLjI0NDA3OCA3LjY3MjU5Qy0wLjA4MTM1OTIgNy4zNDcxNSAtMC4wODEzNTkyIDYuODE5NTEgMC4yNDQwNzggNi40OTQwOEw2LjQ5NDA4IDAuMjQ0MDc4QzYuODE5NTEgLTAuMDgxMzU5MiA3LjM0NzE1IC0wLjA4MTM1OTIgNy42NzI1OSAwLjI0NDA3OFoiIGZpbGw9IiMyMTIxMjEiLz4KPC9zdmc+" width="7.92" height="14.17"></span></button>
-    <button class="ph-title-wrap" data-action="change-destination">
-      <span class="ph-title">eSIM</span>
-      <span class="ic ic-20 ph-chev" hidden><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE0LjE2NjciIGhlaWdodD0iNy45MTY2NyIgdmlld0JveD0iMCAwIDE0LjE2NjcgNy45MTY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0wLjI0NDA3OCAwLjI0NDA3OEMwLjU2OTUxNSAtMC4wODEzNTkyIDEuMDk3MTUgLTAuMDgxMzU5MiAxLjQyMjU5IDAuMjQ0MDc4TDcuMDgzMzMgNS45MDQ4MkwxMi43NDQxIDAuMjQ0MDc4QzEzLjA2OTUgLTAuMDgxMzU5MiAxMy41OTcyIC0wLjA4MTM1OTIgMTMuOTIyNiAwLjI0NDA3OEMxNC4yNDggMC41Njk1MTUgMTQuMjQ4IDEuMDk3MTUgMTMuOTIyNiAxLjQyMjU5TDcuNjcyNTkgNy42NzI1OUM3LjM0NzE1IDcuOTk4MDMgNi44MTk1MSA3Ljk5ODAzIDYuNDk0MDggNy42NzI1OUwwLjI0NDA3OCAxLjQyMjU5Qy0wLjA4MTM1OTIgMS4wOTcxNSAtMC4wODEzNTkyIDAuNTY5NTE1IDAuMjQ0MDc4IDAuMjQ0MDc4WiIgZmlsbD0iIzIxMjEyMSIvPgo8L3N2Zz4=" width="14.17" height="7.92"></span>
-    </button>
+    <!-- 置頂標題：目的地頁顯示已選目的地名稱（純文字，不可重選）；主頁「eSIM」 -->
+    <span class="ph-title-wrap"><span class="ph-title">eSIM</span></span>
     <span class="ph-spacer"></span>
   </div>
 
@@ -2294,6 +2301,7 @@
           <div class="tr"><div class="td-k">網路資源</div><div class="td-v" id="dtNet"></div></div>
           <div class="tr"><div class="td-k">IP型別</div><div class="td-v" id="dtIp"></div></div>
           <div class="tr"><div class="td-k">傳輸規格</div><div class="td-v" id="dtTrans"></div></div>
+          <div class="tr"><div class="td-k">到量網速</div><div class="td-v" id="dtThrottle"></div></div>
         </div>
       </section>
 
@@ -2503,7 +2511,8 @@
       <span class="bs-spacer"></span>
     </div>
     <div class="cal-week"><span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span></div>
-    <div class="cal-body" id="calBody" style="padding-bottom:calc(16px + env(safe-area-inset-bottom, 0px));"></div>
+    <div class="cal-body" id="calBody"></div>
+    <div class="fs-foot"><button class="cta" id="calApply">確定</button></div>
   </div>
 
   <!-- 折扣券 bottom sheet（參考 KKday 商品頁；領取成功後置灰，全部領取後橫幅消失） -->
@@ -2765,24 +2774,20 @@
   // 價格參照 2026 台灣市售亞洲 eSIM 行情（每日固定 1GB≈NT$25-30/天；總流量對齊 Airalo/Nomad 檔位價；
   // 無限流量按降速後網速分檔 NT$45-168/天，最高檔=全程不限速）
   var PLANS = {
-    daily:     { note: '每日重置，用完降速',
+    daily:     { note: '每天固定額度，隔日重新計算',
                  opts: [ { t: '500MB/天', per: 52 }, { t: '1GB/天', per: 82 }, { t: '2GB/天', per: 132 },
                          { t: '3GB/天', per: 172 }, { t: '4GB/天', per: 208 }, { t: '5GB/天', per: 242 },
                          { t: '6GB/天', per: 272 }, { t: '7GB/天', per: 298 }, { t: '8GB/天', per: 322 },
                          { t: '10GB/天', per: 372 } ] },
-    total:     { note: '總流量用完即停，可隨時加購',
+    total:     { note: '整趟共用一個額度，每日用量自己控制',
                  opts: [ { t: '共1GB', price: 149, gb: 1 }, { t: '共2GB', price: 219, gb: 2 },
                          { t: '共3GB', price: 289, gb: 3 }, { t: '共5GB', price: 399, gb: 5 },
                          { t: '共10GB', price: 619, gb: 10 }, { t: '共20GB', price: 999, gb: 20 },
                          { t: '共30GB', price: 1290, gb: 30 }, { t: '共50GB', price: 1790, gb: 50 },
                          { t: '共80GB', price: 2490, gb: 80 }, { t: '共100GB', price: 2990, gb: 100 } ] },
-    unlimited: { note: '不限流量，達公平使用量後降至標示網速',
-                 opts: [ { t: '無限不降速', per: 168 },
-                         { t: '無限降速後 128 Kbps', per: 45 }, { t: '無限降速後 256 Kbps', per: 52 },
-                         { t: '無限降速後 384 Kbps', per: 58 }, { t: '無限降速後 512 Kbps', per: 65 },
-                         { t: '無限降速後 1 Mbps', per: 78 }, { t: '無限降速後 3 Mbps', per: 95 },
-                         { t: '無限降速後 5 Mbps', per: 110 }, { t: '無限降速後 10 Mbps', per: 128 },
-                         { t: '無限降速後 20 Mbps', per: 145 } ] }
+    unlimited: { note: '沒有額度上限，天天放心用',
+                 opts: [ { t: '無限不降速', per: 168 }, { t: '無限流量高速', per: 128 },
+                         { t: '無限到量降速', per: 78 }, { t: '無限流量輕速', per: 45 } ] }  // 四檔：不降速 / 高速 / 到量降速 / 輕速
   };
   function daysDiscount(d) { return d >= 30 ? 0.85 : d >= 15 ? 0.9 : d >= 7 ? 0.95 : 1; }
   function priceLabelFor(o, d) {
@@ -2809,7 +2814,7 @@
       opts.forEach(function (o) { if (Math.abs(o.gb - target) < Math.abs(best.gb - target)) best = o; });
       return best.t;
     }
-    return '無限降速後 1 Mbps';  // 無限流量推薦主流降速檔
+    return '無限到量降速';  // 無限流量推薦：到量降速檔
   }
   function badgeFor() { return badgeForTab(state.tab, state.days ? +state.days : 0); }
 
@@ -3588,7 +3593,7 @@
       var a = el.getAttribute('data-action');
       if (a === 'pick-destination') openModal('country');
       else if (a === 'change-destination') openModal(lastType()); // 再次開啟預設進入上次所選類目
-      else if (a === 'compat') toast('查看全部兼容設備（開發中）');
+      else if (a === 'compat') toast('相容裝置列表（原型未提供）');
       else if (a === 'guide') toast('安裝指南：' + el.getAttribute('data-guide') + '（開發中）');
       else if (a === 'faq-more') toast('常見問題列表（開發中）');
       else if (a === 'back') { if (current === 'destination') go('home'); else if (current === 'plans') go('destination'); else toast('返回上一頁'); }
@@ -3616,16 +3621,23 @@
     });
   });
 
+  // 常見問題：展開更多 / 收起（目的地頁，預設顯示 2 條）
+  document.querySelectorAll('.faq-expand').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var list = b.closest('.faq-list'); var open = list.classList.toggle('compact');
+      b.querySelector('.lb').textContent = open ? '展開' : '收起';
+    });
+  });
+
   // ================= 滾動置頂 header =================
   function onPageScroll() {
+    if (lockCount > 0) return;  // bottom sheet 開啟時 body 被鎖、scrollY 歸零，跳過以免置頂 header/filter 被誤收起
     var y = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
     var showPh = y > 120 && current !== 'plans';
-    if (showPh) {  // 吸頂標題：目的地頁＝已選目的地選擇框（日本 ▾，點開重選，與列表頁一致）；主頁＝純文字「eSIM」
+    if (showPh) {  // 吸頂標題：目的地頁＝已選目的地名稱（純文字，不提供重選）；主頁＝「eSIM」
       var dn = document.getElementById('destName');
       var isDest = current === 'destination' && dn && dn.textContent.trim();
       document.querySelector('#pageHeader .ph-title').textContent = isDest ? dn.textContent.trim() : 'eSIM';
-      document.querySelector('#pageHeader .ph-chev').hidden = !isDest;
-      document.querySelector('#pageHeader .ph-title-wrap').classList.toggle('is-sel', !!isDest);
     }
     document.getElementById('pageHeader').classList.toggle('show', showPh);
     var ph = document.querySelector('.pl-head');
@@ -4250,7 +4262,8 @@
     var box = document.getElementById('sortList');
     box.innerHTML = '';
     SORT_NAMES.forEach(function (n, i) {
-      var it = el('<button class="sort-item"><span class="sname"></span><span class="sradio' + (i === sortMode ? ' on' : '') + '"></span></button>');
+      var it = el('<button class="sort-item"><span class="sname"></span>' +
+        (i === sortMode ? '<span class="ic ic-24 ic-stretch sradio-on"><img alt="" src="data:image/svg+xml;base64,PHN2ZyBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE5LjUiIGhlaWdodD0iMTkuNSIgdmlld0JveD0iMCAwIDE5LjUgMTkuNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZD0iTTkuNzUgMEM3LjgyMTY0IDAgNS45MzY1NyAwLjU3MTgyOCA0LjMzMzE5IDEuNjQzMTdDMi43Mjk4MiAyLjcxNDUyIDEuNDgwMTMgNC4yMzcyNiAwLjc0MjE3OSA2LjAxODg0QzAuMDA0MjI0NDkgNy44MDA0MiAtMC4xODg4NTggOS43NjA4MiAwLjE4NzM0OCAxMS42NTIxQzAuNTYzNTU0IDEzLjU0MzQgMS40OTIxNSAxNS4yODA3IDIuODU1NzEgMTYuNjQ0M0M0LjIxOTI4IDE4LjAwNzkgNS45NTY1NiAxOC45MzY1IDcuODQ3ODcgMTkuMzEyN0M5LjczOTE5IDE5LjY4ODkgMTEuNjk5NiAxOS40OTU4IDEzLjQ4MTIgMTguNzU3OEMxNS4yNjI3IDE4LjAxOTkgMTYuNzg1NSAxNi43NzAyIDE3Ljg1NjggMTUuMTY2OEMxOC45MjgyIDEzLjU2MzQgMTkuNSAxMS42Nzg0IDE5LjUgOS43NUMxOS40OTcgNy4xNjUwNiAxOC40Njg4IDQuNjg2ODQgMTYuNjQxIDIuODU5MDFDMTQuODEzMiAxLjAzMTE4IDEyLjMzNDkgMC4wMDI5ODc2MyA5Ljc1IDBWMFpNMTQuMzkzNiA4LjA0MjcyTDguODkzMDcgMTMuMjkyN0M4Ljc1MzIyIDEzLjQyNTggOC41Njc1NiAxMy41IDguMzc0NTIgMTMuNUM4LjE4MTQ3IDEzLjUgNy45OTU4MiAxMy40MjU4IDcuODU1OTYgMTMuMjkyN0w1LjEwNjQ1IDEwLjY2NzdDNC45NjI4IDEwLjUzMDEgNC44Nzk2NSAxMC4zNDExIDQuODc1MjQgMTAuMTQyM0M0Ljg3MDg0IDkuOTQzNDEgNC45NDU1NSA5Ljc1MDkyIDUuMDgyOTcgOS42MDcxQzUuMjIwMzggOS40NjMyOCA1LjQwOTI3IDkuMzc5ODkgNS42MDgxMyA5LjM3NTIzQzUuODA2OTkgOS4zNzA1OCA1Ljk5OTU2IDkuNDQ1MDQgNi4xNDM1NiA5LjU4MjI4TDguMzc0NTIgMTEuNzEyOUwxMy4zNTY0IDYuOTU3MjhDMTMuNTAwNCA2LjgyMDA0IDEzLjY5MyA2Ljc0NTU4IDEzLjg5MTkgNi43NTAyM0MxNC4wOTA3IDYuNzU0ODkgMTQuMjc5NiA2LjgzODI4IDE0LjQxNyA2Ljk4MjFDMTQuNTU0NSA3LjEyNTkyIDE0LjYyOTIgNy4zMTg0MSAxNC42MjQ4IDcuNTE3MjdDMTQuNjIwNCA3LjcxNjE0IDE0LjUzNzIgNy45MDUxMyAxNC4zOTM2IDguMDQyNzJWOC4wNDI3MloiIGZpbGw9IiMyNkJFQzkiLz4KPC9zdmc+" width="19.50" height="19.50"></span>' : '<span class="sradio"></span>') + '</button>');
       it.querySelector('.sname').textContent = n;
       it.addEventListener('click', function () {
         sortMode = i;
@@ -4523,8 +4536,9 @@
 
   // 使用日期日曆（970-49610）；dateReturn 記錄來源以便回填草稿並返回
   var calPick = null, dateReturn = null;
-  function buildCalendar() {
+  function buildCalendar(keepScroll) {
     var body = document.getElementById('calBody');
+    var sc = keepScroll ? body.scrollTop : 0;  // 改選後重繪不要跳回月曆頂端
     body.innerHTML = '';
     var now = new Date();  // 從當天起算，往後顯示一年（12 個月）
     var base = { y: now.getFullYear(), m: now.getMonth() + 1, today: now.getDate() };
@@ -4542,26 +4556,35 @@
         var cls = 'cal-cell' + (past ? ' past' : ' pick') + (isToday ? ' today' : '');
         var cell = el('<div class="' + cls + '"><span>' + d + '</span></div>');
         if (!past) (function (yy, mm, d) {
-          cell.addEventListener('click', function () {  // 點選即確定（無 footer 確認）
-            commitDate({ y: yy, m: mm, d: d, label: mm + '月' + d + '日' });
+          cell.addEventListener('click', function () {  // 點選只暫存草稿，footer「確定」才寫回（Figma 2551-62818）
+            calPick = { y: yy, m: mm, d: d, label: mm + '月' + d + '日' };
+            buildCalendar(true);
           });
         })(yy, mm, d);
-        var cur = (dateReturn === 'outer' ? fState.date : (fDraft && fDraft.date));
-        if (cur && typeof cur === 'object' && cur.y === yy && cur.m === mm && cur.d === d) cell.classList.add('sel');
+        if (calPick && calPick.y === yy && calPick.m === mm && calPick.d === d) cell.classList.add('sel');
         grid.appendChild(cell);
       }
       body.appendChild(mon);
     }
+    if (keepScroll) body.scrollTop = sc;
+    document.getElementById('calApply').disabled = !calPick;  // 未選日期時「確定」置灰
   }
   function openDateSheet() {
+    // 以來源目前的日期為草稿起點；未選過就是 null（「確定」置灰）
+    calPick = dateReturn === 'orderUse' ? orderState.useDate
+      : dateReturn === 'flight' ? flDate
+      : dateReturn === 'outer' ? fState.date
+      : (fDraft && fDraft.date) || null;
+    if (calPick && typeof calPick !== 'object') calPick = null;
     buildCalendar();
     openSheet(document.getElementById('dateSheet'));
     var cb = document.getElementById('calBody');
     requestAnimationFrame(function () {
-      var t = cb.querySelector('.cal-cell.today');
+      var t = cb.querySelector('.cal-cell.sel') || cb.querySelector('.cal-cell.today');
       if (t) cb.scrollTop = t.offsetParent ? t.offsetParent.offsetTop - 8 : 0;
     });
   }
+  document.getElementById('calApply').addEventListener('click', function () { if (calPick) commitDate(calPick); });
   // 點選日期即確定：寫回來源草稿/狀態並關閉日曆、返回來源
   function commitDate(pick) {
     document.getElementById('dateSheet').classList.remove('open');
@@ -4587,8 +4610,8 @@
   function detTransSpec() {
     if (state.tab === 'daily') return '每日 ' + state.plan.replace('/天', '') + ' 高速，超量後限速 256Kbps 不限量';
     if (state.tab === 'total') return state.plan.replace('共', '共 ') + ' 高速流量，用完即止（可隨時加購）';
-    return state.plan === '無限不降速' ? '不限流量，全程不限速'
-         : '不限流量，達公平使用量後' + state.plan.replace('無限降速後 ', '限速 ');
+    return ({ '無限不降速': '不限流量，全程不限速', '無限流量高速': '不限流量，高速上網（達公平使用量後降速）',
+              '無限到量降速': '不限流量，達公平使用量後降速', '無限流量輕速': '不限流量，輕速上網（適合訊息／導航）' })[state.plan] || '不限流量';
   }
   // 取消政策四態（Figma 1029-74421）：免費 / 不可 / 免費或不可(條件) / 收費(手續費表)
   var CXL_SUPPLIER = '由於站內商品來自全球各地，訂單取消時間將依該供應商所在時區判定。供應商需 2–5 個工作天進行取消流程，依照您購買的商品取消政策收取手續費，並於取消流程完成後 14 個工作天內退款。';
@@ -4679,6 +4702,11 @@
     document.getElementById('dtNet').textContent = sp.net;  // 本地 / 漫遊
     document.getElementById('dtIp').textContent = sp.ip === '本地IP' ? '本地 IP（當地出口）' : '漫遊 IP（內建 VPN 出口）';
     document.getElementById('dtTrans').textContent = detTransSpec();
+    // 到量網速：依所選計費方式 / 無限流量檔位（每日：當日額度用完；總量：額度用完；無限：達公平使用量）
+    document.getElementById('dtThrottle').textContent = state.tab === 'unlimited'
+      ? ({ '無限不降速': '不降速，全程維持高速', '無限流量高速': '達公平使用量後降至 3 Mbps', '無限到量降速': '達公平使用量後降至 1 Mbps', '無限流量輕速': '達公平使用量後降至 256 Kbps' })[state.plan] || '達公平使用量後降速'
+      : state.tab === 'total' ? '額度用完後停止連線，加購後恢復'  // 與傳輸規格「用完即止（可隨時加購）」一致
+      : '當日額度用完後降至 256 Kbps，隔日恢復高速';  // 與傳輸規格「超量後限速 256Kbps」一致
     document.getElementById('dtActivate').textContent = '抵達' + (multi ? '目的地' : dest) + '後掃碼安裝，自動連線當地網路';
     document.getElementById('dtCalc').textContent = '首次成功連網後開始計算，以當地時間 00:00 為每日分界';
     document.getElementById('dtValid').textContent = '啟用後連續 ' + d + ' 天';

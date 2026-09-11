@@ -148,6 +148,8 @@ subs = {
     "{{IC_question}}":     svg("question"),
     "{{IC_questionOrange}}": svg("question", recolor=("#9C9DA0", "#E78F37")),  # 方案 B 目的地頁「不知道怎麼選」橙色版（icons/question.svg 原色 #9C9DA0）
     "{{IC_arrowRightDark}}": svg("arrowRight", recolor=("#26BEC9", "#212121")),
+    "{{IC_arrowDownSb}}":    svg("arrowDownLineSemibold"),  # FAQ 展開列 16px 加粗箭頭
+    "{{IC_arrowDownLg}}":    svg("arrowDownLineSemiboldLg"),  # FAQ 條目 20px 加粗箭頭（Figma 2543-35298）
     "{{IC_arrowRightGrey}}": svg("arrowRight", recolor=("#26BEC9", "#9C9DA0")),  # 套餐卡标题箭头（设计稿 $color-text-medium）
     "{{IC_cross}}":        svg("cross"),
     "{{IC_search}}":       svg("search"),
