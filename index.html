@@ -3698,7 +3698,15 @@
         b.querySelector('.p').textContent = priceLabelFor(o, d);
         b.addEventListener('click', function () {
           state.tab = tab; state.plan = o.t; state.planTouched = true;  // 選過流量＝深色值（目的地頁）
-          renderOpts(); updateCta(); closeSheets(); renderPlans('smooth');
+          var sc = document.getElementById('dataOptsScroll');
+          var prev = sc ? sc.scrollLeft : 0;
+          renderOpts(); updateCta();
+          if (sc) {
+            sc._revealToken = (sc._revealToken || 0) + 1;  // 作廢 renderOpts 內的瞬時 reveal 重試，避免它把位置搶回目標
+            sc.scrollLeft = prev;                          // 還原原位置：待 sheet 收合後再平滑滾過去，外層才有可見的滾動動效
+          }
+          closeSheets(); renderPlans('smooth');
+          if (sc && current === 'destination') setTimeout(function () { revealOpt(sc, true, '.opt.sel'); }, 340);
         });
         grid.appendChild(b);
       });
