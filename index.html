@@ -3608,13 +3608,13 @@
       var a = el.getAttribute('data-action');
       if (a === 'pick-destination') openModal('country');
       else if (a === 'change-destination') openModal(lastType()); // 再次開啟預設進入上次所選類目
-      else if (a === 'compat') toast('相容裝置列表（原型未提供）');
-      else if (a === 'guide') toast('安裝指南：' + el.getAttribute('data-guide') + '（開發中）');
-      else if (a === 'faq-more') toast('常見問題列表（開發中）');
-      else if (a === 'back') { if (current === 'destination') go('home'); else if (current === 'plans') go('destination'); else toast('返回上一頁'); }
+      else if (a === 'compat') toast('demo 未開發');
+      else if (a === 'guide') toast('demo 未開發');
+      else if (a === 'faq-more') toast('demo 未開發');
+      else if (a === 'back') { if (current === 'destination') go('home'); else if (current === 'plans') go('destination'); else toast('demo 未開發'); }
       else if (a === 'back-plans') go('destination');
       else if (a === 'enter-esim') go('home');            // 首頁 eSIM 入口 → eSIM 主頁
-      else if (a === 'kkh-demo') toast('原型僅提供 eSIM 訂購流程');
+      else if (a === 'kkh-demo') toast('demo 未開發');
     });
   });
 
@@ -5973,7 +5973,7 @@
     var byId = function (id) { return document.getElementById(id); };
     byId('payCancelInfo').onclick = function () { renderCancelSheet(); openSheet(byId('cancelSheet')); };
     if (byId('payDestLine')) byId('payDestLine').onclick = openOrdScope;
-    byId('payPromo').onclick = function () { toast('折扣碼（開發中）'); };
+    byId('payPromo').onclick = function () { toast('demo 未開發'); };
     byId('payPoints').onclick = function () { ps.usePoints = !ps.usePoints; renderPay(); };
     byId('payAgree').onclick = function () { ps.agree = !ps.agree; renderPay(); };
     document.querySelectorAll('#payBody .pay-opt[data-m]').forEach(function (o) { o.onclick = function () { ps.method = o.getAttribute('data-m'); renderPay(); }; });
