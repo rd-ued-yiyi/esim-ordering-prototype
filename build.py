@@ -210,6 +210,12 @@ subs = {
     "{{IC_simCard20}}":      file_img("assets/ord/simCard20.svg"),    # ic_simCard_line
     "{{IC_editLine}}":     file_img("assets/ord/edit.svg"),         # 编辑按钮 ic_edit_line（intrinsic 15.6×15.6）
     "{{IC_infoCyan}}":     svg("info", recolor=("#727272", "#13A3B6")),  # 免费取消行 info（cyan）
+    "{{IC_infoDark}}":     svg("info", recolor=("#727272", "#212121")),  # 不可取消 Text secondary 鈕 info（深色）
+    "{{IC_minusOn}}":      svg("minusLineSemibold", recolor=("#ADE6EB", "#26BEC9")),  # Stepper 減（可用）
+    "{{IC_minusOff}}":     svg("minusLineSemibold"),  # Stepper 減（停用 #ADE6EB）
+    "{{IC_plusOn}}":       svg("plusLineSemibold"),  # Stepper 加（可用 #26BEC9）
+    "{{IC_plusOff}}":      svg("plusLineSemibold", recolor=("#26BEC9", "#ADE6EB")),
+    "{{IC_arrowUpLg}}":    svg("arrowUpLineLg"),  # 付款頁商品摘要收合箭頭 ic_arrowUp_line_lg 20
     "{{IC_infoFill}}":     svg("infoFill"),  # 设备信息提示：实心 info 图标（Figma 1116-91131 ic_info_fill，#2D84D6）
     "{{IC_spark}}":        inline_svg_to_img(DET_SPARK),
     "{{IC_smile}}":        inline_svg_to_img(DET_SMILE),
