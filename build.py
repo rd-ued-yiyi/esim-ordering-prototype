@@ -211,6 +211,7 @@ subs = {
     "{{IC_editLine}}":     file_img("assets/ord/edit.svg"),         # 编辑按钮 ic_edit_line（intrinsic 15.6×15.6）
     "{{IC_infoCyan}}":     svg("info", recolor=("#727272", "#13A3B6")),  # 免费取消行 info（cyan）
     "{{IC_infoDark}}":     svg("info", recolor=("#727272", "#212121")),  # 不可取消 Text secondary 鈕 info（深色）
+    "{{IC_crumbArrow14}}": svg("crumbArrow14"),  # 麵包屑箭頭 ic_arrowRight_line 14 #9C9DA0
     "{{IC_minusOn}}":      svg("minusLineSemibold", recolor=("#ADE6EB", "#26BEC9")),  # Stepper 減（可用）
     "{{IC_minusOff}}":     svg("minusLineSemibold"),  # Stepper 減（停用 #ADE6EB）
     "{{IC_plusOn}}":       svg("plusLineSemibold"),  # Stepper 加（可用 #26BEC9）
