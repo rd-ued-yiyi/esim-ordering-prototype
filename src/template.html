@@ -218,7 +218,7 @@
   .con { position: relative; z-index: 1; padding-bottom: 40px; }
   .title-block { padding: 8px 24px 0; color: #fff; }
   .title-block .t-h4 { font-size: 28px; line-height: 36px; }  /* 主題頁 eSIM 標題（Figma 648-806：Semibold 28/36） */
-  .title-block .sub { margin-top: 8px; }
+  .title-block .sub { margin-top: 8px; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }  /* 說明最多 2 行，超出省略（Figma 2538-30531） */
 
   .page { display: flex; flex-direction: column; gap: 16px; padding: 20px 16px 0; }
 
